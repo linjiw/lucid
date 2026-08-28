@@ -677,3 +677,58 @@ have receipts for everything; keep the paper reproducible from them.
   If confirmed, the paper's mechanism story is: *the full envelope is unsustainable
   because of one channel, and a scalar λ cannot express "everything except latency"*
   — which is the evidence LUCID-MC (per-channel gating) needs.
+- **2026-08-28 03:30–04:45 — Second host brought up (`linjiw-ubuntu`, RTX 5080 16 GB).**
+  Infrastructure only; **no research evidence was produced and no claim moved.** The
+  workspace had never been checked out here: both submodules were empty and the Isaac
+  stack was pointed at an upstream NVlabs clone, not the fork. What now exists is a
+  second machine that can run the program end to end.
+
+  *Portability.* 87 hardcoded `/data/robotixx/lucid-sonic` literals across 28 drivers
+  now resolve through `gear_sonic/research/practice_utility/paths.py`, whose default is
+  the original host's absolute path — that host is unchanged and byte-identical —
+  overridable with `$LUCID_ROOT`. `env/lucid_env.sh` is host-independent (derives the
+  workspace from its own path, auto-detects conda-`sonic` vs a uv venv). The
+  `pyproject.toml` numpy edit that used to conflict on every pull is gone, replaced by
+  `$UV_OVERRIDE`. Commits `878d107`, `7442e88` (fork); `d21fa90`, `aec4b6b` (workspace).
+  **Launcher bytes changed**, so `launcher_sha256` in receipts written from here will not
+  match pre-2026-08-28 receipts; old receipts keep their own hashes, so lineage is intact.
+
+  *The frozen instrument was rebuilt and verified, not assumed.* BONES-SEED (gated on HF)
+  pulled, 142,220 CSVs extracted, and the pools the frozen manifests name regenerated at
+  120→30 fps. **512/512 `debug512` and 4950/4950 `adapt4950` clips are hash-identical to
+  the frozen `content_sha256` values.** `env/write_pool_equivalence.py` compares all six
+  manifests field by field and writes a `lucid_pool_equivalence` receipt
+  (`pool_equivalence_20260828_042753.json`): every clip hash, motion key, split
+  `assignment`, `group_partition`, `ratios`, `seed` and `stats` identical. Both encoders
+  regenerated (`bdaf342b21b97704`, `ce5145020cf8c6e4`) — new instruments, not the
+  originals. CPU suite **1,156 passed / 0 skipped**, up from 1,143/13: the trained-encoder
+  tests now run, reading the frozen manifests via `paths.relocate()`.
+
+  *⛔ Open decision — pool identity.* `pool_sha256` hashes `source_root`, an **absolute
+  filesystem path**, so byte-identical data in a different directory gets a different
+  identity by construction. The frozen v2 probe manifest, the passive-dose plan and the
+  directional-calibration preregistration are all hash-bound to it and therefore **do not
+  validate on this host**, even though the instrument is provably the same. Three options,
+  none taken: (1) re-freeze downstream here, discarding the Aug-26 outcome-blind freeze and
+  re-preregistering; (2) drop `source_root` from `pool_sha256`, making pool identity
+  content-addressed and portable — defensible as a bug fix, since a content hash
+  containing a path is not one — at the cost that no new run reproduces an old
+  `pool_sha256`; (3) teach the hash gates about the equivalence receipt, preserving the
+  outcome-blind freeze as an audited exception. **This is a lineage decision and is
+  deliberately left to the PI.** Nothing hash-bound should be launched here until it is made.
+
+  *Machine capability, measured (receipts `throughput_idle_*_20260828_*.json`).* On the
+  real `debug512` pool at `num_envs=256`: native **605** env-steps/s, observer **595** —
+  the observer callback costs **1.5%**, so instrumenting a branch is effectively free. The
+  same config on the 2-motion `sample_data` pool runs at 5,116 env-steps/s, i.e. **the pool,
+  not policy compute, sets iteration time** (8.5×). Budget ≈0.37 h per 128-iteration branch
+  at 256 envs. The card is at 100% util and 8 GB of 16 GB by `num_envs=256` on `debug512`.
+  These are idle-GPU numbers on a **dedicated** card — unlike the shared 5090, no capacity
+  gate is needed here, which removes the blocker that stalled Track B on Aug 27.
+
+  *Still missing here.* The settled origin `sonic_release_test-20260818_141446/
+  model_step_000024.pt` is not transferable; regenerating it starts a **new branch lineage**
+  and the TACE drivers pin that exact path. Only the 5,462 clips the frozen manifests name
+  are converted to motion_lib PKLs; the other ~137k CSVs are extracted but unconverted.
+  SMPL pack absent (`smpl_motion_file=dummy` is fine for all G1-encoder work).
+  Setup and open questions: `docs/machine-setup.md`.

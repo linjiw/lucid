@@ -35,8 +35,16 @@ authorize them, or nothing does. Do not build learned schedulers before the gate
 ## 2. Environment — how to run anything
 
 ```bash
-source /data/robotixx/lucid-sonic/lucid_env.sh   # conda env `sonic`, IsaacLab 2.3.2 / IsaacSim 5.1.0 / torch 2.7.0+cu128
+source <workspace>/env/lucid_env.sh   # IsaacLab 2.3.2 / IsaacSim 5.1.0 / torch 2.7.0+cu128
 ```
+
+**Two hosts as of 2026-08-28.** The env script is host-independent: it derives the
+workspace from its own path, auto-detects the python stack (conda env `sonic` on
+`robotixx`, a uv venv on `linjiw-ubuntu`), and sets `LUCID_ROOT`. `docs/machine-setup.md`
+records the second host, what its data root does and does not reproduce, and the open
+`pool_sha256` lineage decision. The GPU notes below describe the shared 5090 on the
+original host; the second host has a **dedicated** RTX 5080 (16 GB), so its capacity
+gates are not contended — but its measured throughput is in the setup doc, not here.
 
 Non-negotiable gotchas the script handles (never bypass it):
 - `TMPDIR` must be `$LUCID_ROOT/tmp` (`/tmp/isaaclab` is owned by another user → PermissionError).

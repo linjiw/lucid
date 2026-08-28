@@ -4,6 +4,39 @@ Written 2026-08-28 while bringing the program up on `linjiw-ubuntu` (RTX 5080).
 The original host (`robotixx`, RTX 5090, conda env `sonic`, data root under
 `/data/robotixx/`) is unchanged and still works; everything below is additive.
 
+## Resuming from here (state as of 2026-08-28 04:45)
+
+**Green.** Both submodules checked out; `gear_sonic` editable against the fork;
+`check_environment.py --training` clean; **1,156 CPU tests pass, 0 skipped**; both
+pools rebuilt and hash-verified against the frozen manifests; both encoders
+regenerated; six idle-GPU receipts written on a clean tree. Four commits, none
+pushed: `878d107`, `7442e88` (fork), `d21fa90`, `aec4b6b` (workspace).
+
+**Blocked on one decision, which is the PI's.** `pool_sha256` hashes an absolute
+path, so every hash-bound Aug-26 artifact — the v2 probe manifest, the passive-dose
+plan, the directional-calibration preregistration — fails to validate here despite
+the instrument being provably identical. Pick one of the three options under *Open
+decision: pool identity* below before launching anything hash-bound. Nothing else
+in the program is waiting on anything.
+
+**Then, in order.**
+
+1. Settle `pool_sha256`; if option 2 or 3, land the code change and re-run the CPU suite.
+2. Decide the origin. `sonic_release_test-20260818_141446/model_step_000024.pt` cannot
+   be transferred. Either regenerate a settled origin here and accept a **new branch
+   lineage** (then repoint the `CKPT` line in the four `run_tace_*.sh` drivers), or run
+   only work that does not need it.
+3. The Aug-27 log's own next cell is still open and does not depend on either decision:
+   channel attribution, `fixed_nolat` vs `fixed_latonly` × 3 seeds × 128 it, via
+   `run_tace_channel_attr.sh`. At ~0.37 h per 128-iteration branch at `num_envs=256`,
+   that is roughly 2 GPU-hours here on a dedicated card — the contention that stalled
+   Track B on the shared 5090 does not apply.
+
+**Deliberately not done.** `whole_body_tracking` is checked out but **not installed**;
+it is the non-claim-bearing BeyondMimic sandbox and its own pins could perturb a working
+Isaac dependency set. Install it in a separate venv if the DR/latency sandbox is needed.
+Nothing has been pushed to either remote.
+
 ## What is host-specific, and how each piece is resolved
 
 | thing | old host | this host | how it resolves |
