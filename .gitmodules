@@ -1,0 +1,7 @@
+[submodule "GR00T-WholeBodyControl"]
+	path = GR00T-WholeBodyControl
+	url = https://github.com/linjiw/GR00T-WholeBodyControl-lucid.git
+	branch = research/practice-utility
+[submodule "whole_body_tracking"]
+	path = whole_body_tracking
+	url = https://github.com/HybridRobotics/whole_body_tracking.git

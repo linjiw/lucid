@@ -1,0 +1,99 @@
+{
+  "kind": "practice_utility_probe_preflight_report",
+  "schema_version": 1,
+  "status": "blocked",
+  "ready": false,
+  "manifest_path": "/data/robotixx/lucid-sonic/manifests/probe_screen_v2_late_20260826.json",
+  "preflight_path": "/data/robotixx/lucid-sonic/manifests/probe_screen_v2_late_20260826.preflight.json",
+  "manifest_sha256": "17c178dc4c4f5a0dbd378aebfa6097a34e8fc46684e272a0f28c1b3649fa9bc3",
+  "manifest_file_sha256": "591501ac112f39fa890cb6065a11841c16a1a4ed04ee7f568cd883e8b551dc72",
+  "preflight_file_sha256": null,
+  "verified": [
+    {
+      "code": "manifest_hash_verified",
+      "scope": "manifest",
+      "message": "frozen manifest hash 17c178dc4c4f5a0dbd378aebfa6097a34e8fc46684e272a0f28c1b3649fa9bc3"
+    },
+    {
+      "code": "screening_branch_count_preserved",
+      "scope": "branches",
+      "message": "frozen screen retains 2 shared controls (one per stage and seed)"
+    }
+  ],
+  "blockers": [
+    {
+      "code": "shared_control_realized_dose_unimplemented",
+      "scope": "dose",
+      "message": "the live shared control has no target kernels, so it records zero completed_kernel_steps and cannot support the preregistered realized-extra-dose denominator; implement passive per-context control dose or freeze a new independent-control campaign"
+    },
+    {
+      "code": "latent_directional_calibration_unimplemented",
+      "scope": "latent_direction",
+      "message": "Gate B preregisters nested-CV univariate calibration, but no leakage-free calibration implementation or immutable algorithm artifact exists; the label builder therefore emits rank-only diagnostics and keeps latent predictiveness and inverse estimator authorization incomplete"
+    },
+    {
+      "code": "preflight_bundle_missing",
+      "scope": "preflight",
+      "message": "no preregistration bundle exists at /data/robotixx/lucid-sonic/manifests/probe_screen_v2_late_20260826.preflight.json"
+    },
+    {
+      "code": "origin_map_missing",
+      "scope": "origins",
+      "message": "per-(stage, seed) origin map with full capsule/checkpoint pairs"
+    },
+    {
+      "code": "encoder_missing",
+      "scope": "encoder",
+      "message": "frozen, hashed encoder artifact"
+    },
+    {
+      "code": "proxy_feature_coverage_missing",
+      "scope": "proxy_features",
+      "message": "hashed proxy features for every (stage, seed, context)"
+    },
+    {
+      "code": "efficacy_plan_missing",
+      "scope": "efficacy_plan",
+      "message": "frozen deployment-J_eff efficacy plan with quality thresholds"
+    },
+    {
+      "code": "same_estimand_noise_floor_missing",
+      "scope": "noise_floor",
+      "message": "epsilon-zero noise floor measured on the deployment-J_eff estimand"
+    },
+    {
+      "code": "gate_preregistration_missing",
+      "scope": "gates",
+      "message": "explicit Gate-A thresholds and separate latent-proxy/estimator decisions"
+    },
+    {
+      "code": "branch_specs_unavailable",
+      "scope": "branches",
+      "message": "absolute branch horizons cannot be derived without verified origins"
+    }
+  ],
+  "warnings": [
+    {
+      "code": "shared_controls_screening_only",
+      "scope": "branches",
+      "message": "shared controls are preserved for this screen; confirmation must use independent paired controls for every confirmed context"
+    },
+    {
+      "code": "channel_keyed_crn_unimplemented",
+      "scope": "randomness",
+      "message": "counter_rng_enabled in historical capsules is self-reported: derive_seed has no production call sites. This screen uses a stochastic potential-outcome estimand with symmetric fresh restarts and a measured same-estimand floor; it makes no channel-wise common-random-number claim."
+    }
+  ],
+  "branch_specs": [],
+  "branch_counts": {
+    "control": 0,
+    "intervention": 0,
+    "total": 0
+  },
+  "confirmation_requirement": "independent_per_context",
+  "randomness_contract": "stochastic_potential_outcomes_no_channelwise_crn",
+  "gate_b_vocabulary": {
+    "proxy_question": "latent_proxy_predictiveness",
+    "authorization_question": "inverse_estimator_authorization"
+  }
+}

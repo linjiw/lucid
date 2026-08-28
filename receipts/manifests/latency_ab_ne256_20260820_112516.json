@@ -1,0 +1,391 @@
+{
+  "kind": "lucid_fixed_lambda_latency_ab",
+  "schema_version": 1,
+  "created_at": "2026-08-20T11:27:44.911317-04:00",
+  "experiment_id": "latency_ab_ne256_20260820_112516",
+  "git_sha": "811f08498ce951c6e7094bb1e407f8d05cf0b235",
+  "git_status_short": [
+    " M gear_sonic/research/practice_utility/actuator_patch.py",
+    " M gear_sonic/research/practice_utility/events_reset_safe.py",
+    " M gear_sonic/research/practice_utility/observer.py",
+    " M scripts/practice_utility/train_with_delay.py",
+    " M tests/practice_utility/test_actuator_patch.py",
+    " M tests/practice_utility/test_events_reset_safe.py",
+    "?? gear_sonic/config/manager_env/events/tracking/lucid_latency_only.yaml",
+    "?? scripts/practice_utility/run_latency_ab.py",
+    "?? scripts/practice_utility/run_throughput_probe.py",
+    "?? tests/practice_utility/test_latency_ab.py",
+    "?? tests/practice_utility/test_throughput_probe.py"
+  ],
+  "launcher_sha256": "c0d5ca5eb556df846d182d3994502ff8fdd3c4bf947c6aa8db422d986ff77eeb",
+  "config": {
+    "num_envs": 256,
+    "iterations": 12,
+    "seed": 8200,
+    "checkpoint": "/home/robotixx/lucid/GR00T-WholeBodyControl/logs_rl/TRL_G1_Track/manager/universal_token/all_modes/sonic_release_test-20260818_141446/model_step_000024.pt",
+    "max_delay_steps": 8,
+    "max_delay_ms": 40,
+    "trailing_window": 4,
+    "event_preset": "tracking/lucid_latency_only",
+    "other_dr_channels": [],
+    "arm_order": [
+      "lambda0",
+      "lambda1"
+    ]
+  },
+  "commands": {
+    "lambda0": [
+      "/home/robotixx/miniconda3/envs/sonic/bin/python",
+      "/home/robotixx/lucid/GR00T-WholeBodyControl/scripts/practice_utility/train_with_delay.py",
+      "--max-delay",
+      "8",
+      "--",
+      "+exp=manager/universal_token/all_modes/sonic_release",
+      "checkpoint=/home/robotixx/lucid/GR00T-WholeBodyControl/logs_rl/TRL_G1_Track/manager/universal_token/all_modes/sonic_release_test-20260818_141446/model_step_000024.pt",
+      "num_envs=256",
+      "headless=true",
+      "use_wandb=false",
+      "seed=8200",
+      "manager_env/events=tracking/lucid_latency_only",
+      "++algo.config.num_learning_iterations=12",
+      "++algo.config.save_interval=100000",
+      "++manager_env.commands.motion.motion_lib_cfg.motion_file=data/motion_lib_bones_seed/robot_filtered",
+      "++manager_env.commands.motion.motion_lib_cfg.smpl_motion_file=data/motion_lib_bones_seed/smpl_filtered",
+      "++manager_env.events.randomize_action_delay.params.delay_range=[0.0,0.0]",
+      "++callbacks.practice_observer._target_=gear_sonic.research.practice_utility.observer.PracticeObserverCallback",
+      "++callbacks.practice_observer.enabled=true",
+      "++callbacks.practice_observer.encoder_path=/data/robotixx/lucid-sonic/artifacts/lucid_encoder_debug512.pt",
+      "++callbacks.practice_observer.branch_id=latency_ab_ne256_20260820_112516_lambda0",
+      "++callbacks.practice_observer.output_dir=/data/robotixx/lucid-sonic/artifacts/latency_ab/latency_ab_ne256_20260820_112516_lambda0"
+    ],
+    "lambda1": [
+      "/home/robotixx/miniconda3/envs/sonic/bin/python",
+      "/home/robotixx/lucid/GR00T-WholeBodyControl/scripts/practice_utility/train_with_delay.py",
+      "--max-delay",
+      "8",
+      "--",
+      "+exp=manager/universal_token/all_modes/sonic_release",
+      "checkpoint=/home/robotixx/lucid/GR00T-WholeBodyControl/logs_rl/TRL_G1_Track/manager/universal_token/all_modes/sonic_release_test-20260818_141446/model_step_000024.pt",
+      "num_envs=256",
+      "headless=true",
+      "use_wandb=false",
+      "seed=8200",
+      "manager_env/events=tracking/lucid_latency_only",
+      "++algo.config.num_learning_iterations=12",
+      "++algo.config.save_interval=100000",
+      "++manager_env.commands.motion.motion_lib_cfg.motion_file=data/motion_lib_bones_seed/robot_filtered",
+      "++manager_env.commands.motion.motion_lib_cfg.smpl_motion_file=data/motion_lib_bones_seed/smpl_filtered",
+      "++manager_env.events.randomize_action_delay.params.delay_range=[0.0,8.0]",
+      "++callbacks.practice_observer._target_=gear_sonic.research.practice_utility.observer.PracticeObserverCallback",
+      "++callbacks.practice_observer.enabled=true",
+      "++callbacks.practice_observer.encoder_path=/data/robotixx/lucid-sonic/artifacts/lucid_encoder_debug512.pt",
+      "++callbacks.practice_observer.branch_id=latency_ab_ne256_20260820_112516_lambda1",
+      "++callbacks.practice_observer.output_dir=/data/robotixx/lucid-sonic/artifacts/latency_ab/latency_ab_ne256_20260820_112516_lambda1"
+    ]
+  },
+  "runtime": {
+    "lambda0": {
+      "exit_code": 0,
+      "wall_seconds": 72.82518516108394,
+      "gpu": {
+        "samples": 37,
+        "start_free_mib": 28582.0,
+        "min_free_mib": 22721.0,
+        "max_used_mib": 9383.0,
+        "max_gpu_util_pct": 96.0
+      },
+      "log_path": "/data/robotixx/lucid-sonic/outputs/latency_ab_ne256_20260820_112516_lambda0.log",
+      "observer_path": "/data/robotixx/lucid-sonic/artifacts/latency_ab/latency_ab_ne256_20260820_112516_lambda0/observer_latency_ab_ne256_20260820_112516_lambda0.jsonl"
+    },
+    "lambda1": {
+      "exit_code": 0,
+      "wall_seconds": 75.7903919769451,
+      "gpu": {
+        "samples": 38,
+        "start_free_mib": 28582.0,
+        "min_free_mib": 22787.0,
+        "max_used_mib": 9317.0,
+        "max_gpu_util_pct": 96.0
+      },
+      "log_path": "/data/robotixx/lucid-sonic/outputs/latency_ab_ne256_20260820_112516_lambda1.log",
+      "observer_path": "/data/robotixx/lucid-sonic/artifacts/latency_ab/latency_ab_ne256_20260820_112516_lambda1/observer_latency_ab_ne256_20260820_112516_lambda1.jsonl"
+    }
+  },
+  "arms": {
+    "lambda0": {
+      "iterations_parsed": 12,
+      "complete": true,
+      "actuator_groups_swapped": 5,
+      "training": {
+        "Mean rewards": {
+          "series": {
+            "1": 0.82792,
+            "2": 1.99318,
+            "3": 2.96764,
+            "4": 3.71024,
+            "5": 4.86724,
+            "6": 6.24334,
+            "7": 8.40718,
+            "8": 11.03425,
+            "9": 12.9227,
+            "10": 13.69216,
+            "11": 14.82944,
+            "12": 14.19518
+          },
+          "last4_mean": 13.90987
+        },
+        "Mean length": {
+          "series": {
+            "1": 14.625,
+            "2": 29.08696,
+            "3": 41.0,
+            "4": 49.88679,
+            "5": 63.16438,
+            "6": 77.31579,
+            "7": 100.15,
+            "8": 127.61,
+            "9": 150.88,
+            "10": 158.51,
+            "11": 174.59,
+            "12": 165.87
+          },
+          "last4_mean": 162.4625
+        },
+        "Mean entropy": {
+          "series": {
+            "1": 13.32159,
+            "2": 13.32991,
+            "3": 13.33879,
+            "4": 13.3484,
+            "5": 13.35775,
+            "6": 13.36679,
+            "7": 13.37229,
+            "8": 13.37927,
+            "9": 13.38572,
+            "10": 13.39277,
+            "11": 13.40177,
+            "12": 13.41047
+          },
+          "last4_mean": 13.3976825
+        }
+      },
+      "observer_last4_mean": {
+        "latent_median": 0.09796744585037231,
+        "latent_p90": 0.13351813554763795,
+        "raw_median": 7.726062774658203,
+        "raw_p90": 8.222423791885376,
+        "action_rate": 1.241115740851617,
+        "action_acceleration": 3.006505173991496,
+        "foot_slip_per_step_m": 0.0030204093056648102,
+        "contact_impulse_total": 228.3022093671967,
+        "contact_force_peak": 11841.820068359375,
+        "undesired_contact_rate": 0.16011555989583334,
+        "torque_saturation": 0.0024357938218390806,
+        "joint_limit_proximity": 0.25521868172946827,
+        "energy_proxy": 193.7259526668573,
+        "action_delay_mean_steps": 0.0,
+        "action_delay_nonzero_fraction": 0.0
+      },
+      "observer_rows": 12,
+      "live_delay_final": {
+        "action_delay_actuator_groups": 5,
+        "action_delay_num_lags": 1280,
+        "action_delay_min_steps": 0,
+        "action_delay_max_steps": 0,
+        "action_delay_mean_steps": 0.0,
+        "action_delay_nonzero_fraction": 0.0,
+        "action_delay_histogram": [
+          1280
+        ]
+      }
+    },
+    "lambda1": {
+      "iterations_parsed": 12,
+      "complete": true,
+      "actuator_groups_swapped": 5,
+      "training": {
+        "Mean rewards": {
+          "series": {
+            "1": 0.15304,
+            "2": 0.51382,
+            "3": 1.07623,
+            "4": 1.72113,
+            "5": 2.97215,
+            "6": 4.30432,
+            "7": 5.46674,
+            "8": 7.46947,
+            "9": 7.85447,
+            "10": 8.3383,
+            "11": 9.18978,
+            "12": 10.36216
+          },
+          "last4_mean": 8.9361775
+        },
+        "Mean length": {
+          "series": {
+            "1": 13.3,
+            "2": 21.45,
+            "3": 32.58,
+            "4": 43.86,
+            "5": 61.6,
+            "6": 79.26,
+            "7": 94.42,
+            "8": 121.46,
+            "9": 125.93,
+            "10": 132.11,
+            "11": 132.67,
+            "12": 141.52
+          },
+          "last4_mean": 133.0575
+        },
+        "Mean entropy": {
+          "series": {
+            "1": 13.32113,
+            "2": 13.32819,
+            "3": 13.33548,
+            "4": 13.34373,
+            "5": 13.35244,
+            "6": 13.36148,
+            "7": 13.37108,
+            "8": 13.38033,
+            "9": 13.38955,
+            "10": 13.39749,
+            "11": 13.40528,
+            "12": 13.41299
+          },
+          "last4_mean": 13.4013275
+        }
+      },
+      "observer_last4_mean": {
+        "latent_median": 0.20203495025634766,
+        "latent_p90": 0.36559758633375167,
+        "raw_median": 7.779989957809448,
+        "raw_p90": 8.304272174835205,
+        "action_rate": 1.46483370039138,
+        "action_acceleration": 3.199375664022083,
+        "foot_slip_per_step_m": 0.0036648235060655395,
+        "contact_impulse_total": 221.78489004618757,
+        "contact_force_peak": 8184.8297119140625,
+        "undesired_contact_rate": 0.126708984375,
+        "torque_saturation": 0.003232758620689655,
+        "joint_limit_proximity": 0.2544530204777244,
+        "energy_proxy": 295.41953288447877,
+        "action_delay_mean_steps": 3.676562547683716,
+        "action_delay_nonzero_fraction": 0.8804687559604645
+      },
+      "observer_rows": 12,
+      "live_delay_final": {
+        "action_delay_actuator_groups": 5,
+        "action_delay_num_lags": 1280,
+        "action_delay_min_steps": 0,
+        "action_delay_max_steps": 8,
+        "action_delay_mean_steps": 3.688281297683716,
+        "action_delay_nonzero_fraction": 0.8828125,
+        "action_delay_histogram": [
+          150,
+          166,
+          174,
+          143,
+          147,
+          149,
+          134,
+          95,
+          122
+        ]
+      }
+    }
+  },
+  "comparison": {
+    "deltas_lambda1_minus_lambda0": {
+      "Mean rewards": {
+        "absolute": -4.9736925,
+        "relative": -0.35756570694046746
+      },
+      "Mean length": {
+        "absolute": -29.405,
+        "relative": -0.18099561437254752
+      },
+      "Mean entropy": {
+        "absolute": 0.0036450000000005645,
+        "relative": 0.00027206197788315735
+      },
+      "observer/latent_median": {
+        "absolute": 0.10406750440597534,
+        "relative": 1.0622661793686015
+      },
+      "observer/latent_p90": {
+        "absolute": 0.23207945078611372,
+        "relative": 1.7381867252281251
+      },
+      "observer/raw_median": {
+        "absolute": 0.05392718315124512,
+        "relative": 0.006979904865402912
+      },
+      "observer/raw_p90": {
+        "absolute": 0.0818483829498291,
+        "relative": 0.009954289029787592
+      },
+      "observer/action_rate": {
+        "absolute": 0.22371795953976314,
+        "relative": 0.18025551701266354
+      },
+      "observer/action_acceleration": {
+        "absolute": 0.19287049003058687,
+        "relative": 0.06415105874390636
+      },
+      "observer/foot_slip_per_step_m": {
+        "absolute": 0.0006444142004007293,
+        "relative": 0.2133532694367361
+      },
+      "observer/contact_impulse_total": {
+        "absolute": -6.517319321009126,
+        "relative": -0.028546895534097963
+      },
+      "observer/contact_force_peak": {
+        "absolute": -3656.9903564453125,
+        "relative": -0.30881995633564546
+      },
+      "observer/undesired_contact_rate": {
+        "absolute": -0.03340657552083334,
+        "relative": -0.2086404066073698
+      },
+      "observer/torque_saturation": {
+        "absolute": 0.0007969647988505745,
+        "relative": 0.3271889400921658
+      },
+      "observer/joint_limit_proximity": {
+        "absolute": -0.0007656612517438766,
+        "relative": -0.00300002040036974
+      },
+      "observer/energy_proxy": {
+        "absolute": 101.69358021762147,
+        "relative": 0.524935243924183
+      },
+      "observer/action_delay_mean_steps": {
+        "absolute": 3.676562547683716,
+        "relative": null
+      },
+      "observer/action_delay_nonzero_fraction": {
+        "absolute": 0.8804687559604645,
+        "relative": null
+      }
+    },
+    "preregistered_activation_rule": {
+      "reward_absolute_relative_delta_gt": 0.0333,
+      "length_absolute_relative_delta_gt": 0.0314,
+      "basis": "settled-origin last-4 cross-seed one-sigma floors"
+    },
+    "latency_channel_behaviorally_active": true
+  },
+  "verified": [
+    "both arms exited 0 and parsed all requested iterations",
+    "all five G1 actuator groups used DelayedImplicitActuatorCfg in both arms",
+    "the event preset contains action delay and no other DR channel",
+    "lambda=0 used [0,0] steps; lambda=1 used [0,8] steps",
+    "live buffers confirm zero lag at lambda=0 and nonzero lag at lambda=1"
+  ],
+  "not_yet_verified": [
+    "multi-seed latency efficacy",
+    "held-out latency-stress evaluation"
+  ]
+}

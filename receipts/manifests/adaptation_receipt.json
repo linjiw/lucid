@@ -1,0 +1,144 @@
+{
+  "kind": "practice_utility_adaptation_receipt",
+  "schema_version": 1,
+  "purpose": "controlled continuation of the released checkpoint on the adaptation split, producing stage capsules and a post-warm-up sampler snapshot",
+  "config": {
+    "num_envs": 256,
+    "iterations": 24,
+    "pool": "debug512",
+    "split": "performer",
+    "partition_note": "sampler sees the whole resident pool; probe contexts are filtered to the adaptation partition",
+    "checkpoint_sha256": "e6bdab3f64a39336b3d41877d4f497d05f58af275f288ec0e6746c283ded8909"
+  },
+  "throughput": {
+    "iterations_parsed": 24,
+    "num_envs": 256,
+    "steps_per_env": 24,
+    "transitions_per_iteration": 6144,
+    "median_steps_per_second": 86.0,
+    "median_iteration_seconds": 70.707,
+    "env_steps_per_second": 86.89380117951548,
+    "hours_per_128_iteration_branch": 2.5140266666666666
+  },
+  "learning_curve": {
+    "mean_rewards": {
+      "1": 0.48106,
+      "2": 1.2915,
+      "3": 2.60962,
+      "4": 3.62138,
+      "5": 5.44761,
+      "6": 7.1409,
+      "7": 8.91721,
+      "8": 10.21054,
+      "9": 11.6907,
+      "10": 12.54799,
+      "11": 14.24621,
+      "12": 15.37105,
+      "13": 16.44899,
+      "14": 16.17078,
+      "15": 16.07279,
+      "16": 16.18741,
+      "17": 16.08069,
+      "18": 16.94326,
+      "19": 17.51665,
+      "20": 17.95779,
+      "21": 18.90018,
+      "22": 18.20587,
+      "23": 18.26065,
+      "24": 17.83222
+    },
+    "mean_length": {
+      "1": 13.41667,
+      "2": 23.3,
+      "3": 38.80556,
+      "4": 50.62,
+      "5": 69.32911,
+      "6": 87.2,
+      "7": 105.35,
+      "8": 120.71,
+      "9": 138.85,
+      "10": 149.34,
+      "11": 172.73,
+      "12": 183.46,
+      "13": 192.54,
+      "14": 191.19,
+      "15": 188.18,
+      "16": 193.89,
+      "17": 200.47,
+      "18": 210.26,
+      "19": 221.16,
+      "20": 219.65,
+      "21": 224.05,
+      "22": 218.14,
+      "23": 220.77,
+      "24": 222.66
+    }
+  },
+  "adaptation_effect": {
+    "reward_first": 0.48106,
+    "reward_last": 17.83222,
+    "length_first": 13.41667,
+    "length_last": 222.66,
+    "note": "reward rises 14x and episode length 10x over 24 iterations: continuation from the released checkpoint is a large transient, so branch origins should be stage capsules rather than the cold checkpoint"
+  },
+  "capsules": [
+    "adapt_ne256_early.capsule.pt",
+    "adapt_ne256_late.capsule.pt",
+    "adapt_ne256_middle.capsule.pt"
+  ],
+  "snapshot": {
+    "global_step": 20,
+    "active_bins": 2148,
+    "total_bins": 4107,
+    "effective_num_bins": 1336.7275192462769,
+    "distinct_failure_rates": 334,
+    "unique_motions": 195
+  },
+  "campaign": {
+    "manifest_sha256": "ee844e2593083d5c83be8e47eec44333d6b0b49ad5c2b8e7d085dadcf260256d",
+    "campaign_id": "screen_v1_late",
+    "horizons": {
+      "H_s": 4,
+      "H_m": 12,
+      "H_l": 32
+    },
+    "intervention_branches": 48,
+    "control_branches": 2,
+    "coverage": {
+      "late": {
+        "num_contexts": 24,
+        "failure_quartiles": {
+          "0": 6,
+          "1": 5,
+          "2": 7,
+          "3": 6
+        },
+        "families": {
+          "crouch": 2,
+          "dance": 2,
+          "gesture": 1,
+          "groom": 1,
+          "idle": 1,
+          "injured": 2,
+          "jump": 3,
+          "other": 6,
+          "run": 2,
+          "walk": 4
+        },
+        "contact_regimes": {
+          "aerial": 2,
+          "dynamic": 9,
+          "steady": 13
+        },
+        "failure_rate_min": 0.19379860162734985,
+        "failure_rate_max": 1.0204086303710938,
+        "failure_rate_median": 0.5000002384185791
+      }
+    },
+    "estimated_gpu_hours": {
+      "H_l=32": 31.4,
+      "per_branch_hours": 0.63,
+      "branches": 50
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "status": "complete",
+  "objective": "Audit LUCID latency curriculum and evaluate frozen policies across preregistered latency distributions with holdout confirmation.",
+  "source_training_receipt": "/data/robotixx/lucid-sonic/manifests/curriculum_comparison_ne128_20260820_143058.json",
+  "audit_receipt": "/data/robotixx/lucid-sonic/manifests/latency_curriculum_audit_20260820_231532.json",
+  "discovery_receipt": "/data/robotixx/lucid-sonic/manifests/latency_distribution_discovery_ne32_20260820_232545.json",
+  "confirmation_preregistration": "/data/robotixx/lucid-sonic/manifests/latency_distribution_confirmation_ne128_20260821_013440_preregistration.json",
+  "confirmation_receipt": "/data/robotixx/lucid-sonic/manifests/latency_distribution_confirmation_ne128_20260821_013440.json",
+  "result_receipt": "/data/robotixx/lucid-sonic/manifests/latency_distribution_analysis_20260821_042612.json",
+  "next_action": "Preregister equal-compute process-aware training with shared 0-60 ms support and a curriculum over latency amplitude and resampling cadence."
+}

@@ -1,0 +1,279 @@
+{
+  "kind": "lucid_latency_curriculum_audit",
+  "schema_version": 1,
+  "created_at": "2026-08-20T23:15:32.232562-04:00",
+  "source_training_receipt": "/data/robotixx/lucid-sonic/manifests/curriculum_comparison_ne128_20260820_143058.json",
+  "source_training_receipt_sha256": "fac14d591f40cfeb2307458428bdbc95d89468be62c56a66aa39984d0173b4f8",
+  "source_experiment_id": "curriculum_comparison_ne128_20260820_143058",
+  "training_contract": {
+    "physics_step_ms": 5,
+    "delay_envelope_steps": [
+      0,
+      8
+    ],
+    "delay_envelope_ms": [
+      0,
+      40
+    ],
+    "event_mode": "reset",
+    "draw_scope": "per environment and per episode reset",
+    "actuator_group_coupling": "independent (five separately sampled groups)",
+    "within_episode_resampling": false,
+    "curriculum_application": "lambda rescales delay_range immediately; realized lags change when each environment next resets, so current buffers can contain a mixture of recent lambda values",
+    "reset_order": "IsaacLab scene/actuator reset first samples the buffer capacity range; the reset-mode LUCID event then overwrites it with the current curriculum-scaled draw",
+    "discrete_quantization": "upper step is round(8 * lambda)"
+  },
+  "arms": [
+    {
+      "seed": 8600,
+      "mode": "lucid",
+      "curriculum_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne128_20260820_143058/seed_8600/lucid/curriculum_curriculum_comparison_ne128_20260820_143058_s8600_lucid.jsonl",
+      "curriculum_sha256": "ac6609361e30afd27c5bfa2bc4b80dc0d0af03fbc8cc0355030848eaea6422e5",
+      "observer_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne128_20260820_143058/seed_8600/lucid/observer_curriculum_comparison_ne128_20260820_143058_s8600_lucid.jsonl",
+      "observer_sha256": "a84e05d11fb381647c00b653f855235840938b345695e8d507604add8b7c5ee7",
+      "curriculum_rows": 32,
+      "observer_rows": 32,
+      "delayed_actuator_groups": 5,
+      "scalable_terms": [
+        "add_joint_default_pos",
+        "base_com",
+        "physics_material",
+        "push_robot",
+        "randomize_action_delay",
+        "randomize_rigid_body_mass"
+      ],
+      "warmup_all_zero": true,
+      "observed_max_steps": 6,
+      "last4_mean_delay_steps": 1.8515625,
+      "lambda_delay_mean_pearson": 0.981522625037539,
+      "envelope_violations": [],
+      "final_lambda": 0.7418931034355166
+    },
+    {
+      "seed": 8600,
+      "mode": "fixed",
+      "curriculum_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne128_20260820_143058/seed_8600/fixed/curriculum_curriculum_comparison_ne128_20260820_143058_s8600_fixed.jsonl",
+      "curriculum_sha256": "885bcc8a145d354edaf49a3919adeaeda4458ee5543ea6ce12f30bdab699d7b3",
+      "observer_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne128_20260820_143058/seed_8600/fixed/observer_curriculum_comparison_ne128_20260820_143058_s8600_fixed.jsonl",
+      "observer_sha256": "78cd00f580682d2e4524b2f5390f1e6d9b701e4522977a48ff015f846a671fe7",
+      "curriculum_rows": 32,
+      "observer_rows": 32,
+      "delayed_actuator_groups": 5,
+      "scalable_terms": [
+        "add_joint_default_pos",
+        "base_com",
+        "physics_material",
+        "push_robot",
+        "randomize_action_delay",
+        "randomize_rigid_body_mass"
+      ],
+      "warmup_all_zero": false,
+      "observed_max_steps": 8,
+      "last4_mean_delay_steps": 3.867968738079071,
+      "lambda_delay_mean_pearson": null,
+      "envelope_violations": [],
+      "final_lambda": 1.0
+    },
+    {
+      "seed": 8600,
+      "mode": "off",
+      "curriculum_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne128_20260820_143058/seed_8600/off/curriculum_curriculum_comparison_ne128_20260820_143058_s8600_off.jsonl",
+      "curriculum_sha256": "39d5467ad01ad953ea033277953374aca13d26b235ab32eb547630a3ca96bd89",
+      "observer_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne128_20260820_143058/seed_8600/off/observer_curriculum_comparison_ne128_20260820_143058_s8600_off.jsonl",
+      "observer_sha256": "69c188b0be78a38b52a7b45d9b2933698e6ab3155f6e75a0e631f6c285c63c6b",
+      "curriculum_rows": 32,
+      "observer_rows": 32,
+      "delayed_actuator_groups": 5,
+      "scalable_terms": [
+        "add_joint_default_pos",
+        "base_com",
+        "physics_material",
+        "push_robot",
+        "randomize_action_delay",
+        "randomize_rigid_body_mass"
+      ],
+      "warmup_all_zero": true,
+      "observed_max_steps": 0,
+      "last4_mean_delay_steps": 0.0,
+      "lambda_delay_mean_pearson": null,
+      "envelope_violations": [],
+      "final_lambda": 0.0
+    },
+    {
+      "seed": 8601,
+      "mode": "fixed",
+      "curriculum_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne128_20260820_143058/seed_8601/fixed/curriculum_curriculum_comparison_ne128_20260820_143058_s8601_fixed.jsonl",
+      "curriculum_sha256": "885bcc8a145d354edaf49a3919adeaeda4458ee5543ea6ce12f30bdab699d7b3",
+      "observer_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne128_20260820_143058/seed_8601/fixed/observer_curriculum_comparison_ne128_20260820_143058_s8601_fixed.jsonl",
+      "observer_sha256": "33fbfe7e9ef35a741754265c7d163f966677c168c186a7bb00e89d1a06506d71",
+      "curriculum_rows": 32,
+      "observer_rows": 32,
+      "delayed_actuator_groups": 5,
+      "scalable_terms": [
+        "add_joint_default_pos",
+        "base_com",
+        "physics_material",
+        "push_robot",
+        "randomize_action_delay",
+        "randomize_rigid_body_mass"
+      ],
+      "warmup_all_zero": false,
+      "observed_max_steps": 8,
+      "last4_mean_delay_steps": 3.942578136920929,
+      "lambda_delay_mean_pearson": null,
+      "envelope_violations": [],
+      "final_lambda": 1.0
+    },
+    {
+      "seed": 8601,
+      "mode": "off",
+      "curriculum_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne128_20260820_143058/seed_8601/off/curriculum_curriculum_comparison_ne128_20260820_143058_s8601_off.jsonl",
+      "curriculum_sha256": "39d5467ad01ad953ea033277953374aca13d26b235ab32eb547630a3ca96bd89",
+      "observer_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne128_20260820_143058/seed_8601/off/observer_curriculum_comparison_ne128_20260820_143058_s8601_off.jsonl",
+      "observer_sha256": "d3109c6e38466729c08b0217a431354282257835f66bea038397aaddfddcc181",
+      "curriculum_rows": 32,
+      "observer_rows": 32,
+      "delayed_actuator_groups": 5,
+      "scalable_terms": [
+        "add_joint_default_pos",
+        "base_com",
+        "physics_material",
+        "push_robot",
+        "randomize_action_delay",
+        "randomize_rigid_body_mass"
+      ],
+      "warmup_all_zero": true,
+      "observed_max_steps": 0,
+      "last4_mean_delay_steps": 0.0,
+      "lambda_delay_mean_pearson": null,
+      "envelope_violations": [],
+      "final_lambda": 0.0
+    },
+    {
+      "seed": 8601,
+      "mode": "lucid",
+      "curriculum_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne128_20260820_143058/seed_8601/lucid/curriculum_curriculum_comparison_ne128_20260820_143058_s8601_lucid.jsonl",
+      "curriculum_sha256": "c6d09887af71c48e42e3fd9ce95a19fb983aac29b983719b30137a30c776ae89",
+      "observer_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne128_20260820_143058/seed_8601/lucid/observer_curriculum_comparison_ne128_20260820_143058_s8601_lucid.jsonl",
+      "observer_sha256": "5b2be1c01d58eab170a714ff1acd6f4ea56799cc9b6b7578a6c918489744e9d3",
+      "curriculum_rows": 32,
+      "observer_rows": 32,
+      "delayed_actuator_groups": 5,
+      "scalable_terms": [
+        "add_joint_default_pos",
+        "base_com",
+        "physics_material",
+        "push_robot",
+        "randomize_action_delay",
+        "randomize_rigid_body_mass"
+      ],
+      "warmup_all_zero": true,
+      "observed_max_steps": 6,
+      "last4_mean_delay_steps": 1.602734386920929,
+      "lambda_delay_mean_pearson": 0.9800211261041534,
+      "envelope_violations": [],
+      "final_lambda": 0.7237693000428678
+    },
+    {
+      "seed": 8602,
+      "mode": "off",
+      "curriculum_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne128_20260820_143058/seed_8602/off/curriculum_curriculum_comparison_ne128_20260820_143058_s8602_off.jsonl",
+      "curriculum_sha256": "39d5467ad01ad953ea033277953374aca13d26b235ab32eb547630a3ca96bd89",
+      "observer_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne128_20260820_143058/seed_8602/off/observer_curriculum_comparison_ne128_20260820_143058_s8602_off.jsonl",
+      "observer_sha256": "e6936ced83e3de45d051702cd60a230ec476514e41051e99e73211892a38116b",
+      "curriculum_rows": 32,
+      "observer_rows": 32,
+      "delayed_actuator_groups": 5,
+      "scalable_terms": [
+        "add_joint_default_pos",
+        "base_com",
+        "physics_material",
+        "push_robot",
+        "randomize_action_delay",
+        "randomize_rigid_body_mass"
+      ],
+      "warmup_all_zero": true,
+      "observed_max_steps": 0,
+      "last4_mean_delay_steps": 0.0,
+      "lambda_delay_mean_pearson": null,
+      "envelope_violations": [],
+      "final_lambda": 0.0
+    },
+    {
+      "seed": 8602,
+      "mode": "lucid",
+      "curriculum_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne128_20260820_143058/seed_8602/lucid/curriculum_curriculum_comparison_ne128_20260820_143058_s8602_lucid.jsonl",
+      "curriculum_sha256": "206ae65eeaa5c36160605608960a94c0f1235f1283cc7839a48d9945262f2657",
+      "observer_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne128_20260820_143058/seed_8602/lucid/observer_curriculum_comparison_ne128_20260820_143058_s8602_lucid.jsonl",
+      "observer_sha256": "56e5e71ce3ea6b28e256b6e39057042915ad34ab138f399d7cd3cebb29577e7c",
+      "curriculum_rows": 32,
+      "observer_rows": 32,
+      "delayed_actuator_groups": 5,
+      "scalable_terms": [
+        "add_joint_default_pos",
+        "base_com",
+        "physics_material",
+        "push_robot",
+        "randomize_action_delay",
+        "randomize_rigid_body_mass"
+      ],
+      "warmup_all_zero": true,
+      "observed_max_steps": 6,
+      "last4_mean_delay_steps": 1.8167968392372131,
+      "lambda_delay_mean_pearson": 0.9819120825235904,
+      "envelope_violations": [],
+      "final_lambda": 0.8022872950582505
+    },
+    {
+      "seed": 8602,
+      "mode": "fixed",
+      "curriculum_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne128_20260820_143058/seed_8602/fixed/curriculum_curriculum_comparison_ne128_20260820_143058_s8602_fixed.jsonl",
+      "curriculum_sha256": "885bcc8a145d354edaf49a3919adeaeda4458ee5543ea6ce12f30bdab699d7b3",
+      "observer_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne128_20260820_143058/seed_8602/fixed/observer_curriculum_comparison_ne128_20260820_143058_s8602_fixed.jsonl",
+      "observer_sha256": "94525d02c2f67154c2951f4195d6093f73713fa6668cedc3d2dc67731b1f3171",
+      "curriculum_rows": 32,
+      "observer_rows": 32,
+      "delayed_actuator_groups": 5,
+      "scalable_terms": [
+        "add_joint_default_pos",
+        "base_com",
+        "physics_material",
+        "push_robot",
+        "randomize_action_delay",
+        "randomize_rigid_body_mass"
+      ],
+      "warmup_all_zero": false,
+      "observed_max_steps": 8,
+      "last4_mean_delay_steps": 3.866796851158142,
+      "lambda_delay_mean_pearson": null,
+      "envelope_violations": [],
+      "final_lambda": 1.0
+    }
+  ],
+  "cross_seed": {
+    "lucid": {
+      "last4_mean_delay_steps": 1.757031242052714,
+      "final_lambda_mean": 0.755983232845545
+    },
+    "fixed": {
+      "last4_mean_delay_steps": 3.892447908719381,
+      "final_lambda_mean": 1.0
+    },
+    "off": {
+      "last4_mean_delay_steps": 0.0,
+      "final_lambda_mean": 0.0
+    }
+  },
+  "verified": [
+    "all nine arms recorded five live delayed-actuator groups",
+    "all six curriculum terms were runtime-scalable",
+    "off remained zero-delay and fixed reached the complete 0-8-step envelope",
+    "LUCID warmup remained zero-delay and realized mean delay tracked lambda",
+    "no realized lag exceeded the curriculum envelope available up to that rollout"
+  ],
+  "limitations": [
+    "training latency was piecewise constant within an episode, not temporal jitter",
+    "actuator groups were independently delayed rather than sharing one pipeline lag",
+    "the observer logged snapshots each PPO iteration, not every reset draw"
+  ]
+}

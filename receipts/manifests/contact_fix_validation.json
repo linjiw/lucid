@@ -1,0 +1,42 @@
+{
+  "kind": "practice_utility_contact_fix_validation",
+  "schema_version": 1,
+  "defect": "contact forces were indexed with articulation body indices; net_forces_w is indexed by the ContactSensor's own prim-discovery ordering",
+  "detected_by": "live undesired_contact_rate ~0.99 vs SONIC's own undesired_contacts reward term implying ~0.006",
+  "before": {
+    "source": "adapt2 (pre-fix)",
+    "undesired_contact_rate": [
+      0.9778645833333334,
+      0.9890950520833334,
+      0.9912109375,
+      0.9943033854166666
+    ],
+    "foot_slip_total_m": [
+      0.008227838065020527,
+      0.007243388355934532,
+      0.005562753579859293,
+      0.00492232338824006
+    ]
+  },
+  "after": {
+    "source": "verify_contact (post-fix, settled origin)",
+    "undesired_contact_rate": [
+      0.2353515625,
+      0.16324869791666666,
+      0.16536458333333334,
+      0.15494791666666666
+    ],
+    "foot_slip_total_m": [
+      0.13038703956932102,
+      0.102233661524973,
+      0.10373971978240573,
+      0.09622766983637576
+    ],
+    "num_undesired_bodies": 24
+  },
+  "effect": {
+    "undesired_contact_rate": "~0.98-0.99 -> 0.155-0.235 (about 6x correction)",
+    "foot_slip_total_m": "~0.006 -> ~0.10 (real slip had been under-counted because contact was read off the wrong bodies)"
+  },
+  "note": "both harm-gate inputs were materially wrong before the fix; neither would have been caught by the CPU suite, whose fake sensor had no body_names at all"
+}

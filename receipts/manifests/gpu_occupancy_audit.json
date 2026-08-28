@@ -1,0 +1,69 @@
+{
+  "kind": "gpu_occupancy_audit",
+  "schema_version": 1,
+  "gpu": "RTX 5090 32.6 GB",
+  "observed_used_mib": 24170,
+  "observed_free_mib": 1712,
+  "projects": {
+    "kimodo_counterfactual_dataset": {
+      "cwd": "/home/robotixx/GR00T-WholeBodyControl",
+      "entrypoint": "gear_sonic/eval_agent_trl.py (scene render / trajectory export)",
+      "output_root": "/data/robotixx/groot-wbc-kimodo-m0",
+      "processes": 4,
+      "total_mib": 18120,
+      "jobs": {
+        "75178": {
+          "elapsed": "3d 14h",
+          "mem_mib": 4193,
+          "bound": "max_render_steps=250",
+          "scene": "factory_aisle.usda",
+          "outputs": 1,
+          "newest_output_min": 5205
+        },
+        "2165848": {
+          "elapsed": "23h 28m",
+          "mem_mib": 4775,
+          "bound": "max_render_steps=200",
+          "scene": "mf_005_c08_hard.usda",
+          "outputs": 0,
+          "newest_output_min": 1408
+        },
+        "2166588": {
+          "elapsed": "23h 27m",
+          "mem_mib": 4587,
+          "bound": "max_render_steps=200",
+          "scene": "screen_empty.usda",
+          "outputs": 1,
+          "newest_output_min": 176
+        },
+        "2805534": {
+          "elapsed": "15h 51m",
+          "mem_mib": 4565,
+          "bound": "max_render_steps=200",
+          "scene": "mf_005_c08_z1280.usda",
+          "outputs": 0,
+          "newest_output_min": 951
+        }
+      }
+    },
+    "ued_bench_minimax": {
+      "cwd": "/data/robotixx/ued_bench/src/minimax-frontier-v6-gated-d053054",
+      "entrypoint": "minimax.train --agent_rl_algo=ppo (seeds 2006, 2007)",
+      "processes": 2,
+      "total_mib": 4804,
+      "note": "actively progressing; small footprint"
+    }
+  },
+  "finding": "Three of the four Kimodo render jobs appear stalled. Each is bounded by max_render_steps (200-250), and a comparable bounded 300-step run in this workspace completed in 503 s. These have run 16-86 hours. Their trajectory directories were created at process start and never updated, and their success_manifest.json files were never written. All four consume CPU continuously, so they are computing, not deadlocked on I/O.",
+  "stalled_candidates": {
+    "75178": "3.6 days; only file is render.log, written at startup",
+    "2165848": "23.5 h; zero output files; success_manifest missing",
+    "2805534": "15.9 h; zero output files; success_manifest missing"
+  },
+  "healthy": {
+    "2166588": "wrote trajectories and success_manifest 176 min ago"
+  },
+  "reclaimable_mib_if_stalled_jobs_stopped": 13533,
+  "impact": "13.5 GB of 32.6 GB is held by jobs producing no output. Isaac Sim needs ~6 GB to start, and PhysX reserves a fixed ~640 MB contact buffer regardless of num_envs, so this is what is blocking the LUCID curriculum runs from starting at all.",
+  "recommendation": "Confirm with the owner before stopping anything. If the three are indeed stalled, stopping them frees 13.5 GB and unblocks both the LUCID campaign and any further Kimodo work."
+}

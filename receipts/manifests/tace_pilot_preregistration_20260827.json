@@ -1,0 +1,41 @@
+{
+  "kind": "lucid_tace_pilot_preregistration",
+  "schema_version": 1,
+  "created_at": "2026-08-27T01:20:00-04:00",
+  "author": "Fable (autonomous), on behalf of the LUCID program",
+  "code": {"branch": "research/practice-utility", "tace_commit": "de19caa"},
+  "motivation": "LUCID's gap-gated curriculum ended at lambda=0.756 and never trained on the full evaluation envelope; it trails fixed full-range DR by 2.29 pts full-DR success (54.25 vs 56.54) while preserving clean success (83.99 vs 80.39). TACE keeps a fixed cohort of envs on the full envelope throughout so the target distribution never leaves the training mixture.",
+  "design": {
+    "origin_checkpoint": "logs_rl/TRL_G1_Track/manager/universal_token/all_modes/sonic_release_test-20260818_141446/model_step_000024.pt (settled origin, identical to the 2026-08-20 three-arm run)",
+    "num_envs": 128, "iterations": 32, "warmup_iterations": 10, "seeds": [8600, 8601, 8602],
+    "arms": {
+      "fixed": "lambda=1 throughout (mixed / target-distribution reference)",
+      "lucid": "gap-gated PI curriculum, all envs (replicates the 2026-08-20 arm on the new commit)",
+      "ta_lucid_25": "lucid focus cohort (96 envs) + 32 anchor envs pinned to lambda=1; controller reads the tracked focus env only; no consolidation phase",
+      "ta_yoked_25": "same cohorts; replays ta_lucid_25's lambda trajectory for the same seed with no feedback (attribution control)"
+    },
+    "controller": {"delta_target": 0.778, "kp": 1.0, "ki": 0.02, "alpha": 0.05, "integral_max": 1.0, "return_floor": 8.0, "note": "identical across lucid and ta_lucid; the return guard reads the global mean return in both arms"},
+    "smoke_first": "ta_lucid_25 seed 8600, 16 iterations: cohort sizes exact (32/96), anchor delay mean > focus delay mean, controller received gap samples, exit 0. No outcome is read from the smoke."
+  },
+  "evaluation": {
+    "evaluator": "run_curriculum_robustness_eval.py, frozen policy, no learning, 102-motion content-dev panel (training-seen motions; fresh physics), eval seeds 8700-8702 matched to checkpoint seeds",
+    "presets": ["id_clean", "dr_050", "dr_full", "latency_60ms"],
+    "primary_endpoint": "dr_full success_rate, cross-seed mean of per-seed values",
+    "secondary": ["id_clean success_rate", "dr_050 success_rate (robustness-profile point)", "progress_rate", "mpjpe_g"],
+    "profile_summary": "mean of success over {id_clean, dr_050, dr_full} as a coarse area-under-profile"
+  },
+  "hypotheses": {
+    "H_A_headline": "ta_lucid_25 dr_full success >= fixed dr_full success - 2.0 pts (non-inferiority) AND ta_lucid_25 id_clean success >= fixed id_clean success + 2.0 pts",
+    "H_A2_over_lucid": "ta_lucid_25 dr_full success > lucid dr_full success by > 2.0 pts (closes the support gap)",
+    "H_B_attribution": "ta_lucid_25 dr_full success > ta_yoked_25 dr_full success (favorable in >= 2 of 3 seeds); a tie attributes the effect to schedule shape/dose, not online feedback",
+    "H_C_mechanism": "ta_lucid_25 terminal lambda (focus cohort) is not lower than lucid's by more than 0.1 (anchor exposure does not suppress the curriculum) and anchor-cohort realized delay mean exceeds the focus-cohort mean in every iteration after warmup"
+  },
+  "decision_rules": {
+    "three_seeds_are_screening": "with three checkpoint seeds this pilot is an effect-size screen; paper-grade claims require five seeds and untouched confirmation seeds",
+    "noise_floor": "training-side settled floor 3.33% relative; deployment success differences under ~2 pts on three seeds are treated as ties",
+    "no_tuning": "anchor ratio fixed at 0.25 for the pilot; 0.50 may be run afterwards as a second preregistered cell, never selected post hoc on the same panel",
+    "negative_result": "if H_A fails, report it; do not add consolidation, replay, or per-channel control to rescue the pilot"
+  },
+  "verified": [],
+  "not_yet_verified": ["everything above; this file is written before any TACE branch has run on the GPU"]
+}

@@ -1,0 +1,176 @@
+{
+  "kind": "lucid_capsule_resume_equivalence",
+  "schema_version": 1,
+  "created_at": "2026-08-20T12:03:20.012547-04:00",
+  "experiment_id": "resume_equivalence_ne128_20260820_120104",
+  "git_sha": "811f08498ce951c6e7094bb1e407f8d05cf0b235",
+  "git_status_short": [
+    " M gear_sonic/config/callbacks/lucid_curriculum.yaml",
+    " M gear_sonic/research/practice_utility/actuator_patch.py",
+    " M gear_sonic/research/practice_utility/callbacks.py",
+    " M gear_sonic/research/practice_utility/dr_curriculum.py",
+    " M gear_sonic/research/practice_utility/dr_scaling.py",
+    " M gear_sonic/research/practice_utility/events_reset_safe.py",
+    " M gear_sonic/research/practice_utility/observer.py",
+    " M scripts/practice_utility/train_with_delay.py",
+    " M tests/practice_utility/test_actuator_patch.py",
+    " M tests/practice_utility/test_callbacks.py",
+    " M tests/practice_utility/test_dr_curriculum.py",
+    " M tests/practice_utility/test_events_reset_safe.py",
+    "?? gear_sonic/config/manager_env/events/tracking/lucid_latency_only.yaml",
+    "?? scripts/practice_utility/run_curriculum_warmup_parity.py",
+    "?? scripts/practice_utility/run_latency_ab.py",
+    "?? scripts/practice_utility/run_noop_parity.py",
+    "?? scripts/practice_utility/run_resume_equivalence.py",
+    "?? scripts/practice_utility/run_throughput_probe.py",
+    "?? tests/practice_utility/test_curriculum_warmup_parity.py",
+    "?? tests/practice_utility/test_latency_ab.py",
+    "?? tests/practice_utility/test_noop_parity.py",
+    "?? tests/practice_utility/test_resume_equivalence.py",
+    "?? tests/practice_utility/test_throughput_probe.py"
+  ],
+  "launcher_sha256": "98618af8ce3cce25e491c13da98ce810a70b53a0209c3a60d8caaaaa3c37d2ea",
+  "config": {
+    "num_envs": 128,
+    "total_iterations": 20,
+    "split_iteration": 10,
+    "resumed_iterations": 10,
+    "seed": 8500,
+    "checkpoint": "/home/robotixx/lucid/GR00T-WholeBodyControl/logs_rl/TRL_G1_Track/manager/universal_token/all_modes/sonic_release_test-20260818_141446/model_step_000024.pt",
+    "trailing_window": 4,
+    "equivalence_rule": {
+      "reward_absolute_relative_delta_lte": 0.0333,
+      "length_absolute_relative_delta_lte": 0.0314,
+      "basis": "settled-origin last-4 cross-seed one-sigma floors"
+    }
+  },
+  "commands": {
+    "uninterrupted": [
+      "/home/robotixx/miniconda3/envs/sonic/bin/python",
+      "/home/robotixx/lucid/GR00T-WholeBodyControl/gear_sonic/train_agent_trl.py",
+      "+exp=manager/universal_token/all_modes/sonic_release",
+      "checkpoint=/home/robotixx/lucid/GR00T-WholeBodyControl/logs_rl/TRL_G1_Track/manager/universal_token/all_modes/sonic_release_test-20260818_141446/model_step_000024.pt",
+      "num_envs=128",
+      "headless=true",
+      "use_wandb=false",
+      "seed=8500",
+      "++algo.config.num_learning_iterations=20",
+      "++algo.config.save_interval=100000",
+      "++manager_env.commands.motion.motion_lib_cfg.motion_file=data/motion_lib_bones_seed/robot_filtered",
+      "++manager_env.commands.motion.motion_lib_cfg.smpl_motion_file=data/motion_lib_bones_seed/smpl_filtered",
+      "++callbacks.practice_capsule._target_=gear_sonic.research.practice_utility.callbacks.PracticeCapsuleCallback",
+      "++callbacks.practice_capsule.enabled=true",
+      "++callbacks.practice_capsule.capsule_dir=/data/robotixx/lucid-sonic/artifacts/resume_equivalence/resume_equivalence_ne128_20260820_120104/capsules",
+      "++callbacks.practice_capsule.pair_id=resume_equivalence",
+      "++callbacks.practice_capsule.role=control",
+      "++callbacks.practice_capsule.branch_id=resume_equivalence_ne128_20260820_120104_full",
+      "++callbacks.practice_capsule.horizons.split=10"
+    ],
+    "resumed": [
+      "/home/robotixx/miniconda3/envs/sonic/bin/python",
+      "/home/robotixx/lucid/GR00T-WholeBodyControl/gear_sonic/train_agent_trl.py",
+      "+exp=manager/universal_token/all_modes/sonic_release",
+      "checkpoint=/data/robotixx/lucid-sonic/artifacts/resume_equivalence/resume_equivalence_ne128_20260820_120104/split_checkpoint.pt",
+      "num_envs=128",
+      "headless=true",
+      "use_wandb=false",
+      "seed=8500",
+      "++algo.config.num_learning_iterations=20",
+      "++algo.config.save_interval=100000",
+      "++manager_env.commands.motion.motion_lib_cfg.motion_file=data/motion_lib_bones_seed/robot_filtered",
+      "++manager_env.commands.motion.motion_lib_cfg.smpl_motion_file=data/motion_lib_bones_seed/smpl_filtered",
+      "+resume=true",
+      "++callbacks.practice_resume._target_=gear_sonic.research.practice_utility.callbacks.PracticeCapsuleResumeCallback",
+      "++callbacks.practice_resume.enabled=true",
+      "++callbacks.practice_resume.capsule_path=/data/robotixx/lucid-sonic/artifacts/resume_equivalence/resume_equivalence_ne128_20260820_120104/capsules/resume_equivalence_ne128_20260820_120104_full_split.capsule.pt"
+    ]
+  },
+  "artifacts": {
+    "capsule": "/data/robotixx/lucid-sonic/artifacts/resume_equivalence/resume_equivalence_ne128_20260820_120104/capsules/resume_equivalence_ne128_20260820_120104_full_split.capsule.pt",
+    "exported_checkpoint": "/data/robotixx/lucid-sonic/artifacts/resume_equivalence/resume_equivalence_ne128_20260820_120104/split_checkpoint.pt"
+  },
+  "runtime": {
+    "uninterrupted": {
+      "exit_code": 0,
+      "wall_seconds": 79.32135871425271,
+      "gpu": {
+        "samples": 40,
+        "start_free_mib": 28575.0,
+        "min_free_mib": 23444.0,
+        "max_used_mib": 8660.0,
+        "max_gpu_util_pct": 97.0
+      },
+      "log_path": "/data/robotixx/lucid-sonic/outputs/resume_equivalence_ne128_20260820_120104_full.log"
+    },
+    "resumed": {
+      "exit_code": 0,
+      "wall_seconds": 53.71947833523154,
+      "gpu": {
+        "samples": 27,
+        "start_free_mib": 28575.0,
+        "min_free_mib": 23828.0,
+        "max_used_mib": 8276.0,
+        "max_gpu_util_pct": 97.0
+      },
+      "log_path": "/data/robotixx/lucid-sonic/outputs/resume_equivalence_ne128_20260820_120104_resumed.log"
+    }
+  },
+  "comparison": {
+    "exact_post_split": {
+      "shared_iterations": [
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "tolerance": 0.0,
+      "max_abs_difference": {
+        "Mean rewards": 4.680899999999999,
+        "Mean length": 47.77000000000001,
+        "Mean entropy": 0.009600000000000719,
+        "Mean action noise std": 0.0
+      },
+      "matched": {
+        "Mean rewards": false,
+        "Mean length": false,
+        "Mean entropy": false,
+        "Mean action noise std": true
+      },
+      "missing_keys": [],
+      "passes": false
+    },
+    "last4": {
+      "Mean rewards": {
+        "uninterrupted": 13.2161875,
+        "resumed": 17.014675,
+        "relative_delta": 0.28741174412060966
+      },
+      "Mean length": {
+        "uninterrupted": 164.82999999999998,
+        "resumed": 204.035,
+        "relative_delta": 0.2378511193350726
+      },
+      "Mean entropy": {
+        "uninterrupted": 13.455065,
+        "resumed": 13.4636125,
+        "relative_delta": 0.0006352626315815343
+      }
+    },
+    "resume_equivalent": false,
+    "restart_note": "SONIC resets all episodes at train start, so exact post-split identity is not expected"
+  },
+  "verified": [
+    "uninterrupted and resumed arms exited 0 and parsed every requested iteration",
+    "capsule exported policy/value/optimizer/trainer/environment state at the split",
+    "resumed arm restored capsule RNG immediately before its fresh environment reset"
+  ],
+  "not_yet_verified": [
+    "resume equivalence failed the preregistered 3.33% reward / 3.14% length rule"
+  ]
+}

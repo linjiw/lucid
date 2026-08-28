@@ -1,0 +1,15 @@
+iteration	variant	metric	result	decision	notes
+0	baseline_validation	cpu_tests_passed	912	keep	912 passed in 6.81s; branch clean at 811f084
+0	gpu_capacity	free_mib	30986	keep	RTX 5090 at 0% utilization before launch
+1	throughput_native	env_steps_per_s	3725.894	keep	256 envs, 6 iterations, settled origin
+1	throughput_observer	env_steps_per_s	3603.519	keep	3.28% observer penalty; campaign estimate about 1.0 serial GPU-hour
+2	latency_pre_fix	live_delayed_groups	0	discard	Config label was misleading because parent class_type selected ImplicitActuator
+3	latency_factory_fix	live_delayed_groups	5	keep	Resolved config patched; live lag buffers audited
+4	latency_corrected	reward_relative_delta	-0.357566	keep	One-seed fixed-lambda mechanism test; mean active lag 18.4 ms
+5	warmup_initialization_fix	pre_treatment_max_metric_delta	0.0	keep	Lucid/off matched exactly for three treatment-free rollouts; off now starts at lambda 0
+6	disabled_callback_noop	max_metric_delta	0.0	keep	Native and research-disabled matched exactly for all four iterations and parity metrics
+7	resume_hydra_flag	resumed_iterations	0	discard	Hydra requires +resume=true; no scientific verdict
+8	resume_trainer_state	resumed_iterations	0	discard	Capsule saver dropped positional trainer state; exported checkpoint state was null
+9	resume_max_steps	resumed_iterations	1	discard	Restored global_step=10 immediately exceeded relative max_steps=10
+10	resume_equivalence	reward_relative_delta	0.287412	keep	Mechanism complete but L0 failed; length delta +0.237851, thresholds 0.0333/0.0314
+11	final_validation	cpu_tests_passed	944	keep	944 passed in 6.29s; changed-file ruff and git diff checks pass

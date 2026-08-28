@@ -1,0 +1,986 @@
+{
+  "kind": "lucid_latency_distribution_analysis",
+  "schema_version": 1,
+  "created_at": "2026-08-21T04:26:12.531423-04:00",
+  "discovery_receipt": "/data/robotixx/lucid-sonic/manifests/latency_distribution_discovery_ne32_20260820_232545.json",
+  "confirmation_receipt": "/data/robotixx/lucid-sonic/manifests/latency_distribution_confirmation_ne128_20260821_013440.json",
+  "discovery_panel": {
+    "motions": 18,
+    "canonical_groups": 15
+  },
+  "confirmation_panel": {
+    "motions": 84,
+    "canonical_groups": 63
+  },
+  "full_discovery_surface": [
+    {
+      "cell_id": "dr000_burst_common_12_p10",
+      "cell": {
+        "id": "burst_common_12_p10",
+        "kind": "burst",
+        "range": [
+          0,
+          12
+        ],
+        "distribution": "two_point",
+        "coupling": "common",
+        "high_probability": 0.1,
+        "interval_range_s": [
+          0.2,
+          0.5
+        ],
+        "non_latency_dr_scale": 0.0,
+        "cell_id": "dr000_burst_common_12_p10",
+        "training_matched": false
+      },
+      "success": {
+        "lucid": 0.6666666666666667,
+        "fixed": 0.4444444444444444,
+        "off": 0.6666666666666667
+      },
+      "progress": {
+        "lucid": 0.7651599985029962,
+        "fixed": 0.6976152418388261,
+        "off": 0.8390922471880913
+      },
+      "lucid_min_success_margin": 0.0,
+      "lucid_min_progress_margin": -0.07393224868509507
+    },
+    {
+      "cell_id": "dr000_episode_uniform_common_08",
+      "cell": {
+        "id": "episode_uniform_common_08",
+        "kind": "reset",
+        "range": [
+          0,
+          8
+        ],
+        "distribution": "uniform",
+        "coupling": "common",
+        "non_latency_dr_scale": 0.0,
+        "cell_id": "dr000_episode_uniform_common_08",
+        "training_matched": false
+      },
+      "success": {
+        "lucid": 0.5,
+        "fixed": 0.6111111111111112,
+        "off": 0.5555555555555556
+      },
+      "progress": {
+        "lucid": 0.6456062148014704,
+        "fixed": 0.7375412608186404,
+        "off": 0.6994587203694714
+      },
+      "lucid_min_success_margin": -0.11111111111111116,
+      "lucid_min_progress_margin": -0.09193504601716995
+    },
+    {
+      "cell_id": "dr000_episode_uniform_common_12",
+      "cell": {
+        "id": "episode_uniform_common_12",
+        "kind": "reset",
+        "range": [
+          0,
+          12
+        ],
+        "distribution": "uniform",
+        "coupling": "common",
+        "non_latency_dr_scale": 0.0,
+        "cell_id": "dr000_episode_uniform_common_12",
+        "training_matched": false
+      },
+      "success": {
+        "lucid": 0.2777777777777778,
+        "fixed": 0.16666666666666663,
+        "off": 0.16666666666666663
+      },
+      "progress": {
+        "lucid": 0.423349948392974,
+        "fixed": 0.3981955823385053,
+        "off": 0.41111809346410966
+      },
+      "lucid_min_success_margin": 0.11111111111111116,
+      "lucid_min_progress_margin": 0.01223185492886436
+    },
+    {
+      "cell_id": "dr000_episode_uniform_independent_08",
+      "cell": {
+        "id": "episode_uniform_independent_08",
+        "kind": "reset",
+        "range": [
+          0,
+          8
+        ],
+        "distribution": "uniform",
+        "coupling": "independent",
+        "non_latency_dr_scale": 0.0,
+        "cell_id": "dr000_episode_uniform_independent_08",
+        "training_matched": false
+      },
+      "success": {
+        "lucid": 0.6666666666666667,
+        "fixed": 0.5,
+        "off": 0.7777777777777778
+      },
+      "progress": {
+        "lucid": 0.7788685982426008,
+        "fixed": 0.6942505745424165,
+        "off": 0.8843379136588838
+      },
+      "lucid_min_success_margin": -0.11111111111111105,
+      "lucid_min_progress_margin": -0.10546931541628302
+    },
+    {
+      "cell_id": "dr000_fixed_00",
+      "cell": {
+        "id": "fixed_00",
+        "kind": "reset",
+        "range": [
+          0,
+          0
+        ],
+        "distribution": "uniform",
+        "coupling": "common",
+        "non_latency_dr_scale": 0.0,
+        "cell_id": "dr000_fixed_00",
+        "training_matched": false
+      },
+      "success": {
+        "lucid": 0.7222222222222222,
+        "fixed": 0.6111111111111112,
+        "off": 0.7222222222222222
+      },
+      "progress": {
+        "lucid": 0.8117582789725728,
+        "fixed": 0.7761335356367959,
+        "off": 0.8418925520446565
+      },
+      "lucid_min_success_margin": 0.0,
+      "lucid_min_progress_margin": -0.030134273072083717
+    },
+    {
+      "cell_id": "dr000_fixed_04",
+      "cell": {
+        "id": "fixed_04",
+        "kind": "reset",
+        "range": [
+          4,
+          4
+        ],
+        "distribution": "uniform",
+        "coupling": "common",
+        "non_latency_dr_scale": 0.0,
+        "cell_id": "dr000_fixed_04",
+        "training_matched": false
+      },
+      "success": {
+        "lucid": 0.7222222222222222,
+        "fixed": 0.7777777777777778,
+        "off": 0.7222222222222222
+      },
+      "progress": {
+        "lucid": 0.8157443983687295,
+        "fixed": 0.858152214023802,
+        "off": 0.8373284555143781
+      },
+      "lucid_min_success_margin": -0.05555555555555558,
+      "lucid_min_progress_margin": -0.04240781565507257
+    },
+    {
+      "cell_id": "dr000_fixed_08",
+      "cell": {
+        "id": "fixed_08",
+        "kind": "reset",
+        "range": [
+          8,
+          8
+        ],
+        "distribution": "uniform",
+        "coupling": "common",
+        "non_latency_dr_scale": 0.0,
+        "cell_id": "dr000_fixed_08",
+        "training_matched": false
+      },
+      "success": {
+        "lucid": 0.0,
+        "fixed": 0.11111111111111116,
+        "off": 0.0
+      },
+      "progress": {
+        "lucid": 0.14932243670854303,
+        "fixed": 0.3374330271035433,
+        "off": 0.13376700319349766
+      },
+      "lucid_min_success_margin": -0.11111111111111116,
+      "lucid_min_progress_margin": -0.18811059039500025
+    },
+    {
+      "cell_id": "dr000_fixed_12",
+      "cell": {
+        "id": "fixed_12",
+        "kind": "reset",
+        "range": [
+          12,
+          12
+        ],
+        "distribution": "uniform",
+        "coupling": "common",
+        "non_latency_dr_scale": 0.0,
+        "cell_id": "dr000_fixed_12",
+        "training_matched": false
+      },
+      "success": {
+        "lucid": 0.0,
+        "fixed": 0.0,
+        "off": 0.0
+      },
+      "progress": {
+        "lucid": 0.07332420349121094,
+        "fixed": 0.09585307310852739,
+        "off": 0.06984714004728529
+      },
+      "lucid_min_success_margin": 0.0,
+      "lucid_min_progress_margin": -0.022528869617316455
+    },
+    {
+      "cell_id": "dr000_jitter_uniform_common_08",
+      "cell": {
+        "id": "jitter_uniform_common_08",
+        "kind": "jitter",
+        "range": [
+          0,
+          8
+        ],
+        "distribution": "uniform",
+        "coupling": "common",
+        "interval_range_s": [
+          0.2,
+          0.5
+        ],
+        "non_latency_dr_scale": 0.0,
+        "cell_id": "dr000_jitter_uniform_common_08",
+        "training_matched": false
+      },
+      "success": {
+        "lucid": 0.6111111111111112,
+        "fixed": 0.5,
+        "off": 0.5555555555555556
+      },
+      "progress": {
+        "lucid": 0.7277104864931769,
+        "fixed": 0.6899229919330941,
+        "off": 0.7212472825000683
+      },
+      "lucid_min_success_margin": 0.05555555555555558,
+      "lucid_min_progress_margin": 0.006463203993108624
+    },
+    {
+      "cell_id": "dr000_jitter_uniform_common_12",
+      "cell": {
+        "id": "jitter_uniform_common_12",
+        "kind": "jitter",
+        "range": [
+          0,
+          12
+        ],
+        "distribution": "uniform",
+        "coupling": "common",
+        "interval_range_s": [
+          0.2,
+          0.5
+        ],
+        "non_latency_dr_scale": 0.0,
+        "cell_id": "dr000_jitter_uniform_common_12",
+        "training_matched": false
+      },
+      "success": {
+        "lucid": 0.16666666666666663,
+        "fixed": 0.2222222222222222,
+        "off": 0.2777777777777778
+      },
+      "progress": {
+        "lucid": 0.3931030382712682,
+        "fixed": 0.48927390037311447,
+        "off": 0.5011148150596354
+      },
+      "lucid_min_success_margin": -0.11111111111111116,
+      "lucid_min_progress_margin": -0.10801177678836721
+    },
+    {
+      "cell_id": "dr050_episode_uniform_common_08",
+      "cell": {
+        "id": "episode_uniform_common_08",
+        "kind": "reset",
+        "range": [
+          0,
+          8
+        ],
+        "distribution": "uniform",
+        "coupling": "common",
+        "non_latency_dr_scale": 0.5,
+        "cell_id": "dr050_episode_uniform_common_08",
+        "training_matched": false
+      },
+      "success": {
+        "lucid": 0.5555555555555556,
+        "fixed": 0.6111111111111112,
+        "off": 0.5
+      },
+      "progress": {
+        "lucid": 0.6677067205309868,
+        "fixed": 0.7311713116036521,
+        "off": 0.6425426614781221
+      },
+      "lucid_min_success_margin": -0.05555555555555558,
+      "lucid_min_progress_margin": -0.06346459107266533
+    },
+    {
+      "cell_id": "dr050_jitter_uniform_common_08",
+      "cell": {
+        "id": "jitter_uniform_common_08",
+        "kind": "jitter",
+        "range": [
+          0,
+          8
+        ],
+        "distribution": "uniform",
+        "coupling": "common",
+        "interval_range_s": [
+          0.2,
+          0.5
+        ],
+        "non_latency_dr_scale": 0.5,
+        "cell_id": "dr050_jitter_uniform_common_08",
+        "training_matched": false
+      },
+      "success": {
+        "lucid": 0.6111111111111112,
+        "fixed": 0.5555555555555556,
+        "off": 0.5555555555555556
+      },
+      "progress": {
+        "lucid": 0.723000465788775,
+        "fixed": 0.7103673341787524,
+        "off": 0.7739691699130667
+      },
+      "lucid_min_success_margin": 0.05555555555555558,
+      "lucid_min_progress_margin": -0.050968704124291775
+    },
+    {
+      "cell_id": "dr100_burst_common_12_p10",
+      "cell": {
+        "id": "burst_common_12_p10",
+        "kind": "burst",
+        "range": [
+          0,
+          12
+        ],
+        "distribution": "two_point",
+        "coupling": "common",
+        "high_probability": 0.1,
+        "interval_range_s": [
+          0.2,
+          0.5
+        ],
+        "non_latency_dr_scale": 1.0,
+        "cell_id": "dr100_burst_common_12_p10",
+        "training_matched": false
+      },
+      "success": {
+        "lucid": 0.4444444444444444,
+        "fixed": 0.5555555555555556,
+        "off": 0.6666666666666667
+      },
+      "progress": {
+        "lucid": 0.652670239408811,
+        "fixed": 0.7260479165448083,
+        "off": 0.8401901713675923
+      },
+      "lucid_min_success_margin": -0.22222222222222232,
+      "lucid_min_progress_margin": -0.18751993195878136
+    },
+    {
+      "cell_id": "dr100_episode_uniform_common_08",
+      "cell": {
+        "id": "episode_uniform_common_08",
+        "kind": "reset",
+        "range": [
+          0,
+          8
+        ],
+        "distribution": "uniform",
+        "coupling": "common",
+        "non_latency_dr_scale": 1.0,
+        "cell_id": "dr100_episode_uniform_common_08",
+        "training_matched": false
+      },
+      "success": {
+        "lucid": 0.5,
+        "fixed": 0.5,
+        "off": 0.5
+      },
+      "progress": {
+        "lucid": 0.6715947430994775,
+        "fixed": 0.6474853811992539,
+        "off": 0.6662032939493656
+      },
+      "lucid_min_success_margin": 0.0,
+      "lucid_min_progress_margin": 0.0053914491501119155
+    },
+    {
+      "cell_id": "dr100_episode_uniform_common_12",
+      "cell": {
+        "id": "episode_uniform_common_12",
+        "kind": "reset",
+        "range": [
+          0,
+          12
+        ],
+        "distribution": "uniform",
+        "coupling": "common",
+        "non_latency_dr_scale": 1.0,
+        "cell_id": "dr100_episode_uniform_common_12",
+        "training_matched": false
+      },
+      "success": {
+        "lucid": 0.2777777777777778,
+        "fixed": 0.2222222222222222,
+        "off": 0.16666666666666663
+      },
+      "progress": {
+        "lucid": 0.3927808007639315,
+        "fixed": 0.4013571310788393,
+        "off": 0.41506502425505054
+      },
+      "lucid_min_success_margin": 0.05555555555555558,
+      "lucid_min_progress_margin": -0.022284223491119026
+    },
+    {
+      "cell_id": "dr100_episode_uniform_independent_08",
+      "cell": {
+        "id": "episode_uniform_independent_08",
+        "kind": "reset",
+        "range": [
+          0,
+          8
+        ],
+        "distribution": "uniform",
+        "coupling": "independent",
+        "non_latency_dr_scale": 1.0,
+        "cell_id": "dr100_episode_uniform_independent_08",
+        "training_matched": true
+      },
+      "success": {
+        "lucid": 0.5555555555555556,
+        "fixed": 0.5555555555555556,
+        "off": 0.6111111111111112
+      },
+      "progress": {
+        "lucid": 0.7052657703558604,
+        "fixed": 0.7003773533635669,
+        "off": 0.7574321842855878
+      },
+      "lucid_min_success_margin": -0.05555555555555558,
+      "lucid_min_progress_margin": -0.05216641392972743
+    },
+    {
+      "cell_id": "dr100_fixed_00",
+      "cell": {
+        "id": "fixed_00",
+        "kind": "reset",
+        "range": [
+          0,
+          0
+        ],
+        "distribution": "uniform",
+        "coupling": "common",
+        "non_latency_dr_scale": 1.0,
+        "cell_id": "dr100_fixed_00",
+        "training_matched": false
+      },
+      "success": {
+        "lucid": 0.7222222222222222,
+        "fixed": 0.7222222222222222,
+        "off": 0.7222222222222222
+      },
+      "progress": {
+        "lucid": 0.8114087349838681,
+        "fixed": 0.8380775128801664,
+        "off": 0.8399978743659126
+      },
+      "lucid_min_success_margin": 0.0,
+      "lucid_min_progress_margin": -0.028589139382044437
+    },
+    {
+      "cell_id": "dr100_fixed_04",
+      "cell": {
+        "id": "fixed_04",
+        "kind": "reset",
+        "range": [
+          4,
+          4
+        ],
+        "distribution": "uniform",
+        "coupling": "common",
+        "non_latency_dr_scale": 1.0,
+        "cell_id": "dr100_fixed_04",
+        "training_matched": false
+      },
+      "success": {
+        "lucid": 0.5555555555555556,
+        "fixed": 0.6111111111111112,
+        "off": 0.6111111111111112
+      },
+      "progress": {
+        "lucid": 0.7466360322303243,
+        "fixed": 0.7656852925817171,
+        "off": 0.8032688713736005
+      },
+      "lucid_min_success_margin": -0.05555555555555558,
+      "lucid_min_progress_margin": -0.056632839143276215
+    },
+    {
+      "cell_id": "dr100_fixed_08",
+      "cell": {
+        "id": "fixed_08",
+        "kind": "reset",
+        "range": [
+          8,
+          8
+        ],
+        "distribution": "uniform",
+        "coupling": "common",
+        "non_latency_dr_scale": 1.0,
+        "cell_id": "dr100_fixed_08",
+        "training_matched": false
+      },
+      "success": {
+        "lucid": 0.0,
+        "fixed": 0.16666666666666663,
+        "off": 0.0
+      },
+      "progress": {
+        "lucid": 0.14980211502148044,
+        "fixed": 0.405116851752003,
+        "off": 0.1559568223439985
+      },
+      "lucid_min_success_margin": -0.16666666666666663,
+      "lucid_min_progress_margin": -0.2553147367305226
+    },
+    {
+      "cell_id": "dr100_fixed_12",
+      "cell": {
+        "id": "fixed_12",
+        "kind": "reset",
+        "range": [
+          12,
+          12
+        ],
+        "distribution": "uniform",
+        "coupling": "common",
+        "non_latency_dr_scale": 1.0,
+        "cell_id": "dr100_fixed_12",
+        "training_matched": false
+      },
+      "success": {
+        "lucid": 0.0,
+        "fixed": 0.0,
+        "off": 0.0
+      },
+      "progress": {
+        "lucid": 0.07942449342873362,
+        "fixed": 0.10247234606908427,
+        "off": 0.07341910515808397
+      },
+      "lucid_min_success_margin": 0.0,
+      "lucid_min_progress_margin": -0.023047852640350655
+    },
+    {
+      "cell_id": "dr100_jitter_uniform_common_08",
+      "cell": {
+        "id": "jitter_uniform_common_08",
+        "kind": "jitter",
+        "range": [
+          0,
+          8
+        ],
+        "distribution": "uniform",
+        "coupling": "common",
+        "interval_range_s": [
+          0.2,
+          0.5
+        ],
+        "non_latency_dr_scale": 1.0,
+        "cell_id": "dr100_jitter_uniform_common_08",
+        "training_matched": false
+      },
+      "success": {
+        "lucid": 0.4444444444444444,
+        "fixed": 0.38888888888888884,
+        "off": 0.6111111111111112
+      },
+      "progress": {
+        "lucid": 0.6758554774439998,
+        "fixed": 0.6412785094645288,
+        "off": 0.7825215773450004
+      },
+      "lucid_min_success_margin": -0.16666666666666674,
+      "lucid_min_progress_margin": -0.10666609990100062
+    },
+    {
+      "cell_id": "dr100_jitter_uniform_common_12",
+      "cell": {
+        "id": "jitter_uniform_common_12",
+        "kind": "jitter",
+        "range": [
+          0,
+          12
+        ],
+        "distribution": "uniform",
+        "coupling": "common",
+        "interval_range_s": [
+          0.2,
+          0.5
+        ],
+        "non_latency_dr_scale": 1.0,
+        "cell_id": "dr100_jitter_uniform_common_12",
+        "training_matched": false
+      },
+      "success": {
+        "lucid": 0.16666666666666663,
+        "fixed": 0.2222222222222222,
+        "off": 0.0
+      },
+      "progress": {
+        "lucid": 0.3514347086764044,
+        "fixed": 0.4327046624902222,
+        "off": 0.39176674621800583
+      },
+      "lucid_min_success_margin": -0.05555555555555558,
+      "lucid_min_progress_margin": -0.0812699538138178
+    }
+  ],
+  "absolute_best_discovery_conditions": {
+    "lucid": {
+      "success": {
+        "value": 0.7222222222222222,
+        "cell_ids": [
+          "dr000_fixed_00",
+          "dr000_fixed_04",
+          "dr100_fixed_00"
+        ]
+      },
+      "progress": {
+        "value": 0.8157443983687295,
+        "cell_ids": [
+          "dr000_fixed_04"
+        ]
+      }
+    },
+    "fixed": {
+      "success": {
+        "value": 0.7777777777777778,
+        "cell_ids": [
+          "dr000_fixed_04"
+        ]
+      },
+      "progress": {
+        "value": 0.858152214023802,
+        "cell_ids": [
+          "dr000_fixed_04"
+        ]
+      }
+    },
+    "off": {
+      "success": {
+        "value": 0.7777777777777778,
+        "cell_ids": [
+          "dr000_episode_uniform_independent_08"
+        ]
+      },
+      "progress": {
+        "value": 0.8843379136588838,
+        "cell_ids": [
+          "dr000_episode_uniform_independent_08"
+        ]
+      }
+    }
+  },
+  "relative_lucid_ranking": [
+    {
+      "cell_id": "dr000_episode_uniform_common_12",
+      "min_success_margin": 0.11111111111111116,
+      "min_progress_margin": 0.01223185492886436
+    },
+    {
+      "cell_id": "dr000_jitter_uniform_common_08",
+      "min_success_margin": 0.05555555555555558,
+      "min_progress_margin": 0.006463203993108624
+    },
+    {
+      "cell_id": "dr100_episode_uniform_common_12",
+      "min_success_margin": 0.05555555555555558,
+      "min_progress_margin": -0.022284223491119026
+    },
+    {
+      "cell_id": "dr050_jitter_uniform_common_08",
+      "min_success_margin": 0.05555555555555558,
+      "min_progress_margin": -0.050968704124291775
+    },
+    {
+      "cell_id": "dr100_episode_uniform_common_08",
+      "min_success_margin": 0.0,
+      "min_progress_margin": 0.0053914491501119155
+    },
+    {
+      "cell_id": "dr000_fixed_12",
+      "min_success_margin": 0.0,
+      "min_progress_margin": -0.022528869617316455
+    },
+    {
+      "cell_id": "dr100_fixed_12",
+      "min_success_margin": 0.0,
+      "min_progress_margin": -0.023047852640350655
+    },
+    {
+      "cell_id": "dr100_fixed_00",
+      "min_success_margin": 0.0,
+      "min_progress_margin": -0.028589139382044437
+    },
+    {
+      "cell_id": "dr000_fixed_00",
+      "min_success_margin": 0.0,
+      "min_progress_margin": -0.030134273072083717
+    },
+    {
+      "cell_id": "dr000_burst_common_12_p10",
+      "min_success_margin": 0.0,
+      "min_progress_margin": -0.07393224868509507
+    },
+    {
+      "cell_id": "dr000_fixed_04",
+      "min_success_margin": -0.05555555555555558,
+      "min_progress_margin": -0.04240781565507257
+    },
+    {
+      "cell_id": "dr100_episode_uniform_independent_08",
+      "min_success_margin": -0.05555555555555558,
+      "min_progress_margin": -0.05216641392972743
+    },
+    {
+      "cell_id": "dr100_fixed_04",
+      "min_success_margin": -0.05555555555555558,
+      "min_progress_margin": -0.056632839143276215
+    },
+    {
+      "cell_id": "dr050_episode_uniform_common_08",
+      "min_success_margin": -0.05555555555555558,
+      "min_progress_margin": -0.06346459107266533
+    },
+    {
+      "cell_id": "dr100_jitter_uniform_common_12",
+      "min_success_margin": -0.05555555555555558,
+      "min_progress_margin": -0.0812699538138178
+    },
+    {
+      "cell_id": "dr000_episode_uniform_independent_08",
+      "min_success_margin": -0.11111111111111105,
+      "min_progress_margin": -0.10546931541628302
+    },
+    {
+      "cell_id": "dr000_episode_uniform_common_08",
+      "min_success_margin": -0.11111111111111116,
+      "min_progress_margin": -0.09193504601716995
+    },
+    {
+      "cell_id": "dr000_jitter_uniform_common_12",
+      "min_success_margin": -0.11111111111111116,
+      "min_progress_margin": -0.10801177678836721
+    },
+    {
+      "cell_id": "dr000_fixed_08",
+      "min_success_margin": -0.11111111111111116,
+      "min_progress_margin": -0.18811059039500025
+    },
+    {
+      "cell_id": "dr100_fixed_08",
+      "min_success_margin": -0.16666666666666663,
+      "min_progress_margin": -0.2553147367305226
+    },
+    {
+      "cell_id": "dr100_jitter_uniform_common_08",
+      "min_success_margin": -0.16666666666666674,
+      "min_progress_margin": -0.10666609990100062
+    },
+    {
+      "cell_id": "dr100_burst_common_12_p10",
+      "min_success_margin": -0.22222222222222232,
+      "min_progress_margin": -0.18751993195878136
+    }
+  ],
+  "selected_confirmation_cells": [
+    "dr000_episode_uniform_common_12"
+  ],
+  "confirmation": {
+    "dr000_episode_uniform_common_12": {
+      "cell_id": "dr000_episode_uniform_common_12",
+      "mode_metrics": {
+        "lucid": {
+          "success_rate": {
+            "per_checkpoint_seed": {
+              "8600": 0.48809523809523814,
+              "8601": 0.40476190476190477,
+              "8602": 0.48809523809523814
+            },
+            "mean": 0.4603174603174603,
+            "sample_std": 0.048112522432468836
+          },
+          "progress_rate": {
+            "per_checkpoint_seed": {
+              "8600": 0.6002506581966632,
+              "8601": 0.5348124193385176,
+              "8602": 0.5660965489667087
+            },
+            "mean": 0.5670532088339632,
+            "sample_std": 0.032729607006350386
+          }
+        },
+        "fixed": {
+          "success_rate": {
+            "per_checkpoint_seed": {
+              "8600": 0.5119047619047619,
+              "8601": 0.38095238095238093,
+              "8602": 0.5
+            },
+            "mean": 0.46428571428571425,
+            "sample_std": 0.07241383964640738
+          },
+          "progress_rate": {
+            "per_checkpoint_seed": {
+              "8600": 0.6451014897902496,
+              "8601": 0.5265537626775247,
+              "8602": 0.5770072458267567
+            },
+            "mean": 0.5828874994315103,
+            "sample_std": 0.05949221745523052
+          }
+        },
+        "off": {
+          "success_rate": {
+            "per_checkpoint_seed": {
+              "8600": 0.5357142857142857,
+              "8601": 0.36904761904761907,
+              "8602": 0.41666666666666663
+            },
+            "mean": 0.44047619047619047,
+            "sample_std": 0.08584645893961879
+          },
+          "progress_rate": {
+            "per_checkpoint_seed": {
+              "8600": 0.6172383526462086,
+              "8601": 0.5054781773415882,
+              "8602": 0.5354343575115005
+            },
+            "mean": 0.5527169624997658,
+            "sample_std": 0.0578498100464918
+          }
+        }
+      },
+      "comparisons": {
+        "fixed": {
+          "success_rate": {
+            "per_checkpoint_seed": {
+              "8600": -0.023809523809523725,
+              "8601": 0.023809523809523836,
+              "8602": -0.011904761904761862
+            },
+            "mean_delta": -0.003968253968253917,
+            "favorable_seed_count": 1,
+            "exact_seed_block_sign_flip_p_two_sided": 1.0,
+            "bootstrap": {
+              "method": "hierarchical percentile bootstrap over checkpoint seeds and motions",
+              "replicates": 10000,
+              "analysis_seed": 20260821,
+              "ci95": [
+                -0.05555555555555555,
+                0.047619047619047616
+              ],
+              "probability_positive": 0.4087
+            }
+          },
+          "progress_rate": {
+            "per_checkpoint_seed": {
+              "8600": -0.04485083159358638,
+              "8601": 0.008258656660992902,
+              "8602": -0.010910696860047975
+            },
+            "mean_delta": -0.01583429059754715,
+            "favorable_seed_count": 1,
+            "exact_seed_block_sign_flip_p_two_sided": 0.5,
+            "bootstrap": {
+              "method": "hierarchical percentile bootstrap over checkpoint seeds and motions",
+              "replicates": 10000,
+              "analysis_seed": 20260822,
+              "ci95": [
+                -0.05832378099864674,
+                0.02575871164333962
+              ],
+              "probability_positive": 0.2283
+            }
+          }
+        },
+        "off": {
+          "success_rate": {
+            "per_checkpoint_seed": {
+              "8600": -0.04761904761904756,
+              "8601": 0.0357142857142857,
+              "8602": 0.07142857142857151
+            },
+            "mean_delta": 0.019841269841269882,
+            "favorable_seed_count": 2,
+            "exact_seed_block_sign_flip_p_two_sided": 0.75,
+            "bootstrap": {
+              "method": "hierarchical percentile bootstrap over checkpoint seeds and motions",
+              "replicates": 10000,
+              "analysis_seed": 20260831,
+              "ci95": [
+                -0.05158730158730159,
+                0.09126984126984126
+              ],
+              "probability_positive": 0.6847
+            }
+          },
+          "progress_rate": {
+            "per_checkpoint_seed": {
+              "8600": -0.0169876944495454,
+              "8601": 0.029334241996929467,
+              "8602": 0.03066219145520821
+            },
+            "mean_delta": 0.014336246334197425,
+            "favorable_seed_count": 2,
+            "exact_seed_block_sign_flip_p_two_sided": 0.5,
+            "bootstrap": {
+              "method": "hierarchical percentile bootstrap over checkpoint seeds and motions",
+              "replicates": 10000,
+              "analysis_seed": 20260832,
+              "ci95": [
+                -0.02352296725092899,
+                0.05329390072692481
+              ],
+              "probability_positive": 0.7611
+            }
+          }
+        }
+      },
+      "directional_replication": false,
+      "inference_limit": "Only three independent checkpoint-seed blocks are available; the exact two-sided sign-flip test cannot attain p < 0.25. Motion-level bootstrap intervals are descriptive."
+    }
+  },
+  "verified": [
+    "the complete preregistered discovery surface is reported",
+    "confirmation used the mechanically selected cells and disjoint canonical content",
+    "confirmation comparisons are paired by checkpoint and evaluation seed",
+    "all source stages passed latency-process telemetry and checkpoint-freeze checks"
+  ],
+  "claim_boundary": "fresh-physics robustness on training-seen debug512 motions; not unseen-motion, hardware, or real-world latency-distribution evidence"
+}

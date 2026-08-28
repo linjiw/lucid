@@ -1,0 +1,45 @@
+{
+  "kind": "lucid_release_checkpoint_pseudo_training_receipt",
+  "note": "NO TRAINING: SONIC release checkpoint (step 41550) scored under the matched evaluator",
+  "experiment_id": "release_step41550_untrained",
+  "config": {
+    "checkpoint": "/data/robotixx/lucid-sonic/sonic_release/model_step_041550.pt",
+    "num_envs": 128,
+    "iterations": 0,
+    "warmup_iterations": 0,
+    "seeds": [
+      8600,
+      8601,
+      8602
+    ],
+    "modes": [
+      "origin"
+    ]
+  },
+  "arms": {
+    "release_s8600": {
+      "seed": 8600,
+      "mode": "origin",
+      "checkpoint": "/data/robotixx/lucid-sonic/sonic_release/model_step_041550.pt",
+      "checkpoint_exported": true,
+      "complete": true,
+      "branch_id": "release_s8600"
+    },
+    "release_s8601": {
+      "seed": 8601,
+      "mode": "origin",
+      "checkpoint": "/data/robotixx/lucid-sonic/sonic_release/model_step_041550.pt",
+      "checkpoint_exported": true,
+      "complete": true,
+      "branch_id": "release_s8601"
+    },
+    "release_s8602": {
+      "seed": 8602,
+      "mode": "origin",
+      "checkpoint": "/data/robotixx/lucid-sonic/sonic_release/model_step_041550.pt",
+      "checkpoint_exported": true,
+      "complete": true,
+      "branch_id": "release_s8602"
+    }
+  }
+}

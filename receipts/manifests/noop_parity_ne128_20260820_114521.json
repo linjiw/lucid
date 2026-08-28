@@ -1,0 +1,190 @@
+{
+  "kind": "lucid_research_disabled_noop_parity",
+  "schema_version": 1,
+  "created_at": "2026-08-20T11:46:28.052531-04:00",
+  "experiment_id": "noop_parity_ne128_20260820_114521",
+  "git_sha": "811f08498ce951c6e7094bb1e407f8d05cf0b235",
+  "git_status_short": [
+    " M gear_sonic/config/callbacks/lucid_curriculum.yaml",
+    " M gear_sonic/research/practice_utility/actuator_patch.py",
+    " M gear_sonic/research/practice_utility/dr_curriculum.py",
+    " M gear_sonic/research/practice_utility/dr_scaling.py",
+    " M gear_sonic/research/practice_utility/events_reset_safe.py",
+    " M gear_sonic/research/practice_utility/observer.py",
+    " M scripts/practice_utility/train_with_delay.py",
+    " M tests/practice_utility/test_actuator_patch.py",
+    " M tests/practice_utility/test_dr_curriculum.py",
+    " M tests/practice_utility/test_events_reset_safe.py",
+    "?? gear_sonic/config/manager_env/events/tracking/lucid_latency_only.yaml",
+    "?? scripts/practice_utility/run_curriculum_warmup_parity.py",
+    "?? scripts/practice_utility/run_latency_ab.py",
+    "?? scripts/practice_utility/run_noop_parity.py",
+    "?? scripts/practice_utility/run_throughput_probe.py",
+    "?? tests/practice_utility/test_curriculum_warmup_parity.py",
+    "?? tests/practice_utility/test_latency_ab.py",
+    "?? tests/practice_utility/test_noop_parity.py",
+    "?? tests/practice_utility/test_throughput_probe.py"
+  ],
+  "launcher_sha256": "a3cdc9d4e3772668278bb840853482bfc464bcf21938d84c35cfd084d9dfa171",
+  "config": {
+    "num_envs": 128,
+    "iterations": 4,
+    "seed": 8400,
+    "checkpoint": "/home/robotixx/lucid/GR00T-WholeBodyControl/logs_rl/TRL_G1_Track/manager/universal_token/all_modes/sonic_release_test-20260818_141446/model_step_000024.pt",
+    "arm_order": [
+      "native",
+      "research_disabled"
+    ],
+    "tolerance": 0.0
+  },
+  "commands": {
+    "native": [
+      "/home/robotixx/miniconda3/envs/sonic/bin/python",
+      "/home/robotixx/lucid/GR00T-WholeBodyControl/gear_sonic/train_agent_trl.py",
+      "+exp=manager/universal_token/all_modes/sonic_release",
+      "checkpoint=/home/robotixx/lucid/GR00T-WholeBodyControl/logs_rl/TRL_G1_Track/manager/universal_token/all_modes/sonic_release_test-20260818_141446/model_step_000024.pt",
+      "num_envs=128",
+      "headless=true",
+      "use_wandb=false",
+      "seed=8400",
+      "++algo.config.num_learning_iterations=4",
+      "++algo.config.save_interval=100000",
+      "++manager_env.commands.motion.motion_lib_cfg.motion_file=data/motion_lib_bones_seed/robot_filtered",
+      "++manager_env.commands.motion.motion_lib_cfg.smpl_motion_file=data/motion_lib_bones_seed/smpl_filtered"
+    ],
+    "research_disabled": [
+      "/home/robotixx/miniconda3/envs/sonic/bin/python",
+      "/home/robotixx/lucid/GR00T-WholeBodyControl/gear_sonic/train_agent_trl.py",
+      "+exp=manager/universal_token/all_modes/sonic_release",
+      "checkpoint=/home/robotixx/lucid/GR00T-WholeBodyControl/logs_rl/TRL_G1_Track/manager/universal_token/all_modes/sonic_release_test-20260818_141446/model_step_000024.pt",
+      "num_envs=128",
+      "headless=true",
+      "use_wandb=false",
+      "seed=8400",
+      "++algo.config.num_learning_iterations=4",
+      "++algo.config.save_interval=100000",
+      "++manager_env.commands.motion.motion_lib_cfg.motion_file=data/motion_lib_bones_seed/robot_filtered",
+      "++manager_env.commands.motion.motion_lib_cfg.smpl_motion_file=data/motion_lib_bones_seed/smpl_filtered",
+      "++callbacks.practice_observer._target_=gear_sonic.research.practice_utility.observer.PracticeObserverCallback",
+      "++callbacks.practice_observer.enabled=false",
+      "++callbacks.lucid_curriculum._target_=gear_sonic.research.practice_utility.dr_curriculum.LucidCurriculumCallback",
+      "++callbacks.lucid_curriculum.enabled=false"
+    ]
+  },
+  "runtime": {
+    "native": {
+      "exit_code": 0,
+      "wall_seconds": 35.113012476824224,
+      "gpu": {
+        "samples": 18,
+        "start_free_mib": 28573.0,
+        "min_free_mib": 23366.0,
+        "max_used_mib": 8738.0,
+        "max_gpu_util_pct": 96.0
+      },
+      "log_path": "/data/robotixx/lucid-sonic/outputs/noop_parity_ne128_20260820_114521_native.log"
+    },
+    "research_disabled": {
+      "exit_code": 0,
+      "wall_seconds": 31.842565146274865,
+      "gpu": {
+        "samples": 16,
+        "start_free_mib": 28573.0,
+        "min_free_mib": 23366.0,
+        "max_used_mib": 8738.0,
+        "max_gpu_util_pct": 96.0
+      },
+      "log_path": "/data/robotixx/lucid-sonic/outputs/noop_parity_ne128_20260820_114521_research_disabled.log"
+    }
+  },
+  "arms": {
+    "native": {
+      "iterations_parsed": 4,
+      "training": {
+        "Mean rewards": {
+          "1": 0.10694,
+          "2": 1.37213,
+          "3": 2.08664,
+          "4": 2.42799
+        },
+        "Mean length": {
+          "1": 14.0,
+          "2": 24.85714,
+          "3": 35.40909,
+          "4": 40.16
+        },
+        "Mean entropy": {
+          "1": 13.32102,
+          "2": 13.32833,
+          "3": 13.33461,
+          "4": 13.34272
+        },
+        "Mean action noise std": {
+          "1": 0.39,
+          "2": 0.39,
+          "3": 0.39,
+          "4": 0.39
+        }
+      }
+    },
+    "research_disabled": {
+      "iterations_parsed": 4,
+      "training": {
+        "Mean rewards": {
+          "1": 0.10694,
+          "2": 1.37213,
+          "3": 2.08664,
+          "4": 2.42799
+        },
+        "Mean length": {
+          "1": 14.0,
+          "2": 24.85714,
+          "3": 35.40909,
+          "4": 40.16
+        },
+        "Mean entropy": {
+          "1": 13.32102,
+          "2": 13.32833,
+          "3": 13.33461,
+          "4": 13.34272
+        },
+        "Mean action noise std": {
+          "1": 0.39,
+          "2": 0.39,
+          "3": 0.39,
+          "4": 0.39
+        }
+      }
+    }
+  },
+  "comparison": {
+    "shared_iterations": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "tolerance": 0.0,
+    "max_abs_difference": {
+      "Mean rewards": 0.0,
+      "Mean length": 0.0,
+      "Mean entropy": 0.0,
+      "Mean action noise std": 0.0
+    },
+    "matched": {
+      "Mean rewards": true,
+      "Mean length": true,
+      "Mean entropy": true,
+      "Mean action noise std": true
+    },
+    "missing_keys": [],
+    "passes": true
+  },
+  "verified": [
+    "both arms exited 0 and parsed every requested iteration",
+    "disabled observer and curriculum callbacks are exact no-ops on printed training metrics"
+  ],
+  "not_yet_verified": [
+    "resume equivalence"
+  ]
+}

@@ -1,0 +1,5 @@
+iteration	hypothesis	verification	decision	status
+0	Training delay is live and curriculum-scaled, but constant within each episode	All 9 arms: 5 delayed groups, 6 scalable terms, no envelope violation; LUCID lambda/mean-delay Pearson 0.980-0.982	keep	complete
+1	End-of-evaluation lag snapshots are insufficient for distributional latency	Live jitter smoke: 769 invocations, 4232 env resamples, 21160 assignments, exact shared-group coupling	keep	complete
+2	LUCID has a broad latency-distribution advantage	66-run discovery surface: most cells favor fixed or off; only nominal shared per-episode U(0,60 ms) passes selection	refine	complete
+3	The selected U(0,60 ms) region replicates on disjoint content and fresh seeds	LUCID 46.03/56.71%; fixed 46.43/58.29%; off 44.05/55.27%; LUCID beat fixed in 1/3 seeds	discard	complete

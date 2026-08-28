@@ -1,0 +1,150 @@
+{
+  "kind": "lucid_symmetric_restart_equivalence",
+  "schema_version": 1,
+  "created_at": "2026-08-20T14:23:12.424824-04:00",
+  "experiment_id": "restart_pair_equivalence_ne128_20260820_142104",
+  "git_sha": "811f08498ce951c6e7094bb1e407f8d05cf0b235",
+  "git_status_short": [
+    " M gear_sonic/config/callbacks/lucid_curriculum.yaml",
+    " M gear_sonic/research/practice_utility/actuator_patch.py",
+    " M gear_sonic/research/practice_utility/callbacks.py",
+    " M gear_sonic/research/practice_utility/dr_curriculum.py",
+    " M gear_sonic/research/practice_utility/dr_scaling.py",
+    " M gear_sonic/research/practice_utility/events_reset_safe.py",
+    " M gear_sonic/research/practice_utility/observer.py",
+    " M gear_sonic/research/practice_utility/run_log.py",
+    " M scripts/practice_utility/train_with_delay.py",
+    " M tests/practice_utility/test_actuator_patch.py",
+    " M tests/practice_utility/test_callbacks.py",
+    " M tests/practice_utility/test_dr_curriculum.py",
+    " M tests/practice_utility/test_events_reset_safe.py",
+    "?? gear_sonic/config/manager_env/events/tracking/lucid_latency_only.yaml",
+    "?? scripts/practice_utility/run_curriculum_warmup_parity.py",
+    "?? scripts/practice_utility/run_latency_ab.py",
+    "?? scripts/practice_utility/run_noop_parity.py",
+    "?? scripts/practice_utility/run_restart_pair_equivalence.py",
+    "?? scripts/practice_utility/run_resume_equivalence.py",
+    "?? scripts/practice_utility/run_throughput_probe.py",
+    "?? tests/practice_utility/test_curriculum_warmup_parity.py",
+    "?? tests/practice_utility/test_latency_ab.py",
+    "?? tests/practice_utility/test_noop_parity.py",
+    "?? tests/practice_utility/test_restart_pair_equivalence.py",
+    "?? tests/practice_utility/test_resume_equivalence.py",
+    "?? tests/practice_utility/test_throughput_probe.py"
+  ],
+  "launcher_sha256": "90b0197ef883c218562ee55644fa1693ab368e6d0dc692a748491a3700a79e8c",
+  "config": {
+    "num_envs": 128,
+    "seed": 8500,
+    "capsule_global_step": 10,
+    "absolute_total_iterations": 20,
+    "expected_iterations_per_branch": 10,
+    "checkpoint": "/data/robotixx/lucid-sonic/artifacts/resume_equivalence/resume_equivalence_ne128_20260820_120104/split_checkpoint.pt",
+    "checkpoint_sha256": "0fd2f80933a7f90cc4c67e234841fa4ae0f95919a1ea7eb7967fa6ef446f2645",
+    "capsule": "/data/robotixx/lucid-sonic/artifacts/resume_equivalence/resume_equivalence_ne128_20260820_120104/capsules/resume_equivalence_ne128_20260820_120104_full_split.capsule.pt",
+    "capsule_sha256": "5212fddf9e02c735f376e9bac0f119c50999aa8b1427d58d410f6de63ade0b8a",
+    "identity_tolerance": 0.0,
+    "estimand_boundary": "two symmetric fresh resets from one capsule"
+  },
+  "commands": {
+    "branch_a": [
+      "/home/robotixx/miniconda3/envs/sonic/bin/python",
+      "/home/robotixx/lucid/GR00T-WholeBodyControl/gear_sonic/train_agent_trl.py",
+      "+exp=manager/universal_token/all_modes/sonic_release",
+      "checkpoint=/data/robotixx/lucid-sonic/artifacts/resume_equivalence/resume_equivalence_ne128_20260820_120104/split_checkpoint.pt",
+      "num_envs=128",
+      "headless=true",
+      "use_wandb=false",
+      "seed=8500",
+      "++algo.config.num_learning_iterations=20",
+      "++algo.config.save_interval=100000",
+      "++manager_env.commands.motion.motion_lib_cfg.motion_file=data/motion_lib_bones_seed/robot_filtered",
+      "++manager_env.commands.motion.motion_lib_cfg.smpl_motion_file=data/motion_lib_bones_seed/smpl_filtered",
+      "+resume=true",
+      "++callbacks.practice_resume._target_=gear_sonic.research.practice_utility.callbacks.PracticeCapsuleResumeCallback",
+      "++callbacks.practice_resume.enabled=true",
+      "++callbacks.practice_resume.capsule_path=/data/robotixx/lucid-sonic/artifacts/resume_equivalence/resume_equivalence_ne128_20260820_120104/capsules/resume_equivalence_ne128_20260820_120104_full_split.capsule.pt"
+    ],
+    "branch_b": [
+      "/home/robotixx/miniconda3/envs/sonic/bin/python",
+      "/home/robotixx/lucid/GR00T-WholeBodyControl/gear_sonic/train_agent_trl.py",
+      "+exp=manager/universal_token/all_modes/sonic_release",
+      "checkpoint=/data/robotixx/lucid-sonic/artifacts/resume_equivalence/resume_equivalence_ne128_20260820_120104/split_checkpoint.pt",
+      "num_envs=128",
+      "headless=true",
+      "use_wandb=false",
+      "seed=8500",
+      "++algo.config.num_learning_iterations=20",
+      "++algo.config.save_interval=100000",
+      "++manager_env.commands.motion.motion_lib_cfg.motion_file=data/motion_lib_bones_seed/robot_filtered",
+      "++manager_env.commands.motion.motion_lib_cfg.smpl_motion_file=data/motion_lib_bones_seed/smpl_filtered",
+      "+resume=true",
+      "++callbacks.practice_resume._target_=gear_sonic.research.practice_utility.callbacks.PracticeCapsuleResumeCallback",
+      "++callbacks.practice_resume.enabled=true",
+      "++callbacks.practice_resume.capsule_path=/data/robotixx/lucid-sonic/artifacts/resume_equivalence/resume_equivalence_ne128_20260820_120104/capsules/resume_equivalence_ne128_20260820_120104_full_split.capsule.pt"
+    ]
+  },
+  "runtime": {
+    "branch_a": {
+      "exit_code": 0,
+      "wall_seconds": 64.03764991275966,
+      "gpu": {
+        "samples": 32,
+        "start_free_mib": 26883.0,
+        "min_free_mib": 22136.0,
+        "max_used_mib": 9968.0,
+        "max_gpu_util_pct": 96.0
+      },
+      "log_path": "/data/robotixx/lucid-sonic/outputs/restart_pair_equivalence_ne128_20260820_142104_branch_a.log"
+    },
+    "branch_b": {
+      "exit_code": 0,
+      "wall_seconds": 63.472335018217564,
+      "gpu": {
+        "samples": 32,
+        "start_free_mib": 26883.0,
+        "min_free_mib": 22136.0,
+        "max_used_mib": 9968.0,
+        "max_gpu_util_pct": 96.0
+      },
+      "log_path": "/data/robotixx/lucid-sonic/outputs/restart_pair_equivalence_ne128_20260820_142104_branch_b.log"
+    }
+  },
+  "comparison": {
+    "shared_iterations": [
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "tolerance": 0.0,
+    "max_abs_difference": {
+      "Mean rewards": 0.0,
+      "Mean length": 0.0,
+      "Mean entropy": 0.0,
+      "Mean action noise std": 0.0
+    },
+    "matched": {
+      "Mean rewards": true,
+      "Mean length": true,
+      "Mean entropy": true,
+      "Mean action noise std": true
+    },
+    "missing_keys": [],
+    "passes": true,
+    "restart_pair_equivalent": true
+  },
+  "verified": [
+    "both branches restored the same capsule RNG immediately before reset",
+    "both branches parsed every requested post-capsule iteration",
+    "all printed parity metrics match exactly after symmetric restart"
+  ],
+  "not_yet_verified": [],
+  "unsupported_contract": "uninterrupted-vs-resumed live-trajectory identity; SONIC does not checkpoint simulator and episode state"
+}

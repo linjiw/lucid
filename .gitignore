@@ -1,0 +1,7 @@
+# nested code repos are git submodules (see .gitmodules)
+*.pt
+*.pth
+*.onnx
+__pycache__/
+*.log
+tmp/

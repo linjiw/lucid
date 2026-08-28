@@ -1,0 +1,97 @@
+{
+  "kind": "practice_utility_probe_manifest_creation",
+  "schema_version": 1,
+  "created_at": "2026-08-26T15:16:45.618943-04:00",
+  "campaign_id": "probe_screen_v2_late_20260826",
+  "claim_grade_inputs": true,
+  "git_sha": "2bfcb6f7f33a7360ff76d4ed8faa35b2c8cf00d3",
+  "git_status_short": [],
+  "launcher": "/home/robotixx/lucid/GR00T-WholeBodyControl/scripts/practice_utility/create_probe_manifest.py",
+  "launcher_sha256": "7a51cbc6ff6ddaa5cc2b118b26d9b09b70cf762baaf0211e1ce737493cdb0cec",
+  "manifest": {
+    "path": "/data/robotixx/lucid-sonic/manifests/probe_screen_v2_late_20260826.json",
+    "manifest_sha256": "17c178dc4c4f5a0dbd378aebfa6097a34e8fc46684e272a0f28c1b3649fa9bc3",
+    "file_sha256": "591501ac112f39fa890cb6065a11841c16a1a4ed04ee7f568cd883e8b551dc72"
+  },
+  "inputs": {
+    "pool_manifest": {
+      "path": "/data/robotixx/lucid-sonic/manifests/pool_debug512.json",
+      "file_sha256": "4cbeb6b236af059eefd223d8bc418b43aabab29a4dde0899b09d198f70c7f7bd",
+      "pool_sha256": "b065a49854a497aaa82c891e89c32505c46f5122c86ef04f94f340d83cba0434",
+      "source_bytes": {
+        "source_root": "/data/robotixx/groot-wbc-sonic-research/datasets/bones_seed_official_zpd_scale512/robot_filtered",
+        "source_file_count": 512,
+        "source_files_sha256": "3244e55ca0688db7d9121a232ab5245fe9a880006e788d1f2529fed5bc5ac278"
+      }
+    },
+    "split_manifest": {
+      "path": "/data/robotixx/lucid-sonic/manifests/split_debug512_performer.json",
+      "file_sha256": "b2e8805cf1cc3a3cd5af883727df1688d72f6fa5963c84d2e459520ace9cd689",
+      "split_sha256": "0b2a35e00874706f16be635b637fcd5a3a98ca01cf53e811a1d87a127f83ce2f",
+      "pool_sha256": "b065a49854a497aaa82c891e89c32505c46f5122c86ef04f94f340d83cba0434"
+    },
+    "origin_maps": {
+      "late": {
+        "path": "/data/robotixx/lucid-sonic/manifests/probe_origins_ne256_20260826_122253_365435_origin_map.json",
+        "file_sha256": "1e7a170c183117f4c5ec8803e323d8629fad48f331542ebd26b014afb8cf4545",
+        "payload_sha256": "98f76555e22f02dbf221afbadccc9735b6bac4f2fcc91cc53f086db528f04333",
+        "origin_step": 56,
+        "common_context_count": 652,
+        "snapshots": {
+          "9300": {
+            "path": "/data/robotixx/lucid-sonic/artifacts/probe_origins/probe_origins_ne256_20260826_122253_365435/seed_9300/origin_snapshot.json",
+            "file_sha256": "73ef49efb1d89acdb8efe8c463d52bf0ccecdecbc8eed07c7eed47ecd98127df",
+            "global_step": 56,
+            "context_count": 1908,
+            "raw_context_row_count": 1908,
+            "unique_context_count": 1352
+          },
+          "9301": {
+            "path": "/data/robotixx/lucid-sonic/artifacts/probe_origins/probe_origins_ne256_20260826_122253_365435/seed_9301/origin_snapshot.json",
+            "file_sha256": "639eb0d798b9a1ec0da778f5d94b1914f2dcb7f7d4429b72f0c704ca5ff32802",
+            "global_step": 56,
+            "context_count": 2140,
+            "raw_context_row_count": 2140,
+            "unique_context_count": 1707
+          }
+        }
+      }
+    },
+    "exploratory_snapshots": {}
+  },
+  "selection": {
+    "selection_seed": 20260826,
+    "requested_contexts_per_stage": 24,
+    "seeds": [
+      9300,
+      9301
+    ],
+    "train_partition": "adaptation",
+    "snapshot_timeline_fps": 50.0,
+    "motion_feature_bounds": "floor(start*source_fps/timeline_fps), ceil(end*source_fps/timeline_fps)",
+    "counts_per_stage": {
+      "late": {
+        "source_origin_count": 2,
+        "common_resident_contexts": 652,
+        "partition_candidates": 420,
+        "skipped_outside_partition": 232,
+        "skipped_missing_from_pool": 0,
+        "selected_contexts": 24
+      }
+    }
+  },
+  "verified": [
+    "origin-map byte hashes match the command-line references",
+    "one distinct hash-verified snapshot exists per declared stage and seed",
+    "origin-map common contexts equal the source-snapshot intersections",
+    "pool and split logical hashes recompute and match",
+    "pool source bytes and record paths rescan to the frozen logical pool",
+    "the Git worktree was clean before claim-grade construction",
+    "every snapshot ContextKey motion hash matches the frozen pool",
+    "selection is outcome-blind and motion features use time-aligned source bounds"
+  ],
+  "not_yet_verified": [
+    "counterfactual utility labels exceed the same-estimand noise floor",
+    "frozen latent-gap features predict those labels"
+  ]
+}

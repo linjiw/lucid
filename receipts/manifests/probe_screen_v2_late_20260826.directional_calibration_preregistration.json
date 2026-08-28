@@ -1,0 +1,364 @@
+{
+  "algorithm": {
+    "algorithm_sha256": "ee1b857650749c4b141de3fefe852b10442277b4785ca093faafa0cc87061091",
+    "bootstrap": {
+      "confidence": 0.95,
+      "interval": "equal_tailed_empirical_nearest_rank",
+      "method": "hierarchical_motion_family_then_context_block",
+      "replicates": 1000,
+      "resample_seed_replicates_within_context": false,
+      "seed": 20260827
+    },
+    "cross_validation": {
+      "assignment": "hash_tied_greedy_context_count_balance",
+      "context_leakage_guard": "context_id",
+      "fold_seed": 20260826,
+      "inner_folds": 4,
+      "method": "nested_grouped_out_of_fold",
+      "outer_folds": 5,
+      "same_context_across_seeds_or_stages_must_share_fold": true,
+      "same_motion_family_must_share_fold": true,
+      "split_unit": "motion_family"
+    },
+    "deadband": {
+      "comparison": "exclude_abs_true_utility_less_than_or_equal_to_deadband",
+      "quantile": 0.95,
+      "source": "same_estimand_noise_floor_abs_quantile",
+      "units": "must_equal_practice_utility_units"
+    },
+    "decision_semantics": {
+      "failure_does_not_by_itself_authorize_an_estimator": true,
+      "gate_a_must_pass_before_labels_are_read": true,
+      "pass_field": "supports_latent_proxy_claim",
+      "separate_from_inverse_estimator_authorization": true
+    },
+    "diagnostics": {
+      "metrics": [
+        "outer_oof_sign_accuracy",
+        "outer_oof_spearman",
+        "outer_oof_pairwise_accuracy"
+      ],
+      "rank_grouping": "macro_average_within_motion_family",
+      "unit": "context_mean_across_replicate_seeds"
+    },
+    "kind": "practice_utility_latent_directional_calibration",
+    "latent_proxy_pass_rule": {
+      "all_conditions_required": true,
+      "bootstrap_lower_comparison": "strictly_greater_than",
+      "min_bootstrap_pairwise_accuracy_lower": 0.5,
+      "min_bootstrap_sign_accuracy_lower": 0.5,
+      "min_bootstrap_spearman_lower": 0.0,
+      "min_outer_oof_pairwise_accuracy": 0.7,
+      "min_outer_oof_sign_accuracy": 0.75,
+      "min_outer_oof_spearman": 0.5,
+      "negative_motion_family_directions_allowed": 0
+    },
+    "model": {
+      "class": "univariate_affine_ridge",
+      "features": [
+        "latent_gap_p90"
+      ],
+      "fit_intercept": true,
+      "objective": "mean_squared_error_plus_alpha_times_slope_squared",
+      "penalize_intercept": false,
+      "ridge_alpha_grid": [
+        0.0,
+        0.1,
+        1.0
+      ],
+      "selection_metric": "context_macro_mean_squared_error",
+      "selection_tie_break": "smallest_alpha",
+      "standardization": "training_fold_mean_and_population_sd"
+    },
+    "proxy": "latent_gap_p90",
+    "raw_proxy_sign_allowed": false,
+    "schema_version": 1,
+    "support": {
+      "min_contexts": 10,
+      "min_contexts_for_family_rank": 2,
+      "min_motion_families": 8,
+      "min_rankable_motion_families": 4,
+      "min_records": 20,
+      "min_scorable_contexts_outside_deadband": 8,
+      "min_unique_proxy_values": 3
+    },
+    "target": "signed_dose_normalized_practice_utility_H_l"
+  },
+  "artifact_sha256": "b1f6e236e294e8bf540434a61a4d90a140e773de307f92973952cf735c5f4b48",
+  "campaign_id": "probe_screen_v2_late_20260826",
+  "contains_outcomes": false,
+  "design_support": {
+    "algorithm_sha256": "ee1b857650749c4b141de3fefe852b10442277b4785ca093faafa0cc87061091",
+    "blockers": [],
+    "folds": [
+      {
+        "inner_folds_feasible": true,
+        "outer_fold": 0,
+        "test_context_ids": [
+          "0a7145af145a62c1",
+          "10542153e4f735bd",
+          "17d0787dfec2ef58",
+          "31ea019565457a1d",
+          "73d73cc94ec26d53",
+          "8801aaef646f816b"
+        ],
+        "test_motion_families": [
+          "run"
+        ],
+        "train_context_ids": [
+          "0a612089173e5788",
+          "1e6b3c52cc6cc126",
+          "2601c123d1ed2fa5",
+          "26c800e02cef9762",
+          "32a511c0582a2c7a",
+          "36047a86a6bd3987",
+          "3a57336e7a29c8ac",
+          "3cf1d714ceb3ea7f",
+          "409752574e76e461",
+          "5088d3ce661d44a8",
+          "539bafe3000fb3da",
+          "7bec3be0f73e6f2a",
+          "85118dce1ab72dca",
+          "9599570aad0dab30",
+          "9cfaf31039c9f4fe",
+          "af7a7a4451947b0a",
+          "b033106cfc34a4b7",
+          "cdf3e3ce67c68d9c"
+        ],
+        "train_motion_families": [
+          "carry",
+          "crouch",
+          "dance",
+          "groom",
+          "idle",
+          "jump",
+          "other",
+          "search",
+          "walk"
+        ]
+      },
+      {
+        "inner_folds_feasible": true,
+        "outer_fold": 1,
+        "test_context_ids": [
+          "36047a86a6bd3987",
+          "3a57336e7a29c8ac",
+          "409752574e76e461",
+          "9599570aad0dab30",
+          "af7a7a4451947b0a",
+          "cdf3e3ce67c68d9c"
+        ],
+        "test_motion_families": [
+          "other"
+        ],
+        "train_context_ids": [
+          "0a612089173e5788",
+          "0a7145af145a62c1",
+          "10542153e4f735bd",
+          "17d0787dfec2ef58",
+          "1e6b3c52cc6cc126",
+          "2601c123d1ed2fa5",
+          "26c800e02cef9762",
+          "31ea019565457a1d",
+          "32a511c0582a2c7a",
+          "3cf1d714ceb3ea7f",
+          "5088d3ce661d44a8",
+          "539bafe3000fb3da",
+          "73d73cc94ec26d53",
+          "7bec3be0f73e6f2a",
+          "85118dce1ab72dca",
+          "8801aaef646f816b",
+          "9cfaf31039c9f4fe",
+          "b033106cfc34a4b7"
+        ],
+        "train_motion_families": [
+          "carry",
+          "crouch",
+          "dance",
+          "groom",
+          "idle",
+          "jump",
+          "run",
+          "search",
+          "walk"
+        ]
+      },
+      {
+        "inner_folds_feasible": true,
+        "outer_fold": 2,
+        "test_context_ids": [
+          "3cf1d714ceb3ea7f",
+          "539bafe3000fb3da",
+          "85118dce1ab72dca",
+          "9cfaf31039c9f4fe"
+        ],
+        "test_motion_families": [
+          "jump",
+          "walk"
+        ],
+        "train_context_ids": [
+          "0a612089173e5788",
+          "0a7145af145a62c1",
+          "10542153e4f735bd",
+          "17d0787dfec2ef58",
+          "1e6b3c52cc6cc126",
+          "2601c123d1ed2fa5",
+          "26c800e02cef9762",
+          "31ea019565457a1d",
+          "32a511c0582a2c7a",
+          "36047a86a6bd3987",
+          "3a57336e7a29c8ac",
+          "409752574e76e461",
+          "5088d3ce661d44a8",
+          "73d73cc94ec26d53",
+          "7bec3be0f73e6f2a",
+          "8801aaef646f816b",
+          "9599570aad0dab30",
+          "af7a7a4451947b0a",
+          "b033106cfc34a4b7",
+          "cdf3e3ce67c68d9c"
+        ],
+        "train_motion_families": [
+          "carry",
+          "crouch",
+          "dance",
+          "groom",
+          "idle",
+          "other",
+          "run",
+          "search"
+        ]
+      },
+      {
+        "inner_folds_feasible": true,
+        "outer_fold": 3,
+        "test_context_ids": [
+          "0a612089173e5788",
+          "1e6b3c52cc6cc126",
+          "32a511c0582a2c7a",
+          "b033106cfc34a4b7"
+        ],
+        "test_motion_families": [
+          "crouch",
+          "groom",
+          "search"
+        ],
+        "train_context_ids": [
+          "0a7145af145a62c1",
+          "10542153e4f735bd",
+          "17d0787dfec2ef58",
+          "2601c123d1ed2fa5",
+          "26c800e02cef9762",
+          "31ea019565457a1d",
+          "36047a86a6bd3987",
+          "3a57336e7a29c8ac",
+          "3cf1d714ceb3ea7f",
+          "409752574e76e461",
+          "5088d3ce661d44a8",
+          "539bafe3000fb3da",
+          "73d73cc94ec26d53",
+          "7bec3be0f73e6f2a",
+          "85118dce1ab72dca",
+          "8801aaef646f816b",
+          "9599570aad0dab30",
+          "9cfaf31039c9f4fe",
+          "af7a7a4451947b0a",
+          "cdf3e3ce67c68d9c"
+        ],
+        "train_motion_families": [
+          "carry",
+          "dance",
+          "idle",
+          "jump",
+          "other",
+          "run",
+          "walk"
+        ]
+      },
+      {
+        "inner_folds_feasible": true,
+        "outer_fold": 4,
+        "test_context_ids": [
+          "2601c123d1ed2fa5",
+          "26c800e02cef9762",
+          "5088d3ce661d44a8",
+          "7bec3be0f73e6f2a"
+        ],
+        "test_motion_families": [
+          "carry",
+          "dance",
+          "idle"
+        ],
+        "train_context_ids": [
+          "0a612089173e5788",
+          "0a7145af145a62c1",
+          "10542153e4f735bd",
+          "17d0787dfec2ef58",
+          "1e6b3c52cc6cc126",
+          "31ea019565457a1d",
+          "32a511c0582a2c7a",
+          "36047a86a6bd3987",
+          "3a57336e7a29c8ac",
+          "3cf1d714ceb3ea7f",
+          "409752574e76e461",
+          "539bafe3000fb3da",
+          "73d73cc94ec26d53",
+          "85118dce1ab72dca",
+          "8801aaef646f816b",
+          "9599570aad0dab30",
+          "9cfaf31039c9f4fe",
+          "af7a7a4451947b0a",
+          "b033106cfc34a4b7",
+          "cdf3e3ce67c68d9c"
+        ],
+        "train_motion_families": [
+          "crouch",
+          "groom",
+          "jump",
+          "other",
+          "run",
+          "search",
+          "walk"
+        ]
+      }
+    ],
+    "outcomes_read": false,
+    "status": "ready",
+    "support": {
+      "contexts_per_motion_family": {
+        "carry": 1,
+        "crouch": 2,
+        "dance": 2,
+        "groom": 1,
+        "idle": 1,
+        "jump": 1,
+        "other": 6,
+        "run": 6,
+        "search": 1,
+        "walk": 3
+      },
+      "num_contexts": 24,
+      "num_motion_families": 10,
+      "num_rankable_motion_families": 5,
+      "num_records": 48
+    }
+  },
+  "frozen_before_outcomes": true,
+  "git": {
+    "sha": "8a79ce731825981e34157b7bd6bdd96d6173f962",
+    "status_short": []
+  },
+  "kind": "practice_utility_latent_directional_calibration_preregistration",
+  "launcher": {
+    "path": "/home/robotixx/lucid/GR00T-WholeBodyControl/scripts/practice_utility/freeze_directional_calibration.py",
+    "sha256": "ce366a805f19fcebdbeaa43f324b71693a226347f7a01db48665ea43836cefd7"
+  },
+  "manifest_file_sha256": "591501ac112f39fa890cb6065a11841c16a1a4ed04ee7f568cd883e8b551dc72",
+  "manifest_sha256": "17c178dc4c4f5a0dbd378aebfa6097a34e8fc46684e272a0f28c1b3649fa9bc3",
+  "schema_version": 1,
+  "source_manifest": {
+    "file_sha256": "591501ac112f39fa890cb6065a11841c16a1a4ed04ee7f568cd883e8b551dc72",
+    "logical_sha256": "17c178dc4c4f5a0dbd378aebfa6097a34e8fc46684e272a0f28c1b3649fa9bc3",
+    "path": "/data/robotixx/lucid-sonic/manifests/probe_screen_v2_late_20260826.json"
+  }
+}

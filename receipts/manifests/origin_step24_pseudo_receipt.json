@@ -1,0 +1,45 @@
+{
+  "kind": "lucid_origin_checkpoint_pseudo_training_receipt",
+  "note": "NO TRAINING: three pseudo-arms point at the untrained settled origin so the evaluator scores it under matched eval seeds",
+  "experiment_id": "origin_step24_untrained",
+  "config": {
+    "checkpoint": "/home/robotixx/lucid/GR00T-WholeBodyControl/logs_rl/TRL_G1_Track/manager/universal_token/all_modes/sonic_release_test-20260818_141446/model_step_000024.pt",
+    "num_envs": 128,
+    "iterations": 0,
+    "warmup_iterations": 0,
+    "seeds": [
+      8600,
+      8601,
+      8602
+    ],
+    "modes": [
+      "origin"
+    ]
+  },
+  "arms": {
+    "origin_s8600": {
+      "seed": 8600,
+      "mode": "origin",
+      "checkpoint": "/home/robotixx/lucid/GR00T-WholeBodyControl/logs_rl/TRL_G1_Track/manager/universal_token/all_modes/sonic_release_test-20260818_141446/model_step_000024.pt",
+      "checkpoint_exported": true,
+      "complete": true,
+      "branch_id": "origin_s8600"
+    },
+    "origin_s8601": {
+      "seed": 8601,
+      "mode": "origin",
+      "checkpoint": "/home/robotixx/lucid/GR00T-WholeBodyControl/logs_rl/TRL_G1_Track/manager/universal_token/all_modes/sonic_release_test-20260818_141446/model_step_000024.pt",
+      "checkpoint_exported": true,
+      "complete": true,
+      "branch_id": "origin_s8601"
+    },
+    "origin_s8602": {
+      "seed": 8602,
+      "mode": "origin",
+      "checkpoint": "/home/robotixx/lucid/GR00T-WholeBodyControl/logs_rl/TRL_G1_Track/manager/universal_token/all_modes/sonic_release_test-20260818_141446/model_step_000024.pt",
+      "checkpoint_exported": true,
+      "complete": true,
+      "branch_id": "origin_s8602"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "objective": "Resolve SONIC LUCID restart failure and validate corrected curriculum training",
+  "status": "complete",
+  "created_at": "2026-08-20T14:16:00-04:00",
+  "primary_gate": "symmetric restart identity from one checkpoint and capsule",
+  "blocked_features": [
+    "practice utility estimator",
+    "residual allocator"
+  ],
+  "latest_result": {
+    "status": "keep",
+    "experiment": "three-seed curriculum retraining",
+    "receipt": "/data/robotixx/lucid-sonic/manifests/curriculum_comparison_ne128_20260820_143058.json",
+    "result": "9/9 complete; LUCID beats fixed DR during training but trails no-DR clean training"
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "generated_by": "lucid design/impl plan week-1 setup",
+  "host": {
+    "node": "robotixx-g1",
+    "os": "Linux-6.8.0-124-generic-x86_64-with-glibc2.35",
+    "gpu": "NVIDIA GeForce RTX 5090, 32607 MiB, 590.48.01",
+    "cuda_driver": "590.48.01"
+  },
+  "conda_env": {
+    "name": "sonic",
+    "prefix": "/home/robotixx/miniconda3/envs/sonic",
+    "python": "3.11.14",
+    "cloned_from": "flow_isaaclab"
+  },
+  "packages": {
+    "torch": "2.7.0+cu128",
+    "torchvision": "0.22.0+cu128",
+    "numpy": "1.26.4",
+    "scipy": "1.15.3",
+    "isaacsim": "5.1.0.0",
+    "isaaclab": "2.3.2",
+    "hydra-core": "1.3.2",
+    "trl": "0.28.0",
+    "transformers": "5.0.0",
+    "accelerate": "1.14.0",
+    "wandb": "0.24.1",
+    "open3d": "0.19.0",
+    "vector-quantize-pytorch": "1.31.1",
+    "smpl-sim": "0.0.1",
+    "psutil": "5.9.8",
+    "gear_sonic": "0.1.0"
+  },
+  "torch": {
+    "version": "2.7.0+cu128",
+    "cuda": "12.8",
+    "arch_list": [
+      "sm_75",
+      "sm_80",
+      "sm_86",
+      "sm_90",
+      "sm_100",
+      "sm_120",
+      "compute_120"
+    ],
+    "device_capability": [
+      12,
+      0
+    ]
+  },
+  "repos": {
+    "GR00T-WholeBodyControl": {
+      "path": "/home/robotixx/lucid/GR00T-WholeBodyControl",
+      "commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "tag": "sonic-audit-base"
+    },
+    "whole_body_tracking": {
+      "path": "/home/robotixx/lucid/whole_body_tracking",
+      "commit": "cd65172032893724b445448818c34165846d847d",
+      "tag": "bm-lucid-base"
+    }
+  },
+  "checkpoint": {
+    "name": "sonic_release/last.pt",
+    "sha256": "e6bdab3f64a39336b3d41877d4f497d05f58af275f288ec0e6746c283ded8909",
+    "bytes": 469418283,
+    "resolved_from": "/data/robotixx/groot-wbc-sonic-research/lace/checkpoints/sonic_release_external_audit/last.pt"
+  },
+  "data_root": "/data/robotixx/lucid-sonic",
+  "pools": {
+    "debug512": {
+      "clips": 512,
+      "realpath": "/data/robotixx/groot-wbc-sonic-research/datasets/bones_seed_official_zpd_scale512"
+    },
+    "adapt4950": {
+      "clips": 4950,
+      "realpath": "/data/robotixx/groot-wbc-sonic-research/datasets/bones_seed_official_headline_scale4950"
+    }
+  },
+  "known_conflicts": [
+    "isaacsim-kernel pins numpy==1.26.0 but gear_sonic pins numpy==1.26.4 (patch-level, ABI compatible; validated by Isaac Sim launch)",
+    "psutil held at 5.9.8 for isaacsim-kernel; ipython prefers >=7 (non-critical)"
+  ]
+}

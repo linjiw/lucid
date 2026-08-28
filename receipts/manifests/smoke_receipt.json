@@ -1,0 +1,77 @@
+{
+  "kind": "practice_utility_smoke_receipt",
+  "schema_version": 1,
+  "ran_at": "2026-08-18T01:1x-04:00",
+  "purpose": "verify the measurement machinery inside a live SONIC training run before spending campaign GPU time",
+  "config": {
+    "exp": "manager/universal_token/all_modes/sonic_release",
+    "checkpoint_sha256": "e6bdab3f64a39336b3d41877d4f497d05f58af275f288ec0e6746c283ded8909",
+    "num_envs": 64,
+    "ppo_iterations": 5,
+    "pool": "debug512",
+    "epsilon": 0.25,
+    "kernel_radius_bins": 1
+  },
+  "control_branch": {
+    "exit_code": 0,
+    "wall_seconds": 375.8,
+    "armed": false,
+    "drawn_episodes": 76.0,
+    "drawn_kernel_mass": 0.0,
+    "bins_touched": 60,
+    "draws_on_target_motion": 0
+  },
+  "intervention_branch": {
+    "exit_code": 0,
+    "wall_seconds": 359.9,
+    "armed": true,
+    "context_id": "451dbcd4509dab1d",
+    "drawn_episodes": 80.0,
+    "drawn_kernel_mass": 1.7357588823428847,
+    "bins_touched": 63,
+    "draws_on_target_motion": 5.0
+  },
+  "realized_extra_kernel_dose": 1.7357588823428847,
+  "distribution_effect": {
+    "target_motion": "turn_start_jog_0000_002__A029",
+    "boosted_contexts": [
+      {
+        "bin_index": 2,
+        "p": 0.1461282079129626
+      },
+      {
+        "bin_index": 3,
+        "p": 0.055855035960675856
+      },
+      {
+        "bin_index": 1,
+        "p": 0.05505889299257188
+      }
+    ],
+    "highest_non_kernel_p": 0.00682632813552907,
+    "boost_ratio_vs_next": 21.406560747117826,
+    "prob_sum": 1.0
+  },
+  "warmup_effect": {
+    "cold_snapshot_step": 0,
+    "cold_distinct_failure_rates": 1,
+    "warm_snapshot_step": 3,
+    "warm_distinct_failure_rates": 63,
+    "note": "a snapshot at install captures only the sampler prior; stratifying on it would give the campaign no difficulty axis"
+  },
+  "verified": [
+    "callback installs on the live motion library without disturbing the native computation",
+    "control branch leaves the sampling distribution unmodified (armed=False, kernel mass 0)",
+    "intervention boosts exactly the target bin and its radius-1 neighbours",
+    "boosted distribution still sums to 1.0",
+    "dose is recorded per bin and per motion from real draws",
+    "realized extra dose is positive and computable: the utility denominator",
+    "capsules save model, optimizer, 4107-bin sampler counters, and full RNG incl. CUDA",
+    "snapshot_at_step produces informative failure statistics after warm-up"
+  ],
+  "not_yet_verified": [
+    "resume equivalence from a capsule (needs two runs of the same branch)",
+    "bitwise no-op parity native vs research-disabled (needs two full runs)",
+    "multi-horizon capsule reuse across a 128-iteration branch"
+  ]
+}

@@ -1,0 +1,121 @@
+{
+  "kind": "lucid_curriculum_validation",
+  "schema_version": 1,
+  "purpose": "prove the LUCID DR curriculum runs end to end on live SONIC with all channels, including actuation latency",
+  "config": {
+    "num_envs": 128,
+    "iterations": 6,
+    "seed": 7000,
+    "origin": "model_step_000024 (settled)",
+    "max_delay_steps": 8,
+    "delta_target": 0.778,
+    "alpha": 0.15,
+    "warmup_iterations": 1,
+    "events": "tracking/lucid_curriculum"
+  },
+  "actuator_swap": {
+    "groups": 5,
+    "class": "DelayedImplicitActuatorCfg",
+    "max_delay_steps": 8,
+    "max_delay_ms": 40
+  },
+  "scalable_terms": [
+    "add_joint_default_pos",
+    "base_com",
+    "physics_material",
+    "push_robot",
+    "randomize_action_delay",
+    "randomize_rigid_body_mass"
+  ],
+  "lambda_trajectory": [
+    {
+      "iter": 2,
+      "lambda": 0.09347697269439696,
+      "gap_q90": 0.21147289276123046,
+      "gap_samples": 24
+    },
+    {
+      "iter": 3,
+      "lambda": 0.21922216666102406,
+      "gap_q90": 0.06741037964820862,
+      "gap_samples": 24
+    },
+    {
+      "iter": 4,
+      "lambda": 0.35703830822825433,
+      "gap_q90": 0.05885217785835266,
+      "gap_samples": 24
+    },
+    {
+      "iter": 5,
+      "lambda": 0.5030209408700467,
+      "gap_q90": 0.07473536729812622,
+      "gap_samples": 24
+    },
+    {
+      "iter": 6,
+      "lambda": 0.6530209408700467,
+      "gap_q90": 0.09086851477622987,
+      "gap_samples": 24
+    }
+  ],
+  "final": {
+    "lambda": 0.6530209408700467,
+    "implied_latency_ms": 26.1,
+    "implied_mass_range": [
+      0.869,
+      1.327
+    ]
+  },
+  "observer": [
+    {
+      "iter": 1,
+      "latent_median": 0.14665639400482178,
+      "foot_slip_m": 0.11454904778230193,
+      "undesired_contact_rate": 0.2197265625
+    },
+    {
+      "iter": 2,
+      "latent_median": 0.1664937138557434,
+      "foot_slip_m": 0.0884594471837863,
+      "undesired_contact_rate": 0.14778645833333334
+    },
+    {
+      "iter": 3,
+      "latent_median": 0.05144375562667847,
+      "foot_slip_m": 0.08444947836710145,
+      "undesired_contact_rate": 0.14615885416666666
+    },
+    {
+      "iter": 4,
+      "latent_median": 0.051006317138671875,
+      "foot_slip_m": 0.08412066605025724,
+      "undesired_contact_rate": 0.158203125
+    },
+    {
+      "iter": 5,
+      "latent_median": 0.06767737865447998,
+      "foot_slip_m": 0.08582032831931286,
+      "undesired_contact_rate": 0.13509114583333334
+    },
+    {
+      "iter": 6,
+      "latent_median": 0.07878375053405762,
+      "foot_slip_m": 0.08075039405448509,
+      "undesired_contact_rate": 0.138671875
+    }
+  ],
+  "verified": [
+    "all five G1 actuator groups swapped to DelayedImplicitActuatorCfg at 40 ms ceiling",
+    "six channels schedulable at runtime, up from one with the stock config",
+    "gap data reaches the controller every iteration (24 samples), after the callback-ordering fix",
+    "lambda climbs 0.09 -> 0.65 over five updates under sustained low mismatch",
+    "warmup_iterations holds the first iteration as configured",
+    "undesired_contact_rate reads ~0.14, not the pre-fix 0.99"
+  ],
+  "not_yet_verified": [
+    "that a nonzero lag measurably changes robot behaviour (needs an A/B at fixed lambda)",
+    "three-arm training comparison (running)",
+    "evaluation under held-out DR presets (ID-clean / OOD-heavy / 60 ms latency stress)"
+  ]
+}

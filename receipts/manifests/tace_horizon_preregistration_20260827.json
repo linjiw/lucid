@@ -1,0 +1,23 @@
+{
+  "kind": "lucid_tace_horizon_preregistration",
+  "created_at": "2026-08-27T19:55:00-04:00",
+  "author": "Fable (autonomous)",
+  "code": {"branch": "research/practice-utility", "commit": "7369015"},
+  "motivation": "32-iteration pilot (curriculum_comparison_ne128_20260827_140621 / robustness_..._143814): ta_lucid_25 non-inferior to fixed on dr_full (55.56 vs 56.54) with +3.27 clean, but fixed wins dr_050 by 6.9 pts and the coarse profile; lucid-family arms end at lambda 0.63-0.76 and never train at the envelope fixed samples from iteration 1. The budget, not the anchor, is the suspected limit. The Aug 20 consolidation study showed fixed DR degrading with more full-DR iterations (clean 80.39 -> 71.57 at +16), so longer budgets are predicted to favor gap-gated arms.",
+  "design": {
+    "origin_checkpoint": "sonic_release_test-20260818_141446/model_step_000024.pt (settled origin)",
+    "num_envs": 128, "iterations": 128, "warmup_iterations": 10, "seeds": [8600, 8601, 8602],
+    "arms": ["lucid", "fixed", "ta_lucid_25", "ta_lucid_50"],
+    "controller": "identical to the pilot (delta_target 0.778, kp 1, ki 0.02, alpha 0.05, integral_max 1, return_floor 8)",
+    "note_on_alpha": "alpha=0.05/iteration bounds lambda's climb; with 118 post-warmup iterations every curriculum arm can reach lambda=1 if the gap allows, which removes the mechanical ceiling the 32-iteration budget imposed"
+  },
+  "evaluation": {"presets": ["id_clean", "dr_050", "dr_full", "latency_60ms"], "evaluator": "run_curriculum_robustness_eval.py, same 102-motion content-dev panel, eval seeds 8700-8702", "primary_endpoint": "dr_full success_rate cross-seed mean", "secondary": ["id_clean", "dr_050", "coarse profile mean"]},
+  "hypotheses": {
+    "H_H1_fixed_degrades": "fixed id_clean success at 128 iterations is lower than at 32 (80.39) by more than 2 pts",
+    "H_H2_ta_matches_fixed": "ta_lucid_25 or ta_lucid_50 dr_full success at 128 >= fixed dr_full at 128 - 2 pts, with id_clean >= fixed + 2 pts",
+    "H_H3_curriculum_reaches_envelope": "lucid-family terminal lambda at 128 >= 0.9 in >= 2 of 3 seeds",
+    "H_H4_dose": "ta_lucid_50 dr_full >= ta_lucid_25 dr_full (more anchor, more robustness) while id_clean stays within 2 pts of ta_lucid_25"
+  },
+  "decision_rules": {"ties": "differences under 2 pts on three seeds are ties", "no_post_hoc_ratio_selection": "both ratios are reported; neither is promoted on this panel", "negative": "if no curriculum arm matches fixed at 128, report that fixed DR remains the stronger method at this scale"},
+  "verified": [], "not_yet_verified": ["all of the above; written before launch"]
+}

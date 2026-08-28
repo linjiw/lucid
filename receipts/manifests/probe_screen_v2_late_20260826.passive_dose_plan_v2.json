@@ -1,0 +1,348 @@
+{
+  "campaign_id": "probe_screen_v2_late_20260826",
+  "contexts_per_stage": {
+    "late": [
+      {
+        "context": {
+          "bin_end_frame": 50,
+          "bin_index": 0,
+          "bin_start_frame": 0,
+          "encoder_mode": "g1",
+          "motion_hash": "25b55169f8335782814addb30ba8d9e8dd6bebe5412a834c4a35af92f7c005ab",
+          "motion_key": "boss_dust_brushing_004__A034",
+          "perturbation_group": "native",
+          "severity_level": 0
+        },
+        "context_id": "0a612089173e5788"
+      },
+      {
+        "context": {
+          "bin_end_frame": 300,
+          "bin_index": 5,
+          "bin_start_frame": 250,
+          "encoder_mode": "g1",
+          "motion_hash": "18de94c648643eca86440ae6c805fc2f2093156804d94ac339bd02b80a8a1a58",
+          "motion_key": "jog_sideway_135_loop_003__A026",
+          "perturbation_group": "native",
+          "severity_level": 0
+        },
+        "context_id": "0a7145af145a62c1"
+      },
+      {
+        "context": {
+          "bin_end_frame": 100,
+          "bin_index": 1,
+          "bin_start_frame": 50,
+          "encoder_mode": "g1",
+          "motion_hash": "a1c747414b492dd39a26fa78d9c8b4459884fe0a255e5e40ad5b85e230dddb76",
+          "motion_key": "jog_ff_stop_180_R_001__A225",
+          "perturbation_group": "native",
+          "severity_level": 0
+        },
+        "context_id": "10542153e4f735bd"
+      },
+      {
+        "context": {
+          "bin_end_frame": 250,
+          "bin_index": 4,
+          "bin_start_frame": 200,
+          "encoder_mode": "g1",
+          "motion_hash": "bac31fdf0a6b3f5ee07802589582627def6acbb9534cf8442ac5798a68e2bc08",
+          "motion_key": "jog_sideway_left_loop_001__A029",
+          "perturbation_group": "native",
+          "severity_level": 0
+        },
+        "context_id": "17d0787dfec2ef58"
+      },
+      {
+        "context": {
+          "bin_end_frame": 1050,
+          "bin_index": 20,
+          "bin_start_frame": 1000,
+          "encoder_mode": "g1",
+          "motion_hash": "00787f904e1a9d99bfc7dee07a2d56b3867d90ca834130bb8c7461487e17f24a",
+          "motion_key": "body_check_001__A342_M",
+          "perturbation_group": "native",
+          "severity_level": 0
+        },
+        "context_id": "1e6b3c52cc6cc126"
+      },
+      {
+        "context": {
+          "bin_end_frame": 420,
+          "bin_index": 8,
+          "bin_start_frame": 400,
+          "encoder_mode": "g1",
+          "motion_hash": "126a08e040173dcfcdb4f91afe49c83c551ee62ee0ca759ebaf7bb543f70a509",
+          "motion_key": "medium_big_light_two_hands_right_side_low_to_front_low_R_001__A528_M",
+          "perturbation_group": "native",
+          "severity_level": 0
+        },
+        "context_id": "2601c123d1ed2fa5"
+      },
+      {
+        "context": {
+          "bin_end_frame": 150,
+          "bin_index": 2,
+          "bin_start_frame": 100,
+          "encoder_mode": "g1",
+          "motion_hash": "ab6220c2b40aa0f97b0ab55aa443c42ac0c40f7b6f8fe9525627d597c899e305",
+          "motion_key": "dance_vouge_side_side_walk_180_R_002__A318",
+          "perturbation_group": "native",
+          "severity_level": 0
+        },
+        "context_id": "26c800e02cef9762"
+      },
+      {
+        "context": {
+          "bin_end_frame": 165,
+          "bin_index": 3,
+          "bin_start_frame": 150,
+          "encoder_mode": "g1",
+          "motion_hash": "743a61ffba72cb3b9b2f466159f9a93fb2f057a30b1c76eb0d374c939a32d056",
+          "motion_key": "jog_ff_start_180_R_001__A076",
+          "perturbation_group": "native",
+          "severity_level": 0
+        },
+        "context_id": "31ea019565457a1d"
+      },
+      {
+        "context": {
+          "bin_end_frame": 184,
+          "bin_index": 3,
+          "bin_start_frame": 150,
+          "encoder_mode": "g1",
+          "motion_hash": "64b83be5f165854b117560ebf345a2472333d92f8faaf762d868c32085d1c909",
+          "motion_key": "kneeling_start_003__A121",
+          "perturbation_group": "native",
+          "severity_level": 0
+        },
+        "context_id": "32a511c0582a2c7a"
+      },
+      {
+        "context": {
+          "bin_end_frame": 100,
+          "bin_index": 1,
+          "bin_start_frame": 50,
+          "encoder_mode": "g1",
+          "motion_hash": "cf1107ca56d871766028435c9ba25e06b2f568f8f228496b8b22f7d8ac8eb83c",
+          "motion_key": "horse_riding_R_004__A099",
+          "perturbation_group": "native",
+          "severity_level": 0
+        },
+        "context_id": "36047a86a6bd3987"
+      },
+      {
+        "context": {
+          "bin_end_frame": 200,
+          "bin_index": 3,
+          "bin_start_frame": 150,
+          "encoder_mode": "g1",
+          "motion_hash": "3b0e84eafda816d42238e556302bfad2cd2658b334adcd39da5f261d3e0dbe56",
+          "motion_key": "punch_self_face_R_004__A533",
+          "perturbation_group": "native",
+          "severity_level": 0
+        },
+        "context_id": "3a57336e7a29c8ac"
+      },
+      {
+        "context": {
+          "bin_end_frame": 400,
+          "bin_index": 7,
+          "bin_start_frame": 350,
+          "encoder_mode": "g1",
+          "motion_hash": "a0ac5a525dda66cebbafa8b24a838f999e6ef9bf3ce6927714dffc8acddf35da",
+          "motion_key": "inside_door_handle_left_side_open_walk_turn_close_R_001__A512",
+          "perturbation_group": "native",
+          "severity_level": 0
+        },
+        "context_id": "3cf1d714ceb3ea7f"
+      },
+      {
+        "context": {
+          "bin_end_frame": 100,
+          "bin_index": 1,
+          "bin_start_frame": 50,
+          "encoder_mode": "g1",
+          "motion_hash": "1d14a9b529f641d51f586f43229fc64853579a2b1a2fbb7d92df4d2510a37397",
+          "motion_key": "ib_dodge_back_L_001__A437",
+          "perturbation_group": "native",
+          "severity_level": 0
+        },
+        "context_id": "409752574e76e461"
+      },
+      {
+        "context": {
+          "bin_end_frame": 150,
+          "bin_index": 2,
+          "bin_start_frame": 100,
+          "encoder_mode": "g1",
+          "motion_hash": "62d1dc5e8b6d195c870c07d67bc6c764f92136520d983da249a4a8a006162376",
+          "motion_key": "dance_vouge_shake_it_babe_180_R_002__A320_M",
+          "perturbation_group": "native",
+          "severity_level": 0
+        },
+        "context_id": "5088d3ce661d44a8"
+      },
+      {
+        "context": {
+          "bin_end_frame": 184,
+          "bin_index": 3,
+          "bin_start_frame": 150,
+          "encoder_mode": "g1",
+          "motion_hash": "2cab3c029d1fa912c9d51c431e6b37283bd062b7a4f7d6e2930d12ea74ecd8da",
+          "motion_key": "hifive_jump_R_001__A428",
+          "perturbation_group": "native",
+          "severity_level": 0
+        },
+        "context_id": "539bafe3000fb3da"
+      },
+      {
+        "context": {
+          "bin_end_frame": 150,
+          "bin_index": 2,
+          "bin_start_frame": 100,
+          "encoder_mode": "g1",
+          "motion_hash": "4e9bc6bcb433f4fc00b2818b1b1b5def41a49c5b4de960c11d0938ddeb9a93e4",
+          "motion_key": "jog_ff_stop_225_001__A060",
+          "perturbation_group": "native",
+          "severity_level": 0
+        },
+        "context_id": "73d73cc94ec26d53"
+      },
+      {
+        "context": {
+          "bin_end_frame": 354,
+          "bin_index": 7,
+          "bin_start_frame": 350,
+          "encoder_mode": "g1",
+          "motion_hash": "e1cdcad386f517364b6ba9471101d6f0eb4b8c65c438f1d649ff3befa4c58078",
+          "motion_key": "hurry_idle_right_to_hurry_idle_R_001__A277_M",
+          "perturbation_group": "native",
+          "severity_level": 0
+        },
+        "context_id": "7bec3be0f73e6f2a"
+      },
+      {
+        "context": {
+          "bin_end_frame": 150,
+          "bin_index": 2,
+          "bin_start_frame": 100,
+          "encoder_mode": "g1",
+          "motion_hash": "a8ff16780b44f45cf2a21a49f50a5555b9ec1e0412fbdeec84c6565d35b97f0b",
+          "motion_key": "inj_right_leg_walk_180_R_max_001__A105",
+          "perturbation_group": "native",
+          "severity_level": 0
+        },
+        "context_id": "85118dce1ab72dca"
+      },
+      {
+        "context": {
+          "bin_end_frame": 250,
+          "bin_index": 4,
+          "bin_start_frame": 200,
+          "encoder_mode": "g1",
+          "motion_hash": "b91ea9e991286756f20396cee0e36967270e8fb92903630776e7cd6ec527b12d",
+          "motion_key": "jog_ff_stop_315_R_006__A256",
+          "perturbation_group": "native",
+          "severity_level": 0
+        },
+        "context_id": "8801aaef646f816b"
+      },
+      {
+        "context": {
+          "bin_end_frame": 150,
+          "bin_index": 2,
+          "bin_start_frame": 100,
+          "encoder_mode": "g1",
+          "motion_hash": "cf1107ca56d871766028435c9ba25e06b2f568f8f228496b8b22f7d8ac8eb83c",
+          "motion_key": "horse_riding_R_004__A099",
+          "perturbation_group": "native",
+          "severity_level": 0
+        },
+        "context_id": "9599570aad0dab30"
+      },
+      {
+        "context": {
+          "bin_end_frame": 270,
+          "bin_index": 5,
+          "bin_start_frame": 250,
+          "encoder_mode": "g1",
+          "motion_hash": "340712ee0faa1930b3c594e8a98a850fd389389ec35b025e549a5ce786bf3341",
+          "motion_key": "walk_sideway_090_loop_001__A022_M",
+          "perturbation_group": "native",
+          "severity_level": 0
+        },
+        "context_id": "9cfaf31039c9f4fe"
+      },
+      {
+        "context": {
+          "bin_end_frame": 150,
+          "bin_index": 2,
+          "bin_start_frame": 100,
+          "encoder_mode": "g1",
+          "motion_hash": "3b0e84eafda816d42238e556302bfad2cd2658b334adcd39da5f261d3e0dbe56",
+          "motion_key": "punch_self_face_R_004__A533",
+          "perturbation_group": "native",
+          "severity_level": 0
+        },
+        "context_id": "af7a7a4451947b0a"
+      },
+      {
+        "context": {
+          "bin_end_frame": 100,
+          "bin_index": 1,
+          "bin_start_frame": 50,
+          "encoder_mode": "g1",
+          "motion_hash": "c192e341ec208b11a9f05952f03b7a273811ede6339714df69e59accdd94dada",
+          "motion_key": "crouch_ff_loop_360_002__A146_M",
+          "perturbation_group": "native",
+          "severity_level": 0
+        },
+        "context_id": "b033106cfc34a4b7"
+      },
+      {
+        "context": {
+          "bin_end_frame": 150,
+          "bin_index": 2,
+          "bin_start_frame": 100,
+          "encoder_mode": "g1",
+          "motion_hash": "6746b545b454527148c3179b196ec8b69f38fec651a5164cec92696bbcce946b",
+          "motion_key": "my_lord_R_002__A429",
+          "perturbation_group": "native",
+          "severity_level": 0
+        },
+        "context_id": "cdf3e3ce67c68d9c"
+      }
+    ]
+  },
+  "control_strategy": "shared_per_stage_seed",
+  "created_at": "2026-08-27T04:35:48.751844+00:00",
+  "dose_plan_sha256": "cc0954da50531a5a9adcd1d67d2ee099075a476838268a467e8c4b0c1adaa361",
+  "kernel": {
+    "membership_normalization": "peak_equals_one",
+    "radius_bins": 1,
+    "reference_bin_size_frames": 50,
+    "sigma_frames": 50.0
+  },
+  "kind": "practice_utility_passive_dose_plan",
+  "manifest_file_sha256": "591501ac112f39fa890cb6065a11841c16a1a4ed04ee7f568cd883e8b551dc72",
+  "manifest_sha256": "17c178dc4c4f5a0dbd378aebfa6097a34e8fc46684e272a0f28c1b3649fa9bc3",
+  "measurement_hook": "ManagerEnvWrapper.step.pre_transition_context",
+  "provenance": {
+    "git": {
+      "sha": "8a79ce731825981e34157b7bd6bdd96d6173f962",
+      "status_short": []
+    },
+    "launcher": {
+      "path": "/home/robotixx/lucid/GR00T-WholeBodyControl/scripts/practice_utility/create_passive_dose_plan.py",
+      "sha256": "dad1e08f281c09820294c139034ad55c627ef1488a81ee60e67f1d0054cfad3b"
+    },
+    "source_manifest": {
+      "file_sha256": "591501ac112f39fa890cb6065a11841c16a1a4ed04ee7f568cd883e8b551dc72",
+      "logical_sha256": "17c178dc4c4f5a0dbd378aebfa6097a34e8fc46684e272a0f28c1b3649fa9bc3",
+      "path": "/data/robotixx/lucid-sonic/manifests/probe_screen_v2_late_20260826.json"
+    }
+  },
+  "schema_version": 2
+}

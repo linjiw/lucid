@@ -1,0 +1,25 @@
+{
+  "objective": "Continue LUCID experiments from the 2026-08-20 handoff",
+  "current_item": "diagnose resume-equivalence L0 failure before claim-bearing screening",
+  "status": "resume_equivalence_failed",
+  "git_sha": "811f08498ce951c6e7094bb1e407f8d05cf0b235",
+  "verified": [
+    "912 CPU tests pass",
+    "research/practice-utility branch is clean",
+    "RTX 5090 has 30986 MiB free and 0% utilization",
+    "native throughput is 3725.894 env-steps/s at 256 envs",
+    "observer throughput is 3603.519 env-steps/s at 256 envs",
+    "corrected latency-only lambda=1 instantiates five delayed actuator groups",
+    "lambda=1 live mean lag is 18.4 ms and last-4 reward changes by -35.7566%",
+    "lucid and off match exactly for three treatment-free rollouts after off-mode initialization fix",
+    "native and research-disabled runs match exactly across all four printed parity metrics",
+    "resume mechanism loads full checkpoint state plus capsule RNG and completes steps 11-20",
+    "944 CPU tests pass after all continuation changes; changed-file lint and diff checks pass"
+  ],
+  "not_yet_verified": [
+    "resume equivalence: FAILED threshold (+28.7412% reward, +23.7851% length)",
+    "multi-seed curriculum efficacy with corrected latency",
+    "held-out checkpoint evaluation",
+    "Gate A and Gate B"
+  ]
+}

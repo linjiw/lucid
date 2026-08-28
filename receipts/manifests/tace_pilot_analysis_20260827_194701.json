@@ -1,0 +1,596 @@
+{
+  "kind": "lucid_tace_pilot_analysis",
+  "created_at": "2026-08-27T19:47:01.073889-04:00",
+  "training_receipt": "/data/robotixx/lucid-sonic/manifests/curriculum_comparison_ne128_20260827_140621.json",
+  "eval_receipt": "/data/robotixx/lucid-sonic/manifests/curriculum_robustness_ne128_20260827_143814.json",
+  "preregistration": "/data/robotixx/lucid-sonic/manifests/tace_pilot_preregistration_20260827.json",
+  "preregistered_hypotheses": {
+    "H_A_headline": "ta_lucid_25 dr_full success >= fixed dr_full success - 2.0 pts (non-inferiority) AND ta_lucid_25 id_clean success >= fixed id_clean success + 2.0 pts",
+    "H_A2_over_lucid": "ta_lucid_25 dr_full success > lucid dr_full success by > 2.0 pts (closes the support gap)",
+    "H_B_attribution": "ta_lucid_25 dr_full success > ta_yoked_25 dr_full success (favorable in >= 2 of 3 seeds); a tie attributes the effect to schedule shape/dose, not online feedback",
+    "H_C_mechanism": "ta_lucid_25 terminal lambda (focus cohort) is not lower than lucid's by more than 0.1 (anchor exposure does not suppress the curriculum) and anchor-cohort realized delay mean exceeds the focus-cohort mean in every iteration after warmup"
+  },
+  "success_pts_by_preset_and_arm": {
+    "id_clean": {
+      "lucid": 83.98692810457517,
+      "fixed": 80.3921568627451,
+      "ta_lucid_25": 83.66013071895425,
+      "ta_yoked_25": 83.66013071895425
+    },
+    "dr_050": {
+      "lucid": 59.150326797385624,
+      "fixed": 66.01307189542483,
+      "ta_lucid_25": 59.150326797385624,
+      "ta_yoked_25": 59.150326797385624
+    },
+    "dr_full": {
+      "lucid": 54.248366013071895,
+      "fixed": 56.5359477124183,
+      "ta_lucid_25": 55.55555555555555,
+      "ta_yoked_25": 55.55555555555555
+    },
+    "latency_60ms": {
+      "lucid": 0.0,
+      "fixed": 0.0,
+      "ta_lucid_25": 0.0,
+      "ta_yoked_25": 0.0
+    }
+  },
+  "coarse_profile_mean_pts": {
+    "lucid": 65.79520697167756,
+    "fixed": 67.6470588235294,
+    "ta_lucid_25": 66.12200435729848,
+    "ta_yoked_25": 66.12200435729848
+  },
+  "paired": {
+    "ta_lucid_25_vs_fixed_dr_full": {
+      "per_seed_pts": {
+        "8600": -3.9215686274509887,
+        "8601": 12.745098039215685,
+        "8602": -11.764705882352933
+      },
+      "mean_pts": -0.9803921568627455,
+      "favorable_seeds": 1,
+      "num_seeds": 3
+    },
+    "ta_lucid_25_vs_fixed_id_clean": {
+      "per_seed_pts": {
+        "8600": 1.9607843137254832,
+        "8601": 1.9607843137254943,
+        "8602": 5.882352941176472
+      },
+      "mean_pts": 3.26797385620915,
+      "favorable_seeds": 3,
+      "num_seeds": 3
+    },
+    "ta_lucid_25_vs_lucid_dr_full": {
+      "per_seed_pts": {
+        "8600": 1.9607843137254832,
+        "8601": 9.80392156862745,
+        "8602": -7.843137254901967
+      },
+      "mean_pts": 1.3071895424836555,
+      "favorable_seeds": 2,
+      "num_seeds": 3
+    },
+    "ta_lucid_25_vs_ta_yoked_25_dr_full": {
+      "per_seed_pts": {
+        "8600": 0.0,
+        "8601": 0.0,
+        "8602": 0.0
+      },
+      "mean_pts": 0.0,
+      "favorable_seeds": 0,
+      "num_seeds": 3
+    }
+  },
+  "terminal_lambda": {
+    "8600": {
+      "ta_lucid_25": 0.7287535019783975,
+      "lucid": 0.7418931034355166
+    },
+    "8601": {
+      "ta_lucid_25": 0.7598806706159116,
+      "lucid": 0.7237693000428678
+    },
+    "8602": {
+      "ta_lucid_25": 0.4141106527700425,
+      "lucid": 0.8022872950582505
+    }
+  },
+  "cohort_dose": {
+    "8600": {
+      "iterations_checked": 22,
+      "anchor_exceeds_focus_every_iteration": true,
+      "missing": 0,
+      "final": {
+        "num_anchor": 32,
+        "num_focus": 96,
+        "anchor_ratio": 0.25,
+        "consolidating": false,
+        "dispatch": {
+          "add_joint_default_pos": {
+            "term": "add_joint_default_pos",
+            "calls": {
+              "anchor": 156,
+              "focus": 250
+            },
+            "env_counts": {
+              "anchor": 200,
+              "focus": 404
+            },
+            "anchor_params": {
+              "pos_distribution_params": [
+                -0.01,
+                0.01
+              ]
+            }
+          },
+          "base_com": {
+            "term": "base_com",
+            "calls": {
+              "anchor": 156,
+              "focus": 250
+            },
+            "env_counts": {
+              "anchor": 200,
+              "focus": 404
+            },
+            "anchor_params": {
+              "com_range": {
+                "x": [
+                  -0.025,
+                  0.025
+                ],
+                "y": [
+                  -0.05,
+                  0.05
+                ],
+                "z": [
+                  -0.05,
+                  0.05
+                ]
+              }
+            }
+          },
+          "physics_material": {
+            "term": "physics_material",
+            "calls": {
+              "anchor": 156,
+              "focus": 250
+            },
+            "env_counts": {
+              "anchor": 200,
+              "focus": 404
+            },
+            "anchor_params": {
+              "static_friction_range": [
+                0.3,
+                1.6
+              ],
+              "dynamic_friction_range": [
+                0.3,
+                1.2
+              ],
+              "restitution_range": [
+                0.0,
+                0.5
+              ]
+            }
+          },
+          "push_robot": {
+            "term": "push_robot",
+            "calls": {
+              "anchor": 161,
+              "focus": 385
+            },
+            "env_counts": {
+              "anchor": 182,
+              "focus": 555
+            },
+            "anchor_params": {
+              "velocity_range": {
+                "x": [
+                  -0.5,
+                  0.5
+                ],
+                "y": [
+                  -0.5,
+                  0.5
+                ],
+                "z": [
+                  -0.2,
+                  0.2
+                ],
+                "roll": [
+                  -0.52,
+                  0.52
+                ],
+                "pitch": [
+                  -0.52,
+                  0.52
+                ],
+                "yaw": [
+                  -0.78,
+                  0.78
+                ]
+              }
+            }
+          },
+          "randomize_action_delay": {
+            "term": "randomize_action_delay",
+            "calls": {
+              "anchor": 156,
+              "focus": 250
+            },
+            "env_counts": {
+              "anchor": 200,
+              "focus": 404
+            },
+            "anchor_params": {
+              "delay_range": [
+                0.0,
+                8.0
+              ]
+            }
+          },
+          "randomize_rigid_body_mass": {
+            "term": "randomize_rigid_body_mass",
+            "calls": {
+              "anchor": 156,
+              "focus": 250
+            },
+            "env_counts": {
+              "anchor": 200,
+              "focus": 404
+            },
+            "anchor_params": {
+              "mass_distribution_params": [
+                0.8,
+                1.5
+              ]
+            }
+          }
+        },
+        "anchor_delay_mean_steps": 3.7562499046325684,
+        "anchor_delay_max_steps": 8,
+        "anchor_delay_nonzero_fraction": 0.8687499761581421,
+        "focus_delay_mean_steps": 1.9562499523162842,
+        "focus_delay_max_steps": 6,
+        "focus_delay_nonzero_fraction": 0.7541666626930237
+      }
+    },
+    "8601": {
+      "iterations_checked": 22,
+      "anchor_exceeds_focus_every_iteration": true,
+      "missing": 0,
+      "final": {
+        "num_anchor": 32,
+        "num_focus": 96,
+        "anchor_ratio": 0.25,
+        "consolidating": false,
+        "dispatch": {
+          "add_joint_default_pos": {
+            "term": "add_joint_default_pos",
+            "calls": {
+              "anchor": 129,
+              "focus": 243
+            },
+            "env_counts": {
+              "anchor": 174,
+              "focus": 396
+            },
+            "anchor_params": {
+              "pos_distribution_params": [
+                -0.01,
+                0.01
+              ]
+            }
+          },
+          "base_com": {
+            "term": "base_com",
+            "calls": {
+              "anchor": 129,
+              "focus": 243
+            },
+            "env_counts": {
+              "anchor": 174,
+              "focus": 396
+            },
+            "anchor_params": {
+              "com_range": {
+                "x": [
+                  -0.025,
+                  0.025
+                ],
+                "y": [
+                  -0.05,
+                  0.05
+                ],
+                "z": [
+                  -0.05,
+                  0.05
+                ]
+              }
+            }
+          },
+          "physics_material": {
+            "term": "physics_material",
+            "calls": {
+              "anchor": 129,
+              "focus": 243
+            },
+            "env_counts": {
+              "anchor": 174,
+              "focus": 396
+            },
+            "anchor_params": {
+              "static_friction_range": [
+                0.3,
+                1.6
+              ],
+              "dynamic_friction_range": [
+                0.3,
+                1.2
+              ],
+              "restitution_range": [
+                0.0,
+                0.5
+              ]
+            }
+          },
+          "push_robot": {
+            "term": "push_robot",
+            "calls": {
+              "anchor": 148,
+              "focus": 384
+            },
+            "env_counts": {
+              "anchor": 170,
+              "focus": 547
+            },
+            "anchor_params": {
+              "velocity_range": {
+                "x": [
+                  -0.5,
+                  0.5
+                ],
+                "y": [
+                  -0.5,
+                  0.5
+                ],
+                "z": [
+                  -0.2,
+                  0.2
+                ],
+                "roll": [
+                  -0.52,
+                  0.52
+                ],
+                "pitch": [
+                  -0.52,
+                  0.52
+                ],
+                "yaw": [
+                  -0.78,
+                  0.78
+                ]
+              }
+            }
+          },
+          "randomize_action_delay": {
+            "term": "randomize_action_delay",
+            "calls": {
+              "anchor": 129,
+              "focus": 243
+            },
+            "env_counts": {
+              "anchor": 174,
+              "focus": 396
+            },
+            "anchor_params": {
+              "delay_range": [
+                0.0,
+                8.0
+              ]
+            }
+          },
+          "randomize_rigid_body_mass": {
+            "term": "randomize_rigid_body_mass",
+            "calls": {
+              "anchor": 129,
+              "focus": 243
+            },
+            "env_counts": {
+              "anchor": 174,
+              "focus": 396
+            },
+            "anchor_params": {
+              "mass_distribution_params": [
+                0.8,
+                1.5
+              ]
+            }
+          }
+        },
+        "anchor_delay_mean_steps": 3.5374999046325684,
+        "anchor_delay_max_steps": 8,
+        "anchor_delay_nonzero_fraction": 0.8687499761581421,
+        "focus_delay_mean_steps": 2.0562500953674316,
+        "focus_delay_max_steps": 6,
+        "focus_delay_nonzero_fraction": 0.7833333611488342
+      }
+    },
+    "8602": {
+      "iterations_checked": 22,
+      "anchor_exceeds_focus_every_iteration": true,
+      "missing": 0,
+      "final": {
+        "num_anchor": 32,
+        "num_focus": 96,
+        "anchor_ratio": 0.25,
+        "consolidating": false,
+        "dispatch": {
+          "add_joint_default_pos": {
+            "term": "add_joint_default_pos",
+            "calls": {
+              "anchor": 141,
+              "focus": 235
+            },
+            "env_counts": {
+              "anchor": 185,
+              "focus": 381
+            },
+            "anchor_params": {
+              "pos_distribution_params": [
+                -0.01,
+                0.01
+              ]
+            }
+          },
+          "base_com": {
+            "term": "base_com",
+            "calls": {
+              "anchor": 141,
+              "focus": 235
+            },
+            "env_counts": {
+              "anchor": 185,
+              "focus": 381
+            },
+            "anchor_params": {
+              "com_range": {
+                "x": [
+                  -0.025,
+                  0.025
+                ],
+                "y": [
+                  -0.05,
+                  0.05
+                ],
+                "z": [
+                  -0.05,
+                  0.05
+                ]
+              }
+            }
+          },
+          "physics_material": {
+            "term": "physics_material",
+            "calls": {
+              "anchor": 141,
+              "focus": 235
+            },
+            "env_counts": {
+              "anchor": 185,
+              "focus": 381
+            },
+            "anchor_params": {
+              "static_friction_range": [
+                0.3,
+                1.6
+              ],
+              "dynamic_friction_range": [
+                0.3,
+                1.2
+              ],
+              "restitution_range": [
+                0.0,
+                0.5
+              ]
+            }
+          },
+          "push_robot": {
+            "term": "push_robot",
+            "calls": {
+              "anchor": 153,
+              "focus": 404
+            },
+            "env_counts": {
+              "anchor": 174,
+              "focus": 572
+            },
+            "anchor_params": {
+              "velocity_range": {
+                "x": [
+                  -0.5,
+                  0.5
+                ],
+                "y": [
+                  -0.5,
+                  0.5
+                ],
+                "z": [
+                  -0.2,
+                  0.2
+                ],
+                "roll": [
+                  -0.52,
+                  0.52
+                ],
+                "pitch": [
+                  -0.52,
+                  0.52
+                ],
+                "yaw": [
+                  -0.78,
+                  0.78
+                ]
+              }
+            }
+          },
+          "randomize_action_delay": {
+            "term": "randomize_action_delay",
+            "calls": {
+              "anchor": 141,
+              "focus": 235
+            },
+            "env_counts": {
+              "anchor": 185,
+              "focus": 381
+            },
+            "anchor_params": {
+              "delay_range": [
+                0.0,
+                8.0
+              ]
+            }
+          },
+          "randomize_rigid_body_mass": {
+            "term": "randomize_rigid_body_mass",
+            "calls": {
+              "anchor": 141,
+              "focus": 235
+            },
+            "env_counts": {
+              "anchor": 185,
+              "focus": 381
+            },
+            "anchor_params": {
+              "mass_distribution_params": [
+                0.8,
+                1.5
+              ]
+            }
+          }
+        },
+        "anchor_delay_mean_steps": 3.606250047683716,
+        "anchor_delay_max_steps": 8,
+        "anchor_delay_nonzero_fraction": 0.8999999761581421,
+        "focus_delay_mean_steps": 1.15625,
+        "focus_delay_max_steps": 3,
+        "focus_delay_nonzero_fraction": 0.6312500238418579
+      }
+    }
+  },
+  "decisions": {
+    "H_A_headline": true,
+    "H_A2_over_lucid": false,
+    "H_B_attribution": false,
+    "H_C_mechanism": false
+  },
+  "caveats": [
+    "three checkpoint seeds: screening-grade effect sizes, not a paper-grade claim",
+    "content-dev panel motions were in the 512-motion training pool: fresh-physics robustness, not motion generalization"
+  ]
+}
