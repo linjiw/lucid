@@ -1,0 +1,83 @@
+{
+  "kind": "lucid_support_expansion_preregistration",
+  "created_at": "2026-08-28T06:00:44.812544-04:00",
+  "author": "Claude (autonomous PI, second host)",
+  "stage": "stage 8 -- LUCID-S: does expanding the support, and guarding on a scale-free signal, stop the 128-iteration collapse?",
+  "written_before": "any stage-7 outcome was read; stage-7 training was still in flight and its receipt unwritten. This design is motivated only by the already-published stage-5/6 results.",
+  "motivation": {
+    "measured": [
+      "stage 5 (128 it, first host): every arm collapsed vs 32 it -- clean success lucid 83.99 -> 56.86, fixed 80.39 -> 57.19; dr_full -15 pts for both.",
+      "stage 6: `off` x 128 held training reward at 19-22 (last-4 19.09 vs 20.16 at 32 it), so the collapse is DR-induced, not fine-tuning drift.",
+      "dose ordering was non-monotonic in anchor fraction: 0% -> 56.86, 25% -> 57.84, 50% -> 66.01, 100% (fixed) -> 57.19 clean. The best arm is the one with the *widest realized intensity mixture*, not the highest or lowest mean intensity.",
+      "lucid's lambda reached 1.0 at ~it 39 then was decayed to 0.4-0.6 by 3-7 absolute return-guard trips against a floor (8.0) calibrated in the 32-iteration regime, where training reward was roughly twice as large."
+    ],
+    "reading": "Intensity *diversity across environments* is what preserves capability, and a scalar curriculum that moves one point cannot express it. LUCID-S makes lambda the upper edge of a per-environment intensity mixture instead of its single value, and replaces the absolute return guard with one that is invariant to the reward scale."
+  },
+  "design": {
+    "host": "linjiw-ubuntu, RTX 5080 16 GB, dedicated",
+    "origin": {
+      "checkpoint": "/home/linjiw/lucid/GR00T-WholeBodyControl/logs_rl/TRL_G1_Track/manager/universal_token/all_modes/sonic_release_test-20260828_054436/model_step_000024.pt",
+      "sha256": "2fcb299a659c9cb2492243514e402e4936ca98c9f071e3c14617be0de6d94d5e",
+      "provenance": "settled_origin_ne128_20260828_054435.json -- 24 stock iterations from sonic_release/last.pt (sha e6bdab3f...), new branch lineage on this host"
+    },
+    "num_envs": 128,
+    "iterations": 128,
+    "warmup_iterations": 10,
+    "seeds": [
+      8600,
+      8601,
+      8602
+    ],
+    "pool": "debug512 (rebuilt, all 512 clips hash-identical to the frozen manifest)",
+    "smpl_motion_file": "dummy (the 32 GB SMPL pack is absent on this host; recorded in every receipt)",
+    "arms": {
+      "lucid_s4": "spread_strata=4, no anchor, absolute guard -- isolates support expansion",
+      "lucid_rg": "no strata, no anchor, relative guard -- isolates the guard fix",
+      "lucid_s4_rg": "spread_strata=4 + relative guard -- both, without an anchor",
+      "ta_lucid_50": "50% anchor only -- replicates the best stage-5 arm on this host/origin",
+      "ta_lucid_50_s4_rg": "50% anchor + spread_strata=4 + relative guard -- the full proposal"
+    },
+    "references": "stage 7, same host, same origin, same receipt-generation: fixed, off, lucid, fixed_nolat, fixed_latonly; plus the untrained origin scored under the same evaluator"
+  },
+  "evaluation": {
+    "panel": "frozen 102-motion content-dev partition of debug512, eval seeds 8700-8702, no learning",
+    "presets": [
+      "id_clean",
+      "dr_050",
+      "dr_full",
+      "dr_125",
+      "latency_60ms"
+    ],
+    "primary": "robustness-profile AUC over the non-latency DR scale s in {0, 0.5, 1.0, 1.25}, trapezoid over success rate",
+    "co_primary": "dr_125 success -- physics strictly outside the training envelope",
+    "secondary": [
+      "id_clean success (retention)",
+      "dr_full success",
+      "latency_60ms success",
+      "worst-preset success",
+      "terminal lambda",
+      "guard-trip count",
+      "realized per-stratum dose"
+    ]
+  },
+  "hypotheses": {
+    "H_S1": "support expansion helps: lucid_s4 profile AUC exceeds lucid by >= 2 pts.",
+    "H_S2": "the guard fix works as designed: lucid_rg ends with terminal lambda >= 0.9 and <= 2 guard trips (lucid at 128 it had 3-7 trips and terminal lambda 0.4-0.6), and gives up no more than 2 pts of id_clean to lucid.",
+    "H_S3": "the combination is best: ta_lucid_50_s4_rg has the highest profile AUC of every arm, is non-inferior to fixed on dr_full within 2 pts, and beats fixed on id_clean by >= 5 pts.",
+    "H_S4": "capability is retained: ta_lucid_50_s4_rg id_clean success is within 10 pts of the untrained origin's, while fixed is more than 20 pts below it.",
+    "H_S5": "it extrapolates: on dr_125, ta_lucid_50_s4_rg beats fixed by >= 3 pts in at least 2 of 3 seeds."
+  },
+  "decision_rules": {
+    "tie": "< 2 pts on three seeds is a tie and is reported as one",
+    "seed_agreement": "any directional claim must hold in >= 2 of 3 seeds; a 3-seed mean that rests on one seed is reported as such",
+    "if_every_arm_still_collapses": "report the negative in full. The contribution then is the diagnosis (single-intensity training at this scale destroys the released policy; the latent gap is not a sufficient statistic for that harm) plus the audit protocol -- not a tuned win.",
+    "no_post_hoc_arms": "arms and endpoints are fixed by this document; anything added later is exploratory and must be labelled so."
+  },
+  "verified": [],
+  "not_yet_verified": [
+    "all; written before launch"
+  ],
+  "git_sha": "71a0f840b254a227e63a0da18bd50fd7dd872e4e",
+  "git_status_short": [],
+  "logical_sha256": "8825d19aed5badf30d35479317b856e42e5652cb8110458c98ee30f15a5313a9"
+}

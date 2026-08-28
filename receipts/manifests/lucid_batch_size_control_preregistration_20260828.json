@@ -1,0 +1,53 @@
+{
+  "kind": "lucid_batch_size_control_preregistration",
+  "created_at": "2026-08-28T06:11:37.716172-04:00",
+  "author": "Claude (autonomous PI, second host)",
+  "stage": "stage 9 -- is the 128-iteration collapse a property of full-envelope DR, or an artifact of a 32x-too-small batch?",
+  "written_before": "any stage-7 or stage-8 outcome was read.",
+  "why_this_is_not_optional": "Every horizon result in this programme was measured at num_envs=128. SONIC's release policy was trained at num_envs=4096 -- 32x larger. A policy fine-tuned under full DR with 32x fewer samples per update could collapse for reasons that have nothing to do with the randomization envelope, and the entire stage-5/6 reading ('the full envelope is unsustainable') would then be a small-batch artifact wearing a mechanism's clothes. This control decides that, and it must be run whichever way stage 8 goes: if LUCID-S fixes the collapse, the fix still has to survive a larger batch to mean anything for deployment; if it does not, we need to know whether there was ever a real effect.",
+  "design": {
+    "num_envs": 256,
+    "why_256_not_512": "measured 8.0 GB peak at num_envs=256 on debug512; this card has 16 GB and 512 is not safely bounded. 256 is a clean 2x and stays inside the envelope that has already been profiled.",
+    "iterations": 128,
+    "warmup_iterations": 10,
+    "seeds": [
+      8600,
+      8601,
+      8602
+    ],
+    "origin": "the same settled step-24 origin as stages 7 and 8 (sha256 2fcb299a659c9cb2...), which was itself built at num_envs=128; the origin is held fixed on purpose so batch size is the only thing that moves",
+    "arms": [
+      "fixed",
+      "off",
+      "ta_lucid_50_s4_rg"
+    ],
+    "matched_reference": "the same three arms at num_envs=128 from stages 7 and 8"
+  },
+  "evaluation": {
+    "presets": [
+      "id_clean",
+      "dr_050",
+      "dr_full",
+      "dr_125",
+      "latency_60ms"
+    ],
+    "note": "evaluation stays at num_envs=128 for every arm, so the evaluation cost of a branch does not vary with the batch it was trained at"
+  },
+  "hypotheses": {
+    "H_B1": "the collapse is real, not a batch artifact: fixed at 256 envs still loses more than 15 pts of id_clean success against the untrained origin.",
+    "H_B2": "batch size matters but does not explain it: fixed at 256 envs recovers less than half the id_clean gap between fixed@128 and the origin.",
+    "H_B3": "the LUCID-S advantage survives the larger batch: ta_lucid_50_s4_rg beats fixed on profile AUC at 256 envs by at least as much as it does at 128 envs, minus the 2 pt tie margin."
+  },
+  "decision_rules": {
+    "tie": "< 2 pts on three seeds",
+    "if_H_B1_fails": "Then full-envelope DR is sustainable at a realistic batch and the stage-5/6 collapse was a small-batch artifact. Say so plainly, retract the mechanism reading, and re-scope every horizon claim to num_envs=128. The LUCID-S arms would then be answering a question that does not arise at scale, and that is the finding.",
+    "no_reinterpretation": "H_B1 and H_B2 are decided against the untrained origin's id_clean, not against each other, and not against whichever arm happens to look best."
+  },
+  "verified": [],
+  "not_yet_verified": [
+    "all; written before launch"
+  ],
+  "git_sha": "232724b3a4a1e5dccfed5c545e1d6e0990876899",
+  "git_status_short": [],
+  "logical_sha256": "7b868634d66036efc88be3d987fc7fc44c5156e7ef283aaa9b2e8bd40409cec7"
+}

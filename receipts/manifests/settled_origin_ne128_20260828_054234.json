@@ -1,0 +1,121 @@
+{
+  "kind": "lucid_settled_origin",
+  "schema_version": 1,
+  "created_at": "2026-08-28T05:43:30.454524-04:00",
+  "experiment_id": "settled_origin_ne128_20260828_054234",
+  "git_sha": "7442e88e290674069ece7a72ddabeadbb3bb73f4",
+  "git_status_short": [
+    "?? scripts/practice_utility/make_settled_origin.py"
+  ],
+  "launcher_sha256": "89d4a3ccc5c9c02dcda41b2c58bf11b8894c52c355c55c7f5471981181b45b7c",
+  "config": {
+    "source_checkpoint": "/home/linjiw/lucid/GR00T-WholeBodyControl/sonic_release/last.pt",
+    "source_checkpoint_sha256": "e6bdab3f64a39336b3d41877d4f497d05f58af275f288ec0e6746c283ded8909",
+    "num_envs": 128,
+    "iterations": 24,
+    "seed": 8500,
+    "exp": "manager/universal_token/all_modes/sonic_release",
+    "events": "stock (tracking/level0_4); no curriculum, no research callbacks",
+    "motion_file": "data/motion_lib_bones_seed/robot_filtered",
+    "smpl_motion_file": "dummy"
+  },
+  "command": [
+    "/home/linjiw/isaaclab-install/env_isaaclab/bin/python",
+    "/home/linjiw/lucid/GR00T-WholeBodyControl/gear_sonic/train_agent_trl.py",
+    "+exp=manager/universal_token/all_modes/sonic_release",
+    "checkpoint=sonic_release/last.pt",
+    "num_envs=128",
+    "headless=true",
+    "use_wandb=false",
+    "seed=8500",
+    "++algo.config.num_learning_iterations=24",
+    "++algo.config.save_interval=24",
+    "++manager_env.commands.motion.motion_lib_cfg.motion_file=data/motion_lib_bones_seed/robot_filtered",
+    "++manager_env.commands.motion.motion_lib_cfg.smpl_motion_file=dummy"
+  ],
+  "started_at": "2026-08-28T05:42:34.569818-04:00",
+  "wall_seconds": 55.88233356300009,
+  "exit_code": 0,
+  "log_path": "/home/linjiw/lucid-sonic/outputs/settled_origin_ne128_20260828_054234.log",
+  "origin": {
+    "run_dir": "/home/linjiw/lucid/GR00T-WholeBodyControl/logs_rl/TRL_G1_Track/manager/universal_token/all_modes/sonic_release_test-20260828_054236",
+    "checkpoint": null,
+    "checkpoint_sha256": null,
+    "size_bytes": null,
+    "repo_relative": null
+  },
+  "learning_curve": {
+    "Mean rewards": {
+      "1": 1.18049,
+      "2": 2.30414,
+      "3": 3.29652,
+      "4": 4.17041,
+      "5": 4.74059,
+      "6": 6.81889,
+      "7": 8.29304,
+      "8": 9.36991,
+      "9": 9.75811,
+      "10": 11.26,
+      "11": 11.97479,
+      "12": 13.56509,
+      "13": 14.39871,
+      "14": 14.90653,
+      "15": 14.7752,
+      "16": 15.59495,
+      "17": 15.82819,
+      "18": 16.76103,
+      "19": 17.13339,
+      "20": 17.22219,
+      "21": 17.80429,
+      "22": 18.10287,
+      "23": 17.81765,
+      "24": 18.0145
+    },
+    "Mean length": {
+      "1": 19.0,
+      "2": 29.375,
+      "3": 44.0,
+      "4": 51.68,
+      "5": 61.41176,
+      "6": 83.58824,
+      "7": 98.13235,
+      "8": 111.02439,
+      "9": 116.59794,
+      "10": 134.62,
+      "11": 142.92,
+      "12": 159.99,
+      "13": 171.2,
+      "14": 176.2,
+      "15": 175.74,
+      "16": 184.17,
+      "17": 183.85,
+      "18": 196.19,
+      "19": 199.77,
+      "20": 199.14,
+      "21": 206.6,
+      "22": 209.06,
+      "23": 205.2,
+      "24": 210.34
+    }
+  },
+  "settling": {
+    "Mean rewards": {
+      "window": 4,
+      "last_window_mean": 17.9348275,
+      "prior_window_mean": 16.7362,
+      "relative_change": 0.07161885613221643
+    },
+    "Mean length": {
+      "window": 4,
+      "last_window_mean": 207.79999999999998,
+      "prior_window_mean": 194.73749999999998,
+      "relative_change": 0.06707747608960782
+    }
+  },
+  "verified": [],
+  "not_yet_verified": [
+    "that this origin is the same policy as the first host's step-24 origin (it is not; this starts a new branch lineage)",
+    "the cross-seed efficacy noise floor on this host (needs replicate runs)",
+    "any treatment effect"
+  ]
+}

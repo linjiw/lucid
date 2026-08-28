@@ -1,0 +1,48 @@
+{
+  "kind": "lucid_origin_checkpoint_pseudo_training_receipt",
+  "created_at": "2026-08-28T06:01:00.949936-04:00",
+  "note": "NO TRAINING. Three pseudo-arms point at the untrained settled origin so the evaluator scores it under the same panel and eval seeds as every trained arm. This is the retention reference: it says what the policy could do before any curriculum touched it.",
+  "experiment_id": "origin_step24_untrained_linjiw_20260828",
+  "config": {
+    "checkpoint": "/home/linjiw/lucid/GR00T-WholeBodyControl/logs_rl/TRL_G1_Track/manager/universal_token/all_modes/sonic_release_test-20260828_054436/model_step_000024.pt",
+    "checkpoint_sha256": "2fcb299a659c9cb2492243514e402e4936ca98c9f071e3c14617be0de6d94d5e",
+    "num_envs": 128,
+    "iterations": 0,
+    "warmup_iterations": 0,
+    "seeds": [
+      8600,
+      8601,
+      8602
+    ],
+    "modes": [
+      "origin"
+    ],
+    "origin_receipt": "settled_origin_ne128_20260828_054435.json"
+  },
+  "arms": {
+    "origin_s8600": {
+      "seed": 8600,
+      "mode": "origin",
+      "checkpoint": "/home/linjiw/lucid/GR00T-WholeBodyControl/logs_rl/TRL_G1_Track/manager/universal_token/all_modes/sonic_release_test-20260828_054436/model_step_000024.pt",
+      "checkpoint_exported": true,
+      "complete": true,
+      "branch_id": "origin_s8600"
+    },
+    "origin_s8601": {
+      "seed": 8601,
+      "mode": "origin",
+      "checkpoint": "/home/linjiw/lucid/GR00T-WholeBodyControl/logs_rl/TRL_G1_Track/manager/universal_token/all_modes/sonic_release_test-20260828_054436/model_step_000024.pt",
+      "checkpoint_exported": true,
+      "complete": true,
+      "branch_id": "origin_s8601"
+    },
+    "origin_s8602": {
+      "seed": 8602,
+      "mode": "origin",
+      "checkpoint": "/home/linjiw/lucid/GR00T-WholeBodyControl/logs_rl/TRL_G1_Track/manager/universal_token/all_modes/sonic_release_test-20260828_054436/model_step_000024.pt",
+      "checkpoint_exported": true,
+      "complete": true,
+      "branch_id": "origin_s8602"
+    }
+  }
+}
