@@ -696,3 +696,22 @@ have receipts for everything; keep the paper reproducible from them.
   origin/release evaluations (running) decide whether "training" here is net-positive
   at all, and the honest framing may be *retention under DR fine-tuning*; (2) three
   seeds, screening grade. Stage 7 (channel attribution) is now running.
+- **05:40 — THE RELEASE CHECKPOINT, UNTRAINED, BEATS EVERYTHING.** Evaluating SONIC's
+  released `model_step_041550.pt` under the identical evaluator:
+  **id_clean 97.39 / dr_050 71.24 / dr_full 69.61** (progress 98.1 / 82.1 / 81.7).
+  Receipt `curriculum_robustness_ne128_20260828_011506.json`. Every fine-tuned arm at
+  every budget is below it on every preset (best-ever: 84.0 clean, 66.0 dr_050, 56.5
+  dr_full). **Fine-tuning in this testbed has been net-destructive from iteration 1**;
+  the "settled origin" is itself a degraded policy, and the whole
+  lucid/fixed/TACE comparison has measured *rate of degradation*, not capability.
+  This is the most important measurement of the program so far, and it was one
+  evaluation away the entire time. Consequences:
+  1. No curriculum claim can be made until fine-tuning is non-destructive: a
+     no-DR fine-tune must hold ≥ 95% clean. Suspects: 128-env batches (32× smaller
+     than the release's 4096), the adaptive-KL LR schedule on noisy small-batch KL,
+     Adam restarting from fresh moments, entropy drift (13.3→13.8).
+  2. The capability bar for the paper is **beat 69.6% dr_full while holding ≥ 97%
+     clean** — the released policy already has more DR robustness than any curriculum
+     arm produced.
+  3. Everything measured so far is still valid *as a retention study* (the 50% anchor
+     retains best), but it is not the paper.
