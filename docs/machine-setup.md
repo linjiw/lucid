@@ -12,25 +12,43 @@ pools rebuilt and hash-verified against the frozen manifests; both encoders
 regenerated; six idle-GPU receipts written on a clean tree. Four commits, none
 pushed: `878d107`, `7442e88` (fork), `d21fa90`, `aec4b6b` (workspace).
 
-**Blocked on one decision, which is the PI's.** `pool_sha256` hashes an absolute
-path, so every hash-bound Aug-26 artifact — the v2 probe manifest, the passive-dose
-plan, the directional-calibration preregistration — fails to validate here despite
-the instrument being provably identical. Pick one of the three options under *Open
-decision: pool identity* below before launching anything hash-bound. Nothing else
-in the program is waiting on anything.
+**Both open decisions were settled on 2026-08-28 (see `fable.md`).**
 
-**Then, in order.**
+*The origin:* regenerated here, accepting a **new branch lineage**. The released
+checkpoint is byte-identical to the one every earlier result used (sha256
+`e6bdab3f64a3…`), so only the 24-step settled origin differs.
+`scripts/practice_utility/make_settled_origin.py` rebuilds it from stock SONIC and
+receipts its sha256; the current origin is
+`sonic_release_test-20260828_054436/model_step_000024.pt`
+(sha256 `2fcb299a659c9cb2…`, receipt `settled_origin_ne128_20260828_054435.json`).
+A 32-iteration parity cell reproduces the first host's terminal λ (0.767 vs 0.756),
+its realized `fixed` delay dose (3.8918 vs 3.89 steps) and its lucid/fixed reward
+ratio (1.76 vs 1.77) — the instrument is validated, not assumed.
 
-1. Settle `pool_sha256`; if option 2 or 3, land the code change and re-run the CPU suite.
-2. Decide the origin. `sonic_release_test-20260818_141446/model_step_000024.pt` cannot
-   be transferred. Either regenerate a settled origin here and accept a **new branch
-   lineage** (then repoint the `CKPT` line in the four `run_tace_*.sh` drivers), or run
-   only work that does not need it.
-3. The Aug-27 log's own next cell is still open and does not depend on either decision:
-   channel attribution, `fixed_nolat` vs `fixed_latonly` × 3 seeds × 128 it, via
-   `run_tace_channel_attr.sh`. At ~0.37 h per 128-iteration branch at `num_envs=256`,
-   that is roughly 2 GPU-hours here on a dedicated card — the contention that stalled
-   Track B on the shared 5090 does not apply.
+*Pool identity:* **deferred, and largely moot for anything currently running.** The
+evaluator reads the *frozen* pool/split manifests and re-roots their paths through
+`paths.relocate()`, so the 102-motion content-dev panel materialized here carries
+`pool_sha256 b065a498…` / `split_sha256 33784622…` / `motion_keys_sha256 f0c18255…`
+identical to the first host's, and evaluation numbers are cross-host comparable with
+no change at all. The path-dependence still blocks **Track A**, which recomputes
+`pool_sha256` and compares. The intended fix is options 2 and 3 together — make the
+hash content-addressed *and* keep the Aug-26 outcome-blind freeze through the
+equivalence receipt — and it stays unimplemented while Track B holds the GPU.
+
+**Two things this host needed that the doc did not predict.**
+
+1. `data/motion_lib_bones_seed/robot_filtered` must exist as a repo-relative path
+   (symlink it at `$LUCID_ROOT/pools/debug512/robot_filtered`). The throughput probe
+   passes an absolute `--motion-file` and so never noticed.
+2. **`++algo.config.save_interval` is read by nothing.** Every practice-utility driver
+   sets it to 100000 and exports checkpoints through the capsule callback instead, so
+   the dead key went unnoticed; a run that asks for a checkpoint through it silently
+   saves none. The real cadence is `callbacks.model_save.save_frequency`.
+
+**Measured branch cost here:** 1.67 s/iteration at `num_envs=128` on `debug512`, so a
+128-iteration branch is ~4 minutes wall-clock — roughly 4× cheaper than the earlier
+`num_envs=256` throughput probe implied. The shared-GPU contention that stalled Track B
+on the 5090 does not apply on this dedicated card.
 
 **Deliberately not done.** `whole_body_tracking` is checked out but **not installed**;
 it is the non-claim-bearing BeyondMimic sandbox and its own pins could perturb a working
