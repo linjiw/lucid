@@ -1333,3 +1333,49 @@ have receipts for everything; keep the paper reproducible from them.
   `--keys` for named single-motion subsets that still refuse `dev`/`test`, `--wandb-project`
   streaming live to `lucid-scratch`, and a measured VRAM model — peak = 4002 + 2.386·N MiB,
   so 1024 envs = 7,076 MiB total and 1280 = 7,887 (receipt `vram_ladder_20260828_131226`).
+
+- **2026-08-28 16:07 — THE BASELINE WORKS. Plain single-motion tracking, from scratch.**
+  Receipt `single_motion_baseline_milestone_20260828.json`;
+  wandb `https://wandb.ai/16726/lucid-single-motion/runs/r5ovlrbg`.
+
+  One 4.03 s walk clip (`walk_hands_on_back_loop_002__A066_M`, walk family, drawn from the
+  `adaptation` partition, **zero overlap with the dev panel**), fresh initialisation,
+  1024 envs, seed 8600, no event-manager DR, termination thresholds at their upstream
+  term-file defaults. 2,538 iterations in two hours at 2.48 s/iter (9,894 env-steps/s,
+  8.6 GB total device).
+
+  | iterations | episode length | reward |
+  |---|---:|---:|
+  | 1–211 | 27.1 | 1.51 |
+  | 423–633 | 39.2 | 2.76 |
+  | 845–1055 | 100.0 | 6.87 |
+  | 1267–1477 | 145.6 | 10.65 |
+  | 2322–2532 | **174.5** | **13.57** |
+  | (at ~2,900) | **184.6** | — |
+
+  | termination | start | at ~2,900 |
+  |---|---:|---:|
+  | **`time_out`** (reached the END of the motion) | 0.000 | **0.987** |
+  | `foot_pos_xyz` | 0.075 | 0.060 |
+  | `ee_body_pos` / `anchor_pos` | 0.000 | 0.000 |
+
+  Episode length **26.9 → 184.6** (6.9×), reward **1.41 → 13.6** (9.6×), and **98.7% of
+  episodes now run the clip to completion** where none did at the start. The clip is
+  4.03 s ≈ 201 control steps, so the mean episode covers ~92% of it. And it is genuinely
+  *tracking*, not merely surviving: every tracking reward term rose 3–31×
+  (`relative_body_ori` 30.9×, `vr_5point_local` 11.5×, `body_angvel` 10.5×,
+  `body_linvel` 9.9×). Entropy −37.9 → 11.5, action-noise std 0.066 → 0.361.
+
+  **What this settles.** The earlier from-scratch failure was the *task*, not the method:
+  16 diverse clips (jumps, runs, dances) are unlearnable at this scale, one walk is
+  comfortably learnable in two hours on one consumer GPU. It also retires the "not
+  converged" objection from the fine-tuning era — here we can watch a policy go from
+  nothing to competent, which is exactly the regime a curriculum claim belongs in.
+
+  **What it does not settle.** Convergence (episode length is flattening but reward is
+  still rising); generalisation (one motion, and the frozen 102-motion dev panel is not a
+  meaningful test of a single-motion policy — the evaluator needs a change before the
+  comparison can be scored); and anything about curricula, which is what comes next.
+
+  This is now **the baseline every arm is measured against**: same motion, same fresh
+  initialisation, same envs, same thresholds, same budget.

@@ -1,0 +1,130 @@
+{
+  "kind": "lucid_single_motion_baseline_milestone",
+  "schema_version": 1,
+  "created_at": "2026-08-28T17:39:49.711862-04:00",
+  "note": "Two-hour milestone of the plain single-motion from-scratch baseline. The run continues toward 20,000 iterations; this records the state at which the feasibility question was answered.",
+  "git_sha": "f420a9fc5993e4a6803bae575685af2e0e0bd267",
+  "config": {
+    "from_scratch": true,
+    "num_envs": 1024,
+    "seed": 8600,
+    "mode": "off",
+    "randomization": "no event-manager DR. NOT 'no randomization': the motion command term applies reset randomization every reset regardless of lambda -- root velocity +-0.5 m/s, +-0.78 rad/s yaw, pelvis +-0.05 m, joints +-0.1 rad.",
+    "termination_thresholds": "upstream term-file defaults (0.5 / 0.5 / 0.5 / 1.0)",
+    "motion": "walk_hands_on_back_loop_002__A066_M",
+    "motion_duration_seconds": 4.03,
+    "motion_keys_sha256": "10adaedaabf0f39fdc6678958299019f3f690b7c8e8c9fc9ee850f9574458e8c",
+    "partition": "adaptation (zero overlap with the dev panel)",
+    "wandb": "https://wandb.ai/16726/lucid-single-motion/runs/r5ovlrbg"
+  },
+  "at_iteration": 4833,
+  "learning": {
+    "episode_length": {
+      "first100": 26.8765,
+      "last100": 184.5752
+    },
+    "reward": {
+      "first100": 1.4124690000000002,
+      "last100": 15.6190968
+    },
+    "episode_length_blocks": {
+      "1-211": 27.1360663507109,
+      "212-422": 30.56436018957346,
+      "423-633": 39.15113744075829,
+      "634-844": 57.20568720379147,
+      "845-1055": 100.01862559241707,
+      "1056-1266": 131.97535545023698,
+      "1267-1477": 145.61004739336494,
+      "1478-1688": 156.92189573459714,
+      "1689-1899": 164.26184834123222,
+      "1900-2110": 168.53772511848342,
+      "2111-2321": 172.93132701421803,
+      "2322-2532": 174.46914691943127,
+      "2533-2743": 177.34981042654027,
+      "2744-2954": 178.32815165876775,
+      "2955-3165": 179.61919431279622,
+      "3166-3376": 179.85549763033177,
+      "3377-3587": 181.17962085308056,
+      "3588-3798": 181.51289099526068,
+      "3799-4009": 182.0645971563981,
+      "4010-4220": 183.0548815165877,
+      "4221-4431": 183.4437914691943,
+      "4432-4642": 183.5624644549763,
+      "4643-4833": 183.95984293193717
+    }
+  },
+  "terminations": {
+    "time_out": {
+      "first": 0.0,
+      "last": 0.9867
+    },
+    "foot_pos_xyz": {
+      "first": 0.0753,
+      "last": 0.0107
+    },
+    "ee_body_pos": {
+      "first": 0.0,
+      "last": 0.0
+    },
+    "anchor_pos": {
+      "first": 0.0,
+      "last": 0.0
+    },
+    "anchor_ori_full": {
+      "first": 0.0034,
+      "last": 0.0026
+    }
+  },
+  "tracking_reward_terms": {
+    "tracking_anchor_ori": {
+      "first100": 0.014272,
+      "last100": 0.166269
+    },
+    "tracking_anchor_pos": {
+      "first100": 0.018989,
+      "last100": 0.088953
+    },
+    "tracking_body_angvel": {
+      "first100": 0.019163,
+      "last100": 0.210555
+    },
+    "tracking_body_linvel": {
+      "first100": 0.026785,
+      "last100": 0.302831
+    },
+    "tracking_relative_body_ori": {
+      "first100": 0.0068520000000000005,
+      "last100": 0.282128
+    },
+    "tracking_relative_body_pos": {
+      "first100": 0.043352,
+      "last100": 0.357925
+    },
+    "tracking_vr_5point_local": {
+      "first100": 0.052191,
+      "last100": 0.665471
+    }
+  },
+  "throughput": {
+    "iterations_parsed": 4833,
+    "num_envs": 1024,
+    "steps_per_env": 24,
+    "transitions_per_iteration": 24576,
+    "median_steps_per_second": 10109.0,
+    "median_iteration_seconds": 2.431,
+    "env_steps_per_second": 10109.419991772933,
+    "hours_per_128_iteration_branch": 0.08643555555555556
+  },
+  "verified": [
+    "episode length rose 26.9 -> 184.6 over 4833 iterations",
+    "time_out (reached the end of the motion) rose 0.000 -> 0.987",
+    "every tracking reward term rose 3-31x, so the policy is tracking rather than merely surviving",
+    "fresh initialisation confirmed: checkpoint None, resume None, no 'Resuming training from' in the log"
+  ],
+  "not_yet_verified": [
+    "convergence -- episode length is flattening but reward is still rising",
+    "generalisation: this is ONE motion, and the frozen 102-motion dev panel is not a meaningful test of a single-motion policy",
+    "any curriculum claim; this is the no-DR baseline the comparison will be measured against"
+  ],
+  "logical_sha256": "5027a0a30db261ce8436f700cc4171a3ce50c9afcb80c9ad2d4567bf3e6857b3"
+}
