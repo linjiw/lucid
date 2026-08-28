@@ -1,0 +1,23 @@
+{
+  "kind": "lucid_finetune_sustainability_preregistration",
+  "created_at": "2026-08-28T06:10:00-04:00",
+  "author": "Fable (autonomous)",
+  "motivation": "SONIC release checkpoint untrained scores 97.39 clean / 69.61 dr_full; every fine-tuned arm is below it (off@32 83.01 clean, off@128 66.67). Fine-tuning at 128 envs is net-destructive with no DR. Trainer facts: checkpoint= loads policy/value weights only (fresh Adam); adaptive-KL LR ended pinned at the floor 1e-5 (per-update KL persistently > 0.02) -> updates are too large for a converged policy, not the LR too high.",
+  "design": {
+    "arm": "off (no DR) so the effect is fine-tuning alone", "iterations": 32, "warmup_iterations": 10, "seeds": [8600, 8601, 8602], "origin": "settled step-24 (itself already degraded from the release)",
+    "cells": {
+      "C1_batch": {"num_envs": 512, "overrides": []},
+      "C2_update": {"num_envs": 128, "overrides": ["++algo.config.adaptive_lr_min=1e-6", "++algo.config.adaptive_lr_max=2e-5", "++algo.config.num_learning_epochs=1"]},
+      "C3_entropy": {"num_envs": 128, "overrides": ["++algo.config.entropy_coef=0.0"]}
+    },
+    "reference": {"off@32 (128 envs, default)": {"id_clean": 83.01, "dr_full": 50.65}, "release@0": {"id_clean": 97.39, "dr_full": 69.61}}
+  },
+  "evaluation": {"presets": ["id_clean", "dr_full"], "primary": "id_clean success at 32 it"},
+  "hypotheses": {
+    "H_S1": "at least one cell holds id_clean >= 95 (within 2.4 pts of the release) — fine-tuning can be made non-destructive without changing the objective",
+    "H_S2": "C2 (smaller updates) retains more than C1 (bigger batches) — update magnitude, not sample count, is the driver",
+    "H_S3": "C3 alone does not reach 95 — entropy drift is a symptom, not the cause"
+  },
+  "decision_rule": "the best cell by id_clean (ties: fewer changed knobs) becomes the fine-tuning regime; then rerun off/fixed/lucid/ta_lucid_50 under it at 32 and 128 it. Do not combine cells post hoc without a new preregistration.",
+  "verified": [], "not_yet_verified": ["all; written before launch"]
+}

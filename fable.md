@@ -715,3 +715,17 @@ have receipts for everything; keep the paper reproducible from them.
      arm produced.
   3. Everything measured so far is still valid *as a retention study* (the 50% anchor
      retains best), but it is not the paper.
+- **06:15 — Origin (step-24 "settled") checkpoint, untrained by us:** clean 94.12 /
+  dr_050 67.65 / dr_full 62.42 (receipt `curriculum_robustness_ne128_20260828_011345.json`).
+  So the degradation ladder is: release 97.4 → settled origin (24 it @256 envs) 94.1 →
+  off@32 83.0 → off@128 66.7 clean; dr_full 69.6 → 62.4 → 50.7 → 38.9. **Every
+  fine-tuning iteration in this program has cost capability, monotonically.**
+  Trainer facts established: `checkpoint=` restores policy+value weights only (fresh
+  Adam); the adaptive-KL LR ended pinned at its floor 1e-5 because per-update KL stayed
+  > 0.02 — updates are too large for a converged policy at 3,072-sample batches
+  (release: ~98k). **Stage 8 queued (`run_finetune_sustainability.sh`, preregistered in
+  `finetune_sustainability_preregistration_20260828.json`):** no-DR × 32 it × 3 seeds
+  under C2 (LR floor 1e-6, cap 2e-5, 1 PPO epoch), C3 (entropy_coef 0), C1 (512 envs).
+  Bar: id_clean ≥ 95. The winning regime becomes the base for re-running
+  off/fixed/lucid/ta_lucid_50 — that rerun is where a real capability result (beat
+  69.6 dr_full at ≥ 97 clean) can exist. Stage 7 (channel attribution) still running.
