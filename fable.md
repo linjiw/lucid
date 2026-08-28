@@ -677,3 +677,22 @@ have receipts for everything; keep the paper reproducible from them.
   If confirmed, the paper's mechanism story is: *the full envelope is unsustainable
   because of one channel, and a scalar λ cannot express "everything except latency"*
   — which is the evidence LUCID-MC (per-channel gating) needs.
+- **05:07 — Stage 6 eval (`off` × 128 it):** clean 66.67 (all three seeds 67), dr_050
+  44.12, dr_full 38.89 — versus off@32: 83.01 / — / 50.65. **Deployment success decays
+  with continued fine-tuning even without DR, while training reward stays flat** —
+  the training curve is blind to it (stochastic actions on the 512-pool vs
+  deterministic frozen eval on the 102-motion panel). Receipt
+  `curriculum_robustness_ne128_20260828_021915.json`. Standing at 128 it:
+
+  | success % @128 | off | lucid | fixed | ta_lucid_25 | **ta_lucid_50** |
+  |---|---:|---:|---:|---:|---:|
+  | id_clean | **66.67** | 56.86 | 57.19 | 57.84 | **66.01** |
+  | dr_050 | 44.12 | 48.37 | 46.73 | 45.42 | **54.58** |
+  | dr_full | 38.89 | 39.22 | 41.50 | 42.48 | **46.41** |
+
+  The 50% anchor retains clean competence at the no-DR level *and* is the most robust
+  arm at every intensity — the only arm that is not dominated. Two caveats before this
+  becomes a claim: (1) all 128-it numbers sit below the 32-it numbers, so the untrained
+  origin/release evaluations (running) decide whether "training" here is net-positive
+  at all, and the honest framing may be *retention under DR fine-tuning*; (2) three
+  seeds, screening grade. Stage 7 (channel attribution) is now running.
