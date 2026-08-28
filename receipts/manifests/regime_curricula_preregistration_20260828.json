@@ -1,0 +1,17 @@
+{
+  "kind": "lucid_regime_curricula_preregistration",
+  "created_at": "2026-08-28T10:15:00-04:00",
+  "author": "Fable (autonomous)",
+  "regime_decision": {"chosen": "C1: num_envs=512, default optimizer", "rule": "preregistered: best id_clean, ties (<2 pts) -> fewer changed knobs; C2 93.14 vs C1 91.83 is a tie, C1 changes one knob", "cells": {"C1_batch": [91.83, 60.78], "C2_update": [93.14, 57.52], "C3_entropy": [83.01, 48.37], "default": [83.01, 50.65], "origin": [94.12, 62.42], "release": [97.39, 69.61]}},
+  "design": {"arms": ["off", "fixed", "lucid", "ta_lucid_50"], "num_envs": 512, "iterations": [32, 128], "warmup_iterations": 10, "seeds": [8600, 8601, 8602], "origin": "settled step-24", "controller": "unchanged (delta_target 0.778, kp 1, ki 0.02, alpha 0.05, integral_max 1, return_floor 8)", "anchor": "ta_lucid_50 = 256 anchor / 256 focus envs"},
+  "evaluation": {"presets": ["id_clean", "dr_050", "dr_full", "latency_60ms"], "primary": "dr_full success at each budget; co-primary id_clean"},
+  "hypotheses": {
+    "H_R1_lossless_base": "off@32 under the regime holds id_clean >= 90 (fine-tuning no longer destroys the policy)",
+    "H_R2_robustness_gain": "at least one DR arm exceeds off on dr_full by > 3 pts at 32 it while holding id_clean within 3 pts of off — a genuine robustness gain, not degradation-rate",
+    "H_R3_anchor_vs_fixed": "ta_lucid_50 id_clean >= fixed + 3 pts with dr_full >= fixed - 2 pts at 32 it",
+    "H_R4_horizon": "at 128 it, fixed id_clean degrades > 5 pts from its 32-it value while ta_lucid_50 degrades < 3 pts (latency at full strength is still destabilizing; the anchor + gating retain)",
+    "H_R5_beat_release": "any arm reaching dr_full > 69.61 with id_clean >= 95 — the paper-grade capability bar; not expected at 32 it"
+  },
+  "decision_rules": {"ties": "< 3 pts on three seeds", "no_post_hoc": "no combining C1+C2 in this stage; a combined regime needs its own preregistration"},
+  "verified": [], "not_yet_verified": ["all; written before launch"]
+}

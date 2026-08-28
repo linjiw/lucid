@@ -763,3 +763,15 @@ have receipts for everything; keep the paper reproducible from them.
 - **09:29 — Stage 8 cell C3 (entropy_coef=0):** clean 83.01 / dr_full 48.37 — identical to
   the default regime. H_S3 ✓: entropy drift is a symptom of oversized updates, not a
   cause. Receipt `curriculum_robustness_ne128_20260828_083607.json`. C1 (512 envs) running.
+- **10:08 — Stage 8 complete; regime chosen.** C1 (512 envs, default optimizer): clean
+  **91.83** / dr_full **60.78**; C2 (small updates): 93.14 / 57.52; C3 (no entropy): 83.01 /
+  48.37 = default. Both C1 and C2 make 32 iterations of fine-tuning ≈ lossless against
+  the origin (94.12 / 62.42); the damage was oversized PPO updates on 3k-sample
+  batches, fixable either by 4× more samples or 4× smaller steps. Preregistered tie
+  rule → **regime = 512 envs, default optimizer** (one knob). Receipts
+  `curriculum_comparison_ne512_20260828_092929_C1_batch.json`,
+  `curriculum_robustness_ne128_20260828_093719.json`. **Stage 9 launched**
+  (`regime_curricula_preregistration_20260828.json`): off / fixed / lucid / ta_lucid_50
+  × 3 seeds at 512 envs, 32 it now and 128 it queued. This is the first curriculum
+  comparison in the program on a non-destructive base; H_R2 (a DR arm beats off on
+  dr_full by > 3 while holding clean) is the first possible *capability gain*.
