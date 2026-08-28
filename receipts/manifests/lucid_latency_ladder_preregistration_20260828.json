@@ -1,0 +1,62 @@
+{
+  "kind": "lucid_latency_ladder_preregistration",
+  "created_at": "2026-08-28T08:11:25.804686-04:00",
+  "author": "Claude (autonomous PI, second host)",
+  "stage": "stage 11 -- the deployment-latency ladder, replacing a saturated endpoint",
+  "status_of_prior_endpoint": {
+    "endpoint": "latency_60ms",
+    "measured": {
+      "untrained settled origin (this host, seed 8600)": 0.0,
+      "lucid / fixed / ta_lucid_25 / ta_yoked_25 @ 32 it (first host)": 0.0,
+      "lucid / fixed / ta_lucid_25 / ta_lucid_50 @ 128 it (first host)": 0.0
+    },
+    "verdict": "Saturated. Zero before training and zero after it, for every arm ever measured. No endpoint defined on this cell can rank two policies, so H_C3 and the 'deployment' secondary as previously written are not answerable and are superseded here.",
+    "why": "It stacks a fixed 60 ms on top of the full six-channel envelope, moving two axes at once, and 60 ms fixed on all five actuator groups is far harsher than the 0-40 ms sampled independently per group that training ever sees."
+  },
+  "design": {
+    "rungs_ms": [
+      10,
+      20,
+      30,
+      40,
+      60
+    ],
+    "physics_step_ms": 5,
+    "other_channels": "nominal (tracking/lucid_eval_clean) -- latency is the only axis that moves",
+    "training_envelope_for_reference": "0-40 ms sampled independently per actuator group",
+    "arms": [
+      "origin",
+      "off",
+      "fixed",
+      "ta_lucid_50_s4_rg",
+      "ta_lucid_50_latcap_s4_rg"
+    ],
+    "why_these_arms": "the untrained reference, the no-DR control, the standard DR baseline, the LUCID-S proposal, and the capped proposal whose whole point is that it trained on *less* latency than the others and must be shown to pay for that here if it pays anywhere",
+    "seeds": [
+      8600,
+      8601,
+      8602
+    ],
+    "eval_num_envs": 128,
+    "panel": "the same frozen 102-motion content-dev partition, eval seeds 8700-8702"
+  },
+  "hypotheses": {
+    "H_D1": "there is a cliff, and it is inside the training envelope: at least one arm falls below 20% success at a rung <= 40 ms while exceeding 60% at 10 ms.",
+    "H_D2": "DR training buys latency margin the released policy does not have: the best trained arm exceeds the untrained origin by >= 10 pts at the 20 ms rung.",
+    "H_D3": "the latency cap costs latency margin: ta_lucid_50_latcap_s4_rg is below ta_lucid_50_s4_rg at the 40 ms rung. This is preregistered as the expected DIRECTION of a trade, not as a failure -- the cap trains on 0-20 ms and 40 ms is outside it.",
+    "H_D4": "no arm rescues 60 ms: every arm scores < 10% at the 60 ms rung, confirming the saturated cell was measuring a real wall rather than a bug."
+  },
+  "decision_rules": {
+    "tie": "< 2 pts on three seeds",
+    "seed_agreement": ">= 2 of 3 seeds for any directional claim",
+    "this_is_a_measurement_change_not_a_hypothesis_change": "The ladder replaces a saturated instrument. It is declared here, before it is run, with the saturation evidence that motivates it. The AUC primary and every other preregistered endpoint from stages 8 and 9 are untouched.",
+    "if_H_D4_fails": "then something does clear 60 ms and that arm is the headline deployment result; report it as such and re-examine why the combined cell read zero."
+  },
+  "verified": [],
+  "not_yet_verified": [
+    "all; written before any ladder cell was run"
+  ],
+  "git_sha": "62b2f453e51f2e452e074a95556020eee15f61cb",
+  "git_status_short": [],
+  "logical_sha256": "3d7352d1d4c6c3ad0463a65516d51cc9642ca9458b38ae3c3a7ba8284e5ab3b7"
+}

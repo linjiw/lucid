@@ -955,3 +955,59 @@ have receipts for everything; keep the paper reproducible from them.
   anchor arm's own decomposition (`ta_lucid_50_rg`) is **not** in this campaign, and whether
   it is worth an hour of GPU is deliberately left until the evaluation is in rather than
   guessed at now.
+
+- **2026-08-28 08:05 — Two evaluation findings that reframe the study, both from the
+  reference arms rather than the treatments.**
+
+  **(1) The untrained origin beats every trained arm.** First origin cells (seed 8600,
+  frozen policy, no learning): `id_clean` **90.20%**, `dr_050` 68.63%, `dr_full`
+  **60.78%**, `dr_125` 55.88%. Against the first host's 128-iteration table — clean
+  56.9–66.0, dr_full 39.2–46.4 for *every* arm including `fixed` — this says something
+  the curriculum comparison could not: at `num_envs=128`, **DR fine-tuning of the
+  released SONIC policy is net-destructive, and not only on clean capability but on the
+  full-envelope robustness it is explicitly training for.** Every arm in the horizon
+  study was worse than doing nothing. "Which curriculum is best" was the wrong question
+  to be asking of that table.
+
+  That makes the batch-size control the *interpretation-critical* experiment rather than
+  a side check, so the queue was reordered to run it before the latency cap. SONIC's
+  release policy was trained at 4,096 environments; every horizon result here is at 128.
+  If full-envelope DR is sustainable at 256, the stage-5/6 mechanism reading is a
+  small-batch artifact and gets retracted in those words.
+
+  **(2) The deployment-latency endpoint was saturated, and had been all along.**
+  `latency_60ms` reads **0.00%** for the untrained origin — and, checking back, 0.00%
+  for lucid / fixed / ta_lucid_25 / ta_yoked_25 at 32 iterations *and* for lucid /
+  fixed / ta_lucid_25 / ta_lucid_50 at 128, on the first host. Zero before training and
+  zero after it, for every policy ever measured. That is not a robustness measurement,
+  it is a floor, and no endpoint defined on it can rank anything — including H_C3 as
+  written in the stage-9 preregistration, which is hereby superseded.
+
+  Two things made it saturate: it stacks a fixed 60 ms **on top of the full six-channel
+  envelope**, moving two axes at once; and 60 ms fixed on all five actuator groups is far
+  harsher than the 0–40 ms sampled *independently per group* that training ever sees.
+  Note the origin scores 60.78% on `dr_full` — which already contains 0–40 ms latency —
+  and 0.00% once latency is pinned at 60 ms, so the marginal effect of that pin is the
+  whole story.
+
+  **Stage 11, the latency ladder**, replaces it: latency pinned at 10 / 20 / 30 / 40 /
+  60 ms against **nominal** physics on every other channel, so latency is the only axis
+  moving — which is also the question a deployment actually asks. Implemented as an
+  eval-callback parameter rather than five configs, and reported: each receipt records
+  which terms were really pinned, and a rung only counts as measured if every live lag
+  sat at it. Preregistered before running at
+  `lucid_latency_ladder_preregistration_20260828.json` (logical sha `3d7352d1d4c6c3ad`),
+  with the saturation evidence stated as the reason, and with H_D3 written so that the
+  capped arm *losing* margin at 40 ms is recorded as the expected direction of a trade
+  rather than as a failure. Arms: origin, off, fixed, `ta_lucid_50_s4_rg`,
+  `ta_lucid_50_latcap_s4_rg`.
+
+  *Precision, not new hypotheses.* Every evaluated run records which of the 102 panel
+  motions failed, so two arms at the same seed are paired motion by motion — 102 × 3
+  paired observations instead of 3. `motion_paired.py` adds hierarchical paired bootstrap
+  intervals (seeds resampled, then motions within each drawn seed) on exactly the
+  differences the preregistrations already name, including the profile AUC, which is a
+  fixed weighted sum (0.2 / 0.4 / 0.3 / 0.1) of the per-cell rates and so bootstraps at
+  motion level too. The preregistered rules are still scored, unchanged, from the same
+  three-seed means. Pairing is refused unless the panel order is provably shared.
+  Suite **1,246 green**.
