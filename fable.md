@@ -753,3 +753,10 @@ have receipts for everything; keep the paper reproducible from them.
   at full strength, is what makes SONIC fine-tuning collapse; everything else in the
   envelope is benign.* Cost of removing it: latency robustness (dr_full 38.6 vs 41.5)
   — which is exactly the trade a per-channel controller should manage, not a scalar λ.
+- **08:29 — Stage 8 cell C2 (no-DR, 32 it, LR cap 2e-5 / floor 1e-6 / 1 PPO epoch):**
+  clean **93.14** [92, 93, 94], dr_full 57.52 — vs the default regime's 83.01 / 50.65 and
+  the origin's 94.12 / 62.42; training reward identical (20.0 vs 20.2). **Update
+  magnitude was the driver: with small updates, 32 iterations cost ≈1 pt clean instead
+  of 11.** Receipts `curriculum_comparison_ne128_20260828_073416_C2_update.json`,
+  `curriculum_robustness_ne128_20260828_074017.json`. C3 (entropy) and C1 (512 envs)
+  running; regime decision after all three per the preregistration.
