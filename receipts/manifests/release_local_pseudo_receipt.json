@@ -1,0 +1,47 @@
+{
+  "kind": "lucid_release_checkpoint_pseudo_training_receipt",
+  "created_at": "2026-08-28T12:20:54.430479-04:00",
+  "note": "NO TRAINING. The released SONIC checkpoint itself, scored under the same panel, presets and eval seeds as every trained arm. This is the true zero point of the budget curve: the 'origin' every arm branches from is already 24 iterations of fine-tuning, so without this there is no way to tell whether those 24 iterations helped, hurt, or did nothing.",
+  "experiment_id": "release_step41550_untrained_linjiw_20260828",
+  "config": {
+    "checkpoint": "/home/linjiw/lucid/GR00T-WholeBodyControl/sonic_release/last.pt",
+    "checkpoint_sha256": "e6bdab3f64a39336b3d41877d4f497d05f58af275f288ec0e6746c283ded8909",
+    "num_envs": 128,
+    "iterations": 0,
+    "warmup_iterations": 0,
+    "seeds": [
+      8600,
+      8601,
+      8602
+    ],
+    "modes": [
+      "origin"
+    ]
+  },
+  "arms": {
+    "release_s8600": {
+      "seed": 8600,
+      "mode": "origin",
+      "checkpoint": "/home/linjiw/lucid/GR00T-WholeBodyControl/sonic_release/last.pt",
+      "checkpoint_exported": true,
+      "complete": true,
+      "branch_id": "release_s8600"
+    },
+    "release_s8601": {
+      "seed": 8601,
+      "mode": "origin",
+      "checkpoint": "/home/linjiw/lucid/GR00T-WholeBodyControl/sonic_release/last.pt",
+      "checkpoint_exported": true,
+      "complete": true,
+      "branch_id": "release_s8601"
+    },
+    "release_s8602": {
+      "seed": 8602,
+      "mode": "origin",
+      "checkpoint": "/home/linjiw/lucid/GR00T-WholeBodyControl/sonic_release/last.pt",
+      "checkpoint_exported": true,
+      "complete": true,
+      "branch_id": "release_s8602"
+    }
+  }
+}

@@ -1053,3 +1053,202 @@ have receipts for everything; keep the paper reproducible from them.
 
   Driver chain, all four armed and sequential on the one card:
   campaign (origin → stage 7 → stage 8) → stage 10 → stage 9 → stage 12 → stage 11.
+
+- **2026-08-28 08:50 — An anchor defect caught before it ran.** `TACE.install` handed the
+  anchor cohort the *captured baseline*, so any arm that pins or caps a channel would
+  still have given half its environments the full configured range for that channel. For
+  the then-queued `ta_lucid_50_latcap_s4_rg` that is 50% of environments training at
+  uncapped 0–40 ms latency: the cap would have been a claim about half the run, and
+  **nothing in the receipt would have looked wrong.** The anchor now samples the arm's own
+  target envelope — baseline for an unrestricted channel, baseline scaled to the channel's
+  ceiling for a pinned or capped one, with the material term's anchor buckets redrawn at
+  that ceiling. Arms with neither take an early return and are byte-identical, so stages 7,
+  8, 10 and 12 are untouched. Six tests pin it.
+
+  Second instance of one class of bug in this machinery: TACE made the *gap* focus-only but
+  not the *return*, and now the anchor's *envelope* was the config's rather than the arm's.
+  Both are "the cohort split was applied to one thing and not its neighbour", and both are
+  invisible in aggregate telemetry.
+
+- **2026-08-28 11:04 — Stage 7 evaluation. The mechanism story is overturned, including
+  two conclusions recorded earlier in this log.** Receipt
+  `curriculum_robustness_ne128_20260828_084051.json`; 75 cells, all complete.
+
+  | arm | clean | dr_050 | dr_full | dr_125 | AUC | ΔAUC vs origin (95% CI) |
+  |---|---:|---:|---:|---:|---:|---|
+  | **origin** | 89.54 | 66.01 | 60.46 | 56.21 | **68.07** | — |
+  | `lucid` | 63.73 | 46.73 | 42.48 | 36.27 | 47.81 | −20.26 [−26.3, −14.8] |
+  | **`off`** | 61.11 | 45.10 | 36.60 | 37.91 | 45.03 | **−23.04 [−28.3, −17.9]** |
+  | `fixed` | 53.27 | 42.16 | 38.89 | 32.03 | 42.39 | −25.69 [−31.4, −20.6] |
+  | `fixed_nolat` | 60.78 | 39.54 | 35.29 | 33.66 | 41.93 | −26.14 [−30.7, −21.6] |
+  | `fixed_latonly` | 56.21 | 41.83 | 35.29 | 33.99 | 41.96 | −26.11 [−33.4, −19.4] |
+
+  Intervals are the paired motion-level bootstrap over 102 motions × 3 seeds.
+
+  **`off` — no randomization at all — loses 23.0 of the 25.7 points that full DR loses.**
+  Adding the entire six-channel envelope on top costs a further 2.65 points, CI
+  [−7.1, +1.8], covering zero. **The collapse is fine-tuning-induced, not DR-induced**, and
+  the envelope is close to irrelevant to it.
+
+  Two corrections, sharing one shape:
+
+  1. Stage 6 concluded "the 32→128 collapse is DR-induced, not fine-tuning drift" because
+     `off` held its *training reward* at 19–22. But `off`'s training reward is measured on
+     the nominal distribution `off` trains on. Held out, `off` is nearly as damaged as
+     `fixed`. **Retracted.**
+  2. The 06:54 entry above read stage 7's *training* telemetry as "latency carries 89% of
+     the harm". Held out, `fixed_nolat` and `fixed_latonly` are indistinguishable:
+     **−0.03 AUC, CI [−7.8, +9.1]**. There is no channel attribution in evaluation.
+     **Retracted as a held-out claim**; it stands only as a statement about training reward.
+
+  Both used a training-distribution metric to answer a held-out question — the same error
+  the programme's own rules warn against, in a form the rules did not name.
+
+  Preregistered channel-attribution hypotheses, scored: **H_L1 passes** (|latonly − fixed|
+  = 2.94 ≤ 5), **H_L2 fails** (nolat − fixed = 7.52, not > 10). That preregistration's own
+  rule for this case — "the envelope is unsustainable through more than one channel; report
+  it, do not tune" — is what is being followed.
+
+  One quiet positive: `lucid` is the only arm above `off` (+2.78, CI [−1.2, +6.6]) — best of
+  the trained arms, not distinguishable from no-DR, and none beat doing nothing.
+
+  **Consequences.** Stage 9 (the latency cap) was **dropped**: its premise was exactly the
+  attribution that just failed. The tail was reordered to probe the only question left —
+  is there a fine-tuning configuration that is not destructive — cheapest first: stage 12
+  (32 iterations), then stage 10 (256 environments). Four sleeping drivers were replaced by
+  one `run_tail.sh`.
+
+- **2026-08-28 11:30–12:00 — CPU-side session: audit, Gate A, sampler safeguards,
+  preregistered matrix. Nothing executed, nothing committed.**
+
+  ⚠️ **Read this before trusting anything in this entry.** In this session, Bash execution,
+  `git`, and every read outside `/home/linjiw/lucid` were blocked. So: the code and tests
+  below are **written but never run**, no lint or format pass was made, no commit exists,
+  and the live campaign's receipts and logs after Stage 7 could not be read at all. The
+  running drivers were left strictly alone. Treat every artifact here as *unverified until
+  the resume checklist at the end passes.*
+
+  That constraint has one genuine benefit: the preregistration written this session is
+  outcome-blind with respect to stages 8, 10, 12 and 13 **by capability**, not by
+  discipline — their receipts were unreadable.
+
+  *What was written.*
+
+  - `scripts/practice_utility/audit_evaluation_receipt.py` — decides whether an evaluation
+    receipt may be interpreted *at all*, before anybody reads its means. Checks cell
+    coverage (every declared (mode, preset, seed) present exactly once and complete),
+    checkpoint identity and immutability across evaluation, one panel everywhere, and that
+    `mode_summary` is exactly rebuildable from the per-run summaries — a mean that cannot be
+    reconstructed from its parts is not a measurement. Flags saturated presets as
+    unrankable. Grades evidence, and **downgrades a "confirmatory" request to screening**
+    when fewer than five training seeds are present.
+  - `gear_sonic/research/practice_utility/bin_sampler.py` — expanding-support samplers with
+    the safeguards: a preregistered aggregate **easy-bin floor** enforced *after* weighting
+    (this is how an error-weighted curriculum quietly becomes a moving point again);
+    **lagged, frozen** failure statistics so the sampler is not coupled to the batch it is
+    about to draw; per-bin counts and Kish **effective sample size**; **fail-closed**
+    coverage that raises rather than warns; `d_max` that may expand but not shrink;
+    deterministic resume including the lag queue; and receipt fields. `FixedMixtureSampler`
+    is deliberately the same object for both the direct-mixed baseline and the
+    consolidation phase, so those are provably one distribution.
+  - `gear_sonic/research/practice_utility/learnability_gate.py` and
+    `scripts/practice_utility/run_gate_a.py` — Gate A. The hard bin is chosen by a frozen
+    rule from the **reference arm only**, so the choice cannot be steered by which treatment
+    looks good; saturated bins are excluded by measurement and the 60 ms cells by name,
+    because they are a measured floor for every policy including the untrained one. The
+    verdict is three-valued and **`curriculum_unnecessary` is a reportable finding**, not a
+    failure.
+  - `docs/preregistration-curriculum-matrix-2026-08-28.md` — screening (3 seeds) then
+    confirmatory (5 seeds) matrix: origin, no-DR continuation, direct mixed, expanding
+    support, expansion + 40% final mixed consolidation, error-weighted expansion with the
+    15% easy-bin floor, latency-specific LUCID, and descriptor-conditioned oracle/deployable
+    arms held separate from the main claim. Budget equality is specified on environment
+    steps, PPO updates, rollout size and evaluation calls, with the transition LR schedule
+    applied to the *baseline too* so it is never one arm's advantage. Gates 0/A/B/C/D with
+    thresholds frozen in the document.
+
+  *The gate that now precedes everything.* Gate 0: no curriculum question is askable until
+  some configuration exists whose **no-DR continuation** stays within 5 profile-AUC points
+  of the untrained origin. On present evidence `off` at 128 envs / 128 iterations is 23
+  points below it. Stages 12 and 10 are the two probes. **If both fail, the matrix is not
+  run** and the recorded result is that this testbed cannot support a curriculum comparison
+  at accessible scale.
+
+  *Also recorded as still-unimplemented:* per-bin reward/value scaling (PopArt-style)
+  behind an ablatable flag with numerical no-op tests. Specified in the matrix document,
+  deliberately **not** written blind — it touches the PPO path, and writing an untestable
+  change to a shared optimizer is how a silent baseline shift gets introduced.
+
+  **Resume checklist — run these in order before believing any of the above.**
+  1. `pytest tests/practice_utility/` — the three new test files have never executed.
+     Expect ~1,257 prior tests plus ~60 new.
+  2. `make run-checks` (isort, Black, Ruff) on the submodule.
+  3. `python scripts/practice_utility/audit_evaluation_receipt.py <stage 7 eval receipt>`
+     and again for stage 8; both must print `interpretation allowed`.
+  4. `bash sync_receipts.sh` (without push) to mirror the newly landed receipts.
+  5. Read the tail of `$LUCID_ROOT/outputs/lucid_s_driver.log` to find where the campaign
+     actually got to; the chain is stage 8 eval → stage 12 → stage 10 → stage 13 → ladder.
+  6. Only then evaluate Gate 0 from stages 12 and 10, and only then run `run_gate_a.py`.
+  7. Commit the submodule and workspace separately; do **not** push.
+
+- **2026-08-28 11:40 — PI decision: stop fine-tuning the released checkpoint. Train from
+  scratch, to convergence, on a training set sized to this hardware.**
+
+  *Why the old design was answering the wrong question.* Stage 7's held-out decomposition
+  showed plain no-DR continuation (`off`) costs **23.04 profile-AUC points** against the
+  untrained origin (95% CI [−28.33, −17.88], paired over 102 motions × 3 seeds), and that
+  adding the full six-channel envelope on top costs a further 2.65 (CI [−7.06, +1.76],
+  covering zero). Every arm comparison anchored on the release checkpoint was therefore
+  measuring **how fast we damage a policy trained on ~4 × 10⁹ transitions**, not whether a
+  curriculum helps learning. Our fine-tuning budget is 3.9 × 10⁵ transitions — four orders
+  of magnitude smaller — so this was never a fair fight, and the released policy is a
+  poisoned baseline rather than a strong one.
+
+  *And the training curves rule out the obvious objection.* If the arms were merely
+  under-trained, reward would still be climbing at iteration 128. It is not: **every arm
+  peaks between iteration 17 and 51 and declines monotonically thereafter**, `off`
+  included (16.7 at it 51 → 12.85 over it 97–128). That is measured on each arm's *own*
+  training distribution, so it is not a distribution-shift artifact, and held-out
+  evaluation agrees (24 it → 89.5% clean, 128 it → 53–64%). Two independent metrics say
+  longer is worse. The policy is being degraded, not slowly converging.
+
+  *Why from-scratch is the better experiment, not just a different one.* A curriculum is a
+  claim about **learning**. Testing it on a policy that had already learned inverted the
+  question. From scratch, "start inside the frontier and expand support" is exactly the
+  regime curricula are supposed to win in, and every arm starts equal — no arm inherits
+  4 × 10⁹ transitions of prior competence.
+
+  *What is held fixed, so nothing already measured is thrown away.* The evaluation
+  instrument does not change. The content split's `dev` partition (102 motions,
+  `motion_keys_sha256 f0c18255…`) remains the panel, with the same eval seeds and presets,
+  so from-scratch numbers sit on the same axis as the origin's 89.54 / 66.01 / 60.46 /
+  56.21 and every fine-tuned arm. Training draws only from the `adaptation` partition
+  (308 motions), which the content linkage already separated from `dev` and `test`.
+  `make_training_subset.py` builds seeded, symlink-only, receipted subsets and **refuses**
+  to draw from `dev` or `test`. Built and verified: `train016` ⊂ `train064` ⊂ `train308`,
+  nested, with **zero overlap with the dev panel**.
+
+  *Feasibility before commitment.* A from-scratch campaign is tens of GPU-hours, so a
+  bounded pilot runs first: three no-DR runs from fresh initialisation (train016 @512,
+  train064 @512, train064 @1024, 300 iterations, capsules at 50/100/200). It asks only
+  whether a fresh policy learns anything measurable here and at what pool size and batch.
+  Smallest pool first — if a fresh policy cannot learn 16 motions it will not learn 64,
+  and that is a twenty-minute finding rather than a thirty-hour one.
+
+  *Launcher support.* `--from-scratch` omits the checkpoint override so the entire campaign
+  machinery — arms, curriculum, cohorts, receipts — works unchanged on a fresh policy.
+  `--horizons` exports a capsule at each named iteration count, so the convergence curve is
+  measured **along one trajectory** rather than across separate runs, which is what "train
+  until the metric stops improving" actually requires.
+
+  *Cancelled.* The fine-tuning tail (stages 12, 10, 13 and the ladder) is dropped: all of
+  it probed a baseline we are abandoning. Kept: stage 8's evaluation, because it answers a
+  live preregistration and a frozen hypothesis should not be left unanswered; and the
+  released checkpoint's own evaluation, which fixes the true zero point of the budget
+  curve and documents why the pivot was made.
+
+  *Note for whoever reads this next.* Another session is working in this repository
+  concurrently — `bin_sampler.py`, `learnability_gate.py`, `run_gate_a.py`,
+  `audit_evaluation_receipt.py` and their tests appeared untracked at 11:36. They are left
+  alone and not committed here; three of their tests currently fail. The 1,257 tests
+  belonging to this line of work all pass.

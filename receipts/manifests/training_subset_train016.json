@@ -1,0 +1,47 @@
+{
+  "kind": "lucid_training_subset",
+  "schema_version": 1,
+  "created_at": "2026-08-28T12:33:09.311918-04:00",
+  "name": "train016",
+  "git_sha": "e03c0babbee4f67ac6a7f95d3d96a585e078b86e",
+  "config": {
+    "pool_manifest": "/home/linjiw/lucid-sonic/manifests/pool_debug512.json",
+    "split_manifest": "/home/linjiw/lucid-sonic/manifests/split_debug512_content.json",
+    "partition": "adaptation",
+    "requested_size": 16,
+    "seed": 20260828
+  },
+  "pool_sha256": "b065a49854a497aaa82c891e89c32505c46f5122c86ef04f94f340d83cba0434",
+  "split_sha256": "33784622dd8c798edc6fc67bd7921edc8ebb716187f0c2d9b686758d527c4cdd",
+  "split_linkage": "content",
+  "motion_file": "/home/linjiw/lucid-sonic/pools/subsets/train016/robot_filtered",
+  "motion_count": 16,
+  "partition_size": 308,
+  "motion_keys_sha256": "19465e9969f23f41825998becbab00205ab99edc41eeeaabd84c6734fbba7eff",
+  "motion_keys": [
+    "body_search_002__A141",
+    "dance_hiphop_smerf_R_001__A314",
+    "inj_right_leg_jump_ff_180_R_002__A085_M",
+    "injured_R_leg_turn_jog_360_R_003__A233",
+    "jog_arc_cw_start_R_002__A215",
+    "jog_ff_start_270_002__A062_M",
+    "jump_ff_180_R_002__A067_M",
+    "listening_R_001__A165",
+    "looking_around_horizontally_001__A053",
+    "medium_big_light_two_hands_put_down_front_low_R_001__A508",
+    "reach_jump_R_002__A386",
+    "smoke_turn_jog_ff_270_start_R_001__A552_M",
+    "turn_start_walk_135_001__A030",
+    "walk_ff_start_360_002__A174_M",
+    "walk_ff_stop_360_002__A058",
+    "walk_forward_start_003__A043_M"
+  ],
+  "verified": [
+    "every one of 16 clips resolves to an existing file",
+    "the subset directory contains nothing outside the selection",
+    "drawn only from the 'adaptation' partition, so dev and test are untouched"
+  ],
+  "not_yet_verified": [
+    "that this subset is large enough to train a useful policy -- that is the experiment"
+  ]
+}
