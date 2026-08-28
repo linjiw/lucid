@@ -1,0 +1,111 @@
+{
+  "kind": "lucid_idle_gpu_throughput",
+  "schema_version": 1,
+  "created_at": "2026-08-28T03:47:34.340413-04:00",
+  "git_sha": "eaeb02e229c5a72e2d8b9b8a0eceef8332044c54",
+  "git_status_short": [
+    " M gear_sonic/research/practice_utility/README.md",
+    " M scripts/practice_utility/analyze_latency_distribution_sweep.py",
+    " M scripts/practice_utility/analyze_tace_pilot.py",
+    " M scripts/practice_utility/audit_latency_curriculum.py",
+    " M scripts/practice_utility/audit_probe_screen.py",
+    " M scripts/practice_utility/build_motion_pool.py",
+    " M scripts/practice_utility/build_utility_labels.py",
+    " M scripts/practice_utility/create_probe_origins.py",
+    " M scripts/practice_utility/pretrain_encoder.py",
+    " M scripts/practice_utility/run_branch.py",
+    " M scripts/practice_utility/run_curriculum_comparison.py",
+    " M scripts/practice_utility/run_curriculum_consolidation.py",
+    " M scripts/practice_utility/run_curriculum_horizon_scaling.py",
+    " M scripts/practice_utility/run_curriculum_robustness_eval.py",
+    " M scripts/practice_utility/run_curriculum_warmup_parity.py",
+    " M scripts/practice_utility/run_latency_ab.py",
+    " M scripts/practice_utility/run_latency_distribution_sweep.py",
+    " M scripts/practice_utility/run_noise_floor.py",
+    " M scripts/practice_utility/run_noop_parity.py",
+    " M scripts/practice_utility/run_passive_dose_smoke.py",
+    " M scripts/practice_utility/run_restart_pair_equivalence.py",
+    " M scripts/practice_utility/run_resume_equivalence.py",
+    " M scripts/practice_utility/run_tace_channel_attr.sh",
+    " M scripts/practice_utility/run_tace_horizon.sh",
+    " M scripts/practice_utility/run_tace_off128.sh",
+    " M scripts/practice_utility/run_tace_pilot.sh",
+    " M scripts/practice_utility/run_tace_yoked_cross.sh",
+    " M scripts/practice_utility/run_throughput_probe.py",
+    " M tests/practice_utility/test_trained_encoder.py",
+    "?? gear_sonic/research/practice_utility/paths.py"
+  ],
+  "launcher_sha256": "09cdaf9a8c68c8389c7f57ce96586db2c0a86a9bbd9f9dc9d515002a5504210a",
+  "config": {
+    "variant": "native",
+    "num_envs": 1024,
+    "iterations": 6,
+    "seed": 8102,
+    "checkpoint": "/home/linjiw/lucid/GR00T-WholeBodyControl/sonic_release/last.pt",
+    "motion_file": "sample_data/robot_filtered",
+    "smpl_motion_file": "sample_data/smpl_filtered",
+    "first_iteration_excluded_from_steady_state": true
+  },
+  "command": [
+    "/home/linjiw/isaaclab-install/env_isaaclab/bin/python",
+    "/home/linjiw/lucid/GR00T-WholeBodyControl/gear_sonic/train_agent_trl.py",
+    "+exp=manager/universal_token/all_modes/sonic_release",
+    "checkpoint=sonic_release/last.pt",
+    "num_envs=1024",
+    "headless=true",
+    "use_wandb=false",
+    "seed=8102",
+    "++algo.config.num_learning_iterations=6",
+    "++algo.config.save_interval=100000",
+    "++manager_env.commands.motion.motion_lib_cfg.motion_file=sample_data/robot_filtered",
+    "++manager_env.commands.motion.motion_lib_cfg.smpl_motion_file=sample_data/smpl_filtered"
+  ],
+  "started_at": "2026-08-28T03:46:53.051448-04:00",
+  "wall_seconds": 41.288161531999776,
+  "exit_code": 0,
+  "log_path": "/home/linjiw/lucid-sonic/outputs/throughput_idle_native_ne1024_20260828_034653.log",
+  "gpu": {
+    "samples": 21,
+    "start_free_mib": 15827.0,
+    "min_free_mib": 7889.0,
+    "max_used_mib": 7954.0,
+    "max_gpu_util_pct": 100.0
+  },
+  "throughput": {
+    "iterations_parsed": 6,
+    "num_envs": 1024,
+    "steps_per_env": 24,
+    "transitions_per_iteration": 24576,
+    "median_steps_per_second": 15734.0,
+    "median_iteration_seconds": 1.5619999999999998,
+    "env_steps_per_second": 15733.674775928299,
+    "hours_per_128_iteration_branch": 0.05553777777777777
+  },
+  "learning_curve": {
+    "Mean rewards": {
+      "1": 0.18187,
+      "2": 0.74065,
+      "3": 2.06234,
+      "4": 2.4317,
+      "5": 3.50412,
+      "6": 5.11661
+    },
+    "Mean length": {
+      "1": 11.46667,
+      "2": 18.33333,
+      "3": 28.44444,
+      "4": 32.03448,
+      "5": 40.90909,
+      "6": 55.12821
+    }
+  },
+  "verified": [
+    "bounded native continuation exited 0",
+    "parsed all 6 requested iterations",
+    "steady-state median excludes the first warm-up iteration"
+  ],
+  "not_yet_verified": [
+    "whether this single-seed throughput persists across repeated launches",
+    "campaign efficacy or any scientific treatment effect"
+  ]
+}

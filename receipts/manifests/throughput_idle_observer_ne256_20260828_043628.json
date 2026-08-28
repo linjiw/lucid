@@ -1,0 +1,85 @@
+{
+  "kind": "lucid_idle_gpu_throughput",
+  "schema_version": 1,
+  "created_at": "2026-08-28T04:37:59.079586-04:00",
+  "git_sha": "7442e88e290674069ece7a72ddabeadbb3bb73f4",
+  "git_status_short": [],
+  "launcher_sha256": "09cdaf9a8c68c8389c7f57ce96586db2c0a86a9bbd9f9dc9d515002a5504210a",
+  "config": {
+    "variant": "observer",
+    "num_envs": 256,
+    "iterations": 6,
+    "seed": 8200,
+    "checkpoint": "/home/linjiw/lucid/GR00T-WholeBodyControl/sonic_release/last.pt",
+    "motion_file": "/home/linjiw/lucid-sonic/pools/debug512/robot_filtered",
+    "smpl_motion_file": "dummy",
+    "first_iteration_excluded_from_steady_state": true
+  },
+  "command": [
+    "/home/linjiw/isaaclab-install/env_isaaclab/bin/python",
+    "/home/linjiw/lucid/GR00T-WholeBodyControl/gear_sonic/train_agent_trl.py",
+    "+exp=manager/universal_token/all_modes/sonic_release",
+    "checkpoint=sonic_release/last.pt",
+    "num_envs=256",
+    "headless=true",
+    "use_wandb=false",
+    "seed=8200",
+    "++algo.config.num_learning_iterations=6",
+    "++algo.config.save_interval=100000",
+    "++manager_env.commands.motion.motion_lib_cfg.motion_file=/home/linjiw/lucid-sonic/pools/debug512/robot_filtered",
+    "++manager_env.commands.motion.motion_lib_cfg.smpl_motion_file=dummy",
+    "++callbacks.practice_observer._target_=gear_sonic.research.practice_utility.observer.PracticeObserverCallback",
+    "++callbacks.practice_observer.enabled=true",
+    "++callbacks.practice_observer.encoder_path=/home/linjiw/lucid-sonic/artifacts/lucid_encoder_debug512.pt",
+    "++callbacks.practice_observer.branch_id=throughput_idle_observer_ne256_20260828_043628",
+    "++callbacks.practice_observer.output_dir=/home/linjiw/lucid-sonic/artifacts/throughput_idle/throughput_idle_observer_ne256_20260828_043628"
+  ],
+  "started_at": "2026-08-28T04:36:28.342300-04:00",
+  "wall_seconds": 90.72322509100013,
+  "exit_code": 0,
+  "log_path": "/home/linjiw/lucid-sonic/outputs/throughput_idle_observer_ne256_20260828_043628.log",
+  "gpu": {
+    "samples": 46,
+    "start_free_mib": 13265.0,
+    "min_free_mib": 7889.0,
+    "max_used_mib": 7954.0,
+    "max_gpu_util_pct": 100.0
+  },
+  "throughput": {
+    "iterations_parsed": 6,
+    "num_envs": 256,
+    "steps_per_env": 24,
+    "transitions_per_iteration": 6144,
+    "median_steps_per_second": 595.0,
+    "median_iteration_seconds": 10.318,
+    "env_steps_per_second": 595.464237255282,
+    "hours_per_128_iteration_branch": 0.3668622222222222
+  },
+  "learning_curve": {
+    "Mean rewards": {
+      "1": 0.17243,
+      "2": 1.00137,
+      "3": 1.59954,
+      "4": 3.67771,
+      "5": 5.06353,
+      "6": 7.2595
+    },
+    "Mean length": {
+      "1": 12.0,
+      "2": 19.63158,
+      "3": 25.41667,
+      "4": 47.81818,
+      "5": 65.50794,
+      "6": 88.92929
+    }
+  },
+  "verified": [
+    "bounded observer continuation exited 0",
+    "parsed all 6 requested iterations",
+    "steady-state median excludes the first warm-up iteration"
+  ],
+  "not_yet_verified": [
+    "whether this single-seed throughput persists across repeated launches",
+    "campaign efficacy or any scientific treatment effect"
+  ]
+}

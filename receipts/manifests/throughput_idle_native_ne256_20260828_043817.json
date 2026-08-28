@@ -1,0 +1,80 @@
+{
+  "kind": "lucid_idle_gpu_throughput",
+  "schema_version": 1,
+  "created_at": "2026-08-28T04:39:42.804829-04:00",
+  "git_sha": "7442e88e290674069ece7a72ddabeadbb3bb73f4",
+  "git_status_short": [],
+  "launcher_sha256": "09cdaf9a8c68c8389c7f57ce96586db2c0a86a9bbd9f9dc9d515002a5504210a",
+  "config": {
+    "variant": "native",
+    "num_envs": 256,
+    "iterations": 6,
+    "seed": 8201,
+    "checkpoint": "/home/linjiw/lucid/GR00T-WholeBodyControl/sonic_release/last.pt",
+    "motion_file": "/home/linjiw/lucid-sonic/pools/debug512/robot_filtered",
+    "smpl_motion_file": "dummy",
+    "first_iteration_excluded_from_steady_state": true
+  },
+  "command": [
+    "/home/linjiw/isaaclab-install/env_isaaclab/bin/python",
+    "/home/linjiw/lucid/GR00T-WholeBodyControl/gear_sonic/train_agent_trl.py",
+    "+exp=manager/universal_token/all_modes/sonic_release",
+    "checkpoint=sonic_release/last.pt",
+    "num_envs=256",
+    "headless=true",
+    "use_wandb=false",
+    "seed=8201",
+    "++algo.config.num_learning_iterations=6",
+    "++algo.config.save_interval=100000",
+    "++manager_env.commands.motion.motion_lib_cfg.motion_file=/home/linjiw/lucid-sonic/pools/debug512/robot_filtered",
+    "++manager_env.commands.motion.motion_lib_cfg.smpl_motion_file=dummy"
+  ],
+  "started_at": "2026-08-28T04:38:17.502189-04:00",
+  "wall_seconds": 85.30174471999999,
+  "exit_code": 0,
+  "log_path": "/home/linjiw/lucid-sonic/outputs/throughput_idle_native_ne256_20260828_043817.log",
+  "gpu": {
+    "samples": 43,
+    "start_free_mib": 13265.0,
+    "min_free_mib": 7793.0,
+    "max_used_mib": 8050.0,
+    "max_gpu_util_pct": 100.0
+  },
+  "throughput": {
+    "iterations_parsed": 6,
+    "num_envs": 256,
+    "steps_per_env": 24,
+    "transitions_per_iteration": 6144,
+    "median_steps_per_second": 604.0,
+    "median_iteration_seconds": 10.158,
+    "env_steps_per_second": 604.8434731246309,
+    "hours_per_128_iteration_branch": 0.3611733333333333
+  },
+  "learning_curve": {
+    "Mean rewards": {
+      "1": -0.0764,
+      "2": 1.09051,
+      "3": 2.27711,
+      "4": 4.20318,
+      "5": 5.04107,
+      "6": 6.77012
+    },
+    "Mean length": {
+      "1": 13.8,
+      "2": 23.11111,
+      "3": 36.66667,
+      "4": 54.73913,
+      "5": 64.27419,
+      "6": 80.4
+    }
+  },
+  "verified": [
+    "bounded native continuation exited 0",
+    "parsed all 6 requested iterations",
+    "steady-state median excludes the first warm-up iteration"
+  ],
+  "not_yet_verified": [
+    "whether this single-seed throughput persists across repeated launches",
+    "campaign efficacy or any scientific treatment effect"
+  ]
+}
