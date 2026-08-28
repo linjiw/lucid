@@ -732,3 +732,98 @@ have receipts for everything; keep the paper reproducible from them.
   are converted to motion_lib PKLs; the other ~137k CSVs are extracted but unconverted.
   SMPL pack absent (`smpl_motion_file=dummy` is fine for all G1-encoder work).
   Setup and open questions: `docs/machine-setup.md`.
+- **2026-08-28 05:35–06:10 — Second host taken off the blocks; LUCID-S designed,
+  implemented, preregistered, and queued.** Two decisions the previous entry left
+  to the PI are now made and acted on.
+
+  *Decision 1 — the origin.* **Regenerate here and accept a new branch lineage.**
+  The released checkpoint `sonic_release/last.pt` on this host is **byte-identical**
+  to the one every earlier result used (sha256 `e6bdab3f64a3…`, 469,418,283 B —
+  the value recorded in the design plan §14), so the root instrument is not in
+  question; only the 24-step settled origin is. `scripts/practice_utility/make_settled_origin.py`
+  reproduces it from stock SONIC (`+exp=…/sonic_release`, stock `level0_4` events,
+  no research callbacks) and receipts the checkpoint's sha256 and the exact command.
+  New origin: `sonic_release_test-20260828_054436/model_step_000024.pt`, sha256
+  `2fcb299a659c9cb2…`; receipt `settled_origin_ne128_20260828_054435.json`. En route
+  it exposed a launcher defect worth keeping: **`++algo.config.save_interval` is read
+  by nothing.** Every practice-utility driver sets it to 100000 and relies on the
+  capsule callback instead, so nobody noticed; a run that asks for a checkpoint
+  through that key silently saves none. The cadence lives on
+  `callbacks.model_save.save_frequency`.
+
+  *The origin is validated, not assumed.* A 32-iteration `lucid`/`fixed` × 3-seed
+  cell was run on it and compared to the Aug-20/27 table:
+
+  | | this host | first host | |
+  |---|---:|---:|---|
+  | terminal λ (lucid) | **0.767** | 0.756 | +1.5% |
+  | realized delay, fixed (steps) | **3.8918** | 3.89 | equal |
+  | lucid ÷ fixed last-4 reward | **1.76** | 1.77 | equal |
+  | last-4 reward, lucid / fixed | 15.12 / 8.59 | 17.73 / 10.03 | −15% level |
+
+  The controller's fixed point, the realized DR dose and the arm *ratio* reproduce;
+  the absolute reward level sits ~15% lower, consistent with a different settled
+  origin and with `smpl_motion_file=dummy` here (the 32 GB SMPL pack is absent; it
+  is now recorded in every receipt via a new `--smpl-motion-file` flag rather than
+  being silently absorbed by a missing path). Receipt
+  `curriculum_comparison_ne128_20260828_054615.json`.
+
+  *Decision 2 — pool identity: deferred, and largely moot.* The evaluator reads the
+  **frozen** pool/split manifests and re-roots their paths through `paths.relocate()`,
+  so the 102-motion content-dev panel materialized here carries
+  `pool_sha256 b065a498…`, `split_sha256 33784622…` and `motion_keys_sha256 f0c18255…`
+  — **identical to the first host's**. Evaluation numbers are therefore cross-host
+  comparable without any decision at all. `pool_sha256`'s path-dependence still blocks
+  **Track A** (the probe screen recomputes it and compares). The intended fix is
+  option 2+3 together: make the hash content-addressed and keep the Aug-26 outcome-blind
+  freeze via the equivalence receipt. Not implemented — Track A is not on the path to
+  the capability claim, and the infrastructure freeze stands.
+
+  *The science: what the horizon collapse actually says.* Re-reading stage 5 by anchor
+  fraction gives a **non-monotonic** clean-success curve — 0% → 56.86, 25% → 57.84,
+  50% → **66.01**, 100% (`fixed`) → 57.19. The best arm is neither the most nor the
+  least randomized; it is the one whose environments span the **widest range of
+  intensities at once**. Stage 6 (`off` holds at 19–22 reward) already ruled out
+  fine-tuning drift. Read together: *what preserves capability is intensity diversity
+  across environments, and a scalar λ that moves one point cannot express it.*
+
+  **LUCID-S** is that reading made literal, committed at `71a0f84`:
+  1. `spread_strata = K` generalises TACE's anchor/focus split into K intensity strata,
+     stratum k training at λ·(k+1)/K. λ becomes the **upper edge of a training mixture
+     over (0, λ]** rather than its single value. The top stratum is served the event
+     manager's own params, so K = 1 is the pre-strata path exactly.
+  2. `return_guard="relative"` replaces the absolute floor. The floor (8.0) was
+     calibrated at 32 iterations and fired continuously at 128, where reward had halved
+     for *every* arm including `off` — decaying λ from 1.0 to 0.4–0.6 for reasons that
+     had nothing to do with the policy. An absolute threshold also cannot separate "the
+     environment got harder" from "the policy is failing". The replacement compares a
+     return against the best of a trailing window of its own history.
+  3. The evaluator may now **extrapolate past the training envelope** (`dr_125`,
+     `dr_150`); the curriculum is still hard-capped at λ = 1, with a test pinning the
+     asymmetry. Every robustness number in this programme so far was measured inside
+     the envelope the policy trained on, which is exactly the wrong place to test a
+     deployment claim.
+
+  Suite **1,204 green** (was 1,156); 46 new tests.
+
+  *Preregistered before launch*, on a clean tree at `71a0f84`:
+  `lucid_support_expansion_preregistration_20260828.json` (logical sha
+  `8825d19aed5badf3…`). Primary endpoint **robustness-profile AUC** over
+  s ∈ {0, 0.5, 1.0, 1.25}; co-primary the `dr_125` extrapolation cell. H-S1 support
+  expansion beats plain lucid by ≥ 2 pts AUC; H-S2 the relative guard ends at λ ≥ 0.9
+  with ≤ 2 trips; H-S3 `ta_lucid_50_s4_rg` has the highest AUC, is non-inferior to
+  `fixed` on dr_full and beats it on clean by ≥ 5; H-S4 it stays within 10 pts of the
+  **untrained origin** on clean while `fixed` is > 20 pts below it; H-S5 it beats
+  `fixed` on `dr_125` by ≥ 3 pts in ≥ 2/3 seeds. If every arm still collapses, the
+  contribution is the diagnosis and the audit protocol, and that is what gets written.
+
+  *Queued unattended* (`run_lucid_s_campaign.sh`): stage 7 channel attribution with
+  same-host references (`fixed`, `off`, `lucid`, `fixed_nolat`, `fixed_latonly` ×
+  3 seeds × 128 it) → stage 8 LUCID-S (5 arms × 3 seeds × 128 it) → evaluation of the
+  untrained origin, stage 7 and stage 8 on five presets. Branch cost here is ~4 min at
+  1.67 s/iteration on a dedicated card; the shared-GPU contention that stalled Track B
+  on Aug 27 does not apply. `analyze_lucid_s.py` scores the five hypotheses from the
+  receipts and was written and tested **before** the campaign existed — its end-to-end
+  tests build receipts where every verdict is known by construction, and already caught
+  a real defect (an empty `curriculum_path` resolves to `.`, a directory, so the
+  existence check passed and the read raised).
