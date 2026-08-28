@@ -729,3 +729,27 @@ have receipts for everything; keep the paper reproducible from them.
   Bar: id_clean ≥ 95. The winning regime becomes the base for re-running
   off/fixed/lucid/ta_lucid_50 — that rerun is where a real capability result (beat
   69.6 dr_full at ≥ 97 clean) can exist. Stage 7 (channel attribution) still running.
+- **06:08 — Stage 7 training (channel attribution, 128 it):** `fixed_latonly` (0–40 ms
+  latency at λ=1, five other channels nominal) last-4 reward **8.20** ≈ full fixed 7.35;
+  `fixed_nolat` (five channels at λ=1, latency 0) **15.99** ≈ off 19.09. Receipt
+  `curriculum_comparison_ne128_20260828_050752.json`. H_L3 confirmed: **actuation
+  latency is the channel that makes the full envelope unsustainable**; the other five
+  at full strength cost ~3 reward points. A scalar λ cannot say "everything except
+  latency" — this is the causal evidence for per-channel gating (LUCID-MC). Deployment
+  eval pending for H_L1/H_L2.
+- **07:34 — Stage 7 eval (channel attribution @128 it).** Receipt
+  `curriculum_robustness_ne128_20260828_060831.json`.
+
+  | success % @128 | fixed_nolat | fixed_latonly | fixed (all six) | off |
+  |---|---:|---:|---:|---:|
+  | id_clean | **70.92** | 53.59 | 57.19 | 66.67 |
+  | dr_050 | **48.04** | 42.81 | 46.73 | 44.12 |
+  | dr_full | 38.56 | 31.05 | **41.50** | 38.89 |
+
+  **H_L1 ✓** (latency alone reproduces the collapse, within 5 pts of full fixed),
+  **H_L2 ✓** (removing latency recovers +13.7 clean over fixed — above no-DR: the five
+  non-latency channels are mildly protective), **H_L3 ✓** (training reward 16.0 vs
+  8.2). Causal conclusion: *0–40 ms independent per-group actuation latency, sampled
+  at full strength, is what makes SONIC fine-tuning collapse; everything else in the
+  envelope is benign.* Cost of removing it: latency robustness (dr_full 38.6 vs 41.5)
+  — which is exactly the trade a per-channel controller should manage, not a scalar λ.
