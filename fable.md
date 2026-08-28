@@ -664,3 +664,16 @@ have receipts for everything; keep the paper reproducible from them.
   training) has been net-destructive, and "capability" in this testbed means
   *retaining* the released policy's competence while adding robustness — which is
   exactly what the target anchor (and its dose ordering 50 > 25 > 0) is doing.
+- **2026-08-28 02:20 — Stage 6 drift control (`off` × 3 seeds × 128 it):** training
+  reward holds at 19–22 throughout (last-4 19.09 vs 20.16 at 32 it). **The 32→128
+  collapse is DR-induced, not fine-tuning drift.** Training on the full six-channel
+  envelope at this scale destroys the released policy; gap-gating did not protect
+  because the gap stayed under the set-point, λ reached 1 by ≈it 39, and the absolute
+  return guard (floor 8) was tuned for the 32-it regime. Receipt
+  `curriculum_comparison_ne128_20260828_011255.json`; eval running. Next cell
+  (channel attribution, preregistered below): `fixed_nolat` (five channels at λ=1,
+  latency 0) vs `fixed_latonly` (latency at λ=1, rest nominal) × 3 seeds × 128 it — the
+  Aug 20 λ=1 latency A/B (−35.8% reward) makes actuation latency the prime suspect.
+  If confirmed, the paper's mechanism story is: *the full envelope is unsustainable
+  because of one channel, and a scalar λ cannot express "everything except latency"*
+  — which is the evidence LUCID-MC (per-channel gating) needs.

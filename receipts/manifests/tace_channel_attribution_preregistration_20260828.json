@@ -1,0 +1,15 @@
+{
+  "kind": "lucid_channel_attribution_preregistration",
+  "created_at": "2026-08-28T02:30:00-04:00",
+  "author": "Fable (autonomous)",
+  "motivation": "off x128 holds reward (19.1) while every DR arm collapses (fixed 7.4, lucid 9.6): the collapse is DR-induced. Which channel?",
+  "design": {"num_envs": 128, "iterations": 128, "warmup_iterations": 10, "seeds": [8600, 8601, 8602], "origin": "settled step-24", "arms": {"fixed_nolat": "mass/CoM/joint-default/material/push at lambda=1, actuation delay pinned 0", "fixed_latonly": "actuation delay at lambda=1 (0-40 ms, independent per group), five others pinned nominal"}, "references": "fixed@128 (curriculum_comparison_ne128_20260827_205857), off@128 (curriculum_comparison_ne128_20260828_011255)"},
+  "evaluation": {"presets": ["id_clean", "dr_050", "dr_full", "latency_60ms"], "primary": "id_clean and dr_full success at 128 it"},
+  "hypotheses": {
+    "H_L1": "fixed_latonly id_clean success at 128 is within 5 pts of fixed@128 (57.19) — latency alone reproduces the collapse",
+    "H_L2": "fixed_nolat id_clean success at 128 exceeds fixed@128 by > 10 pts — removing latency removes most of the collapse",
+    "H_L3": "fixed_nolat training last-4 reward > 15 (off@128 = 19.1) while fixed_latonly < 10"
+  },
+  "decision_rules": {"ties": "< 3 pts is a tie on three seeds", "if_both_collapse": "the envelope is unsustainable through more than one channel; report it, do not tune"},
+  "verified": [], "not_yet_verified": ["all; written before launch"]
+}
