@@ -760,3 +760,6 @@ have receipts for everything; keep the paper reproducible from them.
   of 11.** Receipts `curriculum_comparison_ne128_20260828_073416_C2_update.json`,
   `curriculum_robustness_ne128_20260828_074017.json`. C3 (entropy) and C1 (512 envs)
   running; regime decision after all three per the preregistration.
+- **09:29 — Stage 8 cell C3 (entropy_coef=0):** clean 83.01 / dr_full 48.37 — identical to
+  the default regime. H_S3 ✓: entropy drift is a symptom of oversized updates, not a
+  cause. Receipt `curriculum_robustness_ne128_20260828_083607.json`. C1 (512 envs) running.
