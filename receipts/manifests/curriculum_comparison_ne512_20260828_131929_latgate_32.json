@@ -1,0 +1,2205 @@
+{
+  "kind": "lucid_three_arm_training_comparison",
+  "schema_version": 1,
+  "created_at": "2026-08-28T13:39:11.714504-04:00",
+  "experiment_id": "curriculum_comparison_ne512_20260828_131929_latgate_32",
+  "git_sha": "17b9e40aee67739b3a0b3c53e85724eaa029cb67",
+  "git_status_short": [],
+  "launcher_sha256": "1fe5d4af90805c782d5e7ca57ba20bc51de2760f96ead6b376187ceb8563d0b8",
+  "config": {
+    "checkpoint": "/home/robotixx/lucid/GR00T-WholeBodyControl/logs_rl/TRL_G1_Track/manager/universal_token/all_modes/sonic_release_test-20260818_141446/model_step_000024.pt",
+    "num_envs": 512,
+    "iterations": 32,
+    "warmup_iterations": 10,
+    "seeds": [
+      8600,
+      8601,
+      8602
+    ],
+    "modes": [
+      "lucid_latgate",
+      "ta_latgate_50"
+    ],
+    "arm_order": [
+      {
+        "seed": 8600,
+        "modes": [
+          "lucid_latgate",
+          "ta_latgate_50"
+        ]
+      },
+      {
+        "seed": 8601,
+        "modes": [
+          "ta_latgate_50",
+          "lucid_latgate"
+        ]
+      },
+      {
+        "seed": 8602,
+        "modes": [
+          "lucid_latgate",
+          "ta_latgate_50"
+        ]
+      }
+    ],
+    "event_preset": "tracking/lucid_curriculum",
+    "arms": {
+      "lucid_latgate": [
+        "lucid",
+        0.0,
+        null
+      ],
+      "ta_latgate_50": [
+        "lucid",
+        0.5,
+        null
+      ]
+    },
+    "consolidation_fraction": 0.0,
+    "extra_overrides": [],
+    "tag": "latgate_32",
+    "max_delay_steps": 8,
+    "max_delay_ms": 40,
+    "controller": {
+      "delta_target": 0.778,
+      "kp": 1.0,
+      "ki": 0.02,
+      "alpha": 0.05,
+      "integral_max": 1.0,
+      "return_floor": 8.0,
+      "calibration": "manuscript mu+3sigma lambda=0 target; integral contribution capped at ki*integral_max=0.02"
+    },
+    "training_noise_floors": {
+      "reward": 0.0333,
+      "length": 0.0314
+    }
+  },
+  "commands": {
+    "curriculum_comparison_ne512_20260828_131929_latgate_32_s8600_lucid_latgate": [
+      "/home/robotixx/miniconda3/envs/sonic/bin/python",
+      "/home/robotixx/lucid/GR00T-WholeBodyControl/scripts/practice_utility/train_with_delay.py",
+      "--max-delay",
+      "8",
+      "--",
+      "+exp=manager/universal_token/all_modes/sonic_release",
+      "checkpoint=logs_rl/TRL_G1_Track/manager/universal_token/all_modes/sonic_release_test-20260818_141446/model_step_000024.pt",
+      "num_envs=512",
+      "headless=true",
+      "use_wandb=false",
+      "seed=8600",
+      "manager_env/events=tracking/lucid_curriculum",
+      "++algo.config.num_learning_iterations=32",
+      "++algo.config.save_interval=100000",
+      "++manager_env.commands.motion.motion_lib_cfg.motion_file=data/motion_lib_bones_seed/robot_filtered",
+      "++manager_env.commands.motion.motion_lib_cfg.smpl_motion_file=data/motion_lib_bones_seed/smpl_filtered",
+      "++callbacks.practice_observer._target_=gear_sonic.research.practice_utility.observer.PracticeObserverCallback",
+      "++callbacks.practice_observer.enabled=true",
+      "++callbacks.practice_observer.encoder_path=/data/robotixx/lucid-sonic/artifacts/lucid_encoder_debug512.pt",
+      "++callbacks.practice_observer.branch_id=curriculum_comparison_ne512_20260828_131929_latgate_32_s8600_lucid_latgate",
+      "++callbacks.practice_observer.output_dir=/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8600/lucid_latgate",
+      "++callbacks.lucid_curriculum._target_=gear_sonic.research.practice_utility.dr_curriculum.LucidCurriculumCallback",
+      "++callbacks.lucid_curriculum.enabled=true",
+      "++callbacks.lucid_curriculum.mode=lucid",
+      "++callbacks.lucid_curriculum.term_lambda_overrides.add_joint_default_pos=1.0",
+      "++callbacks.lucid_curriculum.term_lambda_overrides.base_com=1.0",
+      "++callbacks.lucid_curriculum.term_lambda_overrides.physics_material=1.0",
+      "++callbacks.lucid_curriculum.term_lambda_overrides.push_robot=1.0",
+      "++callbacks.lucid_curriculum.term_lambda_overrides.randomize_rigid_body_mass=1.0",
+      "++callbacks.lucid_curriculum.observer_branch_id=curriculum_comparison_ne512_20260828_131929_latgate_32_s8600_lucid_latgate",
+      "++callbacks.lucid_curriculum.branch_id=curriculum_comparison_ne512_20260828_131929_latgate_32_s8600_lucid_latgate",
+      "++callbacks.lucid_curriculum.output_dir=/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8600/lucid_latgate",
+      "++callbacks.lucid_curriculum.initial_lambda=0.0",
+      "++callbacks.lucid_curriculum.fixed_lambda=1.0",
+      "++callbacks.lucid_curriculum.delta_target=0.778",
+      "++callbacks.lucid_curriculum.kp=1.0",
+      "++callbacks.lucid_curriculum.ki=0.02",
+      "++callbacks.lucid_curriculum.alpha=0.05",
+      "++callbacks.lucid_curriculum.integral_max=1.0",
+      "++callbacks.lucid_curriculum.return_floor=8.0",
+      "++callbacks.lucid_curriculum.warmup_iterations=10",
+      "++callbacks.practice_capsule._target_=gear_sonic.research.practice_utility.callbacks.PracticeCapsuleCallback",
+      "++callbacks.practice_capsule.enabled=true",
+      "++callbacks.practice_capsule.capsule_dir=/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8600/lucid_latgate/capsules",
+      "++callbacks.practice_capsule.pair_id=curriculum_seed_8600",
+      "++callbacks.practice_capsule.role=control",
+      "++callbacks.practice_capsule.branch_id=curriculum_comparison_ne512_20260828_131929_latgate_32_s8600_lucid_latgate",
+      "++callbacks.practice_capsule.horizons.final=32"
+    ],
+    "curriculum_comparison_ne512_20260828_131929_latgate_32_s8600_ta_latgate_50": [
+      "/home/robotixx/miniconda3/envs/sonic/bin/python",
+      "/home/robotixx/lucid/GR00T-WholeBodyControl/scripts/practice_utility/train_with_delay.py",
+      "--max-delay",
+      "8",
+      "--",
+      "+exp=manager/universal_token/all_modes/sonic_release",
+      "checkpoint=logs_rl/TRL_G1_Track/manager/universal_token/all_modes/sonic_release_test-20260818_141446/model_step_000024.pt",
+      "num_envs=512",
+      "headless=true",
+      "use_wandb=false",
+      "seed=8600",
+      "manager_env/events=tracking/lucid_curriculum",
+      "++algo.config.num_learning_iterations=32",
+      "++algo.config.save_interval=100000",
+      "++manager_env.commands.motion.motion_lib_cfg.motion_file=data/motion_lib_bones_seed/robot_filtered",
+      "++manager_env.commands.motion.motion_lib_cfg.smpl_motion_file=data/motion_lib_bones_seed/smpl_filtered",
+      "++callbacks.practice_observer._target_=gear_sonic.research.practice_utility.observer.PracticeObserverCallback",
+      "++callbacks.practice_observer.enabled=true",
+      "++callbacks.practice_observer.encoder_path=/data/robotixx/lucid-sonic/artifacts/lucid_encoder_debug512.pt",
+      "++callbacks.practice_observer.branch_id=curriculum_comparison_ne512_20260828_131929_latgate_32_s8600_ta_latgate_50",
+      "++callbacks.practice_observer.output_dir=/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8600/ta_latgate_50",
+      "++callbacks.lucid_curriculum._target_=gear_sonic.research.practice_utility.dr_curriculum.LucidCurriculumCallback",
+      "++callbacks.lucid_curriculum.enabled=true",
+      "++callbacks.lucid_curriculum.mode=lucid",
+      "++callbacks.lucid_curriculum.anchor_ratio=0.5",
+      "++callbacks.lucid_curriculum.anchor_seed=8600",
+      "++callbacks.lucid_curriculum.consolidation_fraction=0.0",
+      "++callbacks.lucid_curriculum.term_lambda_overrides.add_joint_default_pos=1.0",
+      "++callbacks.lucid_curriculum.term_lambda_overrides.base_com=1.0",
+      "++callbacks.lucid_curriculum.term_lambda_overrides.physics_material=1.0",
+      "++callbacks.lucid_curriculum.term_lambda_overrides.push_robot=1.0",
+      "++callbacks.lucid_curriculum.term_lambda_overrides.randomize_rigid_body_mass=1.0",
+      "++callbacks.lucid_curriculum.observer_branch_id=curriculum_comparison_ne512_20260828_131929_latgate_32_s8600_ta_latgate_50",
+      "++callbacks.lucid_curriculum.branch_id=curriculum_comparison_ne512_20260828_131929_latgate_32_s8600_ta_latgate_50",
+      "++callbacks.lucid_curriculum.output_dir=/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8600/ta_latgate_50",
+      "++callbacks.lucid_curriculum.initial_lambda=0.0",
+      "++callbacks.lucid_curriculum.fixed_lambda=1.0",
+      "++callbacks.lucid_curriculum.delta_target=0.778",
+      "++callbacks.lucid_curriculum.kp=1.0",
+      "++callbacks.lucid_curriculum.ki=0.02",
+      "++callbacks.lucid_curriculum.alpha=0.05",
+      "++callbacks.lucid_curriculum.integral_max=1.0",
+      "++callbacks.lucid_curriculum.return_floor=8.0",
+      "++callbacks.lucid_curriculum.warmup_iterations=10",
+      "++callbacks.practice_capsule._target_=gear_sonic.research.practice_utility.callbacks.PracticeCapsuleCallback",
+      "++callbacks.practice_capsule.enabled=true",
+      "++callbacks.practice_capsule.capsule_dir=/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8600/ta_latgate_50/capsules",
+      "++callbacks.practice_capsule.pair_id=curriculum_seed_8600",
+      "++callbacks.practice_capsule.role=control",
+      "++callbacks.practice_capsule.branch_id=curriculum_comparison_ne512_20260828_131929_latgate_32_s8600_ta_latgate_50",
+      "++callbacks.practice_capsule.horizons.final=32"
+    ],
+    "curriculum_comparison_ne512_20260828_131929_latgate_32_s8601_ta_latgate_50": [
+      "/home/robotixx/miniconda3/envs/sonic/bin/python",
+      "/home/robotixx/lucid/GR00T-WholeBodyControl/scripts/practice_utility/train_with_delay.py",
+      "--max-delay",
+      "8",
+      "--",
+      "+exp=manager/universal_token/all_modes/sonic_release",
+      "checkpoint=logs_rl/TRL_G1_Track/manager/universal_token/all_modes/sonic_release_test-20260818_141446/model_step_000024.pt",
+      "num_envs=512",
+      "headless=true",
+      "use_wandb=false",
+      "seed=8601",
+      "manager_env/events=tracking/lucid_curriculum",
+      "++algo.config.num_learning_iterations=32",
+      "++algo.config.save_interval=100000",
+      "++manager_env.commands.motion.motion_lib_cfg.motion_file=data/motion_lib_bones_seed/robot_filtered",
+      "++manager_env.commands.motion.motion_lib_cfg.smpl_motion_file=data/motion_lib_bones_seed/smpl_filtered",
+      "++callbacks.practice_observer._target_=gear_sonic.research.practice_utility.observer.PracticeObserverCallback",
+      "++callbacks.practice_observer.enabled=true",
+      "++callbacks.practice_observer.encoder_path=/data/robotixx/lucid-sonic/artifacts/lucid_encoder_debug512.pt",
+      "++callbacks.practice_observer.branch_id=curriculum_comparison_ne512_20260828_131929_latgate_32_s8601_ta_latgate_50",
+      "++callbacks.practice_observer.output_dir=/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8601/ta_latgate_50",
+      "++callbacks.lucid_curriculum._target_=gear_sonic.research.practice_utility.dr_curriculum.LucidCurriculumCallback",
+      "++callbacks.lucid_curriculum.enabled=true",
+      "++callbacks.lucid_curriculum.mode=lucid",
+      "++callbacks.lucid_curriculum.anchor_ratio=0.5",
+      "++callbacks.lucid_curriculum.anchor_seed=8601",
+      "++callbacks.lucid_curriculum.consolidation_fraction=0.0",
+      "++callbacks.lucid_curriculum.term_lambda_overrides.add_joint_default_pos=1.0",
+      "++callbacks.lucid_curriculum.term_lambda_overrides.base_com=1.0",
+      "++callbacks.lucid_curriculum.term_lambda_overrides.physics_material=1.0",
+      "++callbacks.lucid_curriculum.term_lambda_overrides.push_robot=1.0",
+      "++callbacks.lucid_curriculum.term_lambda_overrides.randomize_rigid_body_mass=1.0",
+      "++callbacks.lucid_curriculum.observer_branch_id=curriculum_comparison_ne512_20260828_131929_latgate_32_s8601_ta_latgate_50",
+      "++callbacks.lucid_curriculum.branch_id=curriculum_comparison_ne512_20260828_131929_latgate_32_s8601_ta_latgate_50",
+      "++callbacks.lucid_curriculum.output_dir=/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8601/ta_latgate_50",
+      "++callbacks.lucid_curriculum.initial_lambda=0.0",
+      "++callbacks.lucid_curriculum.fixed_lambda=1.0",
+      "++callbacks.lucid_curriculum.delta_target=0.778",
+      "++callbacks.lucid_curriculum.kp=1.0",
+      "++callbacks.lucid_curriculum.ki=0.02",
+      "++callbacks.lucid_curriculum.alpha=0.05",
+      "++callbacks.lucid_curriculum.integral_max=1.0",
+      "++callbacks.lucid_curriculum.return_floor=8.0",
+      "++callbacks.lucid_curriculum.warmup_iterations=10",
+      "++callbacks.practice_capsule._target_=gear_sonic.research.practice_utility.callbacks.PracticeCapsuleCallback",
+      "++callbacks.practice_capsule.enabled=true",
+      "++callbacks.practice_capsule.capsule_dir=/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8601/ta_latgate_50/capsules",
+      "++callbacks.practice_capsule.pair_id=curriculum_seed_8601",
+      "++callbacks.practice_capsule.role=control",
+      "++callbacks.practice_capsule.branch_id=curriculum_comparison_ne512_20260828_131929_latgate_32_s8601_ta_latgate_50",
+      "++callbacks.practice_capsule.horizons.final=32"
+    ],
+    "curriculum_comparison_ne512_20260828_131929_latgate_32_s8601_lucid_latgate": [
+      "/home/robotixx/miniconda3/envs/sonic/bin/python",
+      "/home/robotixx/lucid/GR00T-WholeBodyControl/scripts/practice_utility/train_with_delay.py",
+      "--max-delay",
+      "8",
+      "--",
+      "+exp=manager/universal_token/all_modes/sonic_release",
+      "checkpoint=logs_rl/TRL_G1_Track/manager/universal_token/all_modes/sonic_release_test-20260818_141446/model_step_000024.pt",
+      "num_envs=512",
+      "headless=true",
+      "use_wandb=false",
+      "seed=8601",
+      "manager_env/events=tracking/lucid_curriculum",
+      "++algo.config.num_learning_iterations=32",
+      "++algo.config.save_interval=100000",
+      "++manager_env.commands.motion.motion_lib_cfg.motion_file=data/motion_lib_bones_seed/robot_filtered",
+      "++manager_env.commands.motion.motion_lib_cfg.smpl_motion_file=data/motion_lib_bones_seed/smpl_filtered",
+      "++callbacks.practice_observer._target_=gear_sonic.research.practice_utility.observer.PracticeObserverCallback",
+      "++callbacks.practice_observer.enabled=true",
+      "++callbacks.practice_observer.encoder_path=/data/robotixx/lucid-sonic/artifacts/lucid_encoder_debug512.pt",
+      "++callbacks.practice_observer.branch_id=curriculum_comparison_ne512_20260828_131929_latgate_32_s8601_lucid_latgate",
+      "++callbacks.practice_observer.output_dir=/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8601/lucid_latgate",
+      "++callbacks.lucid_curriculum._target_=gear_sonic.research.practice_utility.dr_curriculum.LucidCurriculumCallback",
+      "++callbacks.lucid_curriculum.enabled=true",
+      "++callbacks.lucid_curriculum.mode=lucid",
+      "++callbacks.lucid_curriculum.term_lambda_overrides.add_joint_default_pos=1.0",
+      "++callbacks.lucid_curriculum.term_lambda_overrides.base_com=1.0",
+      "++callbacks.lucid_curriculum.term_lambda_overrides.physics_material=1.0",
+      "++callbacks.lucid_curriculum.term_lambda_overrides.push_robot=1.0",
+      "++callbacks.lucid_curriculum.term_lambda_overrides.randomize_rigid_body_mass=1.0",
+      "++callbacks.lucid_curriculum.observer_branch_id=curriculum_comparison_ne512_20260828_131929_latgate_32_s8601_lucid_latgate",
+      "++callbacks.lucid_curriculum.branch_id=curriculum_comparison_ne512_20260828_131929_latgate_32_s8601_lucid_latgate",
+      "++callbacks.lucid_curriculum.output_dir=/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8601/lucid_latgate",
+      "++callbacks.lucid_curriculum.initial_lambda=0.0",
+      "++callbacks.lucid_curriculum.fixed_lambda=1.0",
+      "++callbacks.lucid_curriculum.delta_target=0.778",
+      "++callbacks.lucid_curriculum.kp=1.0",
+      "++callbacks.lucid_curriculum.ki=0.02",
+      "++callbacks.lucid_curriculum.alpha=0.05",
+      "++callbacks.lucid_curriculum.integral_max=1.0",
+      "++callbacks.lucid_curriculum.return_floor=8.0",
+      "++callbacks.lucid_curriculum.warmup_iterations=10",
+      "++callbacks.practice_capsule._target_=gear_sonic.research.practice_utility.callbacks.PracticeCapsuleCallback",
+      "++callbacks.practice_capsule.enabled=true",
+      "++callbacks.practice_capsule.capsule_dir=/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8601/lucid_latgate/capsules",
+      "++callbacks.practice_capsule.pair_id=curriculum_seed_8601",
+      "++callbacks.practice_capsule.role=control",
+      "++callbacks.practice_capsule.branch_id=curriculum_comparison_ne512_20260828_131929_latgate_32_s8601_lucid_latgate",
+      "++callbacks.practice_capsule.horizons.final=32"
+    ],
+    "curriculum_comparison_ne512_20260828_131929_latgate_32_s8602_lucid_latgate": [
+      "/home/robotixx/miniconda3/envs/sonic/bin/python",
+      "/home/robotixx/lucid/GR00T-WholeBodyControl/scripts/practice_utility/train_with_delay.py",
+      "--max-delay",
+      "8",
+      "--",
+      "+exp=manager/universal_token/all_modes/sonic_release",
+      "checkpoint=logs_rl/TRL_G1_Track/manager/universal_token/all_modes/sonic_release_test-20260818_141446/model_step_000024.pt",
+      "num_envs=512",
+      "headless=true",
+      "use_wandb=false",
+      "seed=8602",
+      "manager_env/events=tracking/lucid_curriculum",
+      "++algo.config.num_learning_iterations=32",
+      "++algo.config.save_interval=100000",
+      "++manager_env.commands.motion.motion_lib_cfg.motion_file=data/motion_lib_bones_seed/robot_filtered",
+      "++manager_env.commands.motion.motion_lib_cfg.smpl_motion_file=data/motion_lib_bones_seed/smpl_filtered",
+      "++callbacks.practice_observer._target_=gear_sonic.research.practice_utility.observer.PracticeObserverCallback",
+      "++callbacks.practice_observer.enabled=true",
+      "++callbacks.practice_observer.encoder_path=/data/robotixx/lucid-sonic/artifacts/lucid_encoder_debug512.pt",
+      "++callbacks.practice_observer.branch_id=curriculum_comparison_ne512_20260828_131929_latgate_32_s8602_lucid_latgate",
+      "++callbacks.practice_observer.output_dir=/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8602/lucid_latgate",
+      "++callbacks.lucid_curriculum._target_=gear_sonic.research.practice_utility.dr_curriculum.LucidCurriculumCallback",
+      "++callbacks.lucid_curriculum.enabled=true",
+      "++callbacks.lucid_curriculum.mode=lucid",
+      "++callbacks.lucid_curriculum.term_lambda_overrides.add_joint_default_pos=1.0",
+      "++callbacks.lucid_curriculum.term_lambda_overrides.base_com=1.0",
+      "++callbacks.lucid_curriculum.term_lambda_overrides.physics_material=1.0",
+      "++callbacks.lucid_curriculum.term_lambda_overrides.push_robot=1.0",
+      "++callbacks.lucid_curriculum.term_lambda_overrides.randomize_rigid_body_mass=1.0",
+      "++callbacks.lucid_curriculum.observer_branch_id=curriculum_comparison_ne512_20260828_131929_latgate_32_s8602_lucid_latgate",
+      "++callbacks.lucid_curriculum.branch_id=curriculum_comparison_ne512_20260828_131929_latgate_32_s8602_lucid_latgate",
+      "++callbacks.lucid_curriculum.output_dir=/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8602/lucid_latgate",
+      "++callbacks.lucid_curriculum.initial_lambda=0.0",
+      "++callbacks.lucid_curriculum.fixed_lambda=1.0",
+      "++callbacks.lucid_curriculum.delta_target=0.778",
+      "++callbacks.lucid_curriculum.kp=1.0",
+      "++callbacks.lucid_curriculum.ki=0.02",
+      "++callbacks.lucid_curriculum.alpha=0.05",
+      "++callbacks.lucid_curriculum.integral_max=1.0",
+      "++callbacks.lucid_curriculum.return_floor=8.0",
+      "++callbacks.lucid_curriculum.warmup_iterations=10",
+      "++callbacks.practice_capsule._target_=gear_sonic.research.practice_utility.callbacks.PracticeCapsuleCallback",
+      "++callbacks.practice_capsule.enabled=true",
+      "++callbacks.practice_capsule.capsule_dir=/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8602/lucid_latgate/capsules",
+      "++callbacks.practice_capsule.pair_id=curriculum_seed_8602",
+      "++callbacks.practice_capsule.role=control",
+      "++callbacks.practice_capsule.branch_id=curriculum_comparison_ne512_20260828_131929_latgate_32_s8602_lucid_latgate",
+      "++callbacks.practice_capsule.horizons.final=32"
+    ],
+    "curriculum_comparison_ne512_20260828_131929_latgate_32_s8602_ta_latgate_50": [
+      "/home/robotixx/miniconda3/envs/sonic/bin/python",
+      "/home/robotixx/lucid/GR00T-WholeBodyControl/scripts/practice_utility/train_with_delay.py",
+      "--max-delay",
+      "8",
+      "--",
+      "+exp=manager/universal_token/all_modes/sonic_release",
+      "checkpoint=logs_rl/TRL_G1_Track/manager/universal_token/all_modes/sonic_release_test-20260818_141446/model_step_000024.pt",
+      "num_envs=512",
+      "headless=true",
+      "use_wandb=false",
+      "seed=8602",
+      "manager_env/events=tracking/lucid_curriculum",
+      "++algo.config.num_learning_iterations=32",
+      "++algo.config.save_interval=100000",
+      "++manager_env.commands.motion.motion_lib_cfg.motion_file=data/motion_lib_bones_seed/robot_filtered",
+      "++manager_env.commands.motion.motion_lib_cfg.smpl_motion_file=data/motion_lib_bones_seed/smpl_filtered",
+      "++callbacks.practice_observer._target_=gear_sonic.research.practice_utility.observer.PracticeObserverCallback",
+      "++callbacks.practice_observer.enabled=true",
+      "++callbacks.practice_observer.encoder_path=/data/robotixx/lucid-sonic/artifacts/lucid_encoder_debug512.pt",
+      "++callbacks.practice_observer.branch_id=curriculum_comparison_ne512_20260828_131929_latgate_32_s8602_ta_latgate_50",
+      "++callbacks.practice_observer.output_dir=/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8602/ta_latgate_50",
+      "++callbacks.lucid_curriculum._target_=gear_sonic.research.practice_utility.dr_curriculum.LucidCurriculumCallback",
+      "++callbacks.lucid_curriculum.enabled=true",
+      "++callbacks.lucid_curriculum.mode=lucid",
+      "++callbacks.lucid_curriculum.anchor_ratio=0.5",
+      "++callbacks.lucid_curriculum.anchor_seed=8602",
+      "++callbacks.lucid_curriculum.consolidation_fraction=0.0",
+      "++callbacks.lucid_curriculum.term_lambda_overrides.add_joint_default_pos=1.0",
+      "++callbacks.lucid_curriculum.term_lambda_overrides.base_com=1.0",
+      "++callbacks.lucid_curriculum.term_lambda_overrides.physics_material=1.0",
+      "++callbacks.lucid_curriculum.term_lambda_overrides.push_robot=1.0",
+      "++callbacks.lucid_curriculum.term_lambda_overrides.randomize_rigid_body_mass=1.0",
+      "++callbacks.lucid_curriculum.observer_branch_id=curriculum_comparison_ne512_20260828_131929_latgate_32_s8602_ta_latgate_50",
+      "++callbacks.lucid_curriculum.branch_id=curriculum_comparison_ne512_20260828_131929_latgate_32_s8602_ta_latgate_50",
+      "++callbacks.lucid_curriculum.output_dir=/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8602/ta_latgate_50",
+      "++callbacks.lucid_curriculum.initial_lambda=0.0",
+      "++callbacks.lucid_curriculum.fixed_lambda=1.0",
+      "++callbacks.lucid_curriculum.delta_target=0.778",
+      "++callbacks.lucid_curriculum.kp=1.0",
+      "++callbacks.lucid_curriculum.ki=0.02",
+      "++callbacks.lucid_curriculum.alpha=0.05",
+      "++callbacks.lucid_curriculum.integral_max=1.0",
+      "++callbacks.lucid_curriculum.return_floor=8.0",
+      "++callbacks.lucid_curriculum.warmup_iterations=10",
+      "++callbacks.practice_capsule._target_=gear_sonic.research.practice_utility.callbacks.PracticeCapsuleCallback",
+      "++callbacks.practice_capsule.enabled=true",
+      "++callbacks.practice_capsule.capsule_dir=/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8602/ta_latgate_50/capsules",
+      "++callbacks.practice_capsule.pair_id=curriculum_seed_8602",
+      "++callbacks.practice_capsule.role=control",
+      "++callbacks.practice_capsule.branch_id=curriculum_comparison_ne512_20260828_131929_latgate_32_s8602_ta_latgate_50",
+      "++callbacks.practice_capsule.horizons.final=32"
+    ]
+  },
+  "runtime": {
+    "curriculum_comparison_ne512_20260828_131929_latgate_32_s8600_lucid_latgate": {
+      "exit_code": 0,
+      "wall_seconds": 192.64826584793627,
+      "gpu": {
+        "samples": 96,
+        "start_free_mib": 23926.0,
+        "min_free_mib": 16998.0,
+        "max_used_mib": 15106.0,
+        "max_gpu_util_pct": 96.0
+      },
+      "log_path": "/data/robotixx/lucid-sonic/outputs/curriculum_comparison_ne512_20260828_131929_latgate_32_s8600_lucid_latgate.log",
+      "observer_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8600/lucid_latgate/observer_curriculum_comparison_ne512_20260828_131929_latgate_32_s8600_lucid_latgate.jsonl"
+    },
+    "curriculum_comparison_ne512_20260828_131929_latgate_32_s8600_ta_latgate_50": {
+      "exit_code": 0,
+      "wall_seconds": 201.21996121760458,
+      "gpu": {
+        "samples": 100,
+        "start_free_mib": 23926.0,
+        "min_free_mib": 16970.0,
+        "max_used_mib": 15134.0,
+        "max_gpu_util_pct": 96.0
+      },
+      "log_path": "/data/robotixx/lucid-sonic/outputs/curriculum_comparison_ne512_20260828_131929_latgate_32_s8600_ta_latgate_50.log",
+      "observer_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8600/ta_latgate_50/observer_curriculum_comparison_ne512_20260828_131929_latgate_32_s8600_ta_latgate_50.jsonl"
+    },
+    "curriculum_comparison_ne512_20260828_131929_latgate_32_s8601_ta_latgate_50": {
+      "exit_code": 0,
+      "wall_seconds": 193.42242980375886,
+      "gpu": {
+        "samples": 96,
+        "start_free_mib": 23926.0,
+        "min_free_mib": 16980.0,
+        "max_used_mib": 15124.0,
+        "max_gpu_util_pct": 96.0
+      },
+      "log_path": "/data/robotixx/lucid-sonic/outputs/curriculum_comparison_ne512_20260828_131929_latgate_32_s8601_ta_latgate_50.log",
+      "observer_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8601/ta_latgate_50/observer_curriculum_comparison_ne512_20260828_131929_latgate_32_s8601_ta_latgate_50.jsonl"
+    },
+    "curriculum_comparison_ne512_20260828_131929_latgate_32_s8601_lucid_latgate": {
+      "exit_code": 0,
+      "wall_seconds": 200.26274261716753,
+      "gpu": {
+        "samples": 99,
+        "start_free_mib": 24046.0,
+        "min_free_mib": 17090.0,
+        "max_used_mib": 15014.0,
+        "max_gpu_util_pct": 94.0
+      },
+      "log_path": "/data/robotixx/lucid-sonic/outputs/curriculum_comparison_ne512_20260828_131929_latgate_32_s8601_lucid_latgate.log",
+      "observer_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8601/lucid_latgate/observer_curriculum_comparison_ne512_20260828_131929_latgate_32_s8601_lucid_latgate.jsonl"
+    },
+    "curriculum_comparison_ne512_20260828_131929_latgate_32_s8602_lucid_latgate": {
+      "exit_code": 0,
+      "wall_seconds": 192.83664423879236,
+      "gpu": {
+        "samples": 96,
+        "start_free_mib": 24044.0,
+        "min_free_mib": 17134.0,
+        "max_used_mib": 14970.0,
+        "max_gpu_util_pct": 96.0
+      },
+      "log_path": "/data/robotixx/lucid-sonic/outputs/curriculum_comparison_ne512_20260828_131929_latgate_32_s8602_lucid_latgate.log",
+      "observer_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8602/lucid_latgate/observer_curriculum_comparison_ne512_20260828_131929_latgate_32_s8602_lucid_latgate.jsonl"
+    },
+    "curriculum_comparison_ne512_20260828_131929_latgate_32_s8602_ta_latgate_50": {
+      "exit_code": 0,
+      "wall_seconds": 197.07041389122605,
+      "gpu": {
+        "samples": 98,
+        "start_free_mib": 24044.0,
+        "min_free_mib": 17162.0,
+        "max_used_mib": 14942.0,
+        "max_gpu_util_pct": 95.0
+      },
+      "log_path": "/data/robotixx/lucid-sonic/outputs/curriculum_comparison_ne512_20260828_131929_latgate_32_s8602_ta_latgate_50.log",
+      "observer_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8602/ta_latgate_50/observer_curriculum_comparison_ne512_20260828_131929_latgate_32_s8602_ta_latgate_50.jsonl"
+    }
+  },
+  "arms": {
+    "curriculum_comparison_ne512_20260828_131929_latgate_32_s8600_lucid_latgate": {
+      "iterations_parsed": 32,
+      "complete": true,
+      "actuator_groups_swapped": 5,
+      "training": {
+        "Mean rewards": {
+          "series": {
+            "1": 0.4088,
+            "2": 1.41132,
+            "3": 2.35339,
+            "4": 3.62846,
+            "5": 6.49997,
+            "6": 9.23083,
+            "7": 10.50608,
+            "8": 12.04252,
+            "9": 13.43573,
+            "10": 13.4321,
+            "11": 15.25205,
+            "12": 15.92566,
+            "13": 17.67037,
+            "14": 17.81445,
+            "15": 15.65803,
+            "16": 14.78489,
+            "17": 15.19756,
+            "18": 14.52266,
+            "19": 16.35597,
+            "20": 17.85901,
+            "21": 15.62325,
+            "22": 17.21774,
+            "23": 16.40716,
+            "24": 14.23423,
+            "25": 15.01979,
+            "26": 15.55554,
+            "27": 15.75902,
+            "28": 15.19061,
+            "29": 15.02117,
+            "30": 16.25179,
+            "31": 15.8741,
+            "32": 15.04218
+          },
+          "last4_mean": 15.54731
+        },
+        "Mean length": {
+          "series": {
+            "1": 14.09677,
+            "2": 24.48276,
+            "3": 34.16279,
+            "4": 47.8,
+            "5": 77.63,
+            "6": 108.29,
+            "7": 125.13,
+            "8": 148.82,
+            "9": 165.43,
+            "10": 162.87,
+            "11": 181.08,
+            "12": 188.48,
+            "13": 208.62,
+            "14": 212.44,
+            "15": 188.75,
+            "16": 175.29,
+            "17": 182.94,
+            "18": 181.84,
+            "19": 198.27,
+            "20": 207.53,
+            "21": 191.59,
+            "22": 212.76,
+            "23": 198.68,
+            "24": 178.89,
+            "25": 192.29,
+            "26": 192.08,
+            "27": 194.72,
+            "28": 189.32,
+            "29": 189.03,
+            "30": 198.89,
+            "31": 192.43,
+            "32": 189.51
+          },
+          "last4_mean": 192.465
+        },
+        "Mean entropy": {
+          "series": {
+            "1": 13.32262,
+            "2": 13.33158,
+            "3": 13.34067,
+            "4": 13.34956,
+            "5": 13.35639,
+            "6": 13.36378,
+            "7": 13.37281,
+            "8": 13.38208,
+            "9": 13.39153,
+            "10": 13.40076,
+            "11": 13.41127,
+            "12": 13.4214,
+            "13": 13.43127,
+            "14": 13.43974,
+            "15": 13.44689,
+            "16": 13.45489,
+            "17": 13.4636,
+            "18": 13.47308,
+            "19": 13.48354,
+            "20": 13.49234,
+            "21": 13.50099,
+            "22": 13.51039,
+            "23": 13.51972,
+            "24": 13.5297,
+            "25": 13.53979,
+            "26": 13.54861,
+            "27": 13.55698,
+            "28": 13.56577,
+            "29": 13.57444,
+            "30": 13.5835,
+            "31": 13.59352,
+            "32": 13.60375
+          },
+          "last4_mean": 13.5888025
+        }
+      },
+      "observer_last4_mean": {
+        "latent_median": 0.19110549986362457,
+        "latent_p90": 0.3365420743823051,
+        "raw_median": 7.589068293571472,
+        "raw_p90": 8.477877247333527,
+        "action_rate": 1.3406559934722948,
+        "action_acceleration": 3.0833471201899423,
+        "foot_slip_per_step_m": 0.004127068561692907,
+        "contact_impulse_total": 227.3461282397212,
+        "contact_force_peak": 11455.48193359375,
+        "undesired_contact_rate": 0.14461263020833334,
+        "torque_saturation": 0.0034207749640804597,
+        "joint_limit_proximity": 0.2507943034286033,
+        "energy_proxy": 257.2975068164859,
+        "action_delay_mean_steps": 1.8636718392372131,
+        "action_delay_nonzero_fraction": 0.72509765625
+      },
+      "observer_rows": 32,
+      "live_delay_final": {
+        "action_delay_actuator_groups": 5,
+        "action_delay_num_lags": 2560,
+        "action_delay_min_steps": 0,
+        "action_delay_max_steps": 6,
+        "action_delay_mean_steps": 2.053906202316284,
+        "action_delay_nonzero_fraction": 0.74609375,
+        "action_delay_histogram": [
+          650,
+          484,
+          474,
+          351,
+          311,
+          211,
+          79
+        ]
+      },
+      "seed": 8600,
+      "mode": "lucid_latgate",
+      "branch_id": "curriculum_comparison_ne512_20260828_131929_latgate_32_s8600_lucid_latgate",
+      "curriculum_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8600/lucid_latgate/curriculum_curriculum_comparison_ne512_20260828_131929_latgate_32_s8600_lucid_latgate.jsonl",
+      "curriculum_rows": 32,
+      "final_lambda": 0.7149999257831574,
+      "final_integral": 1.0,
+      "mean_return_observed": true,
+      "return_guard_trips": 0,
+      "scalable_terms": [
+        "add_joint_default_pos",
+        "base_com",
+        "physics_material",
+        "push_robot",
+        "randomize_action_delay",
+        "randomize_rigid_body_mass"
+      ],
+      "arm_spec": {
+        "curriculum_mode": "lucid",
+        "anchor_ratio": 0.0,
+        "yoked_source": null,
+        "yoked_cross_seed": false,
+        "term_lambda_overrides": {
+          "add_joint_default_pos": 1.0,
+          "base_com": 1.0,
+          "physics_material": 1.0,
+          "push_robot": 1.0,
+          "randomize_rigid_body_mass": 1.0
+        },
+        "yoked_schedule_path": null
+      },
+      "tace_final": null,
+      "consolidation_rows": 0,
+      "capsule": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8600/lucid_latgate/capsules/curriculum_comparison_ne512_20260828_131929_latgate_32_s8600_lucid_latgate_final.capsule.pt",
+      "checkpoint": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8600/lucid_latgate/final_checkpoint.pt",
+      "checkpoint_exported": true
+    },
+    "curriculum_comparison_ne512_20260828_131929_latgate_32_s8600_ta_latgate_50": {
+      "iterations_parsed": 32,
+      "complete": true,
+      "actuator_groups_swapped": 5,
+      "training": {
+        "Mean rewards": {
+          "series": {
+            "1": -0.03137,
+            "2": 0.56363,
+            "3": 1.74884,
+            "4": 3.54331,
+            "5": 5.08785,
+            "6": 7.43877,
+            "7": 8.27724,
+            "8": 9.86609,
+            "9": 9.778,
+            "10": 9.59434,
+            "11": 9.90274,
+            "12": 11.54052,
+            "13": 9.90999,
+            "14": 11.85498,
+            "15": 13.92704,
+            "16": 13.14439,
+            "17": 12.32796,
+            "18": 12.80337,
+            "19": 11.94,
+            "20": 12.19128,
+            "21": 12.11579,
+            "22": 12.8434,
+            "23": 11.47297,
+            "24": 11.84555,
+            "25": 12.30817,
+            "26": 12.1846,
+            "27": 13.20912,
+            "28": 12.68213,
+            "29": 12.82774,
+            "30": 12.23867,
+            "31": 12.04922,
+            "32": 13.42642
+          },
+          "last4_mean": 12.6355125
+        },
+        "Mean length": {
+          "series": {
+            "1": 11.95946,
+            "2": 23.49,
+            "3": 41.03,
+            "4": 63.38,
+            "5": 79.33,
+            "6": 104.74,
+            "7": 113.27,
+            "8": 131.81,
+            "9": 136.03,
+            "10": 133.72,
+            "11": 141.37,
+            "12": 156.28,
+            "13": 145.83,
+            "14": 165.13,
+            "15": 188.99,
+            "16": 175.92,
+            "17": 170.01,
+            "18": 167.92,
+            "19": 160.72,
+            "20": 164.99,
+            "21": 166.34,
+            "22": 175.5,
+            "23": 156.93,
+            "24": 159.64,
+            "25": 169.77,
+            "26": 169.35,
+            "27": 173.11,
+            "28": 172.52,
+            "29": 185.54,
+            "30": 177.01,
+            "31": 170.09,
+            "32": 177.43
+          },
+          "last4_mean": 177.51749999999998
+        },
+        "Mean entropy": {
+          "series": {
+            "1": 13.32262,
+            "2": 13.33228,
+            "3": 13.34181,
+            "4": 13.35112,
+            "5": 13.36073,
+            "6": 13.37044,
+            "7": 13.37857,
+            "8": 13.38715,
+            "9": 13.39565,
+            "10": 13.4041,
+            "11": 13.41227,
+            "12": 13.42036,
+            "13": 13.42897,
+            "14": 13.4378,
+            "15": 13.44691,
+            "16": 13.45646,
+            "17": 13.46585,
+            "18": 13.47491,
+            "19": 13.48329,
+            "20": 13.49069,
+            "21": 13.4979,
+            "22": 13.50681,
+            "23": 13.51609,
+            "24": 13.52461,
+            "25": 13.53258,
+            "26": 13.5413,
+            "27": 13.55101,
+            "28": 13.55992,
+            "29": 13.5688,
+            "30": 13.57786,
+            "31": 13.587,
+            "32": 13.59562
+          },
+          "last4_mean": 13.58232
+        }
+      },
+      "observer_last4_mean": {
+        "latent_median": 0.037948474287986755,
+        "latent_p90": 0.060710354149341575,
+        "raw_median": 6.275768041610718,
+        "raw_p90": 6.90754234790802,
+        "action_rate": 1.3887000794099444,
+        "action_acceleration": 3.1402828800932747,
+        "foot_slip_per_step_m": 0.0043490427841254165,
+        "contact_impulse_total": 213.98657438632324,
+        "contact_force_peak": 9088.972290039062,
+        "undesired_contact_rate": 0.13427734375,
+        "torque_saturation": 0.004630954786278735,
+        "joint_limit_proximity": 0.25373263844745675,
+        "energy_proxy": 280.8803373411894,
+        "action_delay_mean_steps": 2.811621129512787,
+        "action_delay_nonzero_fraction": 0.8077148348093033
+      },
+      "observer_rows": 32,
+      "live_delay_final": {
+        "action_delay_actuator_groups": 5,
+        "action_delay_num_lags": 2560,
+        "action_delay_min_steps": 0,
+        "action_delay_max_steps": 8,
+        "action_delay_mean_steps": 2.9214844703674316,
+        "action_delay_nonzero_fraction": 0.81640625,
+        "action_delay_histogram": [
+          470,
+          395,
+          373,
+          362,
+          317,
+          229,
+          181,
+          111,
+          122
+        ]
+      },
+      "seed": 8600,
+      "mode": "ta_latgate_50",
+      "branch_id": "curriculum_comparison_ne512_20260828_131929_latgate_32_s8600_ta_latgate_50",
+      "curriculum_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8600/ta_latgate_50/curriculum_curriculum_comparison_ne512_20260828_131929_latgate_32_s8600_ta_latgate_50.jsonl",
+      "curriculum_rows": 32,
+      "final_lambda": 0.7809400327949527,
+      "final_integral": 1.0,
+      "mean_return_observed": true,
+      "return_guard_trips": 0,
+      "scalable_terms": [
+        "add_joint_default_pos",
+        "base_com",
+        "physics_material",
+        "push_robot",
+        "randomize_action_delay",
+        "randomize_rigid_body_mass"
+      ],
+      "arm_spec": {
+        "curriculum_mode": "lucid",
+        "anchor_ratio": 0.5,
+        "yoked_source": null,
+        "yoked_cross_seed": false,
+        "term_lambda_overrides": {
+          "add_joint_default_pos": 1.0,
+          "base_com": 1.0,
+          "physics_material": 1.0,
+          "push_robot": 1.0,
+          "randomize_rigid_body_mass": 1.0
+        },
+        "yoked_schedule_path": null
+      },
+      "tace_final": {
+        "num_anchor": 256,
+        "num_focus": 256,
+        "anchor_ratio": 0.5,
+        "consolidating": false,
+        "dispatch": {
+          "add_joint_default_pos": {
+            "term": "add_joint_default_pos",
+            "calls": {
+              "anchor": 616,
+              "focus": 526
+            },
+            "env_counts": {
+              "anchor": 1499,
+              "focus": 1147
+            },
+            "anchor_params": {
+              "pos_distribution_params": [
+                -0.01,
+                0.01
+              ]
+            }
+          },
+          "base_com": {
+            "term": "base_com",
+            "calls": {
+              "anchor": 616,
+              "focus": 526
+            },
+            "env_counts": {
+              "anchor": 1499,
+              "focus": 1147
+            },
+            "anchor_params": {
+              "com_range": {
+                "x": [
+                  -0.025,
+                  0.025
+                ],
+                "y": [
+                  -0.05,
+                  0.05
+                ],
+                "z": [
+                  -0.05,
+                  0.05
+                ]
+              }
+            }
+          },
+          "physics_material": {
+            "term": "physics_material",
+            "calls": {
+              "anchor": 616,
+              "focus": 526
+            },
+            "env_counts": {
+              "anchor": 1499,
+              "focus": 1147
+            },
+            "anchor_params": {
+              "static_friction_range": [
+                0.3,
+                1.6
+              ],
+              "dynamic_friction_range": [
+                0.3,
+                1.2
+              ],
+              "restitution_range": [
+                0.0,
+                0.5
+              ]
+            }
+          },
+          "push_robot": {
+            "term": "push_robot",
+            "calls": {
+              "anchor": 621,
+              "focus": 634
+            },
+            "env_counts": {
+              "anchor": 1435,
+              "focus": 1475
+            },
+            "anchor_params": {
+              "velocity_range": {
+                "x": [
+                  -0.5,
+                  0.5
+                ],
+                "y": [
+                  -0.5,
+                  0.5
+                ],
+                "z": [
+                  -0.2,
+                  0.2
+                ],
+                "roll": [
+                  -0.52,
+                  0.52
+                ],
+                "pitch": [
+                  -0.52,
+                  0.52
+                ],
+                "yaw": [
+                  -0.78,
+                  0.78
+                ]
+              }
+            }
+          },
+          "randomize_action_delay": {
+            "term": "randomize_action_delay",
+            "calls": {
+              "anchor": 616,
+              "focus": 526
+            },
+            "env_counts": {
+              "anchor": 1499,
+              "focus": 1147
+            },
+            "anchor_params": {
+              "delay_range": [
+                0.0,
+                8.0
+              ]
+            }
+          },
+          "randomize_rigid_body_mass": {
+            "term": "randomize_rigid_body_mass",
+            "calls": {
+              "anchor": 616,
+              "focus": 526
+            },
+            "env_counts": {
+              "anchor": 1499,
+              "focus": 1147
+            },
+            "anchor_params": {
+              "mass_distribution_params": [
+                0.8,
+                1.5
+              ]
+            }
+          }
+        },
+        "anchor_delay_mean_steps": 3.815624952316284,
+        "anchor_delay_max_steps": 8,
+        "anchor_delay_nonzero_fraction": 0.878125011920929,
+        "focus_delay_mean_steps": 2.02734375,
+        "focus_delay_max_steps": 6,
+        "focus_delay_nonzero_fraction": 0.754687488079071
+      },
+      "consolidation_rows": 0,
+      "capsule": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8600/ta_latgate_50/capsules/curriculum_comparison_ne512_20260828_131929_latgate_32_s8600_ta_latgate_50_final.capsule.pt",
+      "checkpoint": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8600/ta_latgate_50/final_checkpoint.pt",
+      "checkpoint_exported": true
+    },
+    "curriculum_comparison_ne512_20260828_131929_latgate_32_s8601_ta_latgate_50": {
+      "iterations_parsed": 32,
+      "complete": true,
+      "actuator_groups_swapped": 5,
+      "training": {
+        "Mean rewards": {
+          "series": {
+            "1": 0.12304,
+            "2": 0.56921,
+            "3": 1.53851,
+            "4": 3.36197,
+            "5": 4.9976,
+            "6": 6.51337,
+            "7": 8.19116,
+            "8": 9.45812,
+            "9": 10.74626,
+            "10": 10.43462,
+            "11": 9.62499,
+            "12": 12.22147,
+            "13": 10.93505,
+            "14": 9.37393,
+            "15": 11.45758,
+            "16": 12.39072,
+            "17": 11.31877,
+            "18": 10.22191,
+            "19": 10.10496,
+            "20": 11.70739,
+            "21": 11.3146,
+            "22": 10.27281,
+            "23": 12.67066,
+            "24": 14.26667,
+            "25": 12.43636,
+            "26": 14.77179,
+            "27": 13.71198,
+            "28": 14.08028,
+            "29": 12.1475,
+            "30": 12.7683,
+            "31": 12.59812,
+            "32": 11.74249
+          },
+          "last4_mean": 12.3141025
+        },
+        "Mean length": {
+          "series": {
+            "1": 12.94521,
+            "2": 24.77,
+            "3": 38.44,
+            "4": 59.8,
+            "5": 79.32,
+            "6": 96.53,
+            "7": 113.38,
+            "8": 128.4,
+            "9": 144.11,
+            "10": 140.6,
+            "11": 144.86,
+            "12": 171.25,
+            "13": 154.47,
+            "14": 131.25,
+            "15": 156.0,
+            "16": 162.53,
+            "17": 158.98,
+            "18": 148.88,
+            "19": 141.55,
+            "20": 153.13,
+            "21": 154.2,
+            "22": 144.29,
+            "23": 167.98,
+            "24": 188.39,
+            "25": 171.79,
+            "26": 202.87,
+            "27": 185.52,
+            "28": 189.19,
+            "29": 178.63,
+            "30": 180.03,
+            "31": 178.42,
+            "32": 168.8
+          },
+          "last4_mean": 176.47
+        },
+        "Mean entropy": {
+          "series": {
+            "1": 13.3224,
+            "2": 13.33126,
+            "3": 13.34008,
+            "4": 13.34918,
+            "5": 13.35823,
+            "6": 13.36768,
+            "7": 13.37669,
+            "8": 13.38588,
+            "9": 13.39449,
+            "10": 13.40292,
+            "11": 13.41207,
+            "12": 13.41977,
+            "13": 13.42815,
+            "14": 13.43732,
+            "15": 13.44671,
+            "16": 13.45613,
+            "17": 13.46536,
+            "18": 13.47431,
+            "19": 13.48235,
+            "20": 13.49092,
+            "21": 13.50002,
+            "22": 13.5092,
+            "23": 13.51893,
+            "24": 13.52762,
+            "25": 13.53591,
+            "26": 13.54415,
+            "27": 13.55213,
+            "28": 13.56053,
+            "29": 13.56874,
+            "30": 13.5775,
+            "31": 13.58598,
+            "32": 13.59449
+          },
+          "last4_mean": 13.5816775
+        }
+      },
+      "observer_last4_mean": {
+        "latent_median": 0.1649559736251831,
+        "latent_p90": 0.20010408610105512,
+        "raw_median": 8.813260793685913,
+        "raw_p90": 10.675241911411286,
+        "action_rate": 1.387913459548162,
+        "action_acceleration": 3.138558437890801,
+        "foot_slip_per_step_m": 0.0044560657067959485,
+        "contact_impulse_total": 232.00669011344903,
+        "contact_force_peak": 12031.62939453125,
+        "undesired_contact_rate": 0.134521484375,
+        "torque_saturation": 0.004245801903735632,
+        "joint_limit_proximity": 0.24895178059130496,
+        "energy_proxy": 275.2684582623694,
+        "action_delay_mean_steps": 2.79638671875,
+        "action_delay_nonzero_fraction": 0.793164074420929
+      },
+      "observer_rows": 32,
+      "live_delay_final": {
+        "action_delay_actuator_groups": 5,
+        "action_delay_num_lags": 2560,
+        "action_delay_min_steps": 0,
+        "action_delay_max_steps": 8,
+        "action_delay_mean_steps": 2.893359422683716,
+        "action_delay_nonzero_fraction": 0.8070312738418579,
+        "action_delay_histogram": [
+          494,
+          389,
+          371,
+          343,
+          327,
+          239,
+          149,
+          134,
+          114
+        ]
+      },
+      "seed": 8601,
+      "mode": "ta_latgate_50",
+      "branch_id": "curriculum_comparison_ne512_20260828_131929_latgate_32_s8601_ta_latgate_50",
+      "curriculum_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8601/ta_latgate_50/curriculum_curriculum_comparison_ne512_20260828_131929_latgate_32_s8601_ta_latgate_50.jsonl",
+      "curriculum_rows": 32,
+      "final_lambda": 0.7350733796744346,
+      "final_integral": 1.0,
+      "mean_return_observed": true,
+      "return_guard_trips": 0,
+      "scalable_terms": [
+        "add_joint_default_pos",
+        "base_com",
+        "physics_material",
+        "push_robot",
+        "randomize_action_delay",
+        "randomize_rigid_body_mass"
+      ],
+      "arm_spec": {
+        "curriculum_mode": "lucid",
+        "anchor_ratio": 0.5,
+        "yoked_source": null,
+        "yoked_cross_seed": false,
+        "term_lambda_overrides": {
+          "add_joint_default_pos": 1.0,
+          "base_com": 1.0,
+          "physics_material": 1.0,
+          "push_robot": 1.0,
+          "randomize_rigid_body_mass": 1.0
+        },
+        "yoked_schedule_path": null
+      },
+      "tace_final": {
+        "num_anchor": 256,
+        "num_focus": 256,
+        "anchor_ratio": 0.5,
+        "consolidating": false,
+        "dispatch": {
+          "add_joint_default_pos": {
+            "term": "add_joint_default_pos",
+            "calls": {
+              "anchor": 626,
+              "focus": 527
+            },
+            "env_counts": {
+              "anchor": 1545,
+              "focus": 1110
+            },
+            "anchor_params": {
+              "pos_distribution_params": [
+                -0.01,
+                0.01
+              ]
+            }
+          },
+          "base_com": {
+            "term": "base_com",
+            "calls": {
+              "anchor": 626,
+              "focus": 527
+            },
+            "env_counts": {
+              "anchor": 1545,
+              "focus": 1110
+            },
+            "anchor_params": {
+              "com_range": {
+                "x": [
+                  -0.025,
+                  0.025
+                ],
+                "y": [
+                  -0.05,
+                  0.05
+                ],
+                "z": [
+                  -0.05,
+                  0.05
+                ]
+              }
+            }
+          },
+          "physics_material": {
+            "term": "physics_material",
+            "calls": {
+              "anchor": 626,
+              "focus": 527
+            },
+            "env_counts": {
+              "anchor": 1545,
+              "focus": 1110
+            },
+            "anchor_params": {
+              "static_friction_range": [
+                0.3,
+                1.6
+              ],
+              "dynamic_friction_range": [
+                0.3,
+                1.2
+              ],
+              "restitution_range": [
+                0.0,
+                0.5
+              ]
+            }
+          },
+          "push_robot": {
+            "term": "push_robot",
+            "calls": {
+              "anchor": 618,
+              "focus": 643
+            },
+            "env_counts": {
+              "anchor": 1387,
+              "focus": 1514
+            },
+            "anchor_params": {
+              "velocity_range": {
+                "x": [
+                  -0.5,
+                  0.5
+                ],
+                "y": [
+                  -0.5,
+                  0.5
+                ],
+                "z": [
+                  -0.2,
+                  0.2
+                ],
+                "roll": [
+                  -0.52,
+                  0.52
+                ],
+                "pitch": [
+                  -0.52,
+                  0.52
+                ],
+                "yaw": [
+                  -0.78,
+                  0.78
+                ]
+              }
+            }
+          },
+          "randomize_action_delay": {
+            "term": "randomize_action_delay",
+            "calls": {
+              "anchor": 626,
+              "focus": 527
+            },
+            "env_counts": {
+              "anchor": 1545,
+              "focus": 1110
+            },
+            "anchor_params": {
+              "delay_range": [
+                0.0,
+                8.0
+              ]
+            }
+          },
+          "randomize_rigid_body_mass": {
+            "term": "randomize_rigid_body_mass",
+            "calls": {
+              "anchor": 626,
+              "focus": 527
+            },
+            "env_counts": {
+              "anchor": 1545,
+              "focus": 1110
+            },
+            "anchor_params": {
+              "mass_distribution_params": [
+                0.8,
+                1.5
+              ]
+            }
+          }
+        },
+        "anchor_delay_mean_steps": 3.757031202316284,
+        "anchor_delay_max_steps": 8,
+        "anchor_delay_nonzero_fraction": 0.875,
+        "focus_delay_mean_steps": 2.0296874046325684,
+        "focus_delay_max_steps": 6,
+        "focus_delay_nonzero_fraction": 0.739062488079071
+      },
+      "consolidation_rows": 0,
+      "capsule": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8601/ta_latgate_50/capsules/curriculum_comparison_ne512_20260828_131929_latgate_32_s8601_ta_latgate_50_final.capsule.pt",
+      "checkpoint": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8601/ta_latgate_50/final_checkpoint.pt",
+      "checkpoint_exported": true
+    },
+    "curriculum_comparison_ne512_20260828_131929_latgate_32_s8601_lucid_latgate": {
+      "iterations_parsed": 32,
+      "complete": true,
+      "actuator_groups_swapped": 5,
+      "training": {
+        "Mean rewards": {
+          "series": {
+            "1": 0.15176,
+            "2": 1.0908,
+            "3": 1.86992,
+            "4": 3.44565,
+            "5": 6.92876,
+            "6": 9.68904,
+            "7": 11.72056,
+            "8": 12.73968,
+            "9": 13.91942,
+            "10": 13.15069,
+            "11": 15.11129,
+            "12": 16.07941,
+            "13": 15.39436,
+            "14": 14.80666,
+            "15": 14.45588,
+            "16": 14.55991,
+            "17": 14.90325,
+            "18": 15.74273,
+            "19": 15.66402,
+            "20": 17.10171,
+            "21": 17.25234,
+            "22": 15.66664,
+            "23": 16.43106,
+            "24": 15.74255,
+            "25": 15.45928,
+            "26": 16.30933,
+            "27": 15.99714,
+            "28": 16.25887,
+            "29": 16.09491,
+            "30": 16.60511,
+            "31": 13.86552,
+            "32": 16.31501
+          },
+          "last4_mean": 15.7201375
+        },
+        "Mean length": {
+          "series": {
+            "1": 10.96154,
+            "2": 21.73913,
+            "3": 31.24615,
+            "4": 47.36458,
+            "5": 85.83,
+            "6": 116.47,
+            "7": 136.71,
+            "8": 148.18,
+            "9": 164.62,
+            "10": 154.74,
+            "11": 178.35,
+            "12": 201.28,
+            "13": 189.27,
+            "14": 177.15,
+            "15": 179.29,
+            "16": 184.48,
+            "17": 189.62,
+            "18": 195.29,
+            "19": 191.67,
+            "20": 207.2,
+            "21": 209.35,
+            "22": 191.66,
+            "23": 199.65,
+            "24": 189.97,
+            "25": 184.71,
+            "26": 193.5,
+            "27": 194.62,
+            "28": 204.34,
+            "29": 203.12,
+            "30": 204.09,
+            "31": 180.88,
+            "32": 204.47
+          },
+          "last4_mean": 198.14
+        },
+        "Mean entropy": {
+          "series": {
+            "1": 13.32236,
+            "2": 13.33174,
+            "3": 13.34092,
+            "4": 13.34844,
+            "5": 13.35683,
+            "6": 13.36649,
+            "7": 13.37493,
+            "8": 13.38405,
+            "9": 13.39346,
+            "10": 13.40203,
+            "11": 13.40897,
+            "12": 13.41635,
+            "13": 13.42627,
+            "14": 13.43662,
+            "15": 13.44437,
+            "16": 13.45242,
+            "17": 13.46136,
+            "18": 13.46987,
+            "19": 13.47943,
+            "20": 13.48868,
+            "21": 13.49699,
+            "22": 13.50603,
+            "23": 13.51465,
+            "24": 13.52359,
+            "25": 13.53372,
+            "26": 13.54348,
+            "27": 13.55212,
+            "28": 13.56163,
+            "29": 13.5722,
+            "30": 13.58183,
+            "31": 13.58953,
+            "32": 13.5986
+          },
+          "last4_mean": 13.58554
+        }
+      },
+      "observer_last4_mean": {
+        "latent_median": 0.18611875176429749,
+        "latent_p90": 0.35805595219135283,
+        "raw_median": 7.731879711151123,
+        "raw_p90": 8.489101254940033,
+        "action_rate": 1.3437482808584926,
+        "action_acceleration": 3.1020815265125714,
+        "foot_slip_per_step_m": 0.0041351822202779385,
+        "contact_impulse_total": 219.16308265761032,
+        "contact_force_peak": 10877.669677734375,
+        "undesired_contact_rate": 0.13922119140625,
+        "torque_saturation": 0.0033386932022270114,
+        "joint_limit_proximity": 0.24959942540321864,
+        "energy_proxy": 251.8449143058576,
+        "action_delay_mean_steps": 1.9005859196186066,
+        "action_delay_nonzero_fraction": 0.7088867276906967
+      },
+      "observer_rows": 32,
+      "live_delay_final": {
+        "action_delay_actuator_groups": 5,
+        "action_delay_num_lags": 2560,
+        "action_delay_min_steps": 0,
+        "action_delay_max_steps": 6,
+        "action_delay_mean_steps": 2.1328125,
+        "action_delay_nonzero_fraction": 0.7406250238418579,
+        "action_delay_histogram": [
+          664,
+          464,
+          409,
+          351,
+          342,
+          223,
+          107
+        ]
+      },
+      "seed": 8601,
+      "mode": "lucid_latgate",
+      "branch_id": "curriculum_comparison_ne512_20260828_131929_latgate_32_s8601_lucid_latgate",
+      "curriculum_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8601/lucid_latgate/curriculum_curriculum_comparison_ne512_20260828_131929_latgate_32_s8601_lucid_latgate.jsonl",
+      "curriculum_rows": 32,
+      "final_lambda": 0.7459612864820957,
+      "final_integral": 1.0,
+      "mean_return_observed": true,
+      "return_guard_trips": 0,
+      "scalable_terms": [
+        "add_joint_default_pos",
+        "base_com",
+        "physics_material",
+        "push_robot",
+        "randomize_action_delay",
+        "randomize_rigid_body_mass"
+      ],
+      "arm_spec": {
+        "curriculum_mode": "lucid",
+        "anchor_ratio": 0.0,
+        "yoked_source": null,
+        "yoked_cross_seed": false,
+        "term_lambda_overrides": {
+          "add_joint_default_pos": 1.0,
+          "base_com": 1.0,
+          "physics_material": 1.0,
+          "push_robot": 1.0,
+          "randomize_rigid_body_mass": 1.0
+        },
+        "yoked_schedule_path": null
+      },
+      "tace_final": null,
+      "consolidation_rows": 0,
+      "capsule": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8601/lucid_latgate/capsules/curriculum_comparison_ne512_20260828_131929_latgate_32_s8601_lucid_latgate_final.capsule.pt",
+      "checkpoint": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8601/lucid_latgate/final_checkpoint.pt",
+      "checkpoint_exported": true
+    },
+    "curriculum_comparison_ne512_20260828_131929_latgate_32_s8602_lucid_latgate": {
+      "iterations_parsed": 32,
+      "complete": true,
+      "actuator_groups_swapped": 5,
+      "training": {
+        "Mean rewards": {
+          "series": {
+            "1": 0.48743,
+            "2": 1.36409,
+            "3": 2.58375,
+            "4": 3.79399,
+            "5": 6.71468,
+            "6": 8.78766,
+            "7": 11.11722,
+            "8": 12.18412,
+            "9": 12.81706,
+            "10": 14.01982,
+            "11": 14.37398,
+            "12": 15.0807,
+            "13": 14.80245,
+            "14": 13.71791,
+            "15": 13.95961,
+            "16": 13.85169,
+            "17": 15.98309,
+            "18": 17.64634,
+            "19": 18.35278,
+            "20": 17.36208,
+            "21": 16.6607,
+            "22": 15.74125,
+            "23": 15.36927,
+            "24": 16.98475,
+            "25": 18.28334,
+            "26": 16.07902,
+            "27": 13.75629,
+            "28": 14.11462,
+            "29": 13.70036,
+            "30": 12.85484,
+            "31": 12.33758,
+            "32": 14.17228
+          },
+          "last4_mean": 13.266265
+        },
+        "Mean length": {
+          "series": {
+            "1": 12.95238,
+            "2": 24.52174,
+            "3": 36.65753,
+            "4": 49.55,
+            "5": 80.79,
+            "6": 107.5,
+            "7": 138.94,
+            "8": 150.3,
+            "9": 158.29,
+            "10": 172.47,
+            "11": 174.31,
+            "12": 180.84,
+            "13": 180.76,
+            "14": 167.4,
+            "15": 171.78,
+            "16": 171.49,
+            "17": 193.12,
+            "18": 204.53,
+            "19": 211.41,
+            "20": 201.65,
+            "21": 196.75,
+            "22": 191.49,
+            "23": 188.84,
+            "24": 203.52,
+            "25": 219.99,
+            "26": 198.58,
+            "27": 177.22,
+            "28": 180.29,
+            "29": 174.36,
+            "30": 165.18,
+            "31": 164.52,
+            "32": 180.9
+          },
+          "last4_mean": 171.24
+        },
+        "Mean entropy": {
+          "series": {
+            "1": 13.3226,
+            "2": 13.33239,
+            "3": 13.34242,
+            "4": 13.35075,
+            "5": 13.35821,
+            "6": 13.36679,
+            "7": 13.37522,
+            "8": 13.38316,
+            "9": 13.39148,
+            "10": 13.40093,
+            "11": 13.41004,
+            "12": 13.41926,
+            "13": 13.42896,
+            "14": 13.43864,
+            "15": 13.44835,
+            "16": 13.45785,
+            "17": 13.46478,
+            "18": 13.47305,
+            "19": 13.48181,
+            "20": 13.49089,
+            "21": 13.49923,
+            "22": 13.50851,
+            "23": 13.51728,
+            "24": 13.52736,
+            "25": 13.53792,
+            "26": 13.54805,
+            "27": 13.55817,
+            "28": 13.5682,
+            "29": 13.57662,
+            "30": 13.5859,
+            "31": 13.59542,
+            "32": 13.60439
+          },
+          "last4_mean": 13.5905825
+        }
+      },
+      "observer_last4_mean": {
+        "latent_median": 0.10076475143432617,
+        "latent_p90": 0.3525948747992515,
+        "raw_median": 7.825025916099548,
+        "raw_p90": 8.718239080905914,
+        "action_rate": 1.3542947842754693,
+        "action_acceleration": 3.1093511715547786,
+        "foot_slip_per_step_m": 0.004076514697344299,
+        "contact_impulse_total": 254.99493698992381,
+        "contact_force_peak": 11704.675048828125,
+        "undesired_contact_rate": 0.15250651041666666,
+        "torque_saturation": 0.0041861698545258615,
+        "joint_limit_proximity": 0.2535181489528733,
+        "energy_proxy": 256.8917833688424,
+        "action_delay_mean_steps": 1.947460949420929,
+        "action_delay_nonzero_fraction": 0.7346679866313934
+      },
+      "observer_rows": 32,
+      "live_delay_final": {
+        "action_delay_actuator_groups": 5,
+        "action_delay_num_lags": 2560,
+        "action_delay_min_steps": 0,
+        "action_delay_max_steps": 6,
+        "action_delay_mean_steps": 2.1324219703674316,
+        "action_delay_nonzero_fraction": 0.758984386920929,
+        "action_delay_histogram": [
+          617,
+          496,
+          424,
+          380,
+          326,
+          231,
+          86
+        ]
+      },
+      "seed": 8602,
+      "mode": "lucid_latgate",
+      "branch_id": "curriculum_comparison_ne512_20260828_131929_latgate_32_s8602_lucid_latgate",
+      "curriculum_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8602/lucid_latgate/curriculum_curriculum_comparison_ne512_20260828_131929_latgate_32_s8602_lucid_latgate.jsonl",
+      "curriculum_rows": 32,
+      "final_lambda": 0.7698745382099152,
+      "final_integral": 1.0,
+      "mean_return_observed": true,
+      "return_guard_trips": 0,
+      "scalable_terms": [
+        "add_joint_default_pos",
+        "base_com",
+        "physics_material",
+        "push_robot",
+        "randomize_action_delay",
+        "randomize_rigid_body_mass"
+      ],
+      "arm_spec": {
+        "curriculum_mode": "lucid",
+        "anchor_ratio": 0.0,
+        "yoked_source": null,
+        "yoked_cross_seed": false,
+        "term_lambda_overrides": {
+          "add_joint_default_pos": 1.0,
+          "base_com": 1.0,
+          "physics_material": 1.0,
+          "push_robot": 1.0,
+          "randomize_rigid_body_mass": 1.0
+        },
+        "yoked_schedule_path": null
+      },
+      "tace_final": null,
+      "consolidation_rows": 0,
+      "capsule": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8602/lucid_latgate/capsules/curriculum_comparison_ne512_20260828_131929_latgate_32_s8602_lucid_latgate_final.capsule.pt",
+      "checkpoint": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8602/lucid_latgate/final_checkpoint.pt",
+      "checkpoint_exported": true
+    },
+    "curriculum_comparison_ne512_20260828_131929_latgate_32_s8602_ta_latgate_50": {
+      "iterations_parsed": 32,
+      "complete": true,
+      "actuator_groups_swapped": 5,
+      "training": {
+        "Mean rewards": {
+          "series": {
+            "1": -0.09118,
+            "2": 0.41476,
+            "3": 1.73476,
+            "4": 3.48799,
+            "5": 5.52071,
+            "6": 7.03756,
+            "7": 7.86226,
+            "8": 8.7779,
+            "9": 9.49862,
+            "10": 9.60233,
+            "11": 10.92661,
+            "12": 11.22235,
+            "13": 12.24997,
+            "14": 11.00647,
+            "15": 11.47059,
+            "16": 11.42339,
+            "17": 10.5726,
+            "18": 11.65011,
+            "19": 11.77376,
+            "20": 13.32159,
+            "21": 12.26875,
+            "22": 12.0604,
+            "23": 13.95883,
+            "24": 11.42093,
+            "25": 10.05852,
+            "26": 11.35774,
+            "27": 15.72324,
+            "28": 12.53018,
+            "29": 11.38865,
+            "30": 11.05138,
+            "31": 13.3098,
+            "32": 11.8209
+          },
+          "last4_mean": 11.8926825
+        },
+        "Mean length": {
+          "series": {
+            "1": 12.1129,
+            "2": 23.7,
+            "3": 39.62,
+            "4": 58.35,
+            "5": 80.13,
+            "6": 98.41,
+            "7": 108.29,
+            "8": 121.17,
+            "9": 131.25,
+            "10": 137.01,
+            "11": 153.91,
+            "12": 154.35,
+            "13": 165.16,
+            "14": 152.33,
+            "15": 156.57,
+            "16": 154.88,
+            "17": 140.77,
+            "18": 163.53,
+            "19": 172.67,
+            "20": 177.9,
+            "21": 168.11,
+            "22": 165.67,
+            "23": 189.46,
+            "24": 155.6,
+            "25": 139.34,
+            "26": 156.49,
+            "27": 203.6,
+            "28": 168.67,
+            "29": 155.69,
+            "30": 155.82,
+            "31": 190.87,
+            "32": 176.17
+          },
+          "last4_mean": 169.6375
+        },
+        "Mean entropy": {
+          "series": {
+            "1": 13.32232,
+            "2": 13.33142,
+            "3": 13.34021,
+            "4": 13.34944,
+            "5": 13.35882,
+            "6": 13.36771,
+            "7": 13.37715,
+            "8": 13.386,
+            "9": 13.39479,
+            "10": 13.40335,
+            "11": 13.41321,
+            "12": 13.42296,
+            "13": 13.43222,
+            "14": 13.44078,
+            "15": 13.44937,
+            "16": 13.45772,
+            "17": 13.46518,
+            "18": 13.47306,
+            "19": 13.48215,
+            "20": 13.49181,
+            "21": 13.50077,
+            "22": 13.50924,
+            "23": 13.51827,
+            "24": 13.52583,
+            "25": 13.53513,
+            "26": 13.54386,
+            "27": 13.5522,
+            "28": 13.56083,
+            "29": 13.56953,
+            "30": 13.57774,
+            "31": 13.58593,
+            "32": 13.59459
+          },
+          "last4_mean": 13.5819475
+        }
+      },
+      "observer_last4_mean": {
+        "latent_median": 0.07166793942451477,
+        "latent_p90": 0.23950510174036027,
+        "raw_median": 7.51569789648056,
+        "raw_p90": 9.977170360088348,
+        "action_rate": 1.4133123623932937,
+        "action_acceleration": 3.1544531173259496,
+        "foot_slip_per_step_m": 0.004637911937570224,
+        "contact_impulse_total": 219.04054576968244,
+        "contact_force_peak": 10733.4443359375,
+        "undesired_contact_rate": 0.13936360677083334,
+        "torque_saturation": 0.004264743848778736,
+        "joint_limit_proximity": 0.25398985043580885,
+        "energy_proxy": 285.6954119524633,
+        "action_delay_mean_steps": 2.812792956829071,
+        "action_delay_nonzero_fraction": 0.8082031309604645
+      },
+      "observer_rows": 32,
+      "live_delay_final": {
+        "action_delay_actuator_groups": 5,
+        "action_delay_num_lags": 2560,
+        "action_delay_min_steps": 0,
+        "action_delay_max_steps": 8,
+        "action_delay_mean_steps": 2.944531202316284,
+        "action_delay_nonzero_fraction": 0.8226562738418579,
+        "action_delay_histogram": [
+          454,
+          404,
+          397,
+          329,
+          304,
+          246,
+          187,
+          127,
+          112
+        ]
+      },
+      "seed": 8602,
+      "mode": "ta_latgate_50",
+      "branch_id": "curriculum_comparison_ne512_20260828_131929_latgate_32_s8602_ta_latgate_50",
+      "curriculum_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8602/ta_latgate_50/curriculum_curriculum_comparison_ne512_20260828_131929_latgate_32_s8602_ta_latgate_50.jsonl",
+      "curriculum_rows": 32,
+      "final_lambda": 0.7720542252151967,
+      "final_integral": 1.0,
+      "mean_return_observed": true,
+      "return_guard_trips": 0,
+      "scalable_terms": [
+        "add_joint_default_pos",
+        "base_com",
+        "physics_material",
+        "push_robot",
+        "randomize_action_delay",
+        "randomize_rigid_body_mass"
+      ],
+      "arm_spec": {
+        "curriculum_mode": "lucid",
+        "anchor_ratio": 0.5,
+        "yoked_source": null,
+        "yoked_cross_seed": false,
+        "term_lambda_overrides": {
+          "add_joint_default_pos": 1.0,
+          "base_com": 1.0,
+          "physics_material": 1.0,
+          "push_robot": 1.0,
+          "randomize_rigid_body_mass": 1.0
+        },
+        "yoked_schedule_path": null
+      },
+      "tace_final": {
+        "num_anchor": 256,
+        "num_focus": 256,
+        "anchor_ratio": 0.5,
+        "consolidating": false,
+        "dispatch": {
+          "add_joint_default_pos": {
+            "term": "add_joint_default_pos",
+            "calls": {
+              "anchor": 617,
+              "focus": 508
+            },
+            "env_counts": {
+              "anchor": 1499,
+              "focus": 1144
+            },
+            "anchor_params": {
+              "pos_distribution_params": [
+                -0.01,
+                0.01
+              ]
+            }
+          },
+          "base_com": {
+            "term": "base_com",
+            "calls": {
+              "anchor": 617,
+              "focus": 508
+            },
+            "env_counts": {
+              "anchor": 1499,
+              "focus": 1144
+            },
+            "anchor_params": {
+              "com_range": {
+                "x": [
+                  -0.025,
+                  0.025
+                ],
+                "y": [
+                  -0.05,
+                  0.05
+                ],
+                "z": [
+                  -0.05,
+                  0.05
+                ]
+              }
+            }
+          },
+          "physics_material": {
+            "term": "physics_material",
+            "calls": {
+              "anchor": 617,
+              "focus": 508
+            },
+            "env_counts": {
+              "anchor": 1499,
+              "focus": 1144
+            },
+            "anchor_params": {
+              "static_friction_range": [
+                0.3,
+                1.6
+              ],
+              "dynamic_friction_range": [
+                0.3,
+                1.2
+              ],
+              "restitution_range": [
+                0.0,
+                0.5
+              ]
+            }
+          },
+          "push_robot": {
+            "term": "push_robot",
+            "calls": {
+              "anchor": 622,
+              "focus": 630
+            },
+            "env_counts": {
+              "anchor": 1392,
+              "focus": 1487
+            },
+            "anchor_params": {
+              "velocity_range": {
+                "x": [
+                  -0.5,
+                  0.5
+                ],
+                "y": [
+                  -0.5,
+                  0.5
+                ],
+                "z": [
+                  -0.2,
+                  0.2
+                ],
+                "roll": [
+                  -0.52,
+                  0.52
+                ],
+                "pitch": [
+                  -0.52,
+                  0.52
+                ],
+                "yaw": [
+                  -0.78,
+                  0.78
+                ]
+              }
+            }
+          },
+          "randomize_action_delay": {
+            "term": "randomize_action_delay",
+            "calls": {
+              "anchor": 617,
+              "focus": 508
+            },
+            "env_counts": {
+              "anchor": 1499,
+              "focus": 1144
+            },
+            "anchor_params": {
+              "delay_range": [
+                0.0,
+                8.0
+              ]
+            }
+          },
+          "randomize_rigid_body_mass": {
+            "term": "randomize_rigid_body_mass",
+            "calls": {
+              "anchor": 617,
+              "focus": 508
+            },
+            "env_counts": {
+              "anchor": 1499,
+              "focus": 1144
+            },
+            "anchor_params": {
+              "mass_distribution_params": [
+                0.8,
+                1.5
+              ]
+            }
+          }
+        },
+        "anchor_delay_mean_steps": 3.8265624046325684,
+        "anchor_delay_max_steps": 8,
+        "anchor_delay_nonzero_fraction": 0.890625,
+        "focus_delay_mean_steps": 2.0625,
+        "focus_delay_max_steps": 6,
+        "focus_delay_nonzero_fraction": 0.754687488079071
+      },
+      "consolidation_rows": 0,
+      "capsule": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8602/ta_latgate_50/capsules/curriculum_comparison_ne512_20260828_131929_latgate_32_s8602_ta_latgate_50_final.capsule.pt",
+      "checkpoint": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260828_131929_latgate_32/seed_8602/ta_latgate_50/final_checkpoint.pt",
+      "checkpoint_exported": true
+    }
+  },
+  "mode_summary": {
+    "lucid_latgate": {
+      "num_seeds": 3,
+      "metrics": {
+        "Mean rewards": {
+          "per_seed": {
+            "8600": 15.54731,
+            "8601": 15.7201375,
+            "8602": 13.266265
+          },
+          "mean": 14.844570833333334,
+          "sample_std": 1.3695818025366655
+        },
+        "Mean length": {
+          "per_seed": {
+            "8600": 192.465,
+            "8601": 198.14,
+            "8602": 171.24
+          },
+          "mean": 187.28166666666667,
+          "sample_std": 14.179305636501848
+        },
+        "Mean entropy": {
+          "per_seed": {
+            "8600": 13.5888025,
+            "8601": 13.58554,
+            "8602": 13.5905825
+          },
+          "mean": 13.588308333333332,
+          "sample_std": 0.0025573134503485188
+        },
+        "observer/latent_p90": {
+          "mean": 0.34906430045763653,
+          "sample_std": 0.011183043010822765
+        },
+        "observer/foot_slip_per_step_m": {
+          "mean": 0.0041129218264383816,
+          "sample_std": 3.1789418845953936e-05
+        },
+        "observer/torque_saturation": {
+          "mean": 0.003648546006944444,
+          "sample_std": 0.0004674012248843886
+        },
+        "observer/energy_proxy": {
+          "mean": 255.3447348303953,
+          "sample_std": 3.0377147096087693
+        },
+        "observer/action_delay_mean_steps": {
+          "mean": 1.9039062360922496,
+          "sample_std": 0.04199311994194497
+        },
+        "observer/action_delay_nonzero_fraction": {
+          "mean": 0.7228841235240301,
+          "sample_std": 0.013032387482288828
+        }
+      },
+      "final_lambda_mean": 0.743611916825056,
+      "all_complete": true
+    },
+    "ta_latgate_50": {
+      "num_seeds": 3,
+      "metrics": {
+        "Mean rewards": {
+          "per_seed": {
+            "8600": 12.6355125,
+            "8601": 12.3141025,
+            "8602": 11.8926825
+          },
+          "mean": 12.280765833333334,
+          "sample_std": 0.3725353704459939
+        },
+        "Mean length": {
+          "per_seed": {
+            "8600": 177.51749999999998,
+            "8601": 176.47,
+            "8602": 169.6375
+          },
+          "mean": 174.54166666666666,
+          "sample_std": 4.279305093509148
+        },
+        "Mean entropy": {
+          "per_seed": {
+            "8600": 13.58232,
+            "8601": 13.5816775,
+            "8602": 13.5819475
+          },
+          "mean": 13.581981666666666,
+          "sample_std": 0.000322609800429563
+        },
+        "observer/latent_p90": {
+          "mean": 0.16677318066358568,
+          "sample_std": 0.09394201607638177
+        },
+        "observer/foot_slip_per_step_m": {
+          "mean": 0.004481006809497197,
+          "sample_std": 0.00014604071660309542
+        },
+        "observer/torque_saturation": {
+          "mean": 0.004380500179597701,
+          "sample_std": 0.00021710672911339632
+        },
+        "observer/energy_proxy": {
+          "mean": 280.61473585200736,
+          "sample_std": 5.218548546016653
+        },
+        "observer/action_delay_mean_steps": {
+          "mean": 2.806933601697286,
+          "sample_std": 0.009152641681100115
+        },
+        "observer/action_delay_nonzero_fraction": {
+          "mean": 0.8030273467302322,
+          "sample_std": 0.008545332864693535
+        }
+      },
+      "final_lambda_mean": 0.762689212561528,
+      "all_complete": true
+    }
+  },
+  "training_comparison": {},
+  "verified": [
+    "every branch completed and exported a final SONIC-compatible checkpoint",
+    "all five live actuator groups used delayed actuators",
+    "all six DR channels were runtime-scalable",
+    "LUCID received SONIC objective/rewards for its return guard"
+  ],
+  "not_yet_verified": [
+    "held-out ID-clean, OOD-heavy, and 60 ms checkpoint evaluation",
+    "training curves alone do not establish final policy generalization"
+  ]
+}

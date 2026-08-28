@@ -795,3 +795,24 @@ have receipts for everything; keep the paper reproducible from them.
   and keep the five benign channels at full strength — `lucid_latgate` and
   `ta_latgate_50` — the minimal two-group LUCID-MC, preregistered in
   `latgate_preregistration_20260828.json`.
+- **16:58 — Stage 10 (latency-gated arms, 512 envs, 32 it) — negative.** Receipt
+  `curriculum_robustness_ne128_20260828_133913.json`.
+
+  | success % @512/32 | off | lucid | **lucid_latgate** | ta_lucid_50 | **ta_latgate_50** | fixed |
+  |---|---:|---:|---:|---:|---:|---:|
+  | id_clean | 91.83 | 91.18 | 91.18 | 89.22 | 86.93 | 87.58 |
+  | dr_050 | 67.65 | 68.30 | 66.67 | 72.88 | 72.55 | 74.51 |
+  | dr_full | 60.78 | 61.11 | 59.48 | 65.69 | 64.05 | 68.30 |
+
+  H_G1 ✗, H_G2 ✗ (latgate ≈ lucid ≈ off), H_G3: the anchor adds +4.6 dr_full for −4.3
+  clean. **Synthesis on the lossless base:** the five non-latency channels are inert for
+  deployment robustness (stage 7 already showed they are harmless for retention);
+  *latency dose alone* orders every arm on both axes — off (0) < lucid ≈ latgate (λ≈0.75
+  on one tracked env) < ta50 ≈ ta_latgate50 < fixed (full) on dr_full, and the reverse
+  on clean. The gap-gated scalar controller is, at 32 iterations, a dose knob that lands
+  at ≈0.75; its online feedback beats a yoked schedule (stage 4) but there is no free
+  lunch here. What remains decisive is **stage 9 @128 it (eval running)**: if fixed's
+  clean collapses with budget while the gated/anchored arms hold, the curriculum's
+  value is *retention over budget* — a legitimate claim. If everything holds at 128 on
+  the lossless base, the honest paper is the sustainability + latency-tradeoff
+  study with TACE as a dose control.
