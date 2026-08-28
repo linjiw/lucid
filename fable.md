@@ -905,3 +905,53 @@ have receipts for everything; keep the paper reproducible from them.
   Every horizon result here was measured at `num_envs=128` against a policy released after
   training at 4096. If full-envelope DR turns out to be sustainable at 256, the stage-5/6
   mechanism reading is a small-batch artifact and gets retracted in those words.
+
+- **2026-08-28 07:48 — Stage 8 training (LUCID-S, 5 arms × 3 seeds × 128 it).** Receipt
+  `curriculum_comparison_ne128_20260828_065416.json`; 15 branches, all complete. Evaluation
+  is the endpoint and is still running — **training reward is not comparable across these
+  arms**, because each trains on a different distribution, and it is reported below only
+  as controller diagnostics.
+
+  | arm | strata/guard | terminal λ | guard trips | realized delay |
+  |---|---|---:|---|---:|
+  | `lucid` (stage 7) | 1 / absolute | 0.339 | 12 / 7 / 7 | 1.49 |
+  | `lucid_rg` | 1 / **relative** | **0.788** | 4 / 5 / 5 | 2.63 |
+  | `lucid_s4` | 4 / absolute | 0.618 | 5 / 4 / 2 | 1.40 |
+  | `lucid_s4_rg` | 4 / **relative** | 0.712 | 4 / 4 / 2 | 1.92 |
+  | `ta_lucid_50` | 1 / absolute | **0.191** | **28 / 19 / 14** | 2.17 |
+  | `ta_lucid_50_s4_rg` | 4 / **relative** | **0.838** | 4 / 4 / 2 | 3.03 |
+
+  **H-S2 fails as written and succeeds as a direction.** I preregistered "terminal λ ≥ 0.9
+  and ≤ 2 guard trips" for `lucid_rg`; it delivered 0.788 and 4/5/5. Against its own
+  control `lucid`, though, the relative guard **cut trips from 12/7/7 to 4/5/5 and lifted
+  terminal λ from 0.339 to 0.788**. The thresholds were too aggressive; the effect is large
+  and in the predicted direction. Recorded as a failed hypothesis with its effect size, not
+  rewritten.
+
+  **A defect the campaign found on its own: the anchor cohort contaminates the return
+  guard.** `ta_lucid_50` with the absolute floor tripped **28 / 19 / 14** times and ended at
+  terminal λ **0.191** (0.035 / 0.130 / 0.406) — the focus half is training at essentially
+  no randomization. TACE was careful to make the *gap* focus-only, and it worked: this arm
+  has the lowest gap of any (0.066), because the focus environments really are easy. But the
+  **return** the guard reads is population-wide, and half that population is pinned at λ = 1
+  by construction. The anchor drags mean return under the floor permanently, so the guard
+  fires forever. The isolation was applied to one controller input and not the other.
+
+  Two consequences. First, it **re-reads the stage-5 result**: `ta_lucid_50@128` was the best
+  arm on the first host (66.01 clean), and this says what it actually was — 50% of
+  environments at λ = 1 and the other 50% at λ ≈ 0. That is not "a 50% anchor", it is the
+  *widest two-point intensity mixture in the study*, which is precisely the mixture reading
+  rather than a coincidence. Second, the fix is already in and is not a new mechanism: a
+  guard that judges a return against **its own recent history** is immune to a constant
+  cohort offset, and `ta_lucid_50_s4_rg` confirms it — same 50% anchor, 4/4/2 trips,
+  terminal λ 0.838. So the relative guard earns its place twice over, for two independent
+  reasons: reward scale does not port across machines, and a population return is not the
+  focus cohort's return.
+
+  Note also that `ta_lucid_50_s4_rg` carries the **highest realized latency dose of any arm**
+  (3.03 steps). Given stage 7, that is the arm most exposed to the one channel that does the
+  damage — which is exactly the tension stage 9's latency cap is preregistered to resolve.
+  `lucid_s4` vs `lucid` and `lucid_s4` vs `lucid_s4_rg` separate strata from guard; the
+  anchor arm's own decomposition (`ta_lucid_50_rg`) is **not** in this campaign, and whether
+  it is worth an hour of GPU is deliberately left until the evaluation is in rather than
+  guessed at now.
