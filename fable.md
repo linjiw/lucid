@@ -1011,3 +1011,45 @@ have receipts for everything; keep the paper reproducible from them.
   motion level too. The preregistered rules are still scored, unchanged, from the same
   three-seed means. Pairing is refused unless the panel order is provably shared.
   Suite **1,246 green**.
+
+- **2026-08-28 08:41 — The untrained-origin reference, complete (3 eval seeds).**
+  Receipt `curriculum_robustness_ne128_20260828_074808.json`. Frozen policy, no learning,
+  the same 102-motion panel and eval seeds as every trained arm.
+
+  | preset | mean | per seed |
+  |---|---:|---|
+  | `id_clean` | **89.54** | 90.20 / 91.18 / 87.25 |
+  | `dr_050` | 66.01 | 68.63 / 66.67 / 62.75 |
+  | `dr_full` | **60.46** | 60.78 / 62.75 / 57.84 |
+  | `dr_125` | 56.21 | 55.88 / 63.73 / 49.02 |
+  | `latency_60ms` | **0.00** | 0.00 / 0.00 / 0.00 |
+
+  Profile AUC (0.2/0.4/0.3/0.1 over s ∈ {0, 0.5, 1, 1.25}) = **68.07**. That is the bar
+  every arm has to clear, and on the first host's 128-iteration table none of them come
+  close on any cell. It is also worth stating plainly that the origin degrades *gracefully*
+  — 89.5 → 66.0 → 60.5 → 56.2 across the severity grid, and it is still above 56% at
+  1.25× the training envelope it never trained on. The released policy is already
+  substantially robust to the five non-latency channels; what it cannot do at all is
+  tolerate a pinned 60 ms of actuation delay.
+
+  **Stage 12, the budget dose-response, is queued as a direct consequence.** The horizon
+  study can say DR fine-tuning hurts at 128 iterations; it cannot say whether some
+  smaller budget helps, because the 32-iteration numbers were measured on the other host
+  with a different origin. The 32-iteration parity cell already exists here and was never
+  evaluated, so stage 12 adds `off` and `ta_lucid_50_s4_rg` at 32 iterations and
+  evaluates all four — giving **0 → 32 → 128 iterations for four arms with origin, pool,
+  panel and eval seeds all held fixed**. If no budget beats 68.07 AUC, the honest headline
+  is that DR fine-tuning of this released policy at accessible scale is net-destructive,
+  and the contribution is the diagnosis plus the audit protocol, exactly as the stage-8
+  decision rule already commits us to.
+
+  The decisive control for *why* is already in flight and needs nothing new: stage 7's
+  evaluation contains `off`, so the decomposition origin → `off` → {`fixed_nolat`,
+  `fixed_latonly`} → `fixed` separates the cost of fine-tuning at all from the cost of
+  each channel group. If `off` lands near the origin, only DR is destructive; if `off`
+  drops with it, the fine-tuning setup itself is (128 environments against a policy
+  released from 4,096, at unchanged PPO hyperparameters), and stage 10 becomes the whole
+  story.
+
+  Driver chain, all four armed and sequential on the one card:
+  campaign (origin → stage 7 → stage 8) → stage 10 → stage 9 → stage 12 → stage 11.
