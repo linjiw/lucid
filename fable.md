@@ -775,3 +775,23 @@ have receipts for everything; keep the paper reproducible from them.
   × 3 seeds at 512 envs, 32 it now and 128 it queued. This is the first curriculum
   comparison in the program on a non-destructive base; H_R2 (a DR arm beats off on
   dr_full by > 3 while holding clean) is the first possible *capability gain*.
+- **13:17 — Stage 9, 32 it @ 512 envs (lossless base).** Receipt
+  `curriculum_robustness_ne128_20260828_102734.json`.
+
+  | success % | off | fixed | lucid | ta_lucid_50 | origin | release |
+  |---|---:|---:|---:|---:|---:|---:|
+  | id_clean | **91.83** | 87.58 | 91.18 | 89.22 | 94.12 | 97.39 |
+  | dr_050 | 67.65 | **74.51** | 68.30 | 72.88 | 67.65 | 71.24 |
+  | dr_full | 60.78 | **68.30** | 61.11 | 65.69 | 62.42 | 69.61 |
+
+  H_R1 ✓ (off holds 91.8 clean). **H_R2 ✓ for `ta_lucid_50`: +4.9 dr_full over off with
+  clean −2.6 — the first genuine robustness gain of the program**; `fixed` gains +7.5 but
+  costs −4.3 clean (fails the retention clause); plain `lucid` gains +0.3 (λ≈0.75 is
+  not enough exposure). H_R3 tie (ta50 vs fixed: clean +1.6, dr_full −2.6). Both fixed
+  and ta50 beat the *release* on dr_050. Picture: a dose–retention Pareto line
+  (robustness ∝ target-envelope dose, clean ∝ inverse); the anchor is a controllable
+  point on it. Stage 9 @128 it is running (H_R4). **Stage 10 (launched concurrently):**
+  since latency is the only destabilizer (stage 7), gate *only* latency with the gap
+  and keep the five benign channels at full strength — `lucid_latgate` and
+  `ta_latgate_50` — the minimal two-group LUCID-MC, preregistered in
+  `latgate_preregistration_20260828.json`.

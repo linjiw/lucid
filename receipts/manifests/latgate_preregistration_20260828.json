@@ -1,0 +1,16 @@
+{
+  "kind": "lucid_latgate_preregistration",
+  "created_at": "2026-08-28T13:25:00-04:00",
+  "author": "Fable (autonomous)",
+  "motivation": "Stage 7: actuation latency is the only destabilizing channel; the other five are benign (fixed_nolat clean 70.9 > off 66.7 @128). Stage 9 @512/32: fixed gains +7.5 dr_full at -4.3 clean; ta_lucid_50 +4.9 at -2.6; lucid +0.3. A scalar lambda under-exposes the benign channels while over-exposing latency. Gate latency alone.",
+  "design": {"regime": "512 envs, default optimizer (stage 8 decision)", "iterations": 32, "warmup_iterations": 10, "seeds": [8600, 8601, 8602], "arms": {"lucid_latgate": "five non-latency channels pinned at lambda=1; PI lambda moves actuation delay only", "ta_latgate_50": "same, plus 50% anchor cohort at the full envelope"}, "references": "stage 9 c1_32 arms off/fixed/lucid/ta_lucid_50 (curriculum_robustness_ne128_20260828_102734)", "controller": "unchanged"},
+  "evaluation": {"presets": ["id_clean", "dr_050", "dr_full", "latency_60ms"], "primary": "dr_full and id_clean success"},
+  "hypotheses": {
+    "H_G1_dominates_fixed": "lucid_latgate id_clean >= fixed + 3 (i.e. >= 90.6) AND dr_full >= fixed - 2 (>= 66.3)",
+    "H_G2_beats_lucid": "lucid_latgate dr_full > lucid + 3 (> 64.1)",
+    "H_G3_anchor_adds": "ta_latgate_50 dr_full >= lucid_latgate dr_full, clean within 3",
+    "H_G4_release_bar": "any latgate arm dr_full > 69.61 with id_clean >= 95 (paper-grade bar; not expected at 32 it)"
+  },
+  "decision_rules": {"ties": "< 3 pts on three seeds", "negative": "if H_G1 fails, gating latency alone is insufficient; report and test 128 it before any further arm"},
+  "verified": [], "not_yet_verified": ["all; written before launch"]
+}
