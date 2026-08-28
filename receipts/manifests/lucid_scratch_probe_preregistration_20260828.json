@@ -1,0 +1,54 @@
+{
+  "kind": "lucid_scratch_probe_preregistration",
+  "created_at": "2026-08-28T13:47:40.668416-04:00",
+  "author": "Claude (autonomous PI, second host)",
+  "stage": "the long from-scratch probe -- does episode length ever take off?",
+  "why_the_first_launch_was_stopped": {
+    "measured": "At 1280 envs with terminations=tracking/base, over 235 iterations: episode length flat at 22.7, ee_body_pos ended 90.3% of episodes, anchor_pos 6.2%, anchor_ori_full 5.9%, time_out 0.8%.",
+    "reading": "The robot was NOT falling. Pelvis height and torso orientation were within bounds in ~93% of episodes; episodes ended because a wrist or an ankle was more than 0.25 m off in Z. tracking/base moved the wall from foot_pos_xyz to ee_body_pos, it did not remove it. A from-scratch probe must be gated by falling, not by tracking accuracy, or it measures the threshold."
+  },
+  "design": {
+    "from_scratch": true,
+    "num_envs": 1024,
+    "num_envs_rationale": "measured VRAM ladder on this exact configuration (receipt vram_ladder_20260828_131226): peak = 4002 + 2.386*num_envs MiB. 1024 -> 7076 MiB total device, 6326 MiB training, which keeps headroom under the 8 GB budget even with another user's job on the card. 2.32 s/iter, so MORE iterations per hour than 1280 (2.71 s/iter) -- and gradient steps, not environments, are the budget that matters: PPO does num_learning_epochs x num_mini_batches = 20 gradient steps per iteration regardless of num_envs.",
+    "iterations": 20000,
+    "iterations_rationale": "12.9 h, 491.5M transitions, 400,000 gradient steps. The released SONIC policy took 41,550 iterations = 831,000 gradient steps, so this is ~48% of its gradient steps and ~0.09% of its samples (it trained on 128 GPUs; the earlier 4.08e9-transition figure was single-GPU arithmetic and 128x low).",
+    "terminations": "the shipped base_adaptive_strict_ori_foot_xyz composition with its four thresholds reverted to the values the terms/*.yaml files themselves declare: anchor_pos 0.5, ee_body_pos 0.5, foot_pos_xyz 0.5, anchor_ori_full 1.0. Every number is upstream's own; none is chosen by us. This keeps the adaptive low-pelvis allowance that two of the 16 clips genuinely use, which tracking/base drops.",
+    "motions": "train016, 16 clips from the adaptation partition, zero overlap with the dev panel",
+    "randomization": "no event-manager DR (lambda=0). NOT 'no randomization': the motion command term applies reset randomization on every training reset regardless of lambda -- root velocity +-0.5 m/s, +-0.78 rad/s yaw, pelvis +-0.05 m, joints +-0.1 rad. dr_scaling never touches the command manager. Every receipt now records this.",
+    "capsules": [
+      100,
+      250,
+      500,
+      1000,
+      2000,
+      4000,
+      8000,
+      12000,
+      16000,
+      20000
+    ],
+    "wandb": "project lucid-scratch, streaming live"
+  },
+  "hypotheses": {
+    "H_P1": "episode length rises: the trailing-500 mean at iteration 20000 exceeds the trailing-500 mean at iteration 500 by at least 50%.",
+    "H_P2": "the gate becomes a fall gate rather than a tracking gate: time_out plus anchor_pos plus anchor_ori_full rises above 0.30 of terminations, from 0.13 at the start.",
+    "H_P3": "reward rises monotonically in the trailing-500 mean across the last four capsule horizons."
+  },
+  "stopping_rule_written_before_launch": {
+    "no_further_relaxation": "This is ONE revert-to-upstream-defaults move and there will not be a second. If under restored defaults any single non-time_out termination term again exceeds 0.70 while anchor_pos and anchor_ori_full both stay below 0.15, we stop relaxing and report that this pool's termination structure makes from-scratch learning infeasible without changing the task itself. Writing this down before launch is what separates it from tuning.",
+    "early_abort": "If at iteration 2000 the trailing-500 episode length has not risen at least 10% above the trailing-500 at iteration 500, the probe is reported as flat and stopped; 12.9 h is not spent confirming a flat line.",
+    "if_H_P1_fails": "The honest finding is that SONIC-scale whole-body tracking is not learnable from scratch at single-GPU scale, and the curriculum question must move to a smaller task -- fewer joints, locomotion-only motions, or a smaller actor-critic. That is a result, not a failure."
+  },
+  "known_confounds_recorded_not_fixed": [
+    "encoder_sample_probs gives a 50/50 g1/teleop split when smpl_motion_file=dummy, so half the rollout trains 3-point-VR tracking scored on full-body criteria. This is SONIC's own recipe; changing it changes the task.",
+    "train016 is a uniform draw over the adaptation partition: 4 walk, 3 jump, 3 run, 2 search, 1 dance, 1 injured, 1 carry, 1 other. Only one plain forward walk. Reselecting the pool after seeing a flat result would be tuning; if done at all it must be a separate preregistered arm.",
+    "PPO hyperparameters (actor_learning_rate 2e-5, max_grad_norm 0.1, init_noise_std 0.05, num_mini_batches 4) are unchanged. They are identical across all four shipped exp configs, so they are the house recipe rather than a fine-tuning artefact. Changing them is performance tuning and would need its own preregistration."
+  ],
+  "verified": [],
+  "not_yet_verified": [
+    "all; written before launch"
+  ],
+  "git_sha": "104f3b7ac8ba980587151258b5db11a0f60c93ae",
+  "logical_sha256": "c19f67d259fce6457fdd7312d9f9d09ecea28c98c144811d9651856af1fb8940"
+}

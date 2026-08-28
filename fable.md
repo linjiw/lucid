@@ -1252,3 +1252,84 @@ have receipts for everything; keep the paper reproducible from them.
   `audit_evaluation_receipt.py` and their tests appeared untracked at 11:36. They are left
   alone and not committed here; three of their tests currently fail. The 1,257 tests
   belonging to this line of work all pass.
+
+- **2026-08-28 11:40–14:10 — PI redirection: stop fine-tuning, train from scratch, and
+  shrink the task until learning is observable.**
+
+  *Why the old design was answering the wrong question.* Stage 7's held-out decomposition
+  showed plain continuation with **no event-manager DR** (`off`) costs **23.04 profile-AUC
+  points** against the untrained origin (95% CI [−28.33, −17.88], paired over 102 motions
+  × 3 seeds), while adding the full six-channel envelope costs a further 2.65 (CI [−7.06,
+  +1.76], covering zero). Every arm comparison anchored on the release checkpoint was
+  measuring **how fast we damage a policy trained on 5.23 × 10¹¹ transitions across 128
+  GPUs**, not whether a curriculum helps learning. The training curves rule out the
+  "under-trained" objection: every arm peaks between iteration 17 and 51 and declines
+  monotonically, `off` included.
+
+  *Compute, corrected.* The release used **128 GPUs**; my earlier 4.08 × 10⁹-transition
+  figure was single-GPU arithmetic and 128× low. But samples are the wrong currency: PPO
+  performs `num_learning_epochs × num_mini_batches` = **20 gradient steps per iteration
+  regardless of `num_envs`**. The release took 41,550 iterations = 831,000 gradient steps.
+  20,000 iterations buys **~48% of its gradient steps** against ~0.09% of its samples.
+  That is what makes a from-scratch probe arguable at all.
+
+  *The real blocker was never compute — it was a termination threshold.* From scratch,
+  under the stock **training** preset (which is stricter than the **eval** preset):
+  `foot_pos_xyz` 0.55, `ee_body_pos` 0.38, `anchor_ori` 0.13, **`time_out` 0.0007** — 93%
+  of episodes die on tracking error in 0.25 s and essentially none reach the end of a
+  motion, against 76% time-out for the trained policy. `threshold_adaptive` is *not* a
+  curriculum; it only loosens for crouching clips. Relaxing in two steps raised episode
+  length 12.8 → 22.7 → **30.4**, but each step merely moved the wall between tracking
+  terms, and **`anchor_pos` stayed at 0.000 throughout**: the robot never falls. It stands
+  and is killed for limb placement.
+
+  | thresholds | length | time_out | dominant term |
+  |---|---:|---:|---|
+  | strict (0.15/0.15/0.2/0.2) | 12.8 | 0.002 | foot 0.55, ee 0.38 |
+  | `tracking/base` (0.25, no foot term) | 22.7 | 0.008 | **ee 0.903** |
+  | upstream term defaults (0.5/0.5/0.5/1.0) | 30.4 | 0.003 | **foot 0.696** |
+
+  Note `tracking/base` composes the *non-adaptive* terms at 0.25, **tighter** than the
+  adaptive terms' own 0.5 default, and drops the low-pelvis allowance two clips need — so
+  it was the wrong relaxation. The launcher now takes `--termination-thresholds default`,
+  reverting the four thresholds the strict preset overrides to the values their own
+  `terms/*.yaml` declare. Every number is upstream's; none is ours. Preregistered as **one**
+  revert with no second relaxation (`lucid_scratch_probe_preregistration_20260828.json`,
+  logical sha `c19f67d259fce645`).
+
+  *A label that was wrong all day.* λ scales **event-manager** terms only. The motion
+  command term applies reset randomization on every training reset regardless of λ — root
+  velocity ±0.5 m/s, ±0.78 rad/s yaw, pelvis ±0.05 m, joints ±0.1 rad — because
+  `dr_scaling` has **zero** references to the command manager. Arms at λ=0 were called
+  "no DR" throughout, including in the stage-7 decomposition. They are *"no event-manager
+  DR"*. Every receipt now records the distinction.
+
+  *Five defects, all silent.* Four more found today, and the pattern is now the paper's
+  methodological core — **every one produced a plausible number rather than an error**:
+  (1) `profile_auc` returns points and `paired()` multiplied by 100 again, so H_S1's
+  evidence read −137.25 for a true −1.37 pts; (2) `merge_summaries` used `dict.update()`,
+  dropping seeds when two receipts share an arm; (3) the evaluator prints its receipt path
+  *after* the try/finally, so the crashed stage-8 run wrote a complete 443 KB receipt that
+  no driver could see — **my "wrote no receipt" was wrong, and 54 cells were nearly re-run
+  on that basis**; (4) `LUCID_GPU_WAIT_SECONDS` defaulted to 0, making the capacity gate a
+  kill switch rather than a queue, which is what killed stage 8 in the first place. All
+  four fixed with regression tests; suite **1,262 green**.
+
+  *Single-motion testbed.* With 16 diverse clips a fresh policy cannot track any of them
+  well enough to see past the first second. On a single arms-still walk
+  (`walk_hands_on_back_loop_002`, 4.03 s), `ee_body_pos` falls **0.903 → 0.000** and
+  `anchor_pos` stays 0.000: the sole failure mode becomes foot placement (`foot_pos_xyz`
+  0.977). That is a well-posed task with one axis of difficulty. Four candidates are under
+  test, chosen from the pool's own `family` metadata **before any of them ran**.
+
+  *Discipline note.* Choosing a clip after seeing which trains best would be selecting a
+  result. What is being selected is a **testbed** on which from-scratch learning
+  demonstrably happens; every curriculum arm then runs on that same fixed task. The
+  selection is setup and is reported as setup. If none of the four learns, that is the
+  answer to the feasibility question, and further clip-shopping would not be honest.
+
+  *Infrastructure.* `--from-scratch` (verified fresh: `checkpoint: None`, `resume: None`,
+  no "Resuming training from" in the log), `--horizons` for capsules along one trajectory,
+  `--keys` for named single-motion subsets that still refuse `dev`/`test`, `--wandb-project`
+  streaming live to `lucid-scratch`, and a measured VRAM model — peak = 4002 + 2.386·N MiB,
+  so 1024 envs = 7,076 MiB total and 1280 = 7,887 (receipt `vram_ladder_20260828_131226`).

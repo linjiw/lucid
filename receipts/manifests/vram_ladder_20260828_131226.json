@@ -1,0 +1,173 @@
+{
+  "kind": "lucid_vram_ladder",
+  "schema_version": 1,
+  "created_at": "2026-08-28T13:15:33.187880-04:00",
+  "git_sha": "2c4cebc06acc216c62d2710d18e9fb445f2f893d",
+  "git_status_short": [
+    "?? gear_sonic/research/practice_utility/bin_sampler.py",
+    "?? gear_sonic/research/practice_utility/learnability_gate.py",
+    "?? scripts/practice_utility/audit_evaluation_receipt.py",
+    "?? scripts/practice_utility/run_gate_a.py",
+    "?? tests/practice_utility/test_bin_sampler.py",
+    "?? tests/practice_utility/test_learnability_gate.py"
+  ],
+  "config": {
+    "budget_mib": 8000,
+    "ladder": [
+      256,
+      512,
+      768,
+      1024,
+      1280
+    ],
+    "iterations": 8,
+    "motion_file": "/home/linjiw/lucid-sonic/pools/subsets/train016/robot_filtered",
+    "smpl_motion_file": "dummy",
+    "from_scratch": true,
+    "events": "tracking/lucid_curriculum, curriculum mode=off (lambda=0)",
+    "peak_is": "total device memory, so anything else resident counts against the budget"
+  },
+  "rungs": [
+    {
+      "num_envs": 256,
+      "fits_budget": true,
+      "exit_code": 0,
+      "wall_seconds": 32.25520253899958,
+      "samples": 32,
+      "baseline_used_mib": 751.0,
+      "peak_used_mib": 5374.0,
+      "peak_over_baseline_mib": 4623.0,
+      "max_util_pct": 74.0,
+      "throughput": {
+        "iterations_parsed": 8,
+        "num_envs": 256,
+        "steps_per_env": 24,
+        "transitions_per_iteration": 6144,
+        "median_steps_per_second": 3771.0,
+        "median_iteration_seconds": 1.63,
+        "env_steps_per_second": 3769.325153374233,
+        "hours_per_128_iteration_branch": 0.05795555555555555
+      },
+      "log_path": "/home/linjiw/lucid-sonic/outputs/vram_ladder_ne256_20260828_131226.log"
+    },
+    {
+      "num_envs": 512,
+      "fits_budget": true,
+      "exit_code": 0,
+      "wall_seconds": 34.67925414400088,
+      "samples": 34,
+      "baseline_used_mib": 750.0,
+      "peak_used_mib": 5995.0,
+      "peak_over_baseline_mib": 5245.0,
+      "max_util_pct": 81.0,
+      "throughput": {
+        "iterations_parsed": 8,
+        "num_envs": 512,
+        "steps_per_env": 24,
+        "transitions_per_iteration": 12288,
+        "median_steps_per_second": 6590.0,
+        "median_iteration_seconds": 1.864,
+        "env_steps_per_second": 6592.2746781115875,
+        "hours_per_128_iteration_branch": 0.06627555555555556
+      },
+      "log_path": "/home/linjiw/lucid-sonic/outputs/vram_ladder_ne512_20260828_131226.log"
+    },
+    {
+      "num_envs": 768,
+      "fits_budget": true,
+      "exit_code": 0,
+      "wall_seconds": 37.02357876499809,
+      "samples": 37,
+      "baseline_used_mib": 750.0,
+      "peak_used_mib": 6592.0,
+      "peak_over_baseline_mib": 5842.0,
+      "max_util_pct": 82.0,
+      "throughput": {
+        "iterations_parsed": 8,
+        "num_envs": 768,
+        "steps_per_env": 24,
+        "transitions_per_iteration": 18432,
+        "median_steps_per_second": 8863.0,
+        "median_iteration_seconds": 2.08,
+        "env_steps_per_second": 8861.538461538461,
+        "hours_per_128_iteration_branch": 0.07395555555555555
+      },
+      "log_path": "/home/linjiw/lucid-sonic/outputs/vram_ladder_ne768_20260828_131226.log"
+    },
+    {
+      "num_envs": 1024,
+      "fits_budget": true,
+      "exit_code": 0,
+      "wall_seconds": 39.353986770998745,
+      "samples": 39,
+      "baseline_used_mib": 750.0,
+      "peak_used_mib": 7076.0,
+      "peak_over_baseline_mib": 6326.0,
+      "max_util_pct": 86.0,
+      "throughput": {
+        "iterations_parsed": 8,
+        "num_envs": 1024,
+        "steps_per_env": 24,
+        "transitions_per_iteration": 24576,
+        "median_steps_per_second": 10590.0,
+        "median_iteration_seconds": 2.321,
+        "env_steps_per_second": 10588.539422662645,
+        "hours_per_128_iteration_branch": 0.08252444444444446
+      },
+      "log_path": "/home/linjiw/lucid-sonic/outputs/vram_ladder_ne1024_20260828_131226.log"
+    },
+    {
+      "num_envs": 1280,
+      "fits_budget": true,
+      "exit_code": 0,
+      "wall_seconds": 43.372111858003336,
+      "samples": 43,
+      "baseline_used_mib": 750.0,
+      "peak_used_mib": 7887.0,
+      "peak_over_baseline_mib": 7137.0,
+      "max_util_pct": 89.0,
+      "throughput": {
+        "iterations_parsed": 8,
+        "num_envs": 1280,
+        "steps_per_env": 24,
+        "transitions_per_iteration": 30720,
+        "median_steps_per_second": 11347.0,
+        "median_iteration_seconds": 2.707,
+        "env_steps_per_second": 11348.356113779091,
+        "hours_per_128_iteration_branch": 0.09624888888888888
+      },
+      "log_path": "/home/linjiw/lucid-sonic/outputs/vram_ladder_ne1280_20260828_131226.log"
+    }
+  ],
+  "largest_fitting_num_envs": 1280,
+  "chosen": {
+    "num_envs": 1280,
+    "fits_budget": true,
+    "exit_code": 0,
+    "wall_seconds": 43.372111858003336,
+    "samples": 43,
+    "baseline_used_mib": 750.0,
+    "peak_used_mib": 7887.0,
+    "peak_over_baseline_mib": 7137.0,
+    "max_util_pct": 89.0,
+    "throughput": {
+      "iterations_parsed": 8,
+      "num_envs": 1280,
+      "steps_per_env": 24,
+      "transitions_per_iteration": 30720,
+      "median_steps_per_second": 11347.0,
+      "median_iteration_seconds": 2.707,
+      "env_steps_per_second": 11348.356113779091,
+      "hours_per_128_iteration_branch": 0.09624888888888888
+    },
+    "log_path": "/home/linjiw/lucid-sonic/outputs/vram_ladder_ne1280_20260828_131226.log"
+  },
+  "verified": [
+    "each rung ran the real launcher, with the delayed actuator and research callbacks the campaign will use",
+    "peak sampled once per second for the whole subprocess lifetime"
+  ],
+  "not_yet_verified": [
+    "that peak memory over 8 iterations bounds peak over thousands -- allocator growth and motion resampling could push it higher later",
+    "anything about learning; this measures memory and throughput only"
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "kind": "lucid_vram_ladder",
+  "schema_version": 1,
+  "created_at": "2026-08-28T13:07:18.150669-04:00",
+  "git_sha": "368e4d9211a6741eef86a384165ffd042e9389dc",
+  "git_status_short": [
+    "?? gear_sonic/research/practice_utility/bin_sampler.py",
+    "?? gear_sonic/research/practice_utility/learnability_gate.py",
+    "?? scripts/practice_utility/audit_evaluation_receipt.py",
+    "?? scripts/practice_utility/run_gate_a.py",
+    "?? scripts/practice_utility/run_vram_ladder.py",
+    "?? tests/practice_utility/test_bin_sampler.py",
+    "?? tests/practice_utility/test_learnability_gate.py"
+  ],
+  "config": {
+    "budget_mib": 8000,
+    "ladder": [
+      256,
+      512,
+      768,
+      1024,
+      1536
+    ],
+    "iterations": 8,
+    "motion_file": "/home/linjiw/lucid-sonic/pools/subsets/train016/robot_filtered",
+    "smpl_motion_file": "dummy",
+    "from_scratch": true,
+    "events": "tracking/lucid_curriculum, curriculum mode=off (lambda=0)",
+    "peak_is": "total device memory, so anything else resident counts against the budget"
+  },
+  "rungs": [],
+  "largest_fitting_num_envs": null,
+  "chosen": null,
+  "verified": [
+    "each rung ran the real launcher, with the delayed actuator and research callbacks the campaign will use",
+    "peak sampled once per second for the whole subprocess lifetime"
+  ],
+  "not_yet_verified": [
+    "that peak memory over 8 iterations bounds peak over thousands -- allocator growth and motion resampling could push it higher later",
+    "anything about learning; this measures memory and throughput only"
+  ]
+}

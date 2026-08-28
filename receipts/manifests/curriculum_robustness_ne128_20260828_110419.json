@@ -1,9 +1,9 @@
 {
   "kind": "lucid_frozen_checkpoint_robustness_evaluation",
   "schema_version": 1,
-  "created_at": "2026-08-28T12:32:38.996796-04:00",
+  "created_at": "2026-08-28T12:54:19.203314-04:00",
   "experiment_id": "curriculum_robustness_ne128_20260828_110419",
-  "git_sha": "e03c0babbee4f67ac6a7f95d3d96a585e078b86e",
+  "git_sha": "51d4da90f8b11ec3a4340de42ae86e168e055771",
   "git_status_short": [
     "?? gear_sonic/research/practice_utility/bin_sampler.py",
     "?? gear_sonic/research/practice_utility/learnability_gate.py",
@@ -10114,6 +10114,662 @@
         "failed_count": 46
       },
       "complete": true
+    },
+    "curriculum_robustness_ne128_20260828_110419_s8602_lucid_s4_rg_dr_full": {
+      "checkpoint_seed": 8602,
+      "evaluation_seed": 8702,
+      "mode": "lucid_s4_rg",
+      "preset": "dr_full",
+      "checkpoint": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne128_20260828_065416/seed_8602/lucid_s4_rg/final_checkpoint.pt",
+      "checkpoint_sha256": "a6e32de1b3dc9aa54373088704c6edc0e96d165ad507399a3a67f4823e484c90",
+      "metrics_path": "/home/linjiw/lucid-sonic/artifacts/curriculum_robustness_eval/curriculum_robustness_ne128_20260828_110419/seed_8602/lucid_s4_rg/dr_full/metrics_eval.json",
+      "log_path": "/home/linjiw/lucid-sonic/outputs/curriculum_robustness_ne128_20260828_110419_s8602_lucid_s4_rg_dr_full.log",
+      "runtime": {
+        "exit_code": 0,
+        "wall_seconds": 367.7811322790003,
+        "gpu": {
+          "samples": 183,
+          "start_free_mib": 11118.0,
+          "min_free_mib": 23.0,
+          "max_used_mib": 15786.0,
+          "max_gpu_util_pct": 100.0
+        }
+      },
+      "summary": {
+        "success_rate": 0.43137254901960786,
+        "progress_rate": 0.6263545584572735,
+        "mpjpe_g": 274.96792603698646,
+        "mpjpe_l": 40.7332418825382,
+        "foot_slip_per_step_m": 0.004067905136086093,
+        "undesired_contact_rate": 0.18675595238095238,
+        "torque_saturation": 0.003742131910235342,
+        "energy_proxy": 182.82542035976263,
+        "quality_missing_signals": [],
+        "active_dr_terms": [
+          "add_joint_default_pos",
+          "base_com",
+          "physics_material",
+          "push_robot",
+          "randomize_action_delay",
+          "randomize_rigid_body_mass"
+        ],
+        "dr_ranges": {
+          "add_joint_default_pos": {
+            "pos_distribution_params": [
+              -0.01,
+              0.01
+            ]
+          },
+          "base_com": {
+            "com_range": {
+              "x": [
+                -0.025,
+                0.025
+              ],
+              "y": [
+                -0.05,
+                0.05
+              ],
+              "z": [
+                -0.05,
+                0.05
+              ]
+            }
+          },
+          "physics_material": {
+            "static_friction_range": [
+              0.3,
+              1.6
+            ],
+            "dynamic_friction_range": [
+              0.3,
+              1.2
+            ],
+            "restitution_range": [
+              0.0,
+              0.5
+            ]
+          },
+          "push_robot": {
+            "velocity_range": {
+              "x": [
+                -0.5,
+                0.5
+              ],
+              "y": [
+                -0.5,
+                0.5
+              ],
+              "z": [
+                -0.2,
+                0.2
+              ],
+              "roll": [
+                -0.52,
+                0.52
+              ],
+              "pitch": [
+                -0.52,
+                0.52
+              ],
+              "yaw": [
+                -0.78,
+                0.78
+              ]
+            }
+          },
+          "randomize_action_delay": {
+            "delay_range": [
+              0.0,
+              8.0
+            ]
+          },
+          "randomize_rigid_body_mass": {
+            "mass_distribution_params": [
+              0.8,
+              1.5
+            ]
+          }
+        },
+        "delay": {
+          "action_delay_actuator_groups": 5,
+          "action_delay_num_lags": 640,
+          "action_delay_min_steps": 0,
+          "action_delay_max_steps": 8,
+          "action_delay_mean_steps": 3.8203125,
+          "action_delay_nonzero_fraction": 0.903124988079071,
+          "action_delay_histogram": [
+            62,
+            92,
+            77,
+            78,
+            72,
+            72,
+            62,
+            55,
+            70
+          ],
+          "action_delay_cross_group_equal_fraction": 0.0,
+          "action_delay_cross_group_range_mean_steps": 5.921875,
+          "action_delay_process_invocations": 964,
+          "action_delay_process_resampled_envs": 1811,
+          "action_delay_process_assignments": 9055,
+          "action_delay_process_mean_steps": 3.971286581998896,
+          "action_delay_process_histogram": [
+            1018,
+            1072,
+            1043,
+            928,
+            986,
+            989,
+            1009,
+            1005,
+            1005
+          ],
+          "action_delay_process_cross_group_equal_fraction": 0.0,
+          "action_delay_process_distribution_counts": {
+            "uniform": 964
+          },
+          "action_delay_process_coupling_counts": {
+            "independent": 964
+          }
+        },
+        "motion_count": 102,
+        "failed_count": 58
+      },
+      "complete": true
+    },
+    "curriculum_robustness_ne128_20260828_110419_s8602_ta_lucid_50_dr_full": {
+      "checkpoint_seed": 8602,
+      "evaluation_seed": 8702,
+      "mode": "ta_lucid_50",
+      "preset": "dr_full",
+      "checkpoint": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne128_20260828_065416/seed_8602/ta_lucid_50/final_checkpoint.pt",
+      "checkpoint_sha256": "86b6a4d758331f30cbef5c9f2501059340322dc05392ea8610e19f305436b4c8",
+      "metrics_path": "/home/linjiw/lucid-sonic/artifacts/curriculum_robustness_eval/curriculum_robustness_ne128_20260828_110419/seed_8602/ta_lucid_50/dr_full/metrics_eval.json",
+      "log_path": "/home/linjiw/lucid-sonic/outputs/curriculum_robustness_ne128_20260828_110419_s8602_ta_lucid_50_dr_full.log",
+      "runtime": {
+        "exit_code": 0,
+        "wall_seconds": 178.29460173999905,
+        "gpu": {
+          "samples": 89,
+          "start_free_mib": 10978.0,
+          "min_free_mib": 5610.0,
+          "max_used_mib": 10199.0,
+          "max_gpu_util_pct": 100.0
+        }
+      },
+      "summary": {
+        "success_rate": 0.33333333333333337,
+        "progress_rate": 0.5499198598440225,
+        "mpjpe_g": 215.14191358287403,
+        "mpjpe_l": 42.08460375666759,
+        "foot_slip_per_step_m": 0.003252373746750101,
+        "undesired_contact_rate": 0.20510549363057326,
+        "torque_saturation": 0.0035906956951460576,
+        "energy_proxy": 177.5381155618436,
+        "quality_missing_signals": [],
+        "active_dr_terms": [
+          "add_joint_default_pos",
+          "base_com",
+          "physics_material",
+          "push_robot",
+          "randomize_action_delay",
+          "randomize_rigid_body_mass"
+        ],
+        "dr_ranges": {
+          "add_joint_default_pos": {
+            "pos_distribution_params": [
+              -0.01,
+              0.01
+            ]
+          },
+          "base_com": {
+            "com_range": {
+              "x": [
+                -0.025,
+                0.025
+              ],
+              "y": [
+                -0.05,
+                0.05
+              ],
+              "z": [
+                -0.05,
+                0.05
+              ]
+            }
+          },
+          "physics_material": {
+            "static_friction_range": [
+              0.3,
+              1.6
+            ],
+            "dynamic_friction_range": [
+              0.3,
+              1.2
+            ],
+            "restitution_range": [
+              0.0,
+              0.5
+            ]
+          },
+          "push_robot": {
+            "velocity_range": {
+              "x": [
+                -0.5,
+                0.5
+              ],
+              "y": [
+                -0.5,
+                0.5
+              ],
+              "z": [
+                -0.2,
+                0.2
+              ],
+              "roll": [
+                -0.52,
+                0.52
+              ],
+              "pitch": [
+                -0.52,
+                0.52
+              ],
+              "yaw": [
+                -0.78,
+                0.78
+              ]
+            }
+          },
+          "randomize_action_delay": {
+            "delay_range": [
+              0.0,
+              8.0
+            ]
+          },
+          "randomize_rigid_body_mass": {
+            "mass_distribution_params": [
+              0.8,
+              1.5
+            ]
+          }
+        },
+        "delay": {
+          "action_delay_actuator_groups": 5,
+          "action_delay_num_lags": 640,
+          "action_delay_min_steps": 0,
+          "action_delay_max_steps": 8,
+          "action_delay_mean_steps": 3.807812452316284,
+          "action_delay_nonzero_fraction": 0.870312511920929,
+          "action_delay_histogram": [
+            83,
+            78,
+            70,
+            68,
+            82,
+            63,
+            62,
+            72,
+            62
+          ],
+          "action_delay_cross_group_equal_fraction": 0.0,
+          "action_delay_cross_group_range_mean_steps": 6.0078125,
+          "action_delay_process_invocations": 550,
+          "action_delay_process_resampled_envs": 1221,
+          "action_delay_process_assignments": 6105,
+          "action_delay_process_mean_steps": 3.980999180999181,
+          "action_delay_process_histogram": [
+            696,
+            677,
+            694,
+            674,
+            697,
+            634,
+            659,
+            687,
+            687
+          ],
+          "action_delay_process_cross_group_equal_fraction": 0.0,
+          "action_delay_process_distribution_counts": {
+            "uniform": 550
+          },
+          "action_delay_process_coupling_counts": {
+            "independent": 550
+          }
+        },
+        "motion_count": 102,
+        "failed_count": 68
+      },
+      "complete": true
+    },
+    "curriculum_robustness_ne128_20260828_110419_s8602_ta_lucid_50_s4_rg_dr_full": {
+      "checkpoint_seed": 8602,
+      "evaluation_seed": 8702,
+      "mode": "ta_lucid_50_s4_rg",
+      "preset": "dr_full",
+      "checkpoint": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne128_20260828_065416/seed_8602/ta_lucid_50_s4_rg/final_checkpoint.pt",
+      "checkpoint_sha256": "3e6a048a6d7b158a4b1c16cfa36b917f769e35ad8a8e506a645cf720863d054b",
+      "metrics_path": "/home/linjiw/lucid-sonic/artifacts/curriculum_robustness_eval/curriculum_robustness_ne128_20260828_110419/seed_8602/ta_lucid_50_s4_rg/dr_full/metrics_eval.json",
+      "log_path": "/home/linjiw/lucid-sonic/outputs/curriculum_robustness_ne128_20260828_110419_s8602_ta_lucid_50_s4_rg_dr_full.log",
+      "runtime": {
+        "exit_code": 0,
+        "wall_seconds": 127.47923785599778,
+        "gpu": {
+          "samples": 64,
+          "start_free_mib": 10990.0,
+          "min_free_mib": 6998.0,
+          "max_used_mib": 8811.0,
+          "max_gpu_util_pct": 99.0
+        }
+      },
+      "summary": {
+        "success_rate": 0.38235294117647056,
+        "progress_rate": 0.5991313175626976,
+        "mpjpe_g": 190.41925405395202,
+        "mpjpe_l": 40.832416573518515,
+        "foot_slip_per_step_m": 0.003510261929788243,
+        "undesired_contact_rate": 0.20039808917197452,
+        "torque_saturation": 0.00302616406764771,
+        "energy_proxy": 178.68586676288407,
+        "quality_missing_signals": [],
+        "active_dr_terms": [
+          "add_joint_default_pos",
+          "base_com",
+          "physics_material",
+          "push_robot",
+          "randomize_action_delay",
+          "randomize_rigid_body_mass"
+        ],
+        "dr_ranges": {
+          "add_joint_default_pos": {
+            "pos_distribution_params": [
+              -0.01,
+              0.01
+            ]
+          },
+          "base_com": {
+            "com_range": {
+              "x": [
+                -0.025,
+                0.025
+              ],
+              "y": [
+                -0.05,
+                0.05
+              ],
+              "z": [
+                -0.05,
+                0.05
+              ]
+            }
+          },
+          "physics_material": {
+            "static_friction_range": [
+              0.3,
+              1.6
+            ],
+            "dynamic_friction_range": [
+              0.3,
+              1.2
+            ],
+            "restitution_range": [
+              0.0,
+              0.5
+            ]
+          },
+          "push_robot": {
+            "velocity_range": {
+              "x": [
+                -0.5,
+                0.5
+              ],
+              "y": [
+                -0.5,
+                0.5
+              ],
+              "z": [
+                -0.2,
+                0.2
+              ],
+              "roll": [
+                -0.52,
+                0.52
+              ],
+              "pitch": [
+                -0.52,
+                0.52
+              ],
+              "yaw": [
+                -0.78,
+                0.78
+              ]
+            }
+          },
+          "randomize_action_delay": {
+            "delay_range": [
+              0.0,
+              8.0
+            ]
+          },
+          "randomize_rigid_body_mass": {
+            "mass_distribution_params": [
+              0.8,
+              1.5
+            ]
+          }
+        },
+        "delay": {
+          "action_delay_actuator_groups": 5,
+          "action_delay_num_lags": 640,
+          "action_delay_min_steps": 0,
+          "action_delay_max_steps": 8,
+          "action_delay_mean_steps": 3.778125047683716,
+          "action_delay_nonzero_fraction": 0.887499988079071,
+          "action_delay_histogram": [
+            72,
+            74,
+            86,
+            80,
+            66,
+            80,
+            62,
+            64,
+            56
+          ],
+          "action_delay_cross_group_equal_fraction": 0.0078125,
+          "action_delay_cross_group_range_mean_steps": 5.8203125,
+          "action_delay_process_invocations": 498,
+          "action_delay_process_resampled_envs": 1112,
+          "action_delay_process_assignments": 5560,
+          "action_delay_process_mean_steps": 4.035431654676259,
+          "action_delay_process_histogram": [
+            595,
+            619,
+            643,
+            589,
+            618,
+            620,
+            593,
+            629,
+            654
+          ],
+          "action_delay_process_cross_group_equal_fraction": 0.0008992805755395684,
+          "action_delay_process_distribution_counts": {
+            "uniform": 498
+          },
+          "action_delay_process_coupling_counts": {
+            "independent": 498
+          }
+        },
+        "motion_count": 102,
+        "failed_count": 63
+      },
+      "complete": true
+    },
+    "curriculum_robustness_ne128_20260828_110419_s8602_lucid_s4_dr_full": {
+      "checkpoint_seed": 8602,
+      "evaluation_seed": 8702,
+      "mode": "lucid_s4",
+      "preset": "dr_full",
+      "checkpoint": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne128_20260828_065416/seed_8602/lucid_s4/final_checkpoint.pt",
+      "checkpoint_sha256": "f9e3bf369c5039264d80d0230c99aae9383605c656e62974d9708196fff3a8f6",
+      "metrics_path": "/home/linjiw/lucid-sonic/artifacts/curriculum_robustness_eval/curriculum_robustness_ne128_20260828_110419/seed_8602/lucid_s4/dr_full/metrics_eval.json",
+      "log_path": "/home/linjiw/lucid-sonic/outputs/curriculum_robustness_ne128_20260828_110419_s8602_lucid_s4_dr_full.log",
+      "runtime": {
+        "exit_code": 0,
+        "wall_seconds": 607.0729429999992,
+        "gpu": {
+          "samples": 301,
+          "start_free_mib": 15040.0,
+          "min_free_mib": 395.0,
+          "max_used_mib": 15414.0,
+          "max_gpu_util_pct": 100.0
+        }
+      },
+      "summary": {
+        "success_rate": 0.3921568627450981,
+        "progress_rate": 0.6232041381573414,
+        "mpjpe_g": 260.68089578111017,
+        "mpjpe_l": 40.2218983134344,
+        "foot_slip_per_step_m": 0.0041528577128317505,
+        "undesired_contact_rate": 0.18621982087227415,
+        "torque_saturation": 0.0037351286389515465,
+        "energy_proxy": 199.58836516701007,
+        "quality_missing_signals": [],
+        "active_dr_terms": [
+          "add_joint_default_pos",
+          "base_com",
+          "physics_material",
+          "push_robot",
+          "randomize_action_delay",
+          "randomize_rigid_body_mass"
+        ],
+        "dr_ranges": {
+          "add_joint_default_pos": {
+            "pos_distribution_params": [
+              -0.01,
+              0.01
+            ]
+          },
+          "base_com": {
+            "com_range": {
+              "x": [
+                -0.025,
+                0.025
+              ],
+              "y": [
+                -0.05,
+                0.05
+              ],
+              "z": [
+                -0.05,
+                0.05
+              ]
+            }
+          },
+          "physics_material": {
+            "static_friction_range": [
+              0.3,
+              1.6
+            ],
+            "dynamic_friction_range": [
+              0.3,
+              1.2
+            ],
+            "restitution_range": [
+              0.0,
+              0.5
+            ]
+          },
+          "push_robot": {
+            "velocity_range": {
+              "x": [
+                -0.5,
+                0.5
+              ],
+              "y": [
+                -0.5,
+                0.5
+              ],
+              "z": [
+                -0.2,
+                0.2
+              ],
+              "roll": [
+                -0.52,
+                0.52
+              ],
+              "pitch": [
+                -0.52,
+                0.52
+              ],
+              "yaw": [
+                -0.78,
+                0.78
+              ]
+            }
+          },
+          "randomize_action_delay": {
+            "delay_range": [
+              0.0,
+              8.0
+            ]
+          },
+          "randomize_rigid_body_mass": {
+            "mass_distribution_params": [
+              0.8,
+              1.5
+            ]
+          }
+        },
+        "delay": {
+          "action_delay_actuator_groups": 5,
+          "action_delay_num_lags": 640,
+          "action_delay_min_steps": 0,
+          "action_delay_max_steps": 8,
+          "action_delay_mean_steps": 3.8890624046325684,
+          "action_delay_nonzero_fraction": 0.890625,
+          "action_delay_histogram": [
+            70,
+            80,
+            78,
+            64,
+            69,
+            71,
+            80,
+            74,
+            54
+          ],
+          "action_delay_cross_group_equal_fraction": 0.0,
+          "action_delay_cross_group_range_mean_steps": 5.765625,
+          "action_delay_process_invocations": 958,
+          "action_delay_process_resampled_envs": 1808,
+          "action_delay_process_assignments": 9040,
+          "action_delay_process_mean_steps": 3.989712389380531,
+          "action_delay_process_histogram": [
+            1038,
+            1030,
+            995,
+            988,
+            957,
+            993,
+            988,
+            1046,
+            1005
+          ],
+          "action_delay_process_cross_group_equal_fraction": 0.0,
+          "action_delay_process_distribution_counts": {
+            "uniform": 958
+          },
+          "action_delay_process_coupling_counts": {
+            "independent": 958
+          }
+        },
+        "motion_count": 102,
+        "failed_count": 62
+      },
+      "complete": true
     }
   },
   "mode_summary": {
@@ -10466,140 +11122,156 @@
     },
     "dr_full": {
       "ta_lucid_50": {
-        "num_runs": 2,
+        "num_runs": 3,
         "metrics": {
           "success_rate": {
             "per_checkpoint_seed": {
               "8600": 0.36274509803921573,
-              "8601": 0.4019607843137255
+              "8601": 0.4019607843137255,
+              "8602": 0.33333333333333337
             },
-            "mean": 0.3823529411764706,
-            "sample_std": 0.02772967769359008
+            "mean": 0.36601307189542487,
+            "sample_std": 0.03443024102239456
           },
           "progress_rate": {
             "per_checkpoint_seed": {
               "8600": 0.5442689066369306,
-              "8601": 0.6049731299920263
+              "8601": 0.6049731299920263,
+              "8602": 0.5499198598440225
             },
-            "mean": 0.5746210183144784,
-            "sample_std": 0.04292436798105099
+            "mean": 0.5663872988243265,
+            "sample_std": 0.033535549693032685
           },
           "mpjpe_g": {
             "per_checkpoint_seed": {
               "8600": 205.62202478171147,
-              "8601": 279.00624954162015
+              "8601": 279.00624954162015,
+              "8602": 215.14191358287403
             },
-            "mean": 242.31413716166583,
-            "sample_std": 51.890482959849166
+            "mean": 233.25672930206852,
+            "sample_std": 39.90515032309089
           },
           "mpjpe_l": {
             "per_checkpoint_seed": {
               "8600": 41.63610610164417,
-              "8601": 41.88406570899394
+              "8601": 41.88406570899394,
+              "8602": 42.08460375666759
             },
-            "mean": 41.76008590531905,
-            "sample_std": 0.17533391981737625
+            "mean": 41.868258522435234,
+            "sample_std": 0.22466627917992896
           },
           "foot_slip_per_step_m": {
             "per_checkpoint_seed": {
               "8600": 0.003354924515770865,
-              "8601": 0.0034519309214568333
+              "8601": 0.0034519309214568333,
+              "8602": 0.003252373746750101
             },
-            "mean": 0.003403427718613849,
-            "sample_std": 6.859388727908159e-05
+            "mean": 0.0033530763946592666,
+            "sample_std": 9.979142326856399e-05
           },
           "undesired_contact_rate": {
             "per_checkpoint_seed": {
               "8600": 0.1685032894736842,
-              "8601": 0.23635549363057326
+              "8601": 0.23635549363057326,
+              "8602": 0.20510549363057326
             },
-            "mean": 0.20242939155212875,
-            "sample_std": 0.0479787536777903
+            "mean": 0.20332142557827693,
+            "sample_std": 0.03396126582370652
           },
           "torque_saturation": {
             "per_checkpoint_seed": {
               "8600": 0.004424625680580768,
-              "8601": 0.0034596008126509983
+              "8601": 0.0034596008126509983,
+              "8602": 0.0035906956951460576
             },
-            "mean": 0.003942113246615883,
-            "sample_std": 0.0006823756281267924
+            "mean": 0.003824974062792608,
+            "sample_std": 0.0005234338679251337
           },
           "energy_proxy": {
             "per_checkpoint_seed": {
               "8600": 187.4742006121533,
-              "8601": 181.41883779708098
+              "8601": 181.41883779708098,
+              "8602": 177.5381155618436
             },
-            "mean": 184.44651920461715,
-            "sample_std": 4.281788109082505
+            "mean": 182.1437179903593,
+            "sample_std": 5.007547803336724
           }
         }
       },
       "lucid_s4": {
-        "num_runs": 2,
+        "num_runs": 3,
         "metrics": {
           "success_rate": {
             "per_checkpoint_seed": {
               "8600": 0.43137254901960786,
-              "8601": 0.36274509803921573
+              "8601": 0.36274509803921573,
+              "8602": 0.3921568627450981
             },
-            "mean": 0.3970588235294118,
-            "sample_std": 0.04852693596378266
+            "mean": 0.3954248366013073,
+            "sample_std": 0.03443024102239456
           },
           "progress_rate": {
             "per_checkpoint_seed": {
               "8600": 0.622900602608627,
-              "8601": 0.5741294907615977
+              "8601": 0.5741294907615977,
+              "8602": 0.6232041381573414
             },
-            "mean": 0.5985150466851124,
-            "sample_std": 0.03448638391304199
+            "mean": 0.6067447438425221,
+            "sample_std": 0.028246045450768722
           },
           "mpjpe_g": {
             "per_checkpoint_seed": {
               "8600": 247.9270405759754,
-              "8601": 221.7004298302759
+              "8601": 221.7004298302759,
+              "8602": 260.68089578111017
             },
-            "mean": 234.81373520312565,
-            "sample_std": 18.545014305824093
+            "mean": 243.43612206245382,
+            "sample_std": 19.874492276718804
           },
           "mpjpe_l": {
             "per_checkpoint_seed": {
               "8600": 43.356583562655224,
-              "8601": 40.112074276321955
+              "8601": 40.112074276321955,
+              "8602": 40.2218983134344
             },
-            "mean": 41.73432891948859,
-            "sample_std": 2.2942145179889804
+            "mean": 41.230185384137194,
+            "sample_std": 1.8423333683091987
           },
           "foot_slip_per_step_m": {
             "per_checkpoint_seed": {
               "8600": 0.0033849765635953744,
-              "8601": 0.0036348259699820586
+              "8601": 0.0036348259699820586,
+              "8602": 0.0041528577128317505
             },
-            "mean": 0.0035099012667887163,
-            "sample_std": 0.00017667020953145789
+            "mean": 0.0037242200821363948,
+            "sample_std": 0.0003916680294637806
           },
           "undesired_contact_rate": {
             "per_checkpoint_seed": {
               "8600": 0.2141265869140625,
-              "8601": 0.19991515837104074
+              "8601": 0.19991515837104074,
+              "8602": 0.18621982087227415
             },
-            "mean": 0.20702087264255162,
-            "sample_std": 0.010048997493118746
+            "mean": 0.20008718871912579,
+            "sample_std": 0.013954178354825287
           },
           "torque_saturation": {
             "per_checkpoint_seed": {
               "8600": 0.0034277904992815883,
-              "8601": 0.003829331799032605
+              "8601": 0.003829331799032605,
+              "8602": 0.0037351286389515465
             },
-            "mean": 0.0036285611491570966,
-            "sample_std": 0.000283932575980404
+            "mean": 0.0036640836457552464,
+            "sample_std": 0.0002099866594456197
           },
           "energy_proxy": {
             "per_checkpoint_seed": {
               "8600": 195.2133996954716,
-              "8601": 170.2318902314407
+              "8601": 170.2318902314407,
+              "8602": 199.58836516701007
             },
-            "mean": 182.72264496345616,
-            "sample_std": 17.66459474629216
+            "mean": 188.3445516979741,
+            "sample_std": 15.837817392880305
           }
         }
       },
@@ -10673,140 +11345,156 @@
         }
       },
       "lucid_s4_rg": {
-        "num_runs": 2,
+        "num_runs": 3,
         "metrics": {
           "success_rate": {
             "per_checkpoint_seed": {
               "8600": 0.37254901960784315,
-              "8601": 0.37254901960784315
+              "8601": 0.37254901960784315,
+              "8602": 0.43137254901960786
             },
-            "mean": 0.37254901960784315,
-            "sample_std": 0.0
+            "mean": 0.39215686274509803,
+            "sample_std": 0.03396178054056623
           },
           "progress_rate": {
             "per_checkpoint_seed": {
               "8600": 0.5944213729315236,
-              "8601": 0.5720843408603733
+              "8601": 0.5720843408603733,
+              "8602": 0.6263545584572735
             },
-            "mean": 0.5832528568959485,
-            "sample_std": 0.0157946668490918
+            "mean": 0.5976200907497234,
+            "sample_std": 0.027276142987308086
           },
           "mpjpe_g": {
             "per_checkpoint_seed": {
               "8600": 261.1518659012797,
-              "8601": 206.24226243136354
+              "8601": 206.24226243136354,
+              "8602": 274.96792603698646
             },
-            "mean": 233.6970641663216,
-            "sample_std": 38.82695296584208
+            "mean": 247.45401812320992,
+            "sample_std": 36.35281948930081
           },
           "mpjpe_l": {
             "per_checkpoint_seed": {
               "8600": 39.86093009708889,
-              "8601": 40.37170784043419
+              "8601": 40.37170784043419,
+              "8602": 40.7332418825382
             },
-            "mean": 40.11631896876154,
-            "sample_std": 0.3611744059986242
+            "mean": 40.32195994002043,
+            "sample_std": 0.4382785677569976
           },
           "foot_slip_per_step_m": {
             "per_checkpoint_seed": {
               "8600": 0.0031180082922621947,
-              "8601": 0.0038474555985428278
+              "8601": 0.0038474555985428278,
+              "8602": 0.004067905136086093
             },
-            "mean": 0.0034827319454025112,
-            "sample_std": 0.0005157971367892961
+            "mean": 0.003677789675630372,
+            "sample_std": 0.0004971578195351578
           },
           "undesired_contact_rate": {
             "per_checkpoint_seed": {
               "8600": 0.17778467006437768,
-              "8601": 0.2090625
+              "8601": 0.2090625,
+              "8602": 0.18675595238095238
             },
-            "mean": 0.19342358503218884,
-            "sample_std": 0.02211676564827815
+            "mean": 0.19120104081511002,
+            "sample_std": 0.016105737169128265
           },
           "torque_saturation": {
             "per_checkpoint_seed": {
               "8600": 0.003073057338685771,
-              "8601": 0.0037120009074410112
+              "8601": 0.0037120009074410112,
+              "8602": 0.003742131910235342
             },
-            "mean": 0.003392529123063391,
-            "sample_std": 0.00045180133026236346
+            "mean": 0.0035090633854540413,
+            "sample_std": 0.0003778927413251271
           },
           "energy_proxy": {
             "per_checkpoint_seed": {
               "8600": 164.0077769618568,
-              "8601": 178.85356836024573
+              "8601": 178.85356836024573,
+              "8602": 182.82542035976263
             },
-            "mean": 171.43067266105126,
-            "sample_std": 10.497559769881738
+            "mean": 175.22892189395506,
+            "sample_std": 9.91864266252608
           }
         }
       },
       "ta_lucid_50_s4_rg": {
-        "num_runs": 2,
+        "num_runs": 3,
         "metrics": {
           "success_rate": {
             "per_checkpoint_seed": {
               "8600": 0.3921568627450981,
-              "8601": 0.37254901960784315
+              "8601": 0.37254901960784315,
+              "8602": 0.38235294117647056
             },
-            "mean": 0.3823529411764706,
-            "sample_std": 0.01386483884679508
+            "mean": 0.38235294117647056,
+            "sample_std": 0.009803921568627472
           },
           "progress_rate": {
             "per_checkpoint_seed": {
               "8600": 0.6002026970005211,
-              "8601": 0.6162421497260677
+              "8601": 0.6162421497260677,
+              "8602": 0.5991313175626976
             },
-            "mean": 0.6082224233632945,
-            "sample_std": 0.011341605788755076
+            "mean": 0.6051920547630955,
+            "sample_std": 0.009584644620066859
           },
           "mpjpe_g": {
             "per_checkpoint_seed": {
               "8600": 216.2887735820836,
-              "8601": 207.6357689378107
+              "8601": 207.6357689378107,
+              "8602": 190.41925405395202
             },
-            "mean": 211.96227125994716,
-            "sample_std": 6.118598261604055
+            "mean": 204.7812655246154,
+            "sample_std": 13.168870583920732
           },
           "mpjpe_l": {
             "per_checkpoint_seed": {
               "8600": 43.6789993657552,
-              "8601": 42.39362546883937
+              "8601": 42.39362546883937,
+              "8602": 40.832416573518515
             },
-            "mean": 43.03631241729728,
-            "sample_std": 0.9088965988693657
+            "mean": 42.30168046937103,
+            "sample_std": 1.4255170326796975
           },
           "foot_slip_per_step_m": {
             "per_checkpoint_seed": {
               "8600": 0.0034099808714295743,
-              "8601": 0.003495389521671278
+              "8601": 0.003495389521671278,
+              "8602": 0.003510261929788243
             },
-            "mean": 0.003452685196550426,
-            "sample_std": 6.039303575789876e-05
+            "mean": 0.0034718774409630317,
+            "sample_std": 5.4117336601194614e-05
           },
           "undesired_contact_rate": {
             "per_checkpoint_seed": {
               "8600": 0.14966517857142858,
-              "8601": 0.18696680267062316
+              "8601": 0.18696680267062316,
+              "8602": 0.20039808917197452
             },
-            "mean": 0.16831599062102587,
-            "sample_std": 0.026376231349812027
+            "mean": 0.1790100234713421,
+            "sample_std": 0.026285733885899602
           },
           "torque_saturation": {
             "per_checkpoint_seed": {
               "8600": 0.003118265086206898,
-              "8601": 0.003239553489204959
+              "8601": 0.003239553489204959,
+              "8602": 0.00302616406764771
             },
-            "mean": 0.0031789092877059283,
-            "sample_std": 8.576385223921596e-05
+            "mean": 0.0031279942143531887,
+            "sample_std": 0.00010702688101126543
           },
           "energy_proxy": {
             "per_checkpoint_seed": {
               "8600": 161.26939927705547,
-              "8601": 173.08148390241843
+              "8601": 173.08148390241843,
+              "8602": 178.68586676288407
             },
-            "mean": 167.17544158973695,
-            "sample_std": 8.352405138543507
+            "mean": 171.012249980786,
+            "sample_std": 8.890704791413164
           }
         }
       }

@@ -1,14 +1,15 @@
 {
   "kind": "lucid_frozen_checkpoint_robustness_evaluation",
   "schema_version": 1,
-  "created_at": "2026-08-28T12:32:01.957029-04:00",
+  "created_at": "2026-08-28T13:08:31.016698-04:00",
   "experiment_id": "curriculum_robustness_ne128_20260828_122105",
-  "git_sha": "e03c0babbee4f67ac6a7f95d3d96a585e078b86e",
+  "git_sha": "368e4d9211a6741eef86a384165ffd042e9389dc",
   "git_status_short": [
     "?? gear_sonic/research/practice_utility/bin_sampler.py",
     "?? gear_sonic/research/practice_utility/learnability_gate.py",
     "?? scripts/practice_utility/audit_evaluation_receipt.py",
     "?? scripts/practice_utility/run_gate_a.py",
+    "?? scripts/practice_utility/run_vram_ladder.py",
     "?? tests/practice_utility/test_bin_sampler.py",
     "?? tests/practice_utility/test_learnability_gate.py"
   ],
@@ -600,6 +601,552 @@
         "failed_count": 1
       },
       "complete": true
+    },
+    "curriculum_robustness_ne128_20260828_122105_s8600_origin_dr_050": {
+      "checkpoint_seed": 8600,
+      "evaluation_seed": 8700,
+      "mode": "origin",
+      "preset": "dr_050",
+      "checkpoint": "/home/linjiw/lucid/GR00T-WholeBodyControl/sonic_release/last.pt",
+      "checkpoint_sha256": "e6bdab3f64a39336b3d41877d4f497d05f58af275f288ec0e6746c283ded8909",
+      "metrics_path": "/home/linjiw/lucid-sonic/artifacts/curriculum_robustness_eval/curriculum_robustness_ne128_20260828_122105/seed_8600/origin/dr_050/metrics_eval.json",
+      "log_path": "/home/linjiw/lucid-sonic/outputs/curriculum_robustness_ne128_20260828_122105_s8600_origin_dr_050.log",
+      "runtime": {
+        "exit_code": 0,
+        "wall_seconds": 718.7141075969994,
+        "gpu": {
+          "samples": 357,
+          "start_free_mib": 11147.0,
+          "min_free_mib": 3823.0,
+          "max_used_mib": 11986.0,
+          "max_gpu_util_pct": 100.0
+        }
+      },
+      "summary": {
+        "success_rate": 0.7549019607843137,
+        "progress_rate": 0.8650353409934277,
+        "mpjpe_g": 257.85021666441963,
+        "mpjpe_l": 30.56817066162303,
+        "foot_slip_per_step_m": 0.0024842591026896154,
+        "undesired_contact_rate": 0.09905747964348592,
+        "torque_saturation": 0.0035749586419379174,
+        "energy_proxy": 174.85062975736088,
+        "quality_missing_signals": [],
+        "active_dr_terms": [
+          "add_joint_default_pos",
+          "base_com",
+          "physics_material",
+          "push_robot",
+          "randomize_action_delay",
+          "randomize_rigid_body_mass"
+        ],
+        "dr_ranges": {
+          "add_joint_default_pos": {
+            "pos_distribution_params": [
+              -0.005,
+              0.005
+            ]
+          },
+          "base_com": {
+            "com_range": {
+              "x": [
+                -0.0125,
+                0.0125
+              ],
+              "y": [
+                -0.025,
+                0.025
+              ],
+              "z": [
+                -0.025,
+                0.025
+              ]
+            }
+          },
+          "physics_material": {
+            "static_friction_range": [
+              0.625,
+              1.2750000000000001
+            ],
+            "dynamic_friction_range": [
+              0.525,
+              0.975
+            ],
+            "restitution_range": [
+              0.0,
+              0.25
+            ]
+          },
+          "push_robot": {
+            "velocity_range": {
+              "x": [
+                -0.25,
+                0.25
+              ],
+              "y": [
+                -0.25,
+                0.25
+              ],
+              "z": [
+                -0.1,
+                0.1
+              ],
+              "roll": [
+                -0.26,
+                0.26
+              ],
+              "pitch": [
+                -0.26,
+                0.26
+              ],
+              "yaw": [
+                -0.39,
+                0.39
+              ]
+            }
+          },
+          "randomize_action_delay": {
+            "delay_range": [
+              0.0,
+              8.0
+            ]
+          },
+          "randomize_rigid_body_mass": {
+            "mass_distribution_params": [
+              0.9,
+              1.25
+            ]
+          }
+        },
+        "delay": {
+          "action_delay_actuator_groups": 5,
+          "action_delay_num_lags": 640,
+          "action_delay_min_steps": 0,
+          "action_delay_max_steps": 8,
+          "action_delay_mean_steps": 3.6343750953674316,
+          "action_delay_nonzero_fraction": 0.871874988079071,
+          "action_delay_histogram": [
+            82,
+            78,
+            75,
+            78,
+            87,
+            71,
+            68,
+            55,
+            46
+          ],
+          "action_delay_cross_group_equal_fraction": 0.0,
+          "action_delay_cross_group_range_mean_steps": 5.71875,
+          "action_delay_process_invocations": 2102,
+          "action_delay_process_resampled_envs": 3114,
+          "action_delay_process_assignments": 15570,
+          "action_delay_process_mean_steps": 4.013166345536288,
+          "action_delay_process_histogram": [
+            1736,
+            1776,
+            1659,
+            1722,
+            1680,
+            1711,
+            1765,
+            1808,
+            1713
+          ],
+          "action_delay_process_cross_group_equal_fraction": 0.0,
+          "action_delay_process_distribution_counts": {
+            "uniform": 2102
+          },
+          "action_delay_process_coupling_counts": {
+            "independent": 2102
+          }
+        },
+        "motion_count": 102,
+        "failed_count": 25
+      },
+      "complete": true
+    },
+    "curriculum_robustness_ne128_20260828_122105_s8600_origin_dr_full": {
+      "checkpoint_seed": 8600,
+      "evaluation_seed": 8700,
+      "mode": "origin",
+      "preset": "dr_full",
+      "checkpoint": "/home/linjiw/lucid/GR00T-WholeBodyControl/sonic_release/last.pt",
+      "checkpoint_sha256": "e6bdab3f64a39336b3d41877d4f497d05f58af275f288ec0e6746c283ded8909",
+      "metrics_path": "/home/linjiw/lucid-sonic/artifacts/curriculum_robustness_eval/curriculum_robustness_ne128_20260828_122105/seed_8600/origin/dr_full/metrics_eval.json",
+      "log_path": "/home/linjiw/lucid-sonic/outputs/curriculum_robustness_ne128_20260828_122105_s8600_origin_dr_full.log",
+      "runtime": {
+        "exit_code": 0,
+        "wall_seconds": 1161.883026435,
+        "gpu": {
+          "samples": 576,
+          "start_free_mib": 15062.0,
+          "min_free_mib": 395.0,
+          "max_used_mib": 15414.0,
+          "max_gpu_util_pct": 100.0
+        }
+      },
+      "summary": {
+        "success_rate": 0.696078431372549,
+        "progress_rate": 0.8108682626602697,
+        "mpjpe_g": 364.10684565360526,
+        "mpjpe_l": 31.647854037827898,
+        "foot_slip_per_step_m": 0.002856475559418915,
+        "undesired_contact_rate": 0.10709176936619719,
+        "torque_saturation": 0.004343307961996085,
+        "energy_proxy": 188.6806576595236,
+        "quality_missing_signals": [],
+        "active_dr_terms": [
+          "add_joint_default_pos",
+          "base_com",
+          "physics_material",
+          "push_robot",
+          "randomize_action_delay",
+          "randomize_rigid_body_mass"
+        ],
+        "dr_ranges": {
+          "add_joint_default_pos": {
+            "pos_distribution_params": [
+              -0.01,
+              0.01
+            ]
+          },
+          "base_com": {
+            "com_range": {
+              "x": [
+                -0.025,
+                0.025
+              ],
+              "y": [
+                -0.05,
+                0.05
+              ],
+              "z": [
+                -0.05,
+                0.05
+              ]
+            }
+          },
+          "physics_material": {
+            "static_friction_range": [
+              0.3,
+              1.6
+            ],
+            "dynamic_friction_range": [
+              0.3,
+              1.2
+            ],
+            "restitution_range": [
+              0.0,
+              0.5
+            ]
+          },
+          "push_robot": {
+            "velocity_range": {
+              "x": [
+                -0.5,
+                0.5
+              ],
+              "y": [
+                -0.5,
+                0.5
+              ],
+              "z": [
+                -0.2,
+                0.2
+              ],
+              "roll": [
+                -0.52,
+                0.52
+              ],
+              "pitch": [
+                -0.52,
+                0.52
+              ],
+              "yaw": [
+                -0.78,
+                0.78
+              ]
+            }
+          },
+          "randomize_action_delay": {
+            "delay_range": [
+              0.0,
+              8.0
+            ]
+          },
+          "randomize_rigid_body_mass": {
+            "mass_distribution_params": [
+              0.8,
+              1.5
+            ]
+          }
+        },
+        "delay": {
+          "action_delay_actuator_groups": 5,
+          "action_delay_num_lags": 640,
+          "action_delay_min_steps": 0,
+          "action_delay_max_steps": 8,
+          "action_delay_mean_steps": 3.8062500953674316,
+          "action_delay_nonzero_fraction": 0.8828125,
+          "action_delay_histogram": [
+            75,
+            72,
+            81,
+            74,
+            78,
+            60,
+            85,
+            62,
+            53
+          ],
+          "action_delay_cross_group_equal_fraction": 0.0,
+          "action_delay_cross_group_range_mean_steps": 5.9375,
+          "action_delay_process_invocations": 2151,
+          "action_delay_process_resampled_envs": 3235,
+          "action_delay_process_assignments": 16175,
+          "action_delay_process_mean_steps": 4.036414219474498,
+          "action_delay_process_histogram": [
+            1755,
+            1806,
+            1745,
+            1795,
+            1755,
+            1800,
+            1855,
+            1854,
+            1810
+          ],
+          "action_delay_process_cross_group_equal_fraction": 0.0,
+          "action_delay_process_distribution_counts": {
+            "uniform": 2151
+          },
+          "action_delay_process_coupling_counts": {
+            "independent": 2151
+          }
+        },
+        "motion_count": 102,
+        "failed_count": 31
+      },
+      "complete": true
+    },
+    "curriculum_robustness_ne128_20260828_122105_s8600_origin_dr_125": {
+      "checkpoint_seed": 8600,
+      "evaluation_seed": 8700,
+      "mode": "origin",
+      "preset": "dr_125",
+      "checkpoint": "/home/linjiw/lucid/GR00T-WholeBodyControl/sonic_release/last.pt",
+      "checkpoint_sha256": "e6bdab3f64a39336b3d41877d4f497d05f58af275f288ec0e6746c283ded8909",
+      "metrics_path": "/home/linjiw/lucid-sonic/artifacts/curriculum_robustness_eval/curriculum_robustness_ne128_20260828_122105/seed_8600/origin/dr_125/metrics_eval.json",
+      "log_path": "/home/linjiw/lucid-sonic/outputs/curriculum_robustness_ne128_20260828_122105_s8600_origin_dr_125.log",
+      "runtime": {
+        "exit_code": -9,
+        "wall_seconds": 33.095047634000366,
+        "gpu": {
+          "samples": 17,
+          "start_free_mib": 9582.0,
+          "min_free_mib": 8477.0,
+          "max_used_mib": 7332.0,
+          "max_gpu_util_pct": 80.0
+        }
+      },
+      "summary": {},
+      "complete": false
+    },
+    "curriculum_robustness_ne128_20260828_122105_s8600_origin_latency_60ms": {
+      "checkpoint_seed": 8600,
+      "evaluation_seed": 8700,
+      "mode": "origin",
+      "preset": "latency_60ms",
+      "checkpoint": "/home/linjiw/lucid/GR00T-WholeBodyControl/sonic_release/last.pt",
+      "checkpoint_sha256": "e6bdab3f64a39336b3d41877d4f497d05f58af275f288ec0e6746c283ded8909",
+      "metrics_path": "/home/linjiw/lucid-sonic/artifacts/curriculum_robustness_eval/curriculum_robustness_ne128_20260828_122105/seed_8600/origin/latency_60ms/metrics_eval.json",
+      "log_path": "/home/linjiw/lucid-sonic/outputs/curriculum_robustness_ne128_20260828_122105_s8600_origin_latency_60ms.log",
+      "runtime": {
+        "exit_code": 0,
+        "wall_seconds": 21.9970544889984,
+        "gpu": {
+          "samples": 11,
+          "start_free_mib": 14831.0,
+          "min_free_mib": 10823.0,
+          "max_used_mib": 4986.0,
+          "max_gpu_util_pct": 66.0
+        }
+      },
+      "summary": {
+        "success_rate": 0.0,
+        "progress_rate": 0.06679329427881349,
+        "mpjpe_g": 32.62958628004153,
+        "mpjpe_l": 25.877155036819417,
+        "foot_slip_per_step_m": 0.004624265785043934,
+        "undesired_contact_rate": 0.3009982638888889,
+        "torque_saturation": 0.009496228448275863,
+        "energy_proxy": 317.3634011274366,
+        "quality_missing_signals": [],
+        "active_dr_terms": [
+          "add_joint_default_pos",
+          "base_com",
+          "physics_material",
+          "push_robot",
+          "randomize_action_delay",
+          "randomize_rigid_body_mass"
+        ],
+        "dr_ranges": {
+          "add_joint_default_pos": {
+            "pos_distribution_params": [
+              -0.01,
+              0.01
+            ]
+          },
+          "base_com": {
+            "com_range": {
+              "x": [
+                -0.025,
+                0.025
+              ],
+              "y": [
+                -0.05,
+                0.05
+              ],
+              "z": [
+                -0.05,
+                0.05
+              ]
+            }
+          },
+          "physics_material": {
+            "static_friction_range": [
+              0.3,
+              1.6
+            ],
+            "dynamic_friction_range": [
+              0.3,
+              1.2
+            ],
+            "restitution_range": [
+              0.0,
+              0.5
+            ]
+          },
+          "push_robot": {
+            "velocity_range": {
+              "x": [
+                -0.5,
+                0.5
+              ],
+              "y": [
+                -0.5,
+                0.5
+              ],
+              "z": [
+                -0.2,
+                0.2
+              ],
+              "roll": [
+                -0.52,
+                0.52
+              ],
+              "pitch": [
+                -0.52,
+                0.52
+              ],
+              "yaw": [
+                -0.78,
+                0.78
+              ]
+            }
+          },
+          "randomize_action_delay": {
+            "delay_range": [
+              12.0,
+              12.0
+            ]
+          },
+          "randomize_rigid_body_mass": {
+            "mass_distribution_params": [
+              0.8,
+              1.5
+            ]
+          }
+        },
+        "delay": {
+          "action_delay_actuator_groups": 5,
+          "action_delay_num_lags": 640,
+          "action_delay_min_steps": 12,
+          "action_delay_max_steps": 12,
+          "action_delay_mean_steps": 12.0,
+          "action_delay_nonzero_fraction": 1.0,
+          "action_delay_histogram": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            640
+          ],
+          "action_delay_cross_group_equal_fraction": 1.0,
+          "action_delay_cross_group_range_mean_steps": 0.0,
+          "action_delay_process_invocations": 33,
+          "action_delay_process_resampled_envs": 455,
+          "action_delay_process_assignments": 2275,
+          "action_delay_process_mean_steps": 12.0,
+          "action_delay_process_histogram": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2275
+          ],
+          "action_delay_process_cross_group_equal_fraction": 1.0,
+          "action_delay_process_distribution_counts": {
+            "uniform": 33
+          },
+          "action_delay_process_coupling_counts": {
+            "independent": 33
+          }
+        },
+        "motion_count": 102,
+        "failed_count": 102
+      },
+      "complete": true
+    },
+    "curriculum_robustness_ne128_20260828_122105_s8601_origin_dr_050": {
+      "checkpoint_seed": 8601,
+      "evaluation_seed": 8701,
+      "mode": "origin",
+      "preset": "dr_050",
+      "checkpoint": "/home/linjiw/lucid/GR00T-WholeBodyControl/sonic_release/last.pt",
+      "checkpoint_sha256": "e6bdab3f64a39336b3d41877d4f497d05f58af275f288ec0e6746c283ded8909",
+      "metrics_path": "/home/linjiw/lucid-sonic/artifacts/curriculum_robustness_eval/curriculum_robustness_ne128_20260828_122105/seed_8601/origin/dr_050/metrics_eval.json",
+      "log_path": "/home/linjiw/lucid-sonic/outputs/curriculum_robustness_ne128_20260828_122105_s8601_origin_dr_050.log",
+      "runtime": {
+        "exit_code": -9,
+        "wall_seconds": 251.81204267000066,
+        "gpu": {
+          "samples": 125,
+          "start_free_mib": 14845.0,
+          "min_free_mib": 6289.0,
+          "max_used_mib": 9520.0,
+          "max_gpu_util_pct": 98.0
+        }
+      },
+      "summary": {},
+      "complete": false
     }
   },
   "mode_summary": {
@@ -665,10 +1212,202 @@
           }
         }
       }
+    },
+    "dr_full": {
+      "origin": {
+        "num_runs": 1,
+        "metrics": {
+          "success_rate": {
+            "per_checkpoint_seed": {
+              "8600": 0.696078431372549
+            },
+            "mean": 0.696078431372549,
+            "sample_std": null
+          },
+          "progress_rate": {
+            "per_checkpoint_seed": {
+              "8600": 0.8108682626602697
+            },
+            "mean": 0.8108682626602697,
+            "sample_std": null
+          },
+          "mpjpe_g": {
+            "per_checkpoint_seed": {
+              "8600": 364.10684565360526
+            },
+            "mean": 364.10684565360526,
+            "sample_std": null
+          },
+          "mpjpe_l": {
+            "per_checkpoint_seed": {
+              "8600": 31.647854037827898
+            },
+            "mean": 31.647854037827898,
+            "sample_std": null
+          },
+          "foot_slip_per_step_m": {
+            "per_checkpoint_seed": {
+              "8600": 0.002856475559418915
+            },
+            "mean": 0.002856475559418915,
+            "sample_std": null
+          },
+          "undesired_contact_rate": {
+            "per_checkpoint_seed": {
+              "8600": 0.10709176936619719
+            },
+            "mean": 0.10709176936619719,
+            "sample_std": null
+          },
+          "torque_saturation": {
+            "per_checkpoint_seed": {
+              "8600": 0.004343307961996085
+            },
+            "mean": 0.004343307961996085,
+            "sample_std": null
+          },
+          "energy_proxy": {
+            "per_checkpoint_seed": {
+              "8600": 188.6806576595236
+            },
+            "mean": 188.6806576595236,
+            "sample_std": null
+          }
+        }
+      }
+    },
+    "latency_60ms": {
+      "origin": {
+        "num_runs": 1,
+        "metrics": {
+          "success_rate": {
+            "per_checkpoint_seed": {
+              "8600": 0.0
+            },
+            "mean": 0.0,
+            "sample_std": null
+          },
+          "progress_rate": {
+            "per_checkpoint_seed": {
+              "8600": 0.06679329427881349
+            },
+            "mean": 0.06679329427881349,
+            "sample_std": null
+          },
+          "mpjpe_g": {
+            "per_checkpoint_seed": {
+              "8600": 32.62958628004153
+            },
+            "mean": 32.62958628004153,
+            "sample_std": null
+          },
+          "mpjpe_l": {
+            "per_checkpoint_seed": {
+              "8600": 25.877155036819417
+            },
+            "mean": 25.877155036819417,
+            "sample_std": null
+          },
+          "foot_slip_per_step_m": {
+            "per_checkpoint_seed": {
+              "8600": 0.004624265785043934
+            },
+            "mean": 0.004624265785043934,
+            "sample_std": null
+          },
+          "undesired_contact_rate": {
+            "per_checkpoint_seed": {
+              "8600": 0.3009982638888889
+            },
+            "mean": 0.3009982638888889,
+            "sample_std": null
+          },
+          "torque_saturation": {
+            "per_checkpoint_seed": {
+              "8600": 0.009496228448275863
+            },
+            "mean": 0.009496228448275863,
+            "sample_std": null
+          },
+          "energy_proxy": {
+            "per_checkpoint_seed": {
+              "8600": 317.3634011274366
+            },
+            "mean": 317.3634011274366,
+            "sample_std": null
+          }
+        }
+      }
+    },
+    "dr_050": {
+      "origin": {
+        "num_runs": 1,
+        "metrics": {
+          "success_rate": {
+            "per_checkpoint_seed": {
+              "8600": 0.7549019607843137
+            },
+            "mean": 0.7549019607843137,
+            "sample_std": null
+          },
+          "progress_rate": {
+            "per_checkpoint_seed": {
+              "8600": 0.8650353409934277
+            },
+            "mean": 0.8650353409934277,
+            "sample_std": null
+          },
+          "mpjpe_g": {
+            "per_checkpoint_seed": {
+              "8600": 257.85021666441963
+            },
+            "mean": 257.85021666441963,
+            "sample_std": null
+          },
+          "mpjpe_l": {
+            "per_checkpoint_seed": {
+              "8600": 30.56817066162303
+            },
+            "mean": 30.56817066162303,
+            "sample_std": null
+          },
+          "foot_slip_per_step_m": {
+            "per_checkpoint_seed": {
+              "8600": 0.0024842591026896154
+            },
+            "mean": 0.0024842591026896154,
+            "sample_std": null
+          },
+          "undesired_contact_rate": {
+            "per_checkpoint_seed": {
+              "8600": 0.09905747964348592
+            },
+            "mean": 0.09905747964348592,
+            "sample_std": null
+          },
+          "torque_saturation": {
+            "per_checkpoint_seed": {
+              "8600": 0.0035749586419379174
+            },
+            "mean": 0.0035749586419379174,
+            "sample_std": null
+          },
+          "energy_proxy": {
+            "per_checkpoint_seed": {
+              "8600": 174.85062975736088
+            },
+            "mean": 174.85062975736088,
+            "sample_std": null
+          }
+        }
+      }
     }
   },
   "paired_comparisons": {
-    "id_clean": {}
+    "id_clean": {},
+    "dr_full": {},
+    "latency_60ms": {},
+    "dr_050": {}
   },
   "checkpoint_sha256_before": {
     "/home/linjiw/lucid/GR00T-WholeBodyControl/sonic_release/last.pt": "e6bdab3f64a39336b3d41877d4f497d05f58af275f288ec0e6746c283ded8909"

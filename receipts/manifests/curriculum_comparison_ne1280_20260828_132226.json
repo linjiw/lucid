@@ -1,0 +1,462 @@
+{
+  "kind": "lucid_three_arm_training_comparison",
+  "schema_version": 1,
+  "created_at": "2026-08-28T13:25:32.833537-04:00",
+  "experiment_id": "curriculum_comparison_ne1280_20260828_132226",
+  "git_sha": "d642372088594d43477a80b00c953d8d84ee3458",
+  "git_status_short": [
+    "?? gear_sonic/research/practice_utility/bin_sampler.py",
+    "?? gear_sonic/research/practice_utility/learnability_gate.py",
+    "?? scripts/practice_utility/audit_evaluation_receipt.py",
+    "?? scripts/practice_utility/run_gate_a.py",
+    "?? tests/practice_utility/test_bin_sampler.py",
+    "?? tests/practice_utility/test_learnability_gate.py"
+  ],
+  "launcher_sha256": "6b2ff8e8e3c5dc16a6dd18db4681d1ea3df4f845ed9d2a78ca8a0d9c856ada54",
+  "config": {
+    "checkpoint": null,
+    "num_envs": 1280,
+    "iterations": 60,
+    "warmup_iterations": 10,
+    "seeds": [
+      8600
+    ],
+    "modes": [
+      "off"
+    ],
+    "arm_order": [
+      {
+        "seed": 8600,
+        "modes": [
+          "off"
+        ]
+      }
+    ],
+    "event_preset": "tracking/lucid_curriculum",
+    "termination_preset": "tracking/eval",
+    "wandb_project": null,
+    "from_scratch": true,
+    "capsule_horizons": [
+      60
+    ],
+    "motion_file": "/home/linjiw/lucid-sonic/pools/subsets/train016/robot_filtered",
+    "smpl_motion_file": "dummy",
+    "arms": {
+      "off": [
+        "off",
+        0.0,
+        null
+      ]
+    },
+    "consolidation_fraction": 0.0,
+    "max_delay_steps": 8,
+    "max_delay_ms": 40,
+    "controller": {
+      "delta_target": 0.778,
+      "kp": 1.0,
+      "ki": 0.02,
+      "alpha": 0.05,
+      "integral_max": 1.0,
+      "return_floor": 8.0,
+      "calibration": "manuscript mu+3sigma lambda=0 target; integral contribution capped at ki*integral_max=0.02"
+    },
+    "training_noise_floors": {
+      "reward": 0.0333,
+      "length": 0.0314
+    }
+  },
+  "commands": {
+    "curriculum_comparison_ne1280_20260828_132226_s8600_off": [
+      "/home/linjiw/isaaclab-install/env_isaaclab/bin/python",
+      "/home/linjiw/lucid/GR00T-WholeBodyControl/scripts/practice_utility/train_with_delay.py",
+      "--max-delay",
+      "8",
+      "--",
+      "+exp=manager/universal_token/all_modes/sonic_release",
+      "num_envs=1280",
+      "headless=true",
+      "use_wandb=false",
+      "seed=8600",
+      "manager_env/events=tracking/lucid_curriculum",
+      "manager_env/terminations=tracking/eval",
+      "++algo.config.num_learning_iterations=60",
+      "++algo.config.save_interval=100000",
+      "++manager_env.commands.motion.motion_lib_cfg.motion_file=/home/linjiw/lucid-sonic/pools/subsets/train016/robot_filtered",
+      "++manager_env.commands.motion.motion_lib_cfg.smpl_motion_file=dummy",
+      "++callbacks.practice_observer._target_=gear_sonic.research.practice_utility.observer.PracticeObserverCallback",
+      "++callbacks.practice_observer.enabled=true",
+      "++callbacks.practice_observer.encoder_path=/home/linjiw/lucid-sonic/artifacts/lucid_encoder_debug512.pt",
+      "++callbacks.practice_observer.branch_id=curriculum_comparison_ne1280_20260828_132226_s8600_off",
+      "++callbacks.practice_observer.output_dir=/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1280_20260828_132226/seed_8600/off",
+      "++callbacks.lucid_curriculum._target_=gear_sonic.research.practice_utility.dr_curriculum.LucidCurriculumCallback",
+      "++callbacks.lucid_curriculum.enabled=true",
+      "++callbacks.lucid_curriculum.mode=off",
+      "++callbacks.lucid_curriculum.observer_branch_id=curriculum_comparison_ne1280_20260828_132226_s8600_off",
+      "++callbacks.lucid_curriculum.branch_id=curriculum_comparison_ne1280_20260828_132226_s8600_off",
+      "++callbacks.lucid_curriculum.output_dir=/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1280_20260828_132226/seed_8600/off",
+      "++callbacks.lucid_curriculum.initial_lambda=0.0",
+      "++callbacks.lucid_curriculum.fixed_lambda=1.0",
+      "++callbacks.lucid_curriculum.delta_target=0.778",
+      "++callbacks.lucid_curriculum.kp=1.0",
+      "++callbacks.lucid_curriculum.ki=0.02",
+      "++callbacks.lucid_curriculum.alpha=0.05",
+      "++callbacks.lucid_curriculum.integral_max=1.0",
+      "++callbacks.lucid_curriculum.return_floor=8.0",
+      "++callbacks.lucid_curriculum.warmup_iterations=10",
+      "++callbacks.practice_capsule._target_=gear_sonic.research.practice_utility.callbacks.PracticeCapsuleCallback",
+      "++callbacks.practice_capsule.enabled=true",
+      "++callbacks.practice_capsule.capsule_dir=/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1280_20260828_132226/seed_8600/off/capsules",
+      "++callbacks.practice_capsule.pair_id=curriculum_seed_8600",
+      "++callbacks.practice_capsule.role=control",
+      "++callbacks.practice_capsule.branch_id=curriculum_comparison_ne1280_20260828_132226_s8600_off",
+      "++callbacks.practice_capsule.horizons.final=60"
+    ]
+  },
+  "runtime": {
+    "curriculum_comparison_ne1280_20260828_132226_s8600_off": {
+      "exit_code": 0,
+      "wall_seconds": 183.57008294900152,
+      "gpu": {
+        "samples": 91,
+        "start_free_mib": 13802.0,
+        "min_free_mib": 6502.0,
+        "max_used_mib": 9307.0,
+        "max_gpu_util_pct": 99.0
+      },
+      "log_path": "/home/linjiw/lucid-sonic/outputs/curriculum_comparison_ne1280_20260828_132226_s8600_off.log",
+      "observer_path": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1280_20260828_132226/seed_8600/off/observer_curriculum_comparison_ne1280_20260828_132226_s8600_off.jsonl"
+    }
+  },
+  "arms": {
+    "curriculum_comparison_ne1280_20260828_132226_s8600_off": {
+      "iterations_parsed": 60,
+      "complete": true,
+      "actuator_groups_swapped": 5,
+      "training": {
+        "Mean rewards": {
+          "series": {
+            "1": 1.15402,
+            "2": 1.62384,
+            "3": 1.64798,
+            "4": 1.54108,
+            "5": 1.38397,
+            "6": 1.42412,
+            "7": 1.30377,
+            "8": 1.37622,
+            "9": 1.48999,
+            "10": 1.34537,
+            "11": 1.45914,
+            "12": 1.23059,
+            "13": 1.38682,
+            "14": 1.28019,
+            "15": 1.29693,
+            "16": 1.51729,
+            "17": 1.41849,
+            "18": 1.46587,
+            "19": 1.37927,
+            "20": 1.36384,
+            "21": 1.3503,
+            "22": 1.25197,
+            "23": 1.14605,
+            "24": 1.41814,
+            "25": 1.45383,
+            "26": 1.39106,
+            "27": 1.16815,
+            "28": 1.49698,
+            "29": 1.42875,
+            "30": 1.47464,
+            "31": 1.34351,
+            "32": 1.42602,
+            "33": 1.41327,
+            "34": 1.34012,
+            "35": 1.4345,
+            "36": 1.45596,
+            "37": 1.26575,
+            "38": 1.45512,
+            "39": 1.39873,
+            "40": 1.25899,
+            "41": 1.26901,
+            "42": 1.48286,
+            "43": 1.2255,
+            "44": 1.17675,
+            "45": 1.20532,
+            "46": 1.24841,
+            "47": 1.315,
+            "48": 1.54251,
+            "49": 1.48889,
+            "50": 1.5021,
+            "51": 1.36975,
+            "52": 1.39278,
+            "53": 1.26382,
+            "54": 1.31946,
+            "55": 1.23632,
+            "56": 1.35427,
+            "57": 1.31533,
+            "58": 1.24358,
+            "59": 1.34082,
+            "60": 1.45652
+          },
+          "last4_mean": 1.3390625
+        },
+        "Mean length": {
+          "series": {
+            "1": 20.41,
+            "2": 25.05,
+            "3": 26.14,
+            "4": 24.93,
+            "5": 23.42,
+            "6": 23.58,
+            "7": 23.53,
+            "8": 22.25,
+            "9": 24.49,
+            "10": 22.92,
+            "11": 24.41,
+            "12": 21.47,
+            "13": 22.94,
+            "14": 22.54,
+            "15": 21.91,
+            "16": 24.78,
+            "17": 23.6,
+            "18": 23.37,
+            "19": 22.37,
+            "20": 22.7,
+            "21": 22.29,
+            "22": 21.03,
+            "23": 19.68,
+            "24": 23.42,
+            "25": 24.09,
+            "26": 22.71,
+            "27": 20.25,
+            "28": 24.87,
+            "29": 23.9,
+            "30": 23.33,
+            "31": 21.25,
+            "32": 24.15,
+            "33": 24.41,
+            "34": 22.33,
+            "35": 24.48,
+            "36": 23.2,
+            "37": 20.95,
+            "38": 23.67,
+            "39": 22.38,
+            "40": 20.92,
+            "41": 21.63,
+            "42": 23.7,
+            "43": 21.25,
+            "44": 19.48,
+            "45": 19.95,
+            "46": 21.13,
+            "47": 21.59,
+            "48": 24.46,
+            "49": 23.53,
+            "50": 24.48,
+            "51": 23.12,
+            "52": 23.38,
+            "53": 21.27,
+            "54": 21.61,
+            "55": 20.65,
+            "56": 23.1,
+            "57": 21.79,
+            "58": 20.79,
+            "59": 21.45,
+            "60": 24.51
+          },
+          "last4_mean": 22.134999999999998
+        },
+        "Mean entropy": {
+          "series": {
+            "1": -45.58729,
+            "2": -45.39738,
+            "3": -45.21841,
+            "4": -45.04049,
+            "5": -44.87479,
+            "6": -44.58603,
+            "7": -44.4113,
+            "8": -44.21113,
+            "9": -44.00456,
+            "10": -43.77132,
+            "11": -43.56041,
+            "12": -43.32698,
+            "13": -43.11669,
+            "14": -42.94654,
+            "15": -42.71204,
+            "16": -42.52729,
+            "17": -42.31183,
+            "18": -42.12092,
+            "19": -41.92944,
+            "20": -41.68825,
+            "21": -41.51477,
+            "22": -41.32579,
+            "23": -41.14675,
+            "24": -40.97018,
+            "25": -40.82052,
+            "26": -40.63987,
+            "27": -40.41004,
+            "28": -40.27562,
+            "29": -40.13876,
+            "30": -40.00972,
+            "31": -39.85319,
+            "32": -39.58048,
+            "33": -39.44845,
+            "34": -39.28347,
+            "35": -39.1056,
+            "36": -38.93581,
+            "37": -38.76325,
+            "38": -38.65598,
+            "39": -38.52611,
+            "40": -38.40347,
+            "41": -38.30171,
+            "42": -38.19596,
+            "43": -38.08087,
+            "44": -37.93937,
+            "45": -37.82671,
+            "46": -37.7025,
+            "47": -37.57661,
+            "48": -37.37531,
+            "49": -37.23925,
+            "50": -37.11218,
+            "51": -36.99297,
+            "52": -36.86714,
+            "53": -36.75113,
+            "54": -36.60803,
+            "55": -36.50237,
+            "56": -36.3904,
+            "57": -36.2892,
+            "58": -36.16545,
+            "59": -36.05168,
+            "60": -35.9273
+          },
+          "last4_mean": -36.1084075
+        }
+      },
+      "observer_last4_mean": {
+        "latent_median": 0.20699121057987213,
+        "latent_p90": 0.3559826850891113,
+        "raw_median": 3.5415680408477783,
+        "raw_p90": 4.254926580190658,
+        "action_rate": 0.0446956357987321,
+        "action_acceleration": 0.12773075876739415,
+        "foot_slip_per_step_m": 0.0037614166910391674,
+        "contact_impulse_total": 225.5126099474725,
+        "contact_force_peak": 15193.138671875,
+        "undesired_contact_rate": 0.33479003906250004,
+        "torque_saturation": 0.0016175017959770117,
+        "joint_limit_proximity": 0.22061370922131318,
+        "energy_proxy": 112.08245099301507,
+        "action_delay_mean_steps": 0.0,
+        "action_delay_nonzero_fraction": 0.0
+      },
+      "observer_rows": 60,
+      "live_delay_final": {
+        "action_delay_actuator_groups": 5,
+        "action_delay_num_lags": 6400,
+        "action_delay_min_steps": 0,
+        "action_delay_max_steps": 0,
+        "action_delay_mean_steps": 0.0,
+        "action_delay_nonzero_fraction": 0.0,
+        "action_delay_histogram": [
+          6400
+        ]
+      },
+      "seed": 8600,
+      "mode": "off",
+      "branch_id": "curriculum_comparison_ne1280_20260828_132226_s8600_off",
+      "curriculum_path": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1280_20260828_132226/seed_8600/off/curriculum_curriculum_comparison_ne1280_20260828_132226_s8600_off.jsonl",
+      "curriculum_rows": 60,
+      "final_lambda": 0.0,
+      "final_integral": null,
+      "mean_return_observed": false,
+      "return_guard_trips": 0,
+      "scalable_terms": [
+        "add_joint_default_pos",
+        "base_com",
+        "physics_material",
+        "push_robot",
+        "randomize_action_delay",
+        "randomize_rigid_body_mass"
+      ],
+      "arm_spec": {
+        "curriculum_mode": "off",
+        "anchor_ratio": 0.0,
+        "yoked_source": null,
+        "yoked_cross_seed": false,
+        "term_lambda_overrides": {},
+        "spread_strata": 1,
+        "return_guard": "absolute",
+        "term_lambda_caps": {},
+        "yoked_schedule_path": null
+      },
+      "tace_final": null,
+      "consolidation_rows": 0,
+      "capsule": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1280_20260828_132226/seed_8600/off/capsules/curriculum_comparison_ne1280_20260828_132226_s8600_off_final.capsule.pt",
+      "checkpoint": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1280_20260828_132226/seed_8600/off/final_checkpoint.pt",
+      "checkpoint_exported": true
+    }
+  },
+  "mode_summary": {
+    "off": {
+      "num_seeds": 1,
+      "metrics": {
+        "Mean rewards": {
+          "per_seed": {
+            "8600": 1.3390625
+          },
+          "mean": 1.3390625,
+          "sample_std": null
+        },
+        "Mean length": {
+          "per_seed": {
+            "8600": 22.134999999999998
+          },
+          "mean": 22.134999999999998,
+          "sample_std": null
+        },
+        "Mean entropy": {
+          "per_seed": {
+            "8600": -36.1084075
+          },
+          "mean": -36.1084075,
+          "sample_std": null
+        },
+        "observer/latent_p90": {
+          "mean": 0.3559826850891113,
+          "sample_std": null
+        },
+        "observer/foot_slip_per_step_m": {
+          "mean": 0.0037614166910391674,
+          "sample_std": null
+        },
+        "observer/torque_saturation": {
+          "mean": 0.0016175017959770117,
+          "sample_std": null
+        },
+        "observer/energy_proxy": {
+          "mean": 112.08245099301507,
+          "sample_std": null
+        },
+        "observer/action_delay_mean_steps": {
+          "mean": 0.0,
+          "sample_std": null
+        },
+        "observer/action_delay_nonzero_fraction": {
+          "mean": 0.0,
+          "sample_std": null
+        }
+      },
+      "final_lambda_mean": 0.0,
+      "all_complete": true
+    }
+  },
+  "training_comparison": {},
+  "verified": [
+    "every branch completed and exported a final SONIC-compatible checkpoint",
+    "all five live actuator groups used delayed actuators",
+    "all six DR channels were runtime-scalable",
+    "LUCID received SONIC objective/rewards for its return guard"
+  ],
+  "not_yet_verified": [
+    "held-out ID-clean, OOD-heavy, and 60 ms checkpoint evaluation",
+    "training curves alone do not establish final policy generalization",
+    "three-seed confirmation"
+  ]
+}

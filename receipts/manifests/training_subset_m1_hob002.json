@@ -1,0 +1,35 @@
+{
+  "kind": "lucid_training_subset",
+  "schema_version": 1,
+  "created_at": "2026-08-28T13:58:13.777897-04:00",
+  "name": "m1_hob002",
+  "git_sha": "8ced781c0a1f15de89cfe8ab459b6f2de185da88",
+  "config": {
+    "pool_manifest": "/home/linjiw/lucid-sonic/manifests/pool_debug512.json",
+    "split_manifest": "/home/linjiw/lucid-sonic/manifests/split_debug512_content.json",
+    "partition": "adaptation",
+    "requested_size": 0,
+    "explicit_keys": [
+      "walk_hands_on_back_loop_002__A066_M"
+    ],
+    "seed": 20260828
+  },
+  "pool_sha256": "b065a49854a497aaa82c891e89c32505c46f5122c86ef04f94f340d83cba0434",
+  "split_sha256": "33784622dd8c798edc6fc67bd7921edc8ebb716187f0c2d9b686758d527c4cdd",
+  "split_linkage": "content",
+  "motion_file": "/home/linjiw/lucid-sonic/pools/subsets/m1_hob002/robot_filtered",
+  "motion_count": 1,
+  "partition_size": 308,
+  "motion_keys_sha256": "10adaedaabf0f39fdc6678958299019f3f690b7c8e8c9fc9ee850f9574458e8c",
+  "motion_keys": [
+    "walk_hands_on_back_loop_002__A066_M"
+  ],
+  "verified": [
+    "every one of 1 clips resolves to an existing file",
+    "the subset directory contains nothing outside the selection",
+    "drawn only from the 'adaptation' partition, so dev and test are untouched"
+  ],
+  "not_yet_verified": [
+    "that this subset is large enough to train a useful policy -- that is the experiment"
+  ]
+}
