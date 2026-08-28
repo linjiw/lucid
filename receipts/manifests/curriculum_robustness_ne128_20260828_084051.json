@@ -1,13 +1,13 @@
 {
   "kind": "lucid_frozen_checkpoint_robustness_evaluation",
   "schema_version": 1,
-  "created_at": "2026-08-28T08:42:20.489136-04:00",
+  "created_at": "2026-08-28T08:49:45.526747-04:00",
   "experiment_id": "curriculum_robustness_ne128_20260828_084051",
-  "git_sha": "62363e425805af337fda34f5db55246b7be11bed",
+  "git_sha": "1a96351a6a6fa9c6c84512553d2083cf4d65d940",
   "git_status_short": [
-    "?? scripts/practice_utility/run_budget_curve.sh"
+    "?? scripts/practice_utility/run_latency_only.sh"
   ],
-  "launcher_sha256": "84fb0a9790e23b5a4fee192fcf86463a2ef68d218a70205d4c2ead53421f1a99",
+  "launcher_sha256": "c77e9e79eedacf5d7c498e1044b5169145a3a375c3a86b104677724164253d8e",
   "training_receipt": "/home/linjiw/lucid-sonic/manifests/curriculum_comparison_ne128_20260828_055416.json",
   "training_experiment_id": "curriculum_comparison_ne128_20260828_055416",
   "protocol": {
@@ -2137,6 +2137,302 @@
         "failed_count": 58
       },
       "complete": true
+    },
+    "curriculum_robustness_ne128_20260828_084051_s8600_off_id_clean": {
+      "checkpoint_seed": 8600,
+      "evaluation_seed": 8700,
+      "mode": "off",
+      "preset": "id_clean",
+      "checkpoint": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne128_20260828_055416/seed_8600/off/final_checkpoint.pt",
+      "checkpoint_sha256": "a6c4f0cde2816ba30b5714b3667a942c6c93fdb3c2c796599cbe0f99d65f78da",
+      "metrics_path": "/home/linjiw/lucid-sonic/artifacts/curriculum_robustness_eval/curriculum_robustness_ne128_20260828_084051/seed_8600/off/id_clean/metrics_eval.json",
+      "log_path": "/home/linjiw/lucid-sonic/outputs/curriculum_robustness_ne128_20260828_084051_s8600_off_id_clean.log",
+      "runtime": {
+        "exit_code": 0,
+        "wall_seconds": 163.40783923399977,
+        "gpu": {
+          "samples": 81,
+          "start_free_mib": 14730.0,
+          "min_free_mib": 10730.0,
+          "max_used_mib": 5079.0,
+          "max_gpu_util_pct": 76.0
+        }
+      },
+      "summary": {
+        "success_rate": 0.5882352941176471,
+        "progress_rate": 0.7193598704522147,
+        "mpjpe_g": 300.382989571113,
+        "mpjpe_l": 37.96592735947711,
+        "foot_slip_per_step_m": 0.002931439466739986,
+        "undesired_contact_rate": 0.13448854982593558,
+        "torque_saturation": 0.0018289188874883622,
+        "energy_proxy": 119.6049522693287,
+        "quality_missing_signals": [],
+        "active_dr_terms": [
+          "add_joint_default_pos",
+          "base_com",
+          "physics_material",
+          "push_robot",
+          "randomize_action_delay",
+          "randomize_rigid_body_mass"
+        ],
+        "dr_ranges": {
+          "add_joint_default_pos": {
+            "pos_distribution_params": [
+              0.0,
+              0.0
+            ]
+          },
+          "base_com": {
+            "com_range": {
+              "x": [
+                0.0,
+                0.0
+              ],
+              "y": [
+                0.0,
+                0.0
+              ],
+              "z": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "physics_material": {
+            "static_friction_range": [
+              0.95,
+              0.95
+            ],
+            "dynamic_friction_range": [
+              0.75,
+              0.75
+            ],
+            "restitution_range": [
+              0.0,
+              0.0
+            ]
+          },
+          "push_robot": {
+            "velocity_range": {
+              "x": [
+                0.0,
+                0.0
+              ],
+              "y": [
+                0.0,
+                0.0
+              ],
+              "z": [
+                0.0,
+                0.0
+              ],
+              "roll": [
+                0.0,
+                0.0
+              ],
+              "pitch": [
+                0.0,
+                0.0
+              ],
+              "yaw": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "randomize_action_delay": {
+            "delay_range": [
+              0.0,
+              0.0
+            ]
+          },
+          "randomize_rigid_body_mass": {
+            "mass_distribution_params": [
+              1.0,
+              1.0
+            ]
+          }
+        },
+        "delay": {
+          "action_delay_actuator_groups": 5,
+          "action_delay_num_lags": 640,
+          "action_delay_min_steps": 0,
+          "action_delay_max_steps": 0,
+          "action_delay_mean_steps": 0.0,
+          "action_delay_nonzero_fraction": 0.0,
+          "action_delay_histogram": [
+            640
+          ],
+          "action_delay_cross_group_equal_fraction": 1.0,
+          "action_delay_cross_group_range_mean_steps": 0.0,
+          "action_delay_process_invocations": 1409,
+          "action_delay_process_resampled_envs": 2510,
+          "action_delay_process_assignments": 12550,
+          "action_delay_process_mean_steps": 0.0,
+          "action_delay_process_histogram": [
+            12550
+          ],
+          "action_delay_process_cross_group_equal_fraction": 1.0,
+          "action_delay_process_distribution_counts": {
+            "uniform": 1409
+          },
+          "action_delay_process_coupling_counts": {
+            "independent": 1409
+          }
+        },
+        "motion_count": 102,
+        "failed_count": 42
+      },
+      "complete": true
+    },
+    "curriculum_robustness_ne128_20260828_084051_s8600_fixed_nolat_id_clean": {
+      "checkpoint_seed": 8600,
+      "evaluation_seed": 8700,
+      "mode": "fixed_nolat",
+      "preset": "id_clean",
+      "checkpoint": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne128_20260828_055416/seed_8600/fixed_nolat/final_checkpoint.pt",
+      "checkpoint_sha256": "e802126daa1851a6431cc0fdf3791fc354b1b1b451aa624bedebd4c56e0f1dda",
+      "metrics_path": "/home/linjiw/lucid-sonic/artifacts/curriculum_robustness_eval/curriculum_robustness_ne128_20260828_084051/seed_8600/fixed_nolat/id_clean/metrics_eval.json",
+      "log_path": "/home/linjiw/lucid-sonic/outputs/curriculum_robustness_ne128_20260828_084051_s8600_fixed_nolat_id_clean.log",
+      "runtime": {
+        "exit_code": 0,
+        "wall_seconds": 273.17617531699943,
+        "gpu": {
+          "samples": 136,
+          "start_free_mib": 14735.0,
+          "min_free_mib": 10734.0,
+          "max_used_mib": 5075.0,
+          "max_gpu_util_pct": 76.0
+        }
+      },
+      "summary": {
+        "success_rate": 0.6372549019607843,
+        "progress_rate": 0.76805158328338,
+        "mpjpe_g": 321.78730256782126,
+        "mpjpe_l": 37.74618322426324,
+        "foot_slip_per_step_m": 0.002279298251818462,
+        "undesired_contact_rate": 0.14295096322241682,
+        "torque_saturation": 0.0014414097210839695,
+        "energy_proxy": 104.93287505465302,
+        "quality_missing_signals": [],
+        "active_dr_terms": [
+          "add_joint_default_pos",
+          "base_com",
+          "physics_material",
+          "push_robot",
+          "randomize_action_delay",
+          "randomize_rigid_body_mass"
+        ],
+        "dr_ranges": {
+          "add_joint_default_pos": {
+            "pos_distribution_params": [
+              0.0,
+              0.0
+            ]
+          },
+          "base_com": {
+            "com_range": {
+              "x": [
+                0.0,
+                0.0
+              ],
+              "y": [
+                0.0,
+                0.0
+              ],
+              "z": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "physics_material": {
+            "static_friction_range": [
+              0.95,
+              0.95
+            ],
+            "dynamic_friction_range": [
+              0.75,
+              0.75
+            ],
+            "restitution_range": [
+              0.0,
+              0.0
+            ]
+          },
+          "push_robot": {
+            "velocity_range": {
+              "x": [
+                0.0,
+                0.0
+              ],
+              "y": [
+                0.0,
+                0.0
+              ],
+              "z": [
+                0.0,
+                0.0
+              ],
+              "roll": [
+                0.0,
+                0.0
+              ],
+              "pitch": [
+                0.0,
+                0.0
+              ],
+              "yaw": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "randomize_action_delay": {
+            "delay_range": [
+              0.0,
+              0.0
+            ]
+          },
+          "randomize_rigid_body_mass": {
+            "mass_distribution_params": [
+              1.0,
+              1.0
+            ]
+          }
+        },
+        "delay": {
+          "action_delay_actuator_groups": 5,
+          "action_delay_num_lags": 640,
+          "action_delay_min_steps": 0,
+          "action_delay_max_steps": 0,
+          "action_delay_mean_steps": 0.0,
+          "action_delay_nonzero_fraction": 0.0,
+          "action_delay_histogram": [
+            640
+          ],
+          "action_delay_cross_group_equal_fraction": 1.0,
+          "action_delay_cross_group_range_mean_steps": 0.0,
+          "action_delay_process_invocations": 2380,
+          "action_delay_process_resampled_envs": 4170,
+          "action_delay_process_assignments": 20850,
+          "action_delay_process_mean_steps": 0.0,
+          "action_delay_process_histogram": [
+            20850
+          ],
+          "action_delay_process_cross_group_equal_fraction": 1.0,
+          "action_delay_process_distribution_counts": {
+            "uniform": 2380
+          },
+          "action_delay_process_coupling_counts": {
+            "independent": 2380
+          }
+        },
+        "motion_count": 102,
+        "failed_count": 37
+      },
+      "complete": true
     }
   },
   "mode_summary": {
@@ -2201,11 +2497,298 @@
             "sample_std": null
           }
         }
+      },
+      "off": {
+        "num_runs": 1,
+        "metrics": {
+          "success_rate": {
+            "per_checkpoint_seed": {
+              "8600": 0.5882352941176471
+            },
+            "mean": 0.5882352941176471,
+            "sample_std": null
+          },
+          "progress_rate": {
+            "per_checkpoint_seed": {
+              "8600": 0.7193598704522147
+            },
+            "mean": 0.7193598704522147,
+            "sample_std": null
+          },
+          "mpjpe_g": {
+            "per_checkpoint_seed": {
+              "8600": 300.382989571113
+            },
+            "mean": 300.382989571113,
+            "sample_std": null
+          },
+          "mpjpe_l": {
+            "per_checkpoint_seed": {
+              "8600": 37.96592735947711
+            },
+            "mean": 37.96592735947711,
+            "sample_std": null
+          },
+          "foot_slip_per_step_m": {
+            "per_checkpoint_seed": {
+              "8600": 0.002931439466739986
+            },
+            "mean": 0.002931439466739986,
+            "sample_std": null
+          },
+          "undesired_contact_rate": {
+            "per_checkpoint_seed": {
+              "8600": 0.13448854982593558
+            },
+            "mean": 0.13448854982593558,
+            "sample_std": null
+          },
+          "torque_saturation": {
+            "per_checkpoint_seed": {
+              "8600": 0.0018289188874883622
+            },
+            "mean": 0.0018289188874883622,
+            "sample_std": null
+          },
+          "energy_proxy": {
+            "per_checkpoint_seed": {
+              "8600": 119.6049522693287
+            },
+            "mean": 119.6049522693287,
+            "sample_std": null
+          }
+        }
+      },
+      "fixed_nolat": {
+        "num_runs": 1,
+        "metrics": {
+          "success_rate": {
+            "per_checkpoint_seed": {
+              "8600": 0.6372549019607843
+            },
+            "mean": 0.6372549019607843,
+            "sample_std": null
+          },
+          "progress_rate": {
+            "per_checkpoint_seed": {
+              "8600": 0.76805158328338
+            },
+            "mean": 0.76805158328338,
+            "sample_std": null
+          },
+          "mpjpe_g": {
+            "per_checkpoint_seed": {
+              "8600": 321.78730256782126
+            },
+            "mean": 321.78730256782126,
+            "sample_std": null
+          },
+          "mpjpe_l": {
+            "per_checkpoint_seed": {
+              "8600": 37.74618322426324
+            },
+            "mean": 37.74618322426324,
+            "sample_std": null
+          },
+          "foot_slip_per_step_m": {
+            "per_checkpoint_seed": {
+              "8600": 0.002279298251818462
+            },
+            "mean": 0.002279298251818462,
+            "sample_std": null
+          },
+          "undesired_contact_rate": {
+            "per_checkpoint_seed": {
+              "8600": 0.14295096322241682
+            },
+            "mean": 0.14295096322241682,
+            "sample_std": null
+          },
+          "torque_saturation": {
+            "per_checkpoint_seed": {
+              "8600": 0.0014414097210839695
+            },
+            "mean": 0.0014414097210839695,
+            "sample_std": null
+          },
+          "energy_proxy": {
+            "per_checkpoint_seed": {
+              "8600": 104.93287505465302
+            },
+            "mean": 104.93287505465302,
+            "sample_std": null
+          }
+        }
       }
     }
   },
   "paired_comparisons": {
-    "id_clean": {}
+    "id_clean": {
+      "fixed_nolat_vs_fixed": {
+        "success_rate": {
+          "treatment_minus_reference_per_seed": {
+            "8600": 0.2058823529411764
+          },
+          "lucid_minus_reference_per_seed": {
+            "8600": 0.2058823529411764
+          },
+          "mean_delta": 0.2058823529411764,
+          "favorable_direction": "positive"
+        },
+        "progress_rate": {
+          "treatment_minus_reference_per_seed": {
+            "8600": 0.10162258783684053
+          },
+          "lucid_minus_reference_per_seed": {
+            "8600": 0.10162258783684053
+          },
+          "mean_delta": 0.10162258783684053,
+          "favorable_direction": "positive"
+        },
+        "mpjpe_g": {
+          "treatment_minus_reference_per_seed": {
+            "8600": 5.361065669670211
+          },
+          "lucid_minus_reference_per_seed": {
+            "8600": 5.361065669670211
+          },
+          "mean_delta": 5.361065669670211,
+          "favorable_direction": "negative"
+        },
+        "mpjpe_l": {
+          "treatment_minus_reference_per_seed": {
+            "8600": -2.927043367726448
+          },
+          "lucid_minus_reference_per_seed": {
+            "8600": -2.927043367726448
+          },
+          "mean_delta": -2.927043367726448,
+          "favorable_direction": "negative"
+        },
+        "foot_slip_per_step_m": {
+          "treatment_minus_reference_per_seed": {
+            "8600": -0.0005390510469513686
+          },
+          "lucid_minus_reference_per_seed": {
+            "8600": -0.0005390510469513686
+          },
+          "mean_delta": -0.0005390510469513686,
+          "favorable_direction": "negative"
+        },
+        "undesired_contact_rate": {
+          "treatment_minus_reference_per_seed": {
+            "8600": 0.0622272790118905
+          },
+          "lucid_minus_reference_per_seed": {
+            "8600": 0.0622272790118905
+          },
+          "mean_delta": 0.0622272790118905,
+          "favorable_direction": "negative"
+        },
+        "torque_saturation": {
+          "treatment_minus_reference_per_seed": {
+            "8600": -0.0003507862861755638
+          },
+          "lucid_minus_reference_per_seed": {
+            "8600": -0.0003507862861755638
+          },
+          "mean_delta": -0.0003507862861755638,
+          "favorable_direction": "negative"
+        },
+        "energy_proxy": {
+          "treatment_minus_reference_per_seed": {
+            "8600": -5.705134104102768
+          },
+          "lucid_minus_reference_per_seed": {
+            "8600": -5.705134104102768
+          },
+          "mean_delta": -5.705134104102768,
+          "favorable_direction": "negative"
+        }
+      },
+      "fixed_nolat_vs_off": {
+        "success_rate": {
+          "treatment_minus_reference_per_seed": {
+            "8600": 0.04901960784313719
+          },
+          "lucid_minus_reference_per_seed": {
+            "8600": 0.04901960784313719
+          },
+          "mean_delta": 0.04901960784313719,
+          "favorable_direction": "positive"
+        },
+        "progress_rate": {
+          "treatment_minus_reference_per_seed": {
+            "8600": 0.048691712831165246
+          },
+          "lucid_minus_reference_per_seed": {
+            "8600": 0.048691712831165246
+          },
+          "mean_delta": 0.048691712831165246,
+          "favorable_direction": "positive"
+        },
+        "mpjpe_g": {
+          "treatment_minus_reference_per_seed": {
+            "8600": 21.404312996708256
+          },
+          "lucid_minus_reference_per_seed": {
+            "8600": 21.404312996708256
+          },
+          "mean_delta": 21.404312996708256,
+          "favorable_direction": "negative"
+        },
+        "mpjpe_l": {
+          "treatment_minus_reference_per_seed": {
+            "8600": -0.21974413521386538
+          },
+          "lucid_minus_reference_per_seed": {
+            "8600": -0.21974413521386538
+          },
+          "mean_delta": -0.21974413521386538,
+          "favorable_direction": "negative"
+        },
+        "foot_slip_per_step_m": {
+          "treatment_minus_reference_per_seed": {
+            "8600": -0.0006521412149215243
+          },
+          "lucid_minus_reference_per_seed": {
+            "8600": -0.0006521412149215243
+          },
+          "mean_delta": -0.0006521412149215243,
+          "favorable_direction": "negative"
+        },
+        "undesired_contact_rate": {
+          "treatment_minus_reference_per_seed": {
+            "8600": 0.008462413396481239
+          },
+          "lucid_minus_reference_per_seed": {
+            "8600": 0.008462413396481239
+          },
+          "mean_delta": 0.008462413396481239,
+          "favorable_direction": "negative"
+        },
+        "torque_saturation": {
+          "treatment_minus_reference_per_seed": {
+            "8600": -0.0003875091664043927
+          },
+          "lucid_minus_reference_per_seed": {
+            "8600": -0.0003875091664043927
+          },
+          "mean_delta": -0.0003875091664043927,
+          "favorable_direction": "negative"
+        },
+        "energy_proxy": {
+          "treatment_minus_reference_per_seed": {
+            "8600": -14.672077214675681
+          },
+          "lucid_minus_reference_per_seed": {
+            "8600": -14.672077214675681
+          },
+          "mean_delta": -14.672077214675681,
+          "favorable_direction": "negative"
+        }
+      }
+    }
   },
   "checkpoint_sha256_before": {
     "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne128_20260828_055416/seed_8600/fixed/final_checkpoint.pt": "6d1ef85d6d8217c6ac93b2906930a4fc88f8821887f07d87ddbf7652d5cfe109",

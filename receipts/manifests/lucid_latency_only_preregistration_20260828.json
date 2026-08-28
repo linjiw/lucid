@@ -1,0 +1,72 @@
+{
+  "kind": "lucid_latency_only_preregistration",
+  "created_at": "2026-08-28T08:49:11.454533-04:00",
+  "author": "Claude (autonomous PI, second host)",
+  "stage": "stage 13 -- train the one axis that has headroom, and only that axis",
+  "written_after": "the untrained-origin evaluation and stage-7 TRAINING telemetry. No trained arm's evaluation had been read: stage 7's evaluation was 2 cells into 75 and stage 8's had not started.",
+  "the_argument": [
+    "1. The untrained settled origin is ALREADY robust to the five non-latency channels: 89.54% clean, 66.01% at half the envelope, 60.46% at the full envelope, 56.21% at 1.25x an envelope it never trained on. There is very little headroom there for training to add, and the 128-iteration horizon study shows training instead subtracts.",
+    "2. The same origin scores 0.00% with latency pinned at 60 ms, on all three eval seeds. That is the one axis where the released policy has nothing at all, so it is the one axis where a curriculum could demonstrably add capability.",
+    "3. Channel attribution (stage 7, 3/3 seeds) says actuation latency alone costs 2.7x what the other five channels cost together and reaches 89% of the full envelope's damage.",
+    "Together: the only place a curriculum can add capability is exactly the place where training at full strength destroys the policy. The minimal intervention those three facts imply is a curriculum on latency alone, approached gently -- gap-gated, stratified across intensities, and guarded on a scale-free signal."
+  ],
+  "design": {
+    "num_envs": 128,
+    "iterations": 128,
+    "warmup_iterations": 10,
+    "seeds": [
+      8600,
+      8601,
+      8602
+    ],
+    "origin": "the same settled step-24 origin as every other stage (sha256 2fcb299a659c9cb2...)",
+    "arms": {
+      "lucid_latonly_s4_rg": "five non-latency channels pinned at nominal; latency scheduled by the gap-gated curriculum over 4 intensity strata with the relative guard",
+      "ta_lucid_50_latonly_s4_rg": "the same plus a 50% anchor at the arm's own target envelope, i.e. full latency and nominal everything else"
+    },
+    "note_on_the_anchor": "the anchor samples this arm's target envelope, not the config's. That was a defect fixed at 1a96351 before any capped or latency-only arm ran; without it half of each anchored arm would have trained on the full six-channel envelope and the arm would not have been what it claimed.",
+    "comparators": [
+      "the untrained origin",
+      "off@128",
+      "fixed@128",
+      "fixed_latonly@128 (same channels, no curriculum)",
+      "ta_lucid_50_s4_rg@128 (same curriculum, all six channels)"
+    ]
+  },
+  "evaluation": {
+    "presets": [
+      "id_clean",
+      "dr_050",
+      "dr_full",
+      "dr_125"
+    ],
+    "ladder": [
+      "lat_10ms",
+      "lat_20ms",
+      "lat_30ms",
+      "lat_40ms",
+      "lat_60ms"
+    ],
+    "primary": "latency-ladder AUC over the rungs 10-40 ms -- the deployment axis",
+    "co_primary": "id_clean success, because a latency gain bought by wrecking nominal capability is not a gain"
+  },
+  "hypotheses": {
+    "H_L1b": "training latency alone is far less destructive than training all six: lucid_latonly_s4_rg id_clean exceeds ta_lucid_50_s4_rg id_clean by >= 5 pts.",
+    "H_L2b": "the curriculum matters, not just the channel choice: lucid_latonly_s4_rg beats fixed_latonly on id_clean by >= 5 pts (fixed_latonly trains the same channel at full strength throughout).",
+    "H_L3b": "capability is actually added: at the 20 ms rung, the best latency-only arm exceeds the untrained origin by >= 10 pts.",
+    "H_L4b": "and it is not bought by forgetting: the same arm stays within 5 pts of the untrained origin on id_clean."
+  },
+  "decision_rules": {
+    "tie": "< 2 pts on three seeds",
+    "seed_agreement": ">= 2 of 3 seeds for any directional claim",
+    "H_L3b_and_H_L4b_are_joint": "a pass on H_L3b with a fail on H_L4b is reported as a trade, with both numbers, and is not called a capability gain.",
+    "if_all_fail": "then no curriculum in this study adds deployable capability to the released policy at this scale, and the paper says exactly that. The contribution is then the diagnosis -- one channel carries the harm, the latent gap cannot see it, the guard is not scale-portable, the anchor contaminated the guard, and two endpoints were saturated -- plus the audit protocol that found them."
+  },
+  "verified": [],
+  "not_yet_verified": [
+    "all; written before launch"
+  ],
+  "git_sha": "1a96351a6a6fa9c6c84512553d2083cf4d65d940",
+  "git_status_short": [],
+  "logical_sha256": "545ace4942b2d266982fe1c0c89b82f986732aa977c4a9f7261d754b325e5748"
+}
