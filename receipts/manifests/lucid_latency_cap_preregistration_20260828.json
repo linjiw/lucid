@@ -1,0 +1,97 @@
+{
+  "kind": "lucid_latency_cap_preregistration",
+  "created_at": "2026-08-28T06:57:15.844642-04:00",
+  "author": "Claude (autonomous PI, second host)",
+  "stage": "stage 9 -- if one channel carries the harm, can a per-channel ceiling keep the rest of the envelope?",
+  "written_after": "stage 7 TRAINING telemetry only (curriculum_comparison_ne128_20260828_055416.json). No stage-7 or stage-8 EVALUATION result existed when this was written, so every evaluation endpoint below is outcome-blind.",
+  "evidence_that_motivates_it": {
+    "harm_is_one_channel": {
+      "last4_reward": {
+        "off": 13.09,
+        "fixed_nolat": 10.63,
+        "fixed_latonly": 6.38,
+        "fixed": 5.52,
+        "lucid": 9.43
+      },
+      "reward_loss_vs_off_per_seed": {
+        "five non-latency channels together": [
+          2.34,
+          2.27,
+          2.76
+        ],
+        "actuation latency alone": [
+          4.55,
+          8.27,
+          7.31
+        ],
+        "full envelope": [
+          6.72,
+          6.98,
+          9.02
+        ]
+      },
+      "reading": "Latency alone costs 2.7x what the other five channels cost together, in 3 of 3 seeds, and reaches 89% of the full envelope's damage. Losses are sub-additive (2.46 + 6.71 > 7.57), so there is mild interaction, but the ordering is not in doubt."
+    },
+    "the_gap_cannot_see_it": {
+      "latent_p90_3seed_mean": {
+        "off": 0.053,
+        "fixed_latonly": 0.078,
+        "lucid": 0.166,
+        "fixed": 0.182,
+        "fixed_nolat": 0.245
+      },
+      "reading": "The most damaging channel raises the latent command-execution gap barely above the no-DR control -- below it in seed 8601 -- while the least damaging channels raise it most. The direction holds in 2 of 3 seeds and the per-seed gap estimates are visibly noisy, so this is recorded as 'the gap does not rank channels by harm', NOT as an anti-correlation. It is still enough to explain why gap-gating never protected the policy: the controller's only evidence is near-blind to the dominant harm channel."
+    },
+    "absolute_thresholds_do_not_port": {
+      "observed": "the same absolute return floor (8.0) tripped 12/7/7 times here against 3-7 on the first host, driving terminal lambda to 0.339 against 0.4-0.6, purely because this host's reward level runs ~15% lower.",
+      "reading": "independent confirmation of the defect the relative guard was built to fix, and the same defect that makes stage 7's own H_L3 thresholds untransferable."
+    }
+  },
+  "design": {
+    "num_envs": 128,
+    "iterations": 128,
+    "warmup_iterations": 10,
+    "seeds": [
+      8600,
+      8601,
+      8602
+    ],
+    "origin": "the same settled step-24 origin as stages 7 and 8 (sha256 2fcb299a659c9cb2...)",
+    "arms": {
+      "lucid_latcap_s4_rg": "latency capped at 0.5 of its envelope, 4 intensity strata, relative guard, no anchor",
+      "ta_lucid_50_latcap_s4_rg": "the same plus a 50% target anchor"
+    },
+    "matched_uncapped_pair": "stage 8's lucid_s4_rg and ta_lucid_50_s4_rg -- same seeds, same origin, everything but the cap. The design is a 2x2 over {cap, no cap} x {anchor, no anchor}.",
+    "why_cap_0_5_and_not_a_tuned_value": "0.5 is the midpoint of the configured 0-40 ms envelope, fixed before any evaluation was seen and not swept. It halves the one channel stage 7 identified as dominant while leaving the other five at full support. The cap is never graded on its own turf: every evaluation preset (dr_full at 40 ms, latency_60ms at 60 ms) tests latency OUTSIDE the capped training range, so a capped arm can only win by generalising past what it trained on."
+  },
+  "evaluation": {
+    "presets": [
+      "id_clean",
+      "dr_050",
+      "dr_full",
+      "dr_125",
+      "latency_60ms"
+    ],
+    "primary": "robustness-profile AUC over s in {0, 0.5, 1.0, 1.25}",
+    "co_primary": "latency_60ms success -- the cap's hardest case, 3x its training ceiling"
+  },
+  "hypotheses": {
+    "H_C1": "capping helps overall: ta_lucid_50_latcap_s4_rg beats ta_lucid_50_s4_rg on profile AUC by >= 2 pts.",
+    "H_C2": "the cap buys retention: it beats its uncapped pair on id_clean by >= 5 pts.",
+    "H_C3": "the cap does NOT cost out-of-range latency robustness: on latency_60ms it is within 3 pts of its uncapped pair. Losing more than that means the cap trades deployment latency margin for clean capability, and it is reported as a trade, not a win.",
+    "H_C4": "the effect is about the channel, not the anchor: the capped-minus-uncapped gain on profile AUC has the same sign with and without the anchor."
+  },
+  "decision_rules": {
+    "tie": "< 2 pts on three seeds",
+    "seed_agreement": "any directional claim must hold in >= 2 of 3 seeds",
+    "if_H_C3_fails": "report and quantify the trade; never present AUC gains without the latency cost beside them.",
+    "cap_value_is_not_swept": "0.5 is the only cap run. If it wins it is one point, not a tuned optimum, and the paper says so."
+  },
+  "verified": [],
+  "not_yet_verified": [
+    "all evaluation endpoints; written before any stage-7/8 evaluation existed"
+  ],
+  "git_sha": "232724b3a4a1e5dccfed5c545e1d6e0990876899",
+  "git_status_short": [],
+  "logical_sha256": "fc73eee1a235174a25170f19a212854430d2f8fa88fd8f216fb99c438c19eecc"
+}

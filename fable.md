@@ -827,3 +827,81 @@ have receipts for everything; keep the paper reproducible from them.
   tests build receipts where every verdict is known by construction, and already caught
   a real defect (an empty `curriculum_path` resolves to `.`, a directory, so the
   existence check passed and the read raised).
+
+- **2026-08-28 06:54 — Stage 7 (channel attribution, 128 it, same-host references).**
+  Receipt `curriculum_comparison_ne128_20260828_055416.json`; 15 branches, all complete.
+  Mechanism validated in-simulator before reading anything: `fixed_nolat` and `off` show
+  max actuator lag 0 and 0% nonzero, `fixed_latonly` 3.74 steps at 86% nonzero.
+
+  | last-4 reward | off | fixed_nolat | lucid | fixed_latonly | fixed |
+  |---|---:|---:|---:|---:|---:|
+  | 3-seed mean | **13.09** | 10.63 | 9.43 | 6.38 | **5.52** |
+  | episode length | 162.6 | 141.2 | 136.0 | 100.3 | 95.5 |
+  | latent gap p90 | 0.053 | **0.245** | 0.166 | **0.078** | 0.182 |
+
+  **One channel carries the harm.** Reward lost against the no-DR control, per seed:
+  the five non-latency channels *together* cost 2.34 / 2.27 / 2.76; actuation latency
+  *alone* costs 4.55 / 8.27 / 7.31. Latency is 2.7× the rest combined, **in 3 of 3
+  seeds**, and reaches 89% of the full envelope's damage. The losses are sub-additive
+  (2.46 + 6.71 > 7.57), so there is mild interaction, but the ordering is not in doubt.
+  This is the evidence LUCID-MC needed: *a scalar λ cannot express "everything except
+  latency"*, and now there is a measured reason to want to.
+
+  **And the curriculum's own signal is nearly blind to it.** `fixed_latonly` — the most
+  damaging arm short of full DR — raises the latent command-execution gap to 0.078,
+  barely above the no-DR control's 0.053 and *below* it in seed 8601 (0.026 vs 0.047).
+  The least damaging arm, `fixed_nolat`, raises it most (0.245). The direction holds in
+  2 of 3 seeds and the per-seed gap estimates are visibly noisy, so this is recorded as
+  **"the gap does not rank channels by harm"**, not as an anti-correlation. It is still
+  enough to explain the whole stage-5 failure: λ climbed to 1.0 by iteration 39 because
+  the gap never objected, and the return guard was the only thing that ever pushed back.
+  Under latency the robot tracks its *commands* in latent space perfectly well; the
+  damage is somewhere the encoder does not look.
+
+  **An absolute threshold does not survive a change of machine.** `lucid` here tripped its
+  return guard **12 / 7 / 7** times against 3–7 on the first host, and ended at
+  terminal λ **0.339** against 0.4–0.6 — same floor (8.0), same code, a reward level
+  ~15% lower. That is independent confirmation of the defect the relative guard was
+  built to fix, and it lands on stage 7's own preregistration too: H_L3's thresholds
+  ("`fixed_nolat` > 15, `fixed_latonly` < 10") were calibrated where `off` = 19.1, and
+  here `off` = 13.09. **As literally written H_L3 fails one clause.** Expressed as a
+  fraction of the same-host no-DR control — the comparison it was plainly making —
+  both clauses pass: 15/19.1 = 79% asked vs 81% observed, and 10/19.1 = 52% asked vs
+  49% observed. Reported both ways; the absolute form is the one that broke, and it
+  broke for exactly the reason the guard did. H_L1/H_L2 are evaluation hypotheses and
+  are still pending.
+
+  *One hygiene note.* The delayed-actuator process records ~640 nonzero assignments —
+  one full population draw at the config default — **before** the curriculum callback
+  binds. `off` and `fixed_nolat` show byte-identical nonzero histograms at the same seed,
+  so it is a shared pre-bind transient and confounds nothing, and it does not exist in
+  evaluation (`id_clean` runs show `action_delay_process_histogram: [5515]`, every
+  assignment zero). Recorded, not claimed.
+
+- **2026-08-28 06:54 — Stage 8 launched; LUCID-S verified live.** The first stratified
+  branch (`lucid_s4`, seed 8600) shows the mechanism doing exactly what it was built to:
+  4 strata of **exactly 32 environments each**, stratum λ = 0.240 / 0.480 / 0.720 / 0.960
+  at λ = 0.9597, `delay_range` params [0, 1.92] / [0, 3.84] / [0, 5.76] / live, and —
+  the part that matters — **realized actuator lag 1.03 / 1.70 / 2.48 / 3.08 steps**.
+  The intensity mixture is physics the simulator installed, not a config assertion.
+  Note a confound the design already anticipates: `lucid_s4` keeps the *absolute* guard,
+  yet sits at λ = 0.96 where plain `lucid` was driven to 0.34 — because three quarters of
+  its environments train easier, mean return stays above the floor. Mixture and λ
+  trajectory therefore move together in that arm; `lucid_rg` (guard only) and
+  `lucid_s4_rg` (both) are in the same campaign precisely to separate them.
+
+  **Stage 9 preregistered** from stage-7 *training* telemetry only, before any evaluation
+  existed: `lucid_latency_cap_preregistration_20260828.json` (logical sha `fc73eee1a235174a`).
+  A 2×2 over {latency cap 0.5, no cap} × {anchor, no anchor}, the capped arms matched to
+  stage 8's `lucid_s4_rg` / `ta_lucid_50_s4_rg` on seeds and origin. The cap is the
+  midpoint of the 0–40 ms envelope, fixed in advance and not swept, and it is never graded
+  on its own turf: `dr_full` (40 ms) and `latency_60ms` (60 ms) both test latency *outside*
+  the capped training range, so a capped arm can only win by generalising past what it
+  trained on. H_C3 is stated so that losing out-of-range latency robustness is reported as
+  a **trade**, not buried under an AUC gain.
+
+  **Stage 10 preregistered** as a validity control that runs whichever way stage 8 goes:
+  `lucid_batch_size_control_preregistration_20260828.json` (logical sha `7b868634d66036ef`).
+  Every horizon result here was measured at `num_envs=128` against a policy released after
+  training at 4096. If full-envelope DR turns out to be sustainable at 256, the stage-5/6
+  mechanism reading is a small-batch artifact and gets retracted in those words.
