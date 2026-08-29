@@ -834,3 +834,12 @@ have receipts for everything; keep the paper reproducible from them.
   `off` × 3 seeds × 128 it, preregistered in `combined_regime_preregistration_20260828.json`
   — bar: clean ≥ 90 at 128 it. If it passes, fixed / ta50 get re-run under it; if not,
   the paper is the sustainability + latency-tradeoff + audit study.
+- **2026-08-29 00:23 — Stage 11 (combined regime: 512 envs + LR cap 2e-5 / floor 1e-6 /
+  1 epoch), `off` × 128 it:** clean **93.14** [96, 91, 92], dr_full 60.13, training
+  reward 24.5 (best ever). H_X1 ✓ H_X2 ✓. **Fine-tuning is lossless at 128 iterations
+  for the first time.** Receipts `curriculum_comparison_ne512_20260828_215844_combined_128.json`,
+  `curriculum_robustness_ne128_20260828_225216.json`. **Stage 12 launched** per the
+  decision rule (`regime2_curricula_preregistration_20260829.json`): fixed / lucid /
+  ta_lucid_50 × 3 seeds × 128 it under the combined regime. H_Y1 fixed gains > 5
+  dr_full over off (60.1) at clean ≥ 88; H_Y2 ta50 dominates fixed (clean +3, dr_full
+  ≥ −2); H_Y3 any arm beats the release (dr_full > 69.6 at clean ≥ 95).
