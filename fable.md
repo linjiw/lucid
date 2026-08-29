@@ -816,3 +816,21 @@ have receipts for everything; keep the paper reproducible from them.
   value is *retention over budget* — a legitimate claim. If everything holds at 128 on
   the lossless base, the honest paper is the sustainability + latency-tradeoff
   study with TACE as a dose control.
+- **21:57 — Stage 9 @128 it, 512 envs.** Receipt `curriculum_robustness_ne128_20260828_152820.json`.
+
+  | success % (32 → 128 it) | off | fixed | lucid | ta_lucid_50 |
+  |---|---|---|---|---|
+  | id_clean | 91.8 → **85.9** | 87.6 → 78.1 | 91.2 → 77.8 | 89.2 → 79.1 |
+  | dr_050 | 67.6 → 67.0 | 74.5 → 65.0 | 68.3 → 68.6 | 72.9 → **72.5** |
+  | dr_full | 60.8 → 56.5 | 68.3 → **61.1** | 61.1 → 58.2 | 65.7 → 58.5 |
+
+  H_R4 ✗ (ta50 loses 10.1 clean, as much as fixed's 9.5; lucid loses 13.4 once λ=1 with
+  zero guard trips), H_R5 ✗. Even 512 envs is not lossless at 128 it (off −6 clean).
+  **Day-2 conclusion:** at this fine-tuning scale DR robustness (≤ +7.5 dr_full) trades
+  roughly 1:1 against clean success via latency dose; the scalar gap controller finds
+  no better point on that line than a fixed dose; the anchor is a usable mid-point; more
+  budget hurts every arm. Retention under training is the binding constraint. **Stage
+  11 launched:** the combined regime (512 envs + LR cap 2e-5 / floor 1e-6 / 1 epoch),
+  `off` × 3 seeds × 128 it, preregistered in `combined_regime_preregistration_20260828.json`
+  — bar: clean ≥ 90 at 128 it. If it passes, fixed / ta50 get re-run under it; if not,
+  the paper is the sustainability + latency-tradeoff + audit study.

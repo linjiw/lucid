@@ -1,0 +1,11 @@
+{
+  "kind": "lucid_combined_regime_preregistration",
+  "created_at": "2026-08-28T22:05:00-04:00",
+  "author": "Fable (autonomous)",
+  "motivation": "512 envs alone is lossless at 32 it (off 91.8) but not at 128 (85.9); C2 small updates were equally effective at 32 (93.1). Both cells attacked update magnitude; combining them is the natural next regime and was explicitly reserved for its own preregistration.",
+  "design": {"arm": "off", "num_envs": 512, "iterations": 128, "warmup_iterations": 10, "seeds": [8600, 8601, 8602], "overrides": ["++algo.config.adaptive_lr_min=1e-6", "++algo.config.adaptive_lr_max=2e-5", "++algo.config.num_learning_epochs=1"], "references": {"off@128 512envs": [85.9, 56.5], "off@32 512envs": [91.8, 60.8], "origin": [94.1, 62.4]}},
+  "evaluation": {"presets": ["id_clean", "dr_full"]},
+  "hypotheses": {"H_X1": "off@128 under the combined regime holds id_clean >= 90", "H_X2": "dr_full >= 60 (no robustness cost from the smaller updates)"},
+  "decision_rule": "if H_X1 passes, rerun fixed and ta_lucid_50 at 128 it under this regime (new preregistration); if it fails, stop regime search — report retention as the limit of PPO fine-tuning at this scale",
+  "verified": [], "not_yet_verified": ["all; written before launch"]
+}
