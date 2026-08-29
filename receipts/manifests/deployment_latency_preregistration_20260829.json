@@ -1,0 +1,15 @@
+{
+  "kind": "lucid_deployment_latency_preregistration",
+  "created_at": "2026-08-29T10:40:00-04:00",
+  "author": "Fable (autonomous)",
+  "motivation": "Training latency was independent per actuator group, 0-40 ms. Deployment latency is a shared command-transport lag; the 2026-08-21 sweep showed the process changes rankings. Score the operating point under shared per-episode U(0, 60 ms).",
+  "policies": {"release": "untrained", "off@128": "stage 11", "fixed@512": "stage 14 operating point"},
+  "panel": "102-motion content-dev (seen motions; fresh physics)",
+  "presets": {"lat_u60_common": "nominal physics + shared U(0,60 ms)", "dr_full_lat_u60_common": "full non-latency envelope + shared U(0,60 ms)"},
+  "hypotheses": {
+    "H_D1": "fixed@512 lat_u60_common success > release + 5 pts (robustness transfers to the deployment process and beyond the 40 ms training support)",
+    "H_D2": "fixed@512 dr_full_lat_u60_common success > release + 5 pts",
+    "H_D3": "off@128 <= release on both (fine-tuning without DR buys no latency robustness)"
+  },
+  "verified": [], "not_yet_verified": ["all; written before launch"]
+}
