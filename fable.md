@@ -974,3 +974,13 @@ point. Writing starts Sept 1 as planned; the story is now positive and simple.
   complete**: seen panel (five seeds), unseen panel, deployment latency, budget curve,
   channel attribution, curriculum negatives. Stage 17 (adaptation-split fine-tuning to
   cut the clean cost) is the one open improvement.
+- **17:56 — Stage 17: fixed @512 fine-tuned on the 2,972-motion adaptation split**
+  (receipts `curriculum_robustness_ne128_20260829_{165839,172450}.json`): unseen200
+  clean **88.5** [87, 89, 90] / dr_full **80.0** [80, 82, 78]; seen102 91.5 / 76.5. Versus the
+  512-pool policy: unseen 87.8 / 79.8. H_P1 ✗, H_P2 ✓, H_P3 ✗ (narrow). **The ~9-pt
+  clean cost on unseen motions is not memorization of the small pool — it is the
+  latency-dose retention cost, and it is pool-independent.** Headline policy stays the
+  512-pool fixed@512 (equivalent, cheaper). The remaining knob is dose: stage 18 maps a
+  third point on the dose–retention frontier — `fixed_lat50` (five channels at full
+  strength, latency envelope halved to 0–20 ms) at 512 it, scored on seen, unseen and
+  shared U(0,60 ms) panels (`dose_frontier_preregistration_20260829.json`).
