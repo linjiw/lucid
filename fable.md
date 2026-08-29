@@ -879,3 +879,48 @@ have receipts for everything; keep the paper reproducible from them.
   [74, 80, 75, 74, 79]; off — clean 93.92, dr_full 60.39. **H_Z1 ✓: every one of five
   seeds exceeds the release's 69.6 dr_full.** This is the headline table. fixed@256
   (H_Z2/H_Z3) running.
+- **08:15 — Stage 13b: fixed @256 it, lossless regime** (receipt
+  `curriculum_robustness_ne128_20260829_072508.json`): clean **94.1** [92, 94, 96],
+  dr_050 **85.9**, dr_full **79.1** [80, 77, 79] — vs @128: 91.5 / 85.0 / 76.5. H_Z2 ✓ (no
+  collapse), H_Z3 ✓ (still rising). **With enough budget under the right regime, DR
+  fine-tuning recovers the origin's clean success while pushing dr_full +9.5 over the
+  release.** The clean gap to the release is now 3.3 pts. Stage 14 launched
+  (`operating_point_preregistration_20260829.json`): fixed @512 × 3 seeds (H_W1: still
+  rising / clean ≥ 94), and lucid + ta_lucid_50 @256 × 3 seeds (H_W2: curricula remain
+  dominated at the operating point).
+
+## Paper plan v2 (2026-08-29) — what the data now supports
+
+**Title (working):** *Robustifying a Released Humanoid Whole-Body Tracker: The
+Bottleneck Was the Fine-Tuning Regime, Not the Curriculum.*
+
+**Claims, each with its receipt:**
+1. **Release-baseline discipline.** The released SONIC policy, untrained, scores 97.4 /
+   71.2 / 69.6 (clean / dr_050 / dr_full); naive fine-tuning is monotonically destructive
+   (97.4 → 94.1 → 83.0 → 66.7 clean over 0 → 24 → 56 → 152 iterations) while training
+   reward stays flat — the training curve is blind to deployment decay.
+2. **Cause and fix.** PPO update magnitude at 3k-sample batches (per-update KL > 0.02,
+   LR pinned at its floor). 512 envs *or* small updates (LR cap 2e-5, 1 epoch) make 32
+   iterations lossless; both together make 128–256 iterations lossless (93.1 / 94.1
+   clean with no DR / with DR). Entropy drift is a symptom.
+3. **Headline.** Under that regime, plain full-envelope DR fine-tuning beats the
+   release: five seeds @128 — dr_full 76.5 ± 3.3 (every seed > 69.6), dr_050 84.3,
+   clean 91.6; @256 — 79.1 / 85.9 / 94.1.
+4. **Mechanism.** Actuation latency (0–40 ms, per-group) is the sole destabilizing
+   channel and the sole source of DR robustness; the other five channels are inert for
+   robustness and benign for retention (channel attribution, both directions).
+5. **Curricula are dominated — preregistered negative.** Gap-gated scalar λ, the
+   target-anchored variant (TACE), latency-only gating, and post-hoc consolidation all
+   sit on or below fixed DR's dose–retention line; the one thing online gap feedback
+   demonstrably buys is a better schedule than a yoked replay (3/3 seeds). Reviewers
+   get 12 preregistered cells, ~40 receipts, and every negative.
+6. **Audit methodology** (parity, yoked attribution, receipts, gates) as the vehicle.
+
+**Figures:** (1) degradation ladder + training-reward blindness; (2) regime study
+(C1/C2/C3, combined) — clean vs iterations; (3) headline bars with per-seed dots vs
+release; (4) channel attribution; (5) dose–retention line with every arm plotted;
+(6) budget curve fixed @32/128/256/512.
+
+**Open before writing:** operating point (stage 14), held-out-motion panel (content
+split unseen in fine-tuning), a 0–60 ms deployment-latency preset at the operating
+point. Writing starts Sept 1 as planned; the story is now positive and simple.
