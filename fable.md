@@ -843,3 +843,33 @@ have receipts for everything; keep the paper reproducible from them.
   ta_lucid_50 × 3 seeds × 128 it under the combined regime. H_Y1 fixed gains > 5
   dr_full over off (60.1) at clean ≥ 88; H_Y2 ta50 dominates fixed (clean +3, dr_full
   ≥ −2); H_Y3 any arm beats the release (dr_full > 69.6 at clean ≥ 95).
+- **2026-08-29 05:36 — Stage 12: DR arms at 128 it under the lossless regime. THE RESULT.**
+  Receipt `curriculum_robustness_ne128_20260829_030550.json`.
+
+  | success % @128, lossless regime | off | **fixed** | lucid | ta_lucid_50 | origin | **release** |
+  |---|---:|---:|---:|---:|---:|---:|
+  | id_clean | 93.1 | 91.5 [87,96,91] | 92.5 | 91.5 | 94.1 | 97.4 |
+  | dr_050 | — | **85.0** [84,91,79] | 80.4 | 81.4 | 67.7 | 71.2 |
+  | dr_full | 60.1 | **76.5** [74,80,75] | 72.5 | 71.9 | 62.4 | 69.6 |
+
+  **Full-envelope DR fine-tuning, with the update magnitude fixed, exceeds the released
+  policy's robustness in every seed** (+6.9 dr_full, +13.8 dr_050) at a −2.6 clean cost
+  vs no-DR (−5.9 vs the release). H_Y1 ✓, H_Y3 ✓ on robustness (clean 91.5 < 95 bar),
+  **H_Y2 ✗ — the anchor is dominated by fixed once the base is stable**, H_Y4 tie
+  (lucid +1.0 clean). Gap-gated λ reached 1 in every seed (gap never exceeded its
+  set-point), so the curricula are just slower ramps to the same dose, and the ramp
+  costs robustness at fixed budget.
+
+  **Paper direction (recommended):** *"Robustifying a released humanoid whole-body
+  tracker: the bottleneck was the fine-tuning regime, not the curriculum."* Claims:
+  (1) release-baseline discipline exposes that naive fine-tuning is net-destructive
+  (monotone ladder 97→94→83→57); (2) the cause is PPO update magnitude at small batch
+  (3k samples) — 512 envs + LR cap 2e-5 / 1 epoch makes 128 it lossless (93.1 clean);
+  (3) under that regime plain full-envelope DR beats the release by +7 / +14 pts on
+  the DR presets; (4) actuation latency is the sole destabilizer and sole robustness
+  source (channel attribution); (5) gap-gated and target-anchored curricula are
+  dominated — a preregistered negative with the yoked attribution as the one thing
+  online feedback buys. Remaining gap to close: clean 91.5 → 97.4.
+  **Stage 13 launched:** fixed + off at seeds 8603–8604 (paper-grade 5 seeds) and
+  fixed @256 it × 3 seeds (does robustness keep rising, does clean hold),
+  `regime2_confirmation_preregistration_20260829.json`.
