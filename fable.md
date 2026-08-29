@@ -873,3 +873,9 @@ have receipts for everything; keep the paper reproducible from them.
   **Stage 13 launched:** fixed + off at seeds 8603–8604 (paper-grade 5 seeds) and
   fixed @256 it × 3 seeds (does robustness keep rising, does clean hold),
   `regime2_confirmation_preregistration_20260829.json`.
+- **07:00 — Stage 13a: five-seed confirmation @128, lossless regime** (seeds 8600–8604;
+  receipt `curriculum_robustness_ne128_20260829_055519.json` + `..._030550`):
+  fixed — clean **91.57 ± 3.30**, dr_050 **84.31 ± 4.33**, dr_full **76.47 ± 3.25**
+  [74, 80, 75, 74, 79]; off — clean 93.92, dr_full 60.39. **H_Z1 ✓: every one of five
+  seeds exceeds the release's 69.6 dr_full.** This is the headline table. fixed@256
+  (H_Z2/H_Z3) running.
