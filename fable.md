@@ -958,3 +958,19 @@ point. Writing starts Sept 1 as planned; the story is now positive and simple.
   partly content-specific — the honest limitation, and the next thing to fix
   (candidates: fine-tune on the 2,972-motion adaptation split instead of 512; lower
   latency dose). Stage 16 (shared U(0, 60 ms)) running.
+- **16:08 — Stage 16: deployment latency, shared per-episode U(0, 60 ms)** (receipts
+  `curriculum_robustness_ne128_20260829_{143034,150357,153734}.json`; live audit: all
+  five groups equal-lag, 0–12 steps, cross-group-equal fraction 1.0):
+
+  | success %, 102-motion panel | release | off@128 | **fixed@512** |
+  |---|---:|---:|---:|
+  | nominal physics + U(0,60 ms) shared lag | 53.27 | 51.31 | **73.53** [71, 76, 74] |
+  | full physics DR + U(0,60 ms) shared lag | 52.29 | 47.06 | **66.01** [61, 70, 68] |
+
+  **H_D1 ✓ (+20.3), H_D2 ✓ (+13.7), H_D3 ✓.** Training used independent per-group 0–40 ms
+  lags; the gain transfers to a shared transport lag with 50% more range. The
+  2026-08-21 finding (LUCID had no deployment-latency advantage) is now inverted for
+  the correctly fine-tuned fixed-DR policy. **All evaluations in Paper plan v2 are
+  complete**: seen panel (five seeds), unseen panel, deployment latency, budget curve,
+  channel attribution, curriculum negatives. Stage 17 (adaptation-split fine-tuning to
+  cut the clean cost) is the one open improvement.
