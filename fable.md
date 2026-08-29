@@ -930,3 +930,14 @@ point. Writing starts Sept 1 as planned; the story is now positive and simple.
   dr_full 76.5 → 79.1 → 81.4 (@128/256/512), clean 91.5 → 94.1 → 91.5 (plateau
   91–94, seed-noisy). H_W1 ✓, H_W1b ✓ → **operating point = 512 it** (largest budget with
   no collapse). Curricula @256 running (H_W2).
+- **10:45 — Queued behind stage 14:** stage 15 = unseen-motion panel (adapt4950
+  content-dev minus debug512, 200 motions hash-bound; `heldout_panel_preregistration_20260829.json`)
+  and stage 16 = shared per-episode U(0, 60 ms) deployment-latency presets
+  (`deployment_latency_preregistration_20260829.json`), both scoring release / off@128
+  / fixed@512. These close the two evaluation gaps in Paper plan v2.
+- **13:00 — Stage 14b: curricula @256, lossless regime** (receipt
+  `curriculum_robustness_ne128_20260829_105536.json`): lucid 91.8 / 82.0 / 76.5, ta_lucid_50
+  91.5 / 83.0 / 77.1 vs fixed 94.1 / 85.9 / 79.1 (clean / dr_050 / dr_full). **H_W2 ✓ — both
+  curricula dominated on both axes at the operating budget.** The preregistered
+  negative is complete across 32 / 128 / 256 iterations and two regimes. Stage 15
+  (unseen motions) running, stage 16 (deployment latency) queued.
