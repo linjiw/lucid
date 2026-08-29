@@ -924,3 +924,9 @@ release; (4) channel attribution; (5) dose–retention line with every arm plott
 **Open before writing:** operating point (stage 14), held-out-motion panel (content
 split unseen in fine-tuning), a 0–60 ms deployment-latency preset at the operating
 point. Writing starts Sept 1 as planned; the story is now positive and simple.
+- **09:53 — Stage 14a: fixed @512 it** (receipt `curriculum_robustness_ne128_20260829_090622.json`):
+  clean 91.5 [92, 88, 94], dr_050 **87.3**, dr_full **81.4** [84, 79, 80], latency_60ms
+  3.6 (first nonzero ever). Budget curve for fixed under the lossless regime —
+  dr_full 76.5 → 79.1 → 81.4 (@128/256/512), clean 91.5 → 94.1 → 91.5 (plateau
+  91–94, seed-noisy). H_W1 ✓, H_W1b ✓ → **operating point = 512 it** (largest budget with
+  no collapse). Curricula @256 running (H_W2).
