@@ -941,3 +941,20 @@ point. Writing starts Sept 1 as planned; the story is now positive and simple.
   curricula dominated on both axes at the operating budget.** The preregistered
   negative is complete across 32 / 128 / 256 iterations and two regimes. Stage 15
   (unseen motions) running, stage 16 (deployment latency) queued.
+- **14:30 — Stage 15: unseen-motion panel** (adapt4950 content-dev minus debug512, 200
+  motions; receipts `curriculum_robustness_ne128_20260829_{130115,133016,135752}.json`):
+
+  | success %, UNSEEN motions | release | off@128 | **fixed@512** |
+  |---|---:|---:|---:|
+  | id_clean | 97.33 | 95.00 | 87.83 [88, 85, 90] |
+  | dr_full | 63.83 | 60.33 | **79.83** [82, 76, 80] |
+
+  **H_H1 ✓ (+16.0 dr_full over the release on unseen motions — larger than the +11.8 on
+  seen motions, because the release is weaker under DR on unseen content), H_H3 ✓
+  (79.8 unseen vs 81.4 seen: the robustness gain is not memorized), H_H2 ✗ (clean
+  −9.5 vs the release on unseen motions, vs −5.9 on seen: roughly a third of the seen-
+  panel clean retention was specific to the 512 fine-tuning motions).** Paper framing:
+  the robustness gain generalizes across motions; the clean cost is 7–10 pts and
+  partly content-specific — the honest limitation, and the next thing to fix
+  (candidates: fine-tune on the 2,972-motion adaptation split instead of 512; lower
+  latency dose). Stage 16 (shared U(0, 60 ms)) running.
