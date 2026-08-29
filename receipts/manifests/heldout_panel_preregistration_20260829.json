@@ -1,0 +1,15 @@
+{
+  "kind": "lucid_heldout_panel_preregistration",
+  "created_at": "2026-08-29T10:20:00-04:00",
+  "author": "Fable (autonomous)",
+  "motivation": "All headline numbers are on the 102-motion content-dev panel drawn from the 512 fine-tuning motions (fresh physics, seen motions). A motion-generalization statement needs motions the fine-tuned policies never saw.",
+  "panel": {"pool": "pool_adapt4950.json (sha e60fc608...)", "split": "split_adapt4950_content.json, partition dev (989)", "excluded": "every motion in pool_debug512 (100 overlaps removed)", "bound": "200 motions by salted-hash order (salt heldout_v1), keys sha256 b87907f2db1ce1ec05f6d61a9e41930a0f5e6e975e7dc2f81736895321bce97c", "untouched": "the adapt4950 test partition remains frozen for camera-ready"},
+  "policies": {"release": "model_step_041550 (untrained)", "off@128": "stage 11 combined regime", "fixed@512": "stage 14 operating point"},
+  "evaluation": {"presets": ["id_clean", "dr_full"], "eval_seeds": "8700-8702 matched to checkpoint seeds"},
+  "hypotheses": {
+    "H_H1_unseen_gain": "fixed@512 dr_full on unseen motions exceeds the release by > 5 pts",
+    "H_H2_unseen_retention": "fixed@512 id_clean on unseen motions >= release - 6 pts (same retention cost as on seen motions)",
+    "H_H3_no_overfit": "fixed@512 unseen dr_full >= its seen-panel dr_full (81.4) - 8 pts"
+  },
+  "verified": [], "not_yet_verified": ["all; written before launch"]
+}
