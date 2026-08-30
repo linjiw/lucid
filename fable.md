@@ -1452,3 +1452,63 @@ have receipts for everything; keep the paper reproducible from them.
   bang-bang (46% of iterations at λ ≤ 0.05, 41% at ≥ 0.95). **No set-point closes this
   loop.** Committed story if P1 loses: the diagnosis, the frontier-centred instrument, and
   the audit protocol.
+
+- **2026-08-30 02:20 — Signal design: what the recorded tracking errors actually are, and
+  what the gap actually measures** (five reads, adversarially verified; two claims
+  re-checked by hand against IsaacLab and the live config).
+
+  *Every logged `Env/Metrics/motion/error_*` is a termination-composition statistic, not a
+  tracking error.* Verified in IsaacLab `command_manager.reset()`: each metric is logged as
+  `mean(metric[env_ids])` over the environments **being reset that step**, then zeroed.
+  The per-env tensor is overwritten every control step, so what gets logged is the error
+  at the last step before each episode ended — a mixture of "error at time-out" (≈0.04 for
+  body_pos) and "error at failure" (≈0.23), weighted by the time-out fraction (two-component
+  fit R² 0.985). That is why every error_* correlates −0.91…−0.98 with episode length: it is
+  a proxy for the *share of episodes that failed*, which is competence, not difficulty.
+  `error_joint_vel` is dominated by reference speed at the snapshot frame and is unusable.
+  `error_anchor_pos` is world-frame and accumulates XY drift (the `anchor_pos` termination
+  is z-only, so 0.000 there means "never dropped 0.5 m", not "no error"). Body velocities
+  are in the world frame, not heading-aligned. Eval `mpjpe_*` averages *all* clip frames
+  with no termination mask, and terminated envs restart at frame 0 and keep contributing;
+  only the success/progress metrics are clean.
+
+  *The latent gap is an effort meter.* Commanded = `joint_pos_target`, the pre-delay PD
+  target, so `q_target − q = τ/Kp + (Kd/Kp)·q̇`: the gap is torque over stiffness. The
+  encoder (a denoising autoencoder fit to reference clips only — no policy involved) embeds
+  an uncentred latent whose cosine is posture-dominated: a 50% amplitude under-tracking
+  moves the gap 0.015, a 0.3 rad steady offset 0.10–0.16 — ~1.4% sensitivity to dynamics,
+  blind to foot placement. **The decisive test is the twin pair:** `fixed` and `lucid_rg`
+  both sat at λ = 1 for their last 2,000 iterations under identical physics and read
+  0.565 vs 0.305 — the gap separates two *policies* under one physics as strongly as it
+  separates λ = 0 from λ = 1. It cannot be a difficulty signal. D3 is structurally
+  impossible for it: `calibrate_target` (μ+3σ at λ = 0) reconstructed on this run gives
+  0.744–0.853, above the λ = 1 q90 ceiling (0.44–0.57), and that ceiling is itself
+  policy-dependent. **No constant binds.**
+
+  *Two claims withdrawn or held.* "Failures cluster in phase" is **withdrawn**: the
+  adaptive sampler credits a failure to the *next* episode's start bin (it runs after
+  `_reset_idx` has already resampled the start), and `pre_failure_sample_window = 200` =
+  the clip length pulls starts to frame 0, so bin-0's 91% share is a restart artefact; no
+  phase-of-death data exists on disk. A reader also claimed the encoder was trained on
+  MuJoCo-ordered joints and fed IsaacLab-ordered ones; the loader *does* have that
+  permutation (`motion_lib_base.py:1597`) but the live config carries no
+  `mujoco_to_isaaclab_dof`, so it is never applied — **unverified, not a defect**, pending
+  a direct joint-name comparison.
+
+  *The proposed signal (no encoder).* Use the **termination pre-image**: the per-body
+  errors the termination terms already compute and discard via `.any()`, each divided by
+  its in-force threshold read at runtime — m_feet = max ankle error / θ_foot, m_ee, m_pelvis,
+  m_ori — so M = max(·) is "fraction of the way to being killed", unit-free, with argmax as
+  the culprit body (D6). Horizon-matched: a prefix mean over the first K = 12 steps of each
+  episode with coverage logged (D5). Reduced per cohort by TACE masks (D4). Self-calibrated
+  by a **yardstick cohort of 64 envs held at λ = 0 in the same run**: R = q_F / q_Y, which
+  is 1 at λ = 0 by construction, measures how much the dose degrades *this* policy relative
+  to its own nominal execution (D1), and falls as it becomes robust (D2 in the robustness
+  sense: eval foot-error ratio phys_150/phys_000 is 1.75 for the no-DR policy vs 1.19 for
+  fixed). Controller: raise λ while R < R_lo, hold in band, lower above R_hi; screening
+  band preregistered at R_lo = 1.10, R_hi = 1.30 from the between-arm ratios and the point
+  where no-DR eval success first leaves 0.99. Hazard by cause and phase is the *guard and
+  the outcome*, not the input — it saturates in-envelope (2–5 deaths per iteration late).
+  Cost < 0.1 ms/step on device. Validation protocol V1–V7 preregistered on the logs on
+  disk with frozen thresholds; on-disk analogues pass V1 (d = 3.9, twin ratio 4) and V2
+  (monotone in the eval ladder, ≥ 5 SE per step); D2 is not evaluable on disk.
