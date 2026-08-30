@@ -1,0 +1,54 @@
+{
+  "kind": "lucid_margin_signal_preregistration",
+  "created_at": "2026-08-30T02:10:42.726169-04:00",
+  "author": "Claude (autonomous PI, second host)",
+  "stage": "the termination-margin arm: does a self-referenced kinematic margin gate the dose where the latent gap could not?",
+  "written_before": "the arm has ever run. Written after seed-8600 evaluation of off/fixed/lucid_rg/lucid_s4_rg and after the signal-validation reads; no margin-arm outcome exists.",
+  "why": [
+    "The latent gap is an effort meter (q_target - q = tau/Kp), read from one env, posture-dominated, and separates two policies under identical physics (0.565 vs 0.305 at lambda=1) as strongly as it separates lambda=0 from 1. It anti-gated live: rose with competence and cut lambda 0.96 -> 0.15 at peak capability in lucid_s4_rg. No set-point closes its loop (replay: 0.778 -> 0.996; mu+3sigma -> 0.998; 0.441 -> bang-bang).",
+    "The margin is the termination pre-image the terms already compute: per-body error over the in-force threshold, M=1 is the kill boundary, prefix-mean over K=12 steps (horizon-matched, so it cannot re-encode episode length), reduced per cohort, and self-referenced as R = q_focus/q_yardstick against 64 envs held at lambda=0 in the same run. R=1 at lambda=0 by construction; no constant from another regime."
+  ],
+  "design": {
+    "arm": "lucid_margin_s4_rg",
+    "comparators": "off, fixed, lucid_rg, lucid_s4_rg (h6000 and final) at the same seeds, origin, motion, envs, budget",
+    "from_scratch": true,
+    "num_envs": 1024,
+    "iterations": 8000,
+    "seeds": [
+      8600,
+      8601,
+      8602
+    ],
+    "strata": 4,
+    "return_guard": "relative",
+    "yardstick_envs": 64,
+    "horizon_K": 12,
+    "band": [
+      1.1,
+      1.3
+    ],
+    "band_rationale": "R_lo = 1.10 is above the between-arm noise at matched competence (body_pos ratio 1.28 at lambda=1 vs 0); R_hi = 1.30 is the eval foot-error ratio (phys_100/phys_000 = 1.36) at which no-DR success first leaves 0.99. Fixed before the arm runs and not swept.",
+    "training_cap": "lambda <= 1 (unchanged); the frontier past 1 is the support test's job, not this arm's",
+    "evaluation": "512-alias panel; phys_000..phys_200 (clamped) and lat_10..lat_50ms; success is the endpoint"
+  },
+  "hypotheses": {
+    "H_M1_closed_loop": "the loop is CLOSED: over iterations 1000-8000 the fraction of iterations with band_error == 0 (ratio inside the band) is >= 0.30, AND lambda is neither pinned (mean >= 0.98 for > 90% of iterations) nor bang-bang (< 30% of iterations at either rail). This is the mechanism claim and is decided before any endpoint.",
+    "H_M2_no_anti_gating": "lambda never falls by more than 0.3 over any 1000-iteration window while window-mean time_out rises. (lucid_s4_rg violated this.)",
+    "H_M3_signal_validity_D1": "on the arm's own margin jsonl, q_focus/q_yardstick at iterations 6000-8000 exceeds 1.0 by at least 3 x the yardstick cohort's block CV (the dose is visible to the signal at matched competence).",
+    "H_M4_signal_validity_D2": "within the arm, at any 1000-iteration window where lambda is flat (range < 0.05), the ratio R falls as window-mean time_out rises (Spearman <= -0.3).",
+    "H_M5_endpoint": "capability: on the extended ladder, lucid_margin_s4_rg is within 2 pts of fixed at phys_150/phys_175/phys_200 and lat_50ms in >= 2/3 seeds (non-inferior at the frontier) AND beats fixed on phys_000..phys_100 mean success by >= 1 pt or on episode-length-at-B by >= 5% (the curriculum's promised dividend: same frontier capability, better nominal/learning-speed). If H_M1 fails, H_M5 is reported but the result is attributed to strata + guard, not the signal."
+  },
+  "decision_rules": {
+    "tie": "< 2 pts on three seeds",
+    "seed_agreement": ">= 2 of 3 seeds for any directional claim",
+    "if_H_M1_fails": "the margin is also not a usable controller input in this regime; report both signals' failure mechanisms side by side. The paper's method claim is then withdrawn and the contribution is the diagnosis + instrument + audit.",
+    "if_H_M1_passes_and_H_M5_fails": "a closed loop that does not help capability: the honest finding is that on this task the dose schedule does not matter once support is fixed at lambda<=1 -- which is what fixed == lucid_rg already says -- and the next question is support, not signal.",
+    "no_band_sweep": "[1.10, 1.30] is the only band run. If it wins it is one point, not a tuned optimum."
+  },
+  "verified": [],
+  "not_yet_verified": [
+    "all; written before launch"
+  ],
+  "git_sha": "cbc26690e024b48eea2da62b2bd1ab2823f8940c",
+  "logical_sha256": "775517eb89eb17f9e6603b7d2279ce29e365315411d9a93985944f25db00bf78"
+}

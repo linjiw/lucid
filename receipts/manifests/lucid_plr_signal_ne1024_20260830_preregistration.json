@@ -1,0 +1,2516 @@
+{
+  "kind": "lucid_plr_signal_preregistration",
+  "schema_version": 1,
+  "created_at": "2026-08-30T01:46:07.027180-04:00",
+  "hypothesis": "A reference-tracking signal and PLR each improve frozen-policy robustness relative to the legacy actuator-following signal and native sampler; their interaction is estimated rather than assumed additive.",
+  "maxrl_exclusion": "MaxRL is not used: its clean estimator requires grouped repeated rollouts with binary terminal correctness, while this task trains PPO on dense continuous tracking rewards.",
+  "design": {
+    "campaign_id": "lucid_plr_signal_ne1024_20260830",
+    "from_scratch": true,
+    "task": "walk_hands_on_back_loop_002__A066_M",
+    "num_envs": 1024,
+    "iterations": 8000,
+    "rollout_steps_per_env": 24,
+    "max_delay": 8,
+    "return_floor": 8.0,
+    "exp": "manager/universal_token/all_modes/sonic_release",
+    "seeds": [
+      8700,
+      8701,
+      8702
+    ],
+    "eval_seed_base": 9700,
+    "arms": {
+      "legacy_native": {
+        "signal_mode": "legacy_plant",
+        "plr_enabled": false
+      },
+      "legacy_plr": {
+        "signal_mode": "legacy_plant",
+        "plr_enabled": true
+      },
+      "tracking_native": {
+        "signal_mode": "total_tracking",
+        "plr_enabled": false
+      },
+      "tracking_plr": {
+        "signal_mode": "total_tracking",
+        "plr_enabled": true
+      }
+    },
+    "arm_order_rule": "cyclic rotation by seed index",
+    "motion_file": "/home/linjiw/lucid-sonic/pools/subsets/m1_hob002/robot_filtered",
+    "smpl_motion_file": "dummy",
+    "encoder": "/home/linjiw/lucid-sonic/artifacts/lucid_encoder_debug512.pt",
+    "evaluation_panel_receipt": "/home/linjiw/lucid-sonic/manifests/replicate_panel_panel_hob002_k512.json",
+    "runtime_environment": {
+      "schema_version": 2,
+      "python": {
+        "path": "/home/linjiw/.local/share/uv/python/cpython-3.11.16-linux-x86_64-gnu/bin/python3.11",
+        "kind": "file",
+        "sha256": "bba9c5269e5794349c1b3bf2bcec677315462a4419dadcc3caefd43fb24d8c94",
+        "size_bytes": 21740416,
+        "version": "3.11.16",
+        "implementation": "CPython",
+        "cache_tag": "cpython-311",
+        "prefix": "/home/linjiw/isaaclab-install/env_isaaclab",
+        "base_prefix": "/home/linjiw/.local/share/uv/python/cpython-3.11.16-linux-x86_64-gnu"
+      },
+      "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.35",
+      "environment": {
+        "CARB_APP_PATH": null,
+        "CUBLAS_WORKSPACE_CONFIG": null,
+        "CUDA_VISIBLE_DEVICES": null,
+        "EXP_PATH": null,
+        "ISAACLAB_PATH": "/home/linjiw/isaaclab-install/IsaacLab",
+        "LD_LIBRARY_PATH": null,
+        "LUCID_PY_ENV": null,
+        "LUCID_REPO": "/home/linjiw/lucid/GR00T-WholeBodyControl-plr",
+        "MKL_NUM_THREADS": "8",
+        "OMNI_KIT_ACCEPT_EULA": "YES",
+        "OMP_NUM_THREADS": "8",
+        "PYTHONHASHSEED": null,
+        "PYTHONPATH": "/home/linjiw/lucid/GR00T-WholeBodyControl-plr",
+        "TMPDIR": "/home/linjiw/lucid-sonic/tmp",
+        "TRL_EXPERIMENTAL_SILENCE": "1",
+        "VIRTUAL_ENV": "/home/linjiw/isaaclab-install/env_isaaclab",
+        "WANDB_MODE": "offline"
+      },
+      "gpu_driver": {
+        "available": true,
+        "executable": {
+          "path": "/usr/bin/nvidia-smi",
+          "kind": "file",
+          "sha256": "dd0cbc1a839dae1cfadb5ba1ffb8e3bfed99ddd8f3d1dca8e986d68ce7d0515c",
+          "size_bytes": 1259616
+        },
+        "query_returncode": 0,
+        "query_stdout": [
+          "0, NVIDIA GeForce RTX 5080, GPU-6f038fe9-2d14-e61c-65d6-5b5ac147d073, 595.84, 12.0"
+        ],
+        "query_stderr": ""
+      },
+      "host_files": {
+        "/etc/os-release": {
+          "path": "/usr/lib/os-release",
+          "kind": "file",
+          "sha256": "594d5ddd35aedb47f00d9c34d140017907a5b9f93c975aba125fc924daac5c07",
+          "size_bytes": 386
+        }
+      },
+      "distributions": {
+        "accelerate": {
+          "version": "1.14.0",
+          "metadata_sha256": "ed1c0dd9cca2d1449bbae7d641208431f5fccc7d5e06e20bec802c1d81340f6c",
+          "record_sha256": "7e535065a5e83ccb37054b4c9f6a0219a11544f06e9fc5e4b836374a4f13e49d"
+        },
+        "einops": {
+          "version": "0.8.2",
+          "metadata_sha256": "0bd65db043688a44f4a29608c1cba521c932f7ff76f238bbd869441e15012653",
+          "record_sha256": "f5ab2503eead94b7dbb3c722415260439feee273c0b91019e1f0788f041400bc"
+        },
+        "gymnasium": {
+          "version": "1.2.1",
+          "metadata_sha256": "be5a7ac39e5fbc0123f071b611f1de47cfcd1c771eecc3a2b35526983bea97db",
+          "record_sha256": "bb1079a6ea2904ba80052b50c7a7d44a715be9d071fe4d159b6400cd1e38a936"
+        },
+        "hydra-core": {
+          "version": "1.3.2",
+          "metadata_sha256": "399046cbf9ae7ebab8dfd009e2b4f748212c710a0e75ca501a72bbb2d456e2e7",
+          "record_sha256": "1abb3b7e07d36c66042e2a5e8b858c7c14392f3980dc7a098a9c717d6eeded31"
+        },
+        "isaaclab": {
+          "version": "0.54.2",
+          "metadata_sha256": "0ed329957f4dd365126557041b8c007e25c694cba9213fdab58dd8ca1f5dc8f2",
+          "record_sha256": "61672aecd6567da737136760e10a18dad1eefe6e7277f5cec4d6611e16492e89"
+        },
+        "isaacsim": {
+          "version": "5.1.0.0",
+          "metadata_sha256": "62886aa8eed75cdd927a5865055e4cf957b271a623f9c1c74e1cbcb51a84a7b9",
+          "record_sha256": "7ab4c015dabc375bc72ea53e99a8be5edf438ac0535e8b52db8cb84a28ee2fda"
+        },
+        "isaacsim-app": {
+          "version": "5.1.0.0",
+          "metadata_sha256": "12cc2a76453d17854ab380cbd20b56be51eca9d62207c28c4554bd861e45b1fe",
+          "record_sha256": "4968a7338c14c01d83d947f455ad4c85ac69e38a6700f0c6e0cc270d6a813098"
+        },
+        "isaacsim-asset": {
+          "version": "5.1.0.0",
+          "metadata_sha256": "0f8406e0435efc9c45401b4bd4b5203f398c13d2b1cc1fcfaabdd8a8e1e04232",
+          "record_sha256": "a53f7e86ac2a54e5713c9d46bb353f06002367a6902c48650bd7ccf1b4d1b86f"
+        },
+        "isaacsim-benchmark": {
+          "version": "5.1.0.0",
+          "metadata_sha256": "5320ecf14874af02cbb85c35d57db2a666b6fa0ae059b34bce9f65445bffb649",
+          "record_sha256": "aa621f888b674e553f2af9070f8a3871408f65c1b7ca42b2d599eb919e5c0f67"
+        },
+        "isaacsim-code-editor": {
+          "version": "5.1.0.0",
+          "metadata_sha256": "f58b6e68004c5a8c3c00771cc0b91ee9076891d63b5673dae27e48f5c9153478",
+          "record_sha256": "4bb110f8bf52729b487ef6b5bb90457532890ad93fe69b7a8d8605af55c827db"
+        },
+        "isaacsim-core": {
+          "version": "5.1.0.0",
+          "metadata_sha256": "e2e691259ea437045130e014a9f7a6fe720f637203be9009261d364f62299a13",
+          "record_sha256": "d8fc2c0fa40ced3daa96e8aca6b7406bd75771d23dbbed8b9640f7686523c71a"
+        },
+        "isaacsim-cortex": {
+          "version": "5.1.0.0",
+          "metadata_sha256": "fdf65bc95d805f8c69d1c2db5803b932abc8a8ce398dd2581313d0956700fd2e",
+          "record_sha256": "33cce4b27b74bb2506adf94e45059c4587163a2fa699a6c6c0c075396298e3a3"
+        },
+        "isaacsim-example": {
+          "version": "5.1.0.0",
+          "metadata_sha256": "a6437f0992f6ff4bfdcfc2c387b09ff0ec39d82998c785f335c3e40224646e89",
+          "record_sha256": "4a547206d6130cd7d2dad2fa07ce856a0693aa0083c16b2beb7cd7c81b921370"
+        },
+        "isaacsim-extscache-kit": {
+          "version": "5.1.0.0",
+          "metadata_sha256": "ecd73330f338ca3cc6f2ec50018cc130d21154de5fae958b0b39576377c1cee6",
+          "record_sha256": "2c16789a4fcb44c457d7b25dabdbc8f9d448f8c772b7c8c7d163e23b73c7a9fc"
+        },
+        "isaacsim-extscache-kit-sdk": {
+          "version": "5.1.0.0",
+          "metadata_sha256": "22d20067c0feed341ce90ba8d516cd5f3a7c78c12df82b2c70eed15b5b5ba835",
+          "record_sha256": "5775bb5b6c20af68df7c4dc55963504b42fc413f3669fda501ac0d2bbbf3d381"
+        },
+        "isaacsim-extscache-physics": {
+          "version": "5.1.0.0",
+          "metadata_sha256": "e0df1c986706bedbc97bbe9856aebf57759e0fee00851507d4659b02423d6ef5",
+          "record_sha256": "2b496acea52bd2df50c89b8205d5ff10022bccdc7c46c04a67c498516d780650"
+        },
+        "isaacsim-gui": {
+          "version": "5.1.0.0",
+          "metadata_sha256": "b706a7dfc8be26835b3b01d982b2808a85d021f6ffb7fa751a47a7319e0c82e8",
+          "record_sha256": "cfe64656c6aa9397192550cfc40e9bb2b9479d7f35fbdbbfb4381fdc30332d80"
+        },
+        "isaacsim-kernel": {
+          "version": "5.1.0.0",
+          "metadata_sha256": "f956aeb5e3ab54c0610f89b629619316a136c7c6ec3ab903d250efee498ec7f5",
+          "record_sha256": "6258f22ffa2feb3cceb6c890112e4426baec6770d6fcc957b83344ac17a95486"
+        },
+        "isaacsim-replicator": {
+          "version": "5.1.0.0",
+          "metadata_sha256": "6ac1e774ca21a8788ed1d2e15bbdd384a2f7b5824882ae68e403ce47a4a76238",
+          "record_sha256": "9dde2b6043ea54e71ec2442ee797bc0ba2d33bb8e012183b208247f07558a534"
+        },
+        "isaacsim-rl": {
+          "version": "5.1.0.0",
+          "metadata_sha256": "b682902682e8d79815a13aea62194e414a98c09b144125247294df1c373c75c5",
+          "record_sha256": "494d228ddffe141c4dfbae22ad5e0870a5892c06fe01b503b7cca7f1f7edc24d"
+        },
+        "isaacsim-robot": {
+          "version": "5.1.0.0",
+          "metadata_sha256": "7dc133caaaa71f49db55249264a6ed32ce311193889db57f9d9a94170fb0995c",
+          "record_sha256": "afc5db090a9f74f6b5ceffc61f5a37b31e412efef79377bbfc8de8f2a60ec06b"
+        },
+        "isaacsim-robot-motion": {
+          "version": "5.1.0.0",
+          "metadata_sha256": "eee501f840a7e8f5cf13edf8ca76180d122bcb6e7cd39d77a5ca8a490922a07b",
+          "record_sha256": "eeb4347de88664a7f38f694dd83c867fae842d303b26d0cd2921b3b2b7fc91d2"
+        },
+        "isaacsim-robot-setup": {
+          "version": "5.1.0.0",
+          "metadata_sha256": "66275ccf0c4d9d89a23712d29ae0891f52e2894780adccbe611d29ad9b58c277",
+          "record_sha256": "645cfa87340f6a51400c28796fa5e9a4a85a6ebbfa9442300917a1e4f925e086"
+        },
+        "isaacsim-ros1": {
+          "version": "5.1.0.0",
+          "metadata_sha256": "89ca7bdec66f91f83ea638d561292ff01b0ec77572f8a69003467bbb7440ba4d",
+          "record_sha256": "10498f0215f118a2143ae236fec6b9415c15d3aea1458e5aaf8efb18cc126f03"
+        },
+        "isaacsim-ros2": {
+          "version": "5.1.0.0",
+          "metadata_sha256": "8abe50978c3c21f7a4477296d323abf3590ae2271426cf08b789645c3ec43011",
+          "record_sha256": "2e589cc80e8a70ae4835428083c81c38671ddaffdd608eec587d2bd59f1559f0"
+        },
+        "isaacsim-sensor": {
+          "version": "5.1.0.0",
+          "metadata_sha256": "6ed45fa52d62150f7a647d36339794b87013f7b12a1c8ed6274b54deea0961f9",
+          "record_sha256": "13280684052601c030f355dca557c6ba8cd2ba4c50a3b928dc12c8a4d5e50986"
+        },
+        "isaacsim-storage": {
+          "version": "5.1.0.0",
+          "metadata_sha256": "c70d0cfcae387d753f7d9fe42dfe1ee192ae7f269569db30785c31079d1f2c33",
+          "record_sha256": "d00ff763b14c0e453adef624075d0977398b3823b1410ed136fe19baba089590"
+        },
+        "isaacsim-template": {
+          "version": "5.1.0.0",
+          "metadata_sha256": "9c93d9972a5e3d5bb6029aad82fefe4e6f3877f8b0e42f3061c4836d8a94c306",
+          "record_sha256": "1f1f2cf0a3ad420ba0d3b5a0389df7ae2f802ed3e90a6e94f0fbad727c66f958"
+        },
+        "isaacsim-test": {
+          "version": "5.1.0.0",
+          "metadata_sha256": "b092cf6bee55ad3ee07920b98d2c7a62d9acfb757f23e9e3860a994f1bc3df1c",
+          "record_sha256": "25b8d54047270b809d627801a0ba85d49ca67e537482531af54354fb2e6c640a"
+        },
+        "isaacsim-utils": {
+          "version": "5.1.0.0",
+          "metadata_sha256": "d632b453d8b7879a886380ceaa7ea5d685c01d4ae8801e1db8de34aee617192e",
+          "record_sha256": "c36280c0b0a91499a47d50fa9d278a06395602b776b1d60e317469bd762f7f53"
+        },
+        "numpy": {
+          "version": "1.26.0",
+          "metadata_sha256": "4a120e41f66312dbf31e1ee06d58f1c0fb25c020b4e6f97b260d2d0125e328a0",
+          "record_sha256": "a13d99daab41e0569060fea84c75463d6e664455f122cf41866705936699c85b"
+        },
+        "nvidia-cublas-cu12": {
+          "version": "12.8.3.14",
+          "metadata_sha256": "b77917e0c0c9ba5137fb6ba258270d904645b6338f74f9f3e277ebe32a7a2426",
+          "record_sha256": "f9485923fae105fdc16fe6a7ce1a41aa1376412d0bfc8da5e6c47455089fcd2a"
+        },
+        "nvidia-cuda-cupti-cu12": {
+          "version": "12.8.57",
+          "metadata_sha256": "38e4e20eb39e418101e0fffca727d3f5756a301b6b4f13f77bf7cfa31460c037",
+          "record_sha256": "f270d4523baa0a1b7b67003499763b24f2412003a08ae8f65c95ed6d0335f19b"
+        },
+        "nvidia-cuda-nvrtc-cu12": {
+          "version": "12.8.61",
+          "metadata_sha256": "957c238bb9693e02fdd2dd7b9be2d496e9a870398c083bab5aeb04e0df048eef",
+          "record_sha256": "0a22fc7e0db4ce1d3ab335b4595527e2ad483980f0cc1cbf88b352a7e2c4d8d1"
+        },
+        "nvidia-cuda-runtime-cu12": {
+          "version": "12.8.57",
+          "metadata_sha256": "c450a27787fcec867730bc6490c70db58ca4d224915701b46637d5178878e869",
+          "record_sha256": "5641397c600b866b50a12cf177b201439e71daeb82a25c645b05a14005402491"
+        },
+        "nvidia-cudnn-cu12": {
+          "version": "9.7.1.26",
+          "metadata_sha256": "a9de8685623b400dea03be6c064df033c60639a3f20745dc91e1f4391bd4fe58",
+          "record_sha256": "b7b917bb32345d858a9529e00963d6bc35fdf6e64567e8620792a7f5b1531664"
+        },
+        "nvidia-cufft-cu12": {
+          "version": "11.3.3.41",
+          "metadata_sha256": "51738ef59e7195e47ca3e5ae138511cf771c6cf2fd1643a5c24b9be928e233d8",
+          "record_sha256": "62968e69e63c78940c02ab48a9a8c0e95b8a0302f569dc8f9a63af787a45e5b6"
+        },
+        "nvidia-cufile-cu12": {
+          "version": "1.13.0.11",
+          "metadata_sha256": "f0d564ccf2003f21f1ad93c9c802f892458e02bcdad3bad3da13f508532b2e43",
+          "record_sha256": "e0b49591b5d502081b920f0ea7b5ec611826e81113d7a37d7b1edeb2f6d465e1"
+        },
+        "nvidia-curand-cu12": {
+          "version": "10.3.9.55",
+          "metadata_sha256": "d077bc8e1f97cd50997a5f537bdfa9e74f4228540274b13e261e577fbbc4295b",
+          "record_sha256": "d93571cadd0943230aa0b1c3557ae501b29f5e5eeeef93512fb5cafc8dc45202"
+        },
+        "nvidia-cusolver-cu12": {
+          "version": "11.7.2.55",
+          "metadata_sha256": "6c29fd45dfde7170242a34761f2b2d4ac1112978e9ea32686f1fe8e1d2c647fb",
+          "record_sha256": "dca5cc5a621e4b00fbd5b60134401005b18ccd7036218090f2912f81a3f73d6b"
+        },
+        "nvidia-cusparse-cu12": {
+          "version": "12.5.7.53",
+          "metadata_sha256": "9e790d50c456a85161fe267d6aface3fd0700972891b0c1ab3d0f80d4eb53cfc",
+          "record_sha256": "a73567df1819409f35926f1c54b53a1ece45615770506e5e53a2aa32aba170ac"
+        },
+        "nvidia-cusparselt-cu12": {
+          "version": "0.6.3",
+          "metadata_sha256": "d9ef439af4fab7f6839a03eec5bff1aaed26903ea17a0e75b136c6d3e69c8b11",
+          "record_sha256": "44827ad74c274b7ec6d69f9e552f9bb244e6a8f673115fc1ffb585d363fd0074"
+        },
+        "nvidia-nccl-cu12": {
+          "version": "2.26.2",
+          "metadata_sha256": "b70f61955da2b73ab44dbdf10f5d822baf48ed6665af2f800e27537caf27848b",
+          "record_sha256": "cc8b3146c7a5d6f1568b4b7db73d5bed9dabde09b2a69999acfc7323c024d3f1"
+        },
+        "nvidia-nvjitlink-cu12": {
+          "version": "12.8.61",
+          "metadata_sha256": "e492c83bd198e5eeff43a00c98e4e4ae9c5f172c1d8e7969f5c6a8c3bd76ce16",
+          "record_sha256": "79655e213f6bde522e63e1d35fc6950fc25915fdb0d81a782d54f2b995901aad"
+        },
+        "nvidia-nvtx-cu12": {
+          "version": "12.8.55",
+          "metadata_sha256": "f8b548c1b05e426d5bd9db4dbaab15214ec3a2c809101535ba45156f3d97f3cf",
+          "record_sha256": "c752bdbe6e6ad224e749f6e420359882e443d95754d0e9fe3148a8c25984b461"
+        },
+        "omegaconf": {
+          "version": "2.3.1",
+          "metadata_sha256": "24dc07ea1b801810c63c386cc47376727a774cce4493bfddf6454fe8335eb84e",
+          "record_sha256": "cffbaceb55f25af97e86f064dbc361db6cc4acacf64516877bc9d16bcc2de2e2"
+        },
+        "scipy": {
+          "version": "1.15.3",
+          "metadata_sha256": "c75caf32b67a13a9fc16aacf993a8bb883b7a69744ffe77cbbd4f3bfbad28f3d",
+          "record_sha256": "ca8835e1256f4ae80bb568b07aec2e0a8c168b325a30d0539be8e2d3b71bdcf2"
+        },
+        "tensordict": {
+          "version": "0.14.0",
+          "metadata_sha256": "f88be7f2e826dafffa59ddd8bb9a3cce8ec77f623e8f27f10af4985ee1830950",
+          "record_sha256": "da9c26aa8b9662b558863af10ff52dbce3708aef16f3e422e535043161d24fe2"
+        },
+        "torch": {
+          "version": "2.7.0+cu128",
+          "metadata_sha256": "86107f52ff49e63a75c9d345374cac30140e053a12ffa728d676fee836e69022",
+          "record_sha256": "c0df6b68b412bd12815a2151f09c57bf38fca9b3b24d9f47895496f95c07973d"
+        },
+        "torchvision": {
+          "version": "0.22.0+cu128",
+          "metadata_sha256": "fab375854a51f36b4975dd9034a78958034c545b7585e8c569113d433b93d8aa",
+          "record_sha256": "7affb1f721afeecd108596d8760581350122cec8533b180652d9344fdf3f3b98"
+        },
+        "transformers": {
+          "version": "4.57.6",
+          "metadata_sha256": "91601044a74fe02571a825356754dbbaa9e1d3e3dd3c2237254c15e903e421e3",
+          "record_sha256": "2d93a2c546c95f000539538a73994220b778d300005c12579bacbb16e84ca66a"
+        },
+        "trl": {
+          "version": "0.28.0",
+          "metadata_sha256": "6ecd9332e877abcc896821a8671903c53a7e46dc9c7d5d8858f70f84c7ce2254",
+          "record_sha256": "7e5494fcaab2cc9999fcf92b8e7b1a70e14980be62105fbc90a674d06e579c5a"
+        },
+        "wandb": {
+          "version": "0.29.0",
+          "metadata_sha256": "b26469a8d4f648475861cf2a5d150665deb2702fb3e79c9d842974f13befbaf6",
+          "record_sha256": "697458ef610afb919eb8171c0a5506eabb080ac8e2fc845a44e19a55e461f4b1"
+        },
+        "warp-lang": {
+          "version": "1.16.0",
+          "metadata_sha256": "3648264c8f25472fbf2506789077b92511b4e60e497b098ac4eca8aa84c190eb",
+          "record_sha256": "648fe5bdf5b66abf8eb870ea4c4a9138de8c5413c7c4d33f769cf2af9d4214d3"
+        }
+      },
+      "module_trees": {
+        "accelerate": {
+          "module": "accelerate",
+          "root": "/home/linjiw/isaaclab-install/env_isaaclab/lib/python3.11/site-packages/accelerate",
+          "payload_source": "distribution-record",
+          "owner_distributions": [
+            "accelerate"
+          ],
+          "file_count": 84,
+          "total_size_bytes": 1491684,
+          "native_file_count": 0,
+          "native_size_bytes": 0,
+          "manifest_sha256": "a7bd0f6c7e41155933cb097c2f922a2e7920758efa12cbf5758f69c14987166c"
+        },
+        "einops": {
+          "module": "einops",
+          "root": "/home/linjiw/isaaclab-install/env_isaaclab/lib/python3.11/site-packages/einops",
+          "payload_source": "distribution-record",
+          "owner_distributions": [
+            "einops"
+          ],
+          "file_count": 27,
+          "total_size_bytes": 215213,
+          "native_file_count": 0,
+          "native_size_bytes": 0,
+          "manifest_sha256": "fc41f24a83fb0525678ed9dd96332bfcf2fbf3679e34bef60ca117b85c07645d"
+        },
+        "gymnasium": {
+          "module": "gymnasium",
+          "root": "/home/linjiw/isaaclab-install/env_isaaclab/lib/python3.11/site-packages/gymnasium",
+          "payload_source": "distribution-record",
+          "owner_distributions": [
+            "gymnasium"
+          ],
+          "file_count": 220,
+          "total_size_bytes": 2045240,
+          "native_file_count": 0,
+          "native_size_bytes": 0,
+          "manifest_sha256": "8c8d83d1c417e335e9482663f51195976f4d5bc50327d87d602d0067462ec057"
+        },
+        "hydra-core": {
+          "module": "hydra",
+          "root": "/home/linjiw/isaaclab-install/env_isaaclab/lib/python3.11/site-packages/hydra",
+          "payload_source": "distribution-record",
+          "owner_distributions": [
+            "hydra-core"
+          ],
+          "file_count": 144,
+          "total_size_bytes": 480977,
+          "native_file_count": 0,
+          "native_size_bytes": 0,
+          "manifest_sha256": "b819c053818a886b64ca3f499887f97b65f2e8e9bb81c68730fe3be5641211d4"
+        },
+        "isaaclab": {
+          "module": "isaaclab",
+          "root": "/home/linjiw/isaaclab-install/IsaacLab/source/isaaclab/isaaclab",
+          "payload_source": "editable-source-tree",
+          "owner_distributions": [],
+          "file_count": 314,
+          "total_size_bytes": 3000058,
+          "native_file_count": 0,
+          "native_size_bytes": 0,
+          "manifest_sha256": "d62242e4998a1492e86385aaaa70f1398f81d78355eb8452c70b771afc5295fb"
+        },
+        "isaacsim": {
+          "module": "isaacsim",
+          "root": "/home/linjiw/isaaclab-install/env_isaaclab/lib/python3.11/site-packages/isaacsim",
+          "payload_source": "distribution-record",
+          "owner_distributions": [
+            "isaacsim",
+            "isaacsim-app",
+            "isaacsim-asset",
+            "isaacsim-benchmark",
+            "isaacsim-code-editor",
+            "isaacsim-core",
+            "isaacsim-cortex",
+            "isaacsim-example",
+            "isaacsim-extscache-kit",
+            "isaacsim-extscache-kit-sdk",
+            "isaacsim-extscache-physics",
+            "isaacsim-gui",
+            "isaacsim-kernel",
+            "isaacsim-replicator",
+            "isaacsim-rl",
+            "isaacsim-robot",
+            "isaacsim-robot-motion",
+            "isaacsim-robot-setup",
+            "isaacsim-ros1",
+            "isaacsim-ros2",
+            "isaacsim-sensor",
+            "isaacsim-storage",
+            "isaacsim-template",
+            "isaacsim-test",
+            "isaacsim-utils"
+          ],
+          "file_count": 46771,
+          "total_size_bytes": 10399610668,
+          "native_file_count": 2188,
+          "native_size_bytes": 6815992734,
+          "manifest_sha256": "daa3ba53a37229f44f70f4293b8862cacf4e2adf5f07807aaba26588e6c19896"
+        },
+        "nvidia-cuda-stack": {
+          "module": "nvidia",
+          "root": "/home/linjiw/isaaclab-install/env_isaaclab/lib/python3.11/site-packages/nvidia",
+          "payload_source": "distribution-record",
+          "owner_distributions": [
+            "nvidia-cublas-cu12",
+            "nvidia-cuda-cupti-cu12",
+            "nvidia-cuda-nvrtc-cu12",
+            "nvidia-cuda-runtime-cu12",
+            "nvidia-cudnn-cu12",
+            "nvidia-cufft-cu12",
+            "nvidia-cufile-cu12",
+            "nvidia-curand-cu12",
+            "nvidia-cusolver-cu12",
+            "nvidia-cusparse-cu12",
+            "nvidia-nccl-cu12",
+            "nvidia-nvjitlink-cu12",
+            "nvidia-nvtx-cu12"
+          ],
+          "file_count": 278,
+          "total_size_bytes": 3854382973,
+          "native_file_count": 32,
+          "native_size_bytes": 3844956456,
+          "manifest_sha256": "a00f8d663b85a638ecce6bc22fc9b9566cdf382d47035bf4c8d1087dfc9219a8"
+        },
+        "numpy": {
+          "module": "numpy",
+          "root": "/home/linjiw/isaaclab-install/env_isaaclab/lib/python3.11/site-packages/numpy",
+          "payload_source": "distribution-record",
+          "owner_distributions": [
+            "numpy"
+          ],
+          "file_count": 880,
+          "total_size_bytes": 26267717,
+          "native_file_count": 19,
+          "native_size_bytes": 14650139,
+          "manifest_sha256": "c1b16b8e2098cd1cdcb568ff2299368ba23688b739b41b4d760687a13e82ea83"
+        },
+        "omegaconf": {
+          "module": "omegaconf",
+          "root": "/home/linjiw/isaaclab-install/env_isaaclab/lib/python3.11/site-packages/omegaconf",
+          "payload_source": "distribution-record",
+          "owner_distributions": [
+            "omegaconf"
+          ],
+          "file_count": 23,
+          "total_size_bytes": 337473,
+          "native_file_count": 0,
+          "native_size_bytes": 0,
+          "manifest_sha256": "39d43d2e02e95fd0ec75edbbe486f1d8b9c14c217108478e5f529893f956f094"
+        },
+        "scipy": {
+          "module": "scipy",
+          "root": "/home/linjiw/isaaclab-install/env_isaaclab/lib/python3.11/site-packages/scipy",
+          "payload_source": "distribution-record",
+          "owner_distributions": [
+            "scipy"
+          ],
+          "file_count": 1415,
+          "total_size_bytes": 92049894,
+          "native_file_count": 115,
+          "native_size_bytes": 62348819,
+          "manifest_sha256": "9e68a51c3cef2405ee0959759363607240060e80d41a91f156e33ef665262310"
+        },
+        "tensordict": {
+          "module": "tensordict",
+          "root": "/home/linjiw/isaaclab-install/env_isaaclab/lib/python3.11/site-packages/tensordict",
+          "payload_source": "distribution-record",
+          "owner_distributions": [
+            "tensordict"
+          ],
+          "file_count": 59,
+          "total_size_bytes": 2670904,
+          "native_file_count": 1,
+          "native_size_bytes": 213520,
+          "manifest_sha256": "430b5a16e325583b5652837beb7dfcbb6990e2edcfb15fa29431fff4ad91b59f"
+        },
+        "torch": {
+          "module": "torch",
+          "root": "/home/linjiw/isaaclab-install/env_isaaclab/lib/python3.11/site-packages/torch",
+          "payload_source": "distribution-record",
+          "owner_distributions": [
+            "torch"
+          ],
+          "file_count": 10838,
+          "total_size_bytes": 2004260294,
+          "native_file_count": 12,
+          "native_size_bytes": 1927169956,
+          "manifest_sha256": "5f17254d27df93e27619358278a0a79e41724c420af5258d5fb0523cd4a98ba0"
+        },
+        "torchvision": {
+          "module": "torchvision",
+          "root": "/home/linjiw/isaaclab-install/env_isaaclab/lib/python3.11/site-packages/torchvision",
+          "payload_source": "distribution-record",
+          "owner_distributions": [
+            "torchvision"
+          ],
+          "file_count": 252,
+          "total_size_bytes": 13740713,
+          "native_file_count": 2,
+          "native_size_bytes": 11115073,
+          "manifest_sha256": "ebcadb903ac0296ebc3dc11eaa18be5335de6ba376bd794fccfda554b8c20537"
+        },
+        "transformers": {
+          "module": "transformers",
+          "root": "/home/linjiw/isaaclab-install/env_isaaclab/lib/python3.11/site-packages/transformers",
+          "payload_source": "distribution-record",
+          "owner_distributions": [
+            "transformers"
+          ],
+          "file_count": 2240,
+          "total_size_bytes": 52124225,
+          "native_file_count": 0,
+          "native_size_bytes": 0,
+          "manifest_sha256": "f6e4549d078be15149b7d86f7bac4a2f56c473aea9e20be314cbc5ac4a34066d"
+        },
+        "trl": {
+          "module": "trl",
+          "root": "/home/linjiw/isaaclab-install/env_isaaclab/lib/python3.11/site-packages/trl",
+          "payload_source": "distribution-record",
+          "owner_distributions": [
+            "trl"
+          ],
+          "file_count": 139,
+          "total_size_bytes": 1984362,
+          "native_file_count": 0,
+          "native_size_bytes": 0,
+          "manifest_sha256": "c92f4a29f24d47c59cd489bee7a2802b8832e1d25aafd52cae5b1edbfa09b385"
+        },
+        "wandb": {
+          "module": "wandb",
+          "root": "/home/linjiw/isaaclab-install/env_isaaclab/lib/python3.11/site-packages/wandb",
+          "payload_source": "distribution-record",
+          "owner_distributions": [
+            "wandb"
+          ],
+          "file_count": 606,
+          "total_size_bytes": 89790844,
+          "native_file_count": 1,
+          "native_size_bytes": 22804288,
+          "manifest_sha256": "7f6fb4fb59f34dc05806e7b53be92fb21fd9fab6b34fc3342016709a77b49025"
+        },
+        "warp-lang": {
+          "module": "warp",
+          "root": "/home/linjiw/isaaclab-install/env_isaaclab/lib/python3.11/site-packages/warp",
+          "payload_source": "distribution-record",
+          "owner_distributions": [
+            "warp-lang"
+          ],
+          "file_count": 557,
+          "total_size_bytes": 445877479,
+          "native_file_count": 2,
+          "native_size_bytes": 427473968,
+          "manifest_sha256": "e25df48d904d909927de54f28fb3cac085ae726c919c57f0292aee81ccc3e0e0"
+        }
+      }
+    },
+    "input_artifacts": {
+      "schema_version": 1,
+      "motion": {
+        "path": "/home/linjiw/lucid-sonic/pools/subsets/m1_hob002/robot_filtered",
+        "kind": "directory",
+        "members": {
+          "walk_hands_on_back_loop_002__A066_M.pkl": {
+            "sha256": "a7f10e7aa26e53cc4e346151d4ccd74e932e3aafa1cfaaac77dab8b8eec40929",
+            "size_bytes": 33022
+          }
+        },
+        "manifest_sha256": "3850ff05b94d8961147b1a403fec364ad56fca5c2c1d2a674c7c7b113a5926de"
+      },
+      "encoder": {
+        "path": "/home/linjiw/lucid-sonic/artifacts/lucid_encoder_debug512.pt",
+        "kind": "file",
+        "sha256": "a4195a6e49e4ec7098f58be4b04f464bbb14a9ce6c20ff508678faf4428a879d",
+        "size_bytes": 579045
+      },
+      "evaluation_panel": {
+        "path": "/home/linjiw/lucid-sonic/manifests/replicate_panel_panel_hob002_k512.json",
+        "kind": "file",
+        "sha256": "e2e61933405e6701b0563eb4df793b6faf5c90d8ae5b7d8fc1e11f47142aefd7",
+        "size_bytes": 1815
+      }
+    },
+    "motion_panel_linkage": {
+      "schema_version": 1,
+      "training_member": "walk_hands_on_back_loop_002__A066_M.pkl",
+      "training_member_resolved": "/home/linjiw/lucid-sonic/pools/debug512/robot_filtered/walk_hands_on_back_loop_002__A066_M.pkl",
+      "training_member_sha256": "a7f10e7aa26e53cc4e346151d4ccd74e932e3aafa1cfaaac77dab8b8eec40929",
+      "panel_source": "/home/linjiw/lucid-sonic/pools/debug512/robot_filtered/walk_hands_on_back_loop_002__A066_M.pkl",
+      "panel_source_sha256": "a7f10e7aa26e53cc4e346151d4ccd74e932e3aafa1cfaaac77dab8b8eec40929",
+      "motion_key": "walk_hands_on_back_loop_002__A066_M",
+      "same_resolved_clip": true
+    },
+    "termination_thresholds": "upstream term defaults 0.5/0.5/0.5/1.0",
+    "pre_failure_sample_window_frames": 0,
+    "controller": {
+      "family": "LUCID-S4 relative return guard",
+      "delta_target": 0.778,
+      "kp": 1.0,
+      "ki": 0.02,
+      "alpha": 0.05,
+      "integral_max": 1.0,
+      "warmup_iterations": 10,
+      "return_relative_drop": 0.25,
+      "return_window": 8,
+      "spread_strata": 4
+    },
+    "plr": {
+      "score": "mean absolute native unnormalised GAE (L1 value loss)",
+      "level": "dataset-global episode-start 50-frame motion bin",
+      "prioritization": "rank",
+      "beta": 0.1,
+      "staleness": 0.1,
+      "alpha": 1.0,
+      "duplicate_rule": "one mass per global level, split over resident copies",
+      "sampling_event_clock": "motion draws detected by terminal, episode-start-bin change, or non-increasing motion elapsed step in deterministic time-then-env order",
+      "score_attribution": "native rollout GAE attributed to the episode-start bin",
+      "runtime_scope": "single process; multi-process launch fails closed"
+    },
+    "signal": {
+      "legacy": "PD joint_pos_target -> executed joint_pos latent cosine gap",
+      "tracking": "reference joint_pos -> executed joint_pos latent cosine gap",
+      "tracking_treatment_bundle": [
+        "pre-step causal reference/command/execution capture",
+        "episode and motion-bin reset-safe windows",
+        "explicit body-joint mapping and soft-limit normalization for raw features",
+        "fixed maximum-gap marks for non-timeout early termination"
+      ],
+      "controller_signal": "frozen-encoder reference->execution latent gap; the diagnostic feature vector is not fitted into a utility estimator",
+      "diagnostics": [
+        "reference->command intent",
+        "command->execution plant",
+        "reference->execution total",
+        "causal best lag, aligned residual, and lag-explained fraction",
+        "normalised signed error budget",
+        "reference/execution velocity and acceleration RMS",
+        "reference motion amplitude and total-error-to-motion ratio",
+        "early-failure terminal fill"
+      ],
+      "max_lag_steps": 8,
+      "terminal_fill_count": 1,
+      "terminal_gap": 2.0
+    },
+    "primary_evaluation": {
+      "physics_ladder": [
+        "phys_000",
+        "phys_025",
+        "phys_050",
+        "phys_075",
+        "phys_100",
+        "phys_125",
+        "phys_150"
+      ],
+      "latency_ladder": [
+        "lat_10ms",
+        "lat_20ms",
+        "lat_30ms",
+        "lat_40ms",
+        "lat_60ms"
+      ],
+      "outcome": "per-training-seed progress capability AUC",
+      "contrasts": [
+        "tracking_native - legacy_native",
+        "legacy_plr - legacy_native",
+        "tracking_plr - tracking_native",
+        "difference-in-differences interaction"
+      ]
+    }
+  },
+  "design_sha256": "c5032231b570e63eaa8bb49f074fb2eb3c07c6753e822931bb3780486dfa0080",
+  "implementation_scope": {
+    "schema_version": 1,
+    "source_roots": {
+      "gear_sonic": [
+        ".py",
+        ".yaml",
+        ".yml",
+        ".toml",
+        ".json"
+      ],
+      "scripts/practice_utility": [
+        ".py",
+        ".sh",
+        ".yaml",
+        ".yml",
+        ".toml",
+        ".json"
+      ]
+    },
+    "robot_asset_roots": [
+      "gear_sonic/data/assets/robot_description/urdf/g1",
+      "gear_sonic/data/assets/robot_description/mjcf",
+      "gear_sonic/data/assets/robot_description/meshes/g1"
+    ],
+    "exact_files": [
+      "pyproject.toml"
+    ],
+    "file_count": 433,
+    "relative_paths_sha256": "3f061303d98aeb192171d5830d1b5d6ba9787f77a59b1a0ec56f6e5fb278f320"
+  },
+  "implementation": {
+    "gear_sonic/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "gear_sonic/camera/__init__.py": {
+      "sha256": "6e0dff5d68fb8188c6207d944e6c54931f354eeb81df74c7ab2c99e26ddfaa4f",
+      "size_bytes": 740
+    },
+    "gear_sonic/camera/composed_camera.py": {
+      "sha256": "86e603ee644253c8e93207fbe31bc1ce57db0fe4f61a78329007d0847db6119d",
+      "size_bytes": 26216
+    },
+    "gear_sonic/camera/drivers/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "gear_sonic/camera/drivers/dummy.py": {
+      "sha256": "89242f396c3987a98a4eaed82c56aaf509e5df435f331a96c32cf0e01241a474",
+      "size_bytes": 2493
+    },
+    "gear_sonic/camera/drivers/oak.py": {
+      "sha256": "fac8e9c782174a6e79366a80317c23774bd2ecfa0d7eb005e4ec5b6f55f5c8df",
+      "size_bytes": 16068
+    },
+    "gear_sonic/camera/drivers/realsense.py": {
+      "sha256": "1f80954faa863c88bf0f1c8982c7b2f4499a73881caa618534578255fa63fd87",
+      "size_bytes": 5576
+    },
+    "gear_sonic/camera/drivers/usb_camera.py": {
+      "sha256": "3ab15d2661c6fe6f629f929b275026e08ea70038a203efc368d9db317e6ca8bc",
+      "size_bytes": 3132
+    },
+    "gear_sonic/camera/sensor.py": {
+      "sha256": "36b73c91225e02cf13cd6b5313b53c036cd58bcae49ae459153212038d7cf3e7",
+      "size_bytes": 968
+    },
+    "gear_sonic/camera/sensor_server.py": {
+      "sha256": "cadaf157e02220b0f6a75f5daf95be207160fc013d560909492c1f49769331c1",
+      "size_bytes": 8051
+    },
+    "gear_sonic/config/actor_critic/critics/mlp.yaml": {
+      "sha256": "1304f7a390d718c0302b31cbd5be61dfd597181c3e6e575a85b3bca328d3fd80",
+      "size_bytes": 374
+    },
+    "gear_sonic/config/actor_critic/decoders/g1_dyn_mlp.yaml": {
+      "sha256": "4e10d2267500a917c6523280e24518a4826df0135cb6f6879f67a3f7dddac6a4",
+      "size_bytes": 407
+    },
+    "gear_sonic/config/actor_critic/decoders/g1_kin_mf_mlp.yaml": {
+      "sha256": "1582d3cef59650adc6377a90f6c828a9de40f2274475c5feb03a37be8946580c",
+      "size_bytes": 516
+    },
+    "gear_sonic/config/actor_critic/encoders/g1_mf_mlp.yaml": {
+      "sha256": "aae7fcb5e043cdf9ea6e2dbbc5da0742c31a4de321ba9867a5537c1e151c739d",
+      "size_bytes": 466
+    },
+    "gear_sonic/config/actor_critic/encoders/smpl_mlp.yaml": {
+      "sha256": "93aa26325e2291458c3f5a5613ba1e0cd8098e3537a21030b208ab1cae925e59",
+      "size_bytes": 475
+    },
+    "gear_sonic/config/actor_critic/encoders/soma_mlp.yaml": {
+      "sha256": "98fe67c2cc46125f38b5213829f7efb708467d019ab52a6f70f0086edafa740e",
+      "size_bytes": 551
+    },
+    "gear_sonic/config/actor_critic/encoders/teleop_mlp.yaml": {
+      "sha256": "de5ffa95c268263ad92f96d71f57bd75b7c17ded7856a8e630018545050a8a78",
+      "size_bytes": 469
+    },
+    "gear_sonic/config/actor_critic/mlp.yaml": {
+      "sha256": "ca9c2f13893a8c9baa38bd9f548280555dafe92e89b789ba6952b91230249fce",
+      "size_bytes": 957
+    },
+    "gear_sonic/config/actor_critic/quantizers/fsq.yaml": {
+      "sha256": "04c18b94f2ef2133c6ee7579c8bede6560cd3b681f7f2eedfdca407c7d6052a4",
+      "size_bytes": 38
+    },
+    "gear_sonic/config/actor_critic/universal_token/all_mlp_v1.yaml": {
+      "sha256": "3966977247a843214ac1c9ef384d9a9fa5b0b93efd484c08e08e54b0241e00c5",
+      "size_bytes": 1997
+    },
+    "gear_sonic/config/actor_critic/universal_token/all_mlp_v1_soma.yaml": {
+      "sha256": "7742ce8bf1a5c28f9d2450b2a43f3ce401834f8c10d9818dad531a6960f7c5ce",
+      "size_bytes": 2304
+    },
+    "gear_sonic/config/algo/ppo_im_phc.yaml": {
+      "sha256": "57fec213ced45071d501548ea4bb31be1ca83aedfa6b5bdbdab056efae853632",
+      "size_bytes": 912
+    },
+    "gear_sonic/config/algo/trl/ppo.yaml": {
+      "sha256": "fed42dba314b2ebb4aa0fa2d01eaf07f3fd7f9aab8b56a652fc2e4d4aa8ec3a5",
+      "size_bytes": 675
+    },
+    "gear_sonic/config/aux_losses/terms/g1_recon.yaml": {
+      "sha256": "f72c7421678956202f813ccdb5d8e741c6dadf095e17bc3547edfb868111160f",
+      "size_bytes": 121
+    },
+    "gear_sonic/config/aux_losses/terms/g1_smpl_latent.yaml": {
+      "sha256": "38d6f6b9c2566c7586a29dfa5b26a5bb883e72d2079c99740e730a22d913f14d",
+      "size_bytes": 142
+    },
+    "gear_sonic/config/aux_losses/terms/g1_soma_latent.yaml": {
+      "sha256": "66abd5f8275fbeb3d1d4974dbafa93c7215ec638134cbd372214a3fda4f2b18f",
+      "size_bytes": 141
+    },
+    "gear_sonic/config/aux_losses/terms/g1_teleop_latent.yaml": {
+      "sha256": "d4a324d0d1c2879670c24605e0ba863dfe7ed6524cc23bba1a40eb9d3149e9eb",
+      "size_bytes": 146
+    },
+    "gear_sonic/config/aux_losses/terms/reencoded_smpl_g1_latent.yaml": {
+      "sha256": "2f8fbf1375f928cfa7eec344ccb2a5ca23c5f36ce58709d32c9816e38f2a2437",
+      "size_bytes": 161
+    },
+    "gear_sonic/config/aux_losses/terms/teleop_smpl_latent.yaml": {
+      "sha256": "6cbe4c2f878c36f605f656a5fa04d33d08f764365fd478d9d4ad27e48190d355",
+      "size_bytes": 227
+    },
+    "gear_sonic/config/aux_losses/universal_token/g1_recon_and_all_latent.yaml": {
+      "sha256": "5c22164387fa6c2434f322636d24ed0314b48bef16af9002dc8a09a0252db2ab",
+      "size_bytes": 392
+    },
+    "gear_sonic/config/aux_losses/universal_token/g1_recon_and_all_latent_soma.yaml": {
+      "sha256": "96ca6d3c593c268f009d211709dad79bc2b096c7383833ce846b14b7584ec5e1",
+      "size_bytes": 452
+    },
+    "gear_sonic/config/base.yaml": {
+      "sha256": "32da23dc059653aac95fabce7641bbec9a91eeed00ff8950a116124caa15323c",
+      "size_bytes": 1083
+    },
+    "gear_sonic/config/base/hydra.yaml": {
+      "sha256": "5edd12020b36efaea773d2fa9669d981b308b7ccda7508bdc04e3cbc63424c92",
+      "size_bytes": 293
+    },
+    "gear_sonic/config/base/structure.yaml": {
+      "sha256": "dd3c6fc67865cb2927249ee4a9a2196ca7acc6b6b0abfaa4f2b8f50190dd34e7",
+      "size_bytes": 97
+    },
+    "gear_sonic/config/base_eval.yaml": {
+      "sha256": "c4e5cf797e6a7d675909634c2733a16db3bed084b701a9a6a8e7c1123f1f9efd",
+      "size_bytes": 498
+    },
+    "gear_sonic/config/callbacks/im_eval.yaml": {
+      "sha256": "9253ae831e6af47c5693ffb8a24e497b3eb7097e52b2f0f3033606bc5c8c6c5f",
+      "size_bytes": 161
+    },
+    "gear_sonic/config/callbacks/im_resample.yaml": {
+      "sha256": "312dfd4301a5f1b6f6c6b48b82c6c9276cf2b686fe95f92467f430950a85af8f",
+      "size_bytes": 156
+    },
+    "gear_sonic/config/callbacks/lucid_curriculum.yaml": {
+      "sha256": "7305e6edbe4a06239d77909ac728e79c0792de5e7004f6894d7736df4b05b119",
+      "size_bytes": 2859
+    },
+    "gear_sonic/config/callbacks/model_save.yaml": {
+      "sha256": "03d32fc98f92350f43c1219bef6d64a96106724f719c4c901bb47bf417d540a0",
+      "size_bytes": 168
+    },
+    "gear_sonic/config/callbacks/practice_capsule.yaml": {
+      "sha256": "1f235ea0b331edad23265f52c05801c613724dc441573869f617eec24d30159d",
+      "size_bytes": 430
+    },
+    "gear_sonic/config/callbacks/practice_context.yaml": {
+      "sha256": "7b40df1cacd4648ecbb9d0bf2428cfb5ebfec18d1b1b0ce26ed664b2511e4a10",
+      "size_bytes": 897
+    },
+    "gear_sonic/config/callbacks/practice_observer.yaml": {
+      "sha256": "675712369c074872d9ac660024bca1c0029e3fdd7c8dd293c3418859b8f7f468",
+      "size_bytes": 653
+    },
+    "gear_sonic/config/callbacks/read_eval.yaml": {
+      "sha256": "547b3eb772f17bd66031f5536676e91e2c025137eacf534fac84bf5278b7da59",
+      "size_bytes": 139
+    },
+    "gear_sonic/config/callbacks/wandb.yaml": {
+      "sha256": "33f46d32e4717749f8c02d910332e10a7c4c78da6c3fa08015c3861c9c51f2e5",
+      "size_bytes": 73
+    },
+    "gear_sonic/config/eval_exp.yaml": {
+      "sha256": "b588486a47d603e2f76c1fe9b59d3734d09a1892566da6c430147b62e6408b7e",
+      "size_bytes": 1117
+    },
+    "gear_sonic/config/exp/manager/universal_token/all_modes/sonic_bones_seed.yaml": {
+      "sha256": "dc442e5db2a18b5b95d5d5c2ed2b226331f9a967691f31a6916c81d3ab7a8ef7",
+      "size_bytes": 3605
+    },
+    "gear_sonic/config/exp/manager/universal_token/all_modes/sonic_h2.yaml": {
+      "sha256": "ef9f82d2d96e4d7a7b0f4d2df0582f19df987110645c9cabda99f583f5a6ca41",
+      "size_bytes": 3132
+    },
+    "gear_sonic/config/exp/manager/universal_token/all_modes/sonic_release.yaml": {
+      "sha256": "d94f7acb1c47a8e019a6d90357ea96f44822c858c2080d63a497f34e5fb2e4d7",
+      "size_bytes": 3333
+    },
+    "gear_sonic/config/exp/manager/universal_token/all_modes/sonic_v1_1.yaml": {
+      "sha256": "aa55abcad9214ca091f001893e8081766ad5d8ebdcc6ead3aaf2e76dab4e0a54",
+      "size_bytes": 3713
+    },
+    "gear_sonic/config/manager_env/actions/terms/joint_pos.yaml": {
+      "sha256": "c808c3ed68a45f793118d8ee8f95860c30094ef4607ce075edcaa93e5f5bd15d",
+      "size_bytes": 143
+    },
+    "gear_sonic/config/manager_env/actions/tracking/base.yaml": {
+      "sha256": "298a59e2c5e761dde6ea3fc3976c8098cfd7c9ce39041e9d0ba73a9a153f3dfe",
+      "size_bytes": 130
+    },
+    "gear_sonic/config/manager_env/base_env.yaml": {
+      "sha256": "5dd025cb090747f867fcab27918f58cb0917d359f407f7302e1771ed468b2d34",
+      "size_bytes": 2025
+    },
+    "gear_sonic/config/manager_env/commands/terms/motion.yaml": {
+      "sha256": "98cb712361383d35b7034e42b9d20ca59466f748f11acd162062303f8ef1646c",
+      "size_bytes": 2057
+    },
+    "gear_sonic/config/manager_env/commands/tracking/base.yaml": {
+      "sha256": "6ada9bd3db8971c970de64f10eada90270c408d90446827cb5703e9243d5e14b",
+      "size_bytes": 130
+    },
+    "gear_sonic/config/manager_env/curriculum/empty.yaml": {
+      "sha256": "a1e8b3bf8b131669bf110de523444114a208e87731e513e0f26f66bcb6da2bee",
+      "size_bytes": 67
+    },
+    "gear_sonic/config/manager_env/events/terms/add_joint_default_pos.yaml": {
+      "sha256": "b974d8a4b81a935d4aa3b1fcb50bf95cecb6f4acef4dd7869d398b553d646a0e",
+      "size_bytes": 336
+    },
+    "gear_sonic/config/manager_env/events/terms/base_com.yaml": {
+      "sha256": "b647b935b18fdb16e005e66542383d005e59e352d32c131e542608955dfd51c5",
+      "size_bytes": 347
+    },
+    "gear_sonic/config/manager_env/events/terms/physics_material.yaml": {
+      "sha256": "e8867558365f593d34ae2f74ffe5f3acdc57c46186394b1ee5dce595ef9ad4f8",
+      "size_bytes": 397
+    },
+    "gear_sonic/config/manager_env/events/terms/push_robot.yaml": {
+      "sha256": "b06ac678bd795ba800573478b5e940c4f05143f73323c9c485145d84faecddeb",
+      "size_bytes": 1953
+    },
+    "gear_sonic/config/manager_env/events/terms/randomize_action_delay.yaml": {
+      "sha256": "17cf6bbde161fb25adc2b7546ead21979f3d4c98c027966485f836c34d4b4fcb",
+      "size_bytes": 1052
+    },
+    "gear_sonic/config/manager_env/events/terms/randomize_rigid_body_mass.yaml": {
+      "sha256": "22bb4dcb503ec28a4216698442db8889d20974e0aba4885baf6f59c5ab3760f6",
+      "size_bytes": 333
+    },
+    "gear_sonic/config/manager_env/events/tracking/base.yaml": {
+      "sha256": "3ae9400b9c911a36d0702a73ee218b092b5218a0427b82fbb10f19ab588fad41",
+      "size_bytes": 226
+    },
+    "gear_sonic/config/manager_env/events/tracking/level0_4.yaml": {
+      "sha256": "c11337f8fb260cae8959bcb9044c5310cf2f2324eecc179d1deb69ab98bf6476",
+      "size_bytes": 753
+    },
+    "gear_sonic/config/manager_env/events/tracking/lucid_curriculum.yaml": {
+      "sha256": "86889133dadbccf2368246a7d9c44f6c83a892737f2c5bdab768c7ed4b0020ec",
+      "size_bytes": 3087
+    },
+    "gear_sonic/config/manager_env/events/tracking/lucid_eval_clean.yaml": {
+      "sha256": "27ddaa68d217d58599230dff2e0538e1bc6421058ac26e1460d60116f3c34af5",
+      "size_bytes": 1681
+    },
+    "gear_sonic/config/manager_env/events/tracking/lucid_eval_latency_60ms.yaml": {
+      "sha256": "ccaab0fb0adc6395218d4cf3918f7d5e5cc1c8046d3faa04b5ed77ad9f6994e3",
+      "size_bytes": 1235
+    },
+    "gear_sonic/config/manager_env/events/tracking/lucid_eval_latency_jitter.yaml": {
+      "sha256": "22e79e3a4d8c271ed0bd73b9b1c87a29f1dd7a5624b44ab66240fd01b009b653",
+      "size_bytes": 1739
+    },
+    "gear_sonic/config/manager_env/events/tracking/lucid_latency_only.yaml": {
+      "sha256": "8ccbbf5196a1ad16e523e04fab3a8562822791b56ed8b9a5ca0d6291b81a95e7",
+      "size_bytes": 438
+    },
+    "gear_sonic/config/manager_env/observations/critic/privileged.yaml": {
+      "sha256": "b860de6348f5c8285e7a079a279ac37deb5b15cf86872398f103d334b50e905d",
+      "size_bytes": 444
+    },
+    "gear_sonic/config/manager_env/observations/critic/privileged_mf_hist.yaml": {
+      "sha256": "554aedc1e32899f7a6da39368f4ded6a9ea05131b7d2b8b5e4e6440386a9cf76",
+      "size_bytes": 764
+    },
+    "gear_sonic/config/manager_env/observations/policy/global.yaml": {
+      "sha256": "e1fd892de22b0a0355e7f0bd440862dc1ca64a47277bc5fce627ff6d5903a52c",
+      "size_bytes": 1162
+    },
+    "gear_sonic/config/manager_env/observations/policy/local_dir_hist.yaml": {
+      "sha256": "da53d61a86d1f73c7f7b31a9abdcca68ea129572d5982b7d5ee44cc5474ed74e",
+      "size_bytes": 1056
+    },
+    "gear_sonic/config/manager_env/observations/terms/actions.yaml": {
+      "sha256": "5e08df18d5662497dca17f8dfb4e4ad0dcfcb60d22f3ce27364708b182f03bb9",
+      "size_bytes": 110
+    },
+    "gear_sonic/config/manager_env/observations/terms/base_ang_vel.yaml": {
+      "sha256": "2445fab317a7a7e1c049b44e2f3fe6158a9ab9b93fdba8e5eec9078b8e1a2ca4",
+      "size_bytes": 116
+    },
+    "gear_sonic/config/manager_env/observations/terms/base_lin_vel.yaml": {
+      "sha256": "1a20f542df65c68e356f550c337845b59d103798aad92cd998df0d728eccfbdf",
+      "size_bytes": 116
+    },
+    "gear_sonic/config/manager_env/observations/terms/body_ori.yaml": {
+      "sha256": "aeec23530fe33171301828fa3798ddcdd62e315e65a65304c415d25ef22b5c74",
+      "size_bytes": 153
+    },
+    "gear_sonic/config/manager_env/observations/terms/body_pos.yaml": {
+      "sha256": "1dac77448de95a8c33dc60260a9714c7ad24ac559f57923861f30007345919b7",
+      "size_bytes": 153
+    },
+    "gear_sonic/config/manager_env/observations/terms/command.yaml": {
+      "sha256": "bc0df920995e3d6c9cc14a4d146e253f38cb46f6b1babcb4bb0c3f9602ce6dd2",
+      "size_bytes": 154
+    },
+    "gear_sonic/config/manager_env/observations/terms/command_multi_future.yaml": {
+      "sha256": "7d6b2ed92c22e4e7b0877821b84fd30d076c7c41d4cccfef13d13d934a133e35",
+      "size_bytes": 169
+    },
+    "gear_sonic/config/manager_env/observations/terms/command_multi_future_lower_body.yaml": {
+      "sha256": "a78941d0176949fc3595e3ba6f4dc030aecd2ab351155cefbe5424d7a6350953",
+      "size_bytes": 191
+    },
+    "gear_sonic/config/manager_env/observations/terms/command_multi_future_nonflat.yaml": {
+      "sha256": "55bfd77670262d4745750217d1cb31073e07bc6407d52d8cc5274752384055b3",
+      "size_bytes": 199
+    },
+    "gear_sonic/config/manager_env/observations/terms/command_z.yaml": {
+      "sha256": "1ddbe9e552b1930349306bdf25d816802d162ee694864fc1fee00393681109a6",
+      "size_bytes": 147
+    },
+    "gear_sonic/config/manager_env/observations/terms/command_z_multi_future_nonflat.yaml": {
+      "sha256": "065e8db89252957d648dc97ffff8df68a09df0eab0d9ba396fab8263501a3cb8",
+      "size_bytes": 203
+    },
+    "gear_sonic/config/manager_env/observations/terms/encoder_index.yaml": {
+      "sha256": "bcce51a42d602d025206b9bf97953ffb8a68046a9d90c8a90fcd736a98e75775",
+      "size_bytes": 195
+    },
+    "gear_sonic/config/manager_env/observations/terms/gravity_dir.yaml": {
+      "sha256": "8074e21a58cd1226ae1a0c844a86e72fae9458bf8dbac8ef9f81d4e0b1035c9b",
+      "size_bytes": 151
+    },
+    "gear_sonic/config/manager_env/observations/terms/joint_pos.yaml": {
+      "sha256": "5fc20d4de0f9b22278bbdb52e862f3159413ad15020dd9563c0bfc5905d52523",
+      "size_bytes": 114
+    },
+    "gear_sonic/config/manager_env/observations/terms/joint_pos_multi_future_wrist_for_smpl.yaml": {
+      "sha256": "8f6a4acbcae618a19d06b8e8562e72d8f62eac1e0b121a760faaca6e0f4455aa",
+      "size_bytes": 412
+    },
+    "gear_sonic/config/manager_env/observations/terms/joint_pos_multi_future_wrist_for_soma.yaml": {
+      "sha256": "175a281b4842003f90f1bd1dde18179bd419185c2c22bbf4c977ac9e370c8b69",
+      "size_bytes": 412
+    },
+    "gear_sonic/config/manager_env/observations/terms/joint_vel.yaml": {
+      "sha256": "5003a7429883f6757da208c9f5d2c93622f1ff3a27abe52a1884afc6bfd3f71b",
+      "size_bytes": 114
+    },
+    "gear_sonic/config/manager_env/observations/terms/motion_anchor_ori_b.yaml": {
+      "sha256": "d2f9e0aadad682722ad2b65375671d498625dcc919b8ee7eb505f9bba2ef56e6",
+      "size_bytes": 167
+    },
+    "gear_sonic/config/manager_env/observations/terms/motion_anchor_ori_b_mf_nonflat.yaml": {
+      "sha256": "15a1094f1363373392d9e2931f9acd94e55336025de0722fda87837c1700c91d",
+      "size_bytes": 203
+    },
+    "gear_sonic/config/manager_env/observations/terms/motion_anchor_ori_heading.yaml": {
+      "sha256": "ca4011bfc79396f1a2ad3cd490605d5b75449719ecea0c1ee11fdf655001e10e",
+      "size_bytes": 179
+    },
+    "gear_sonic/config/manager_env/observations/terms/motion_anchor_ori_heading_mf_nonflat.yaml": {
+      "sha256": "6acd24ecf4e078c6788754a91dc951d582af10ac260198b7777587cac21c5b6f",
+      "size_bytes": 215
+    },
+    "gear_sonic/config/manager_env/observations/terms/motion_anchor_pos_b.yaml": {
+      "sha256": "2dd31a671ca953b0085268115d66a12680dec79de7a975604bd276dc25ae30b1",
+      "size_bytes": 167
+    },
+    "gear_sonic/config/manager_env/observations/terms/smpl_joints_multi_future_local_nonflat.yaml": {
+      "sha256": "ac83f7d0b93330bafce9735fffb77093055d8eba63a71b353a342d56e84d6846",
+      "size_bytes": 219
+    },
+    "gear_sonic/config/manager_env/observations/terms/smpl_root_ori_b_multi_future.yaml": {
+      "sha256": "e63b70c11562108fac225b93e313d3d9269781ca99fca558c67e535ccec2f62b",
+      "size_bytes": 197
+    },
+    "gear_sonic/config/manager_env/observations/terms/smpl_root_ori_heading_multi_future.yaml": {
+      "sha256": "f25453e2316e588e10ac301337caa5c6e0ddb37786e637fb27481c4b43d65c29",
+      "size_bytes": 209
+    },
+    "gear_sonic/config/manager_env/observations/terms/soma_joints_multi_future_local_nonflat.yaml": {
+      "sha256": "cd8fa80b4dec4aaf47438191f7b56727f8b5fe4f747f27214f3b73175a624949",
+      "size_bytes": 219
+    },
+    "gear_sonic/config/manager_env/observations/terms/soma_root_ori_b_multi_future.yaml": {
+      "sha256": "ea3fab485299400f60dabd037fb2512876de34e01eb98795740838ac80041dce",
+      "size_bytes": 197
+    },
+    "gear_sonic/config/manager_env/observations/terms/vr_3point_local_orn_target.yaml": {
+      "sha256": "a56e42c2dab0630c127abe80780a9a2eba10c4c12c46373c4b649f682b080078",
+      "size_bytes": 181
+    },
+    "gear_sonic/config/manager_env/observations/terms/vr_3point_local_target.yaml": {
+      "sha256": "c4a17cd0e598de209d2b68559eb50a808dd4169bb2eabcdf5b13426bcc15df9f",
+      "size_bytes": 173
+    },
+    "gear_sonic/config/manager_env/observations/tokenizer/unitoken_all_noz.yaml": {
+      "sha256": "526350ce5a9e2e75a2f493bd8a1760dd202755a1bdb411f854f81c5047070778",
+      "size_bytes": 1350
+    },
+    "gear_sonic/config/manager_env/observations/tokenizer/unitoken_all_noz_heading.yaml": {
+      "sha256": "60574cd90c950b7659fc82c1ca6ed1f0b3c7ce203279db76716f1c54f5097ff9",
+      "size_bytes": 1358
+    },
+    "gear_sonic/config/manager_env/observations/tokenizer/unitoken_all_noz_soma.yaml": {
+      "sha256": "9b43aa14401af98d1d104f26a143d7e4f4cc4ef222db6201fc0ed09e193df071",
+      "size_bytes": 1783
+    },
+    "gear_sonic/config/manager_env/recorders/empty.yaml": {
+      "sha256": "b4a7a26f8dd950fb0a345aa1bf75827eb112ee6045e248cd2292ba5de40cbe2b",
+      "size_bytes": 65
+    },
+    "gear_sonic/config/manager_env/recorders/render.yaml": {
+      "sha256": "5f42bd07280ffff42db220d66377a7cbcbfa71a792b652c144832f41c238445e",
+      "size_bytes": 234
+    },
+    "gear_sonic/config/manager_env/rewards/terms/action_rate_l2.yaml": {
+      "sha256": "bdb562102d504e1232317ca1289be4a96d892818f21d08546e2af434e17c4781",
+      "size_bytes": 131
+    },
+    "gear_sonic/config/manager_env/rewards/terms/anti_shake_ang_vel.yaml": {
+      "sha256": "b93a9e22764a805f087bc14fbcd20b856aaaba79bb6e94d6aa94cdf3b7366325",
+      "size_bytes": 275
+    },
+    "gear_sonic/config/manager_env/rewards/terms/energy_consumption.yaml": {
+      "sha256": "eaf398d405dbd90551da4c6e3c384938a32d87996bf54d81a7f4f811409e4842",
+      "size_bytes": 184
+    },
+    "gear_sonic/config/manager_env/rewards/terms/feet_acc.yaml": {
+      "sha256": "c421593ccffc841cf875eaaf2475d34d990ab22f1e171745c1847bdc5b3612e1",
+      "size_bytes": 252
+    },
+    "gear_sonic/config/manager_env/rewards/terms/joint_limit.yaml": {
+      "sha256": "213acd39c4f61e0f0093bafdc304e88727620d2b55095db9c5e7df9a3a39ddec",
+      "size_bytes": 250
+    },
+    "gear_sonic/config/manager_env/rewards/terms/tracking_anchor_ori.yaml": {
+      "sha256": "d382f0ae91384fbb54c2b8841089a55044e99106a09a6a67b31be42aa1f2bb49",
+      "size_bytes": 195
+    },
+    "gear_sonic/config/manager_env/rewards/terms/tracking_anchor_pos.yaml": {
+      "sha256": "759589d9592bed621eda38b14df87341d8dd430ef91d17cd99cfce6ad62ebafd",
+      "size_bytes": 195
+    },
+    "gear_sonic/config/manager_env/rewards/terms/tracking_body_angvel.yaml": {
+      "sha256": "3098e85c836482a2c5c34fc9cb31407803a18952f93a47ec58717f756f134c08",
+      "size_bytes": 198
+    },
+    "gear_sonic/config/manager_env/rewards/terms/tracking_body_linvel.yaml": {
+      "sha256": "b89c21ea802502282c23d0f8541d6c91d824cc1d16c2a3ac1685cd1d552f4d95",
+      "size_bytes": 197
+    },
+    "gear_sonic/config/manager_env/rewards/terms/tracking_relative_body_ori.yaml": {
+      "sha256": "507e3919749ae635ebc7de8d8a372c39eaaf22598ac04bc896caf77df5e89d6d",
+      "size_bytes": 209
+    },
+    "gear_sonic/config/manager_env/rewards/terms/tracking_relative_body_pos.yaml": {
+      "sha256": "5f78b182f7618f2179671cdae17a9cdbe90910d3bc2ea01e9475c95927f309ee",
+      "size_bytes": 209
+    },
+    "gear_sonic/config/manager_env/rewards/terms/tracking_vr_2wrists_local_ori.yaml": {
+      "sha256": "5bac306f667e651ad2488015401265613fe96489b665a61e8db1c8257a62f791",
+      "size_bytes": 279
+    },
+    "gear_sonic/config/manager_env/rewards/terms/tracking_vr_5point_local.yaml": {
+      "sha256": "1f494f38a971bf3ae9a072a67a3988053223805d69fb95103cc5de7a2899526a",
+      "size_bytes": 205
+    },
+    "gear_sonic/config/manager_env/rewards/terms/undesired_contacts.yaml": {
+      "sha256": "d1baafb853e13d6e42ab588bf4fbc46b4404b2b8458db9f41da49c8d06838ae7",
+      "size_bytes": 437
+    },
+    "gear_sonic/config/manager_env/rewards/tracking/base.yaml": {
+      "sha256": "0bed10df01db8d599cd4b1a725ef4a6b9841424fcd983e1d169e54547a0a9a05",
+      "size_bytes": 466
+    },
+    "gear_sonic/config/manager_env/rewards/tracking/base_5point_local_feet_acc.yaml": {
+      "sha256": "858df23cf13cedeeda0d85b02df80013fd30798e24f4e46e3aa5477ae306ef79",
+      "size_bytes": 570
+    },
+    "gear_sonic/config/manager_env/rewards/tracking/local_feet_acc_energy_5pt.yaml": {
+      "sha256": "d262ca7e1c4517c6949d625b188516100b86df2ffdbcebe3f0c90bed20af6bb0",
+      "size_bytes": 628
+    },
+    "gear_sonic/config/manager_env/terminations/terms/anchor_ori_full.yaml": {
+      "sha256": "40090fdac7c298f8c979b7f0ff13e9ed566b642e0048068be9064e2015b1724e",
+      "size_bytes": 264
+    },
+    "gear_sonic/config/manager_env/terminations/terms/anchor_pos.yaml": {
+      "sha256": "ac9e93010c8fadfe3e6346a1917c7a0ed55592c67de02af11c09a3e9a012e890",
+      "size_bytes": 181
+    },
+    "gear_sonic/config/manager_env/terminations/terms/anchor_pos_adaptive.yaml": {
+      "sha256": "22f64a2230cf3a9e541398083e13bacf25c6a367a84b09521176bcba6140a8d4",
+      "size_bytes": 265
+    },
+    "gear_sonic/config/manager_env/terminations/terms/ee_body_pos.yaml": {
+      "sha256": "e31b91f3d69c799e4c2c85fc31793c8ef0cd63360a545878c07036b79615f3f2",
+      "size_bytes": 320
+    },
+    "gear_sonic/config/manager_env/terminations/terms/ee_body_pos_adaptive.yaml": {
+      "sha256": "4febbf9922d8912745804d142838a88445adf74137900636559bac9cf23bbbb2",
+      "size_bytes": 404
+    },
+    "gear_sonic/config/manager_env/terminations/terms/foot_pos_xyz.yaml": {
+      "sha256": "92674a2a63447ec3cf0ac9567b279be1c1e7ecae3d5735baf9f44d538c6f0e3b",
+      "size_bytes": 256
+    },
+    "gear_sonic/config/manager_env/terminations/terms/motion_time_out.yaml": {
+      "sha256": "3faa62a973adc867c394296d165db2808f1e003a69f7103d60e9bca71f8878e9",
+      "size_bytes": 171
+    },
+    "gear_sonic/config/manager_env/terminations/tracking/base.yaml": {
+      "sha256": "f40d9e9430975d5b875a728f713aba32a3cdeb439a206f3d77911b18bc68ee11",
+      "size_bytes": 241
+    },
+    "gear_sonic/config/manager_env/terminations/tracking/base_adaptive_strict_ori_foot_xyz.yaml": {
+      "sha256": "defe33c30dc7b2a4cd1e7ed03ba4921d4ac323825af2b4306b9c639cb5d39435",
+      "size_bytes": 467
+    },
+    "gear_sonic/config/manager_env/terminations/tracking/eval.yaml": {
+      "sha256": "5ca7fbe4c9dbad836667902c7927a68b947b3cc332292bf486048dde00e6fb83",
+      "size_bytes": 535
+    },
+    "gear_sonic/config/opt/wandb.yaml": {
+      "sha256": "dbe40f75732656ac8c59468e2acad2be32032be58a5186b40c0886f98152e7ba",
+      "size_bytes": 301
+    },
+    "gear_sonic/config/trainer/trl.yaml": {
+      "sha256": "6c7212814fbb151f9449c7be45b95d9a9159125f4adf9b8a55659f4ec70d22c3",
+      "size_bytes": 59
+    },
+    "gear_sonic/config/trainer/trl_ppo_aux.yaml": {
+      "sha256": "81cde1e7dd376d86590308e1c053e0a935689f8da90521c9b6cb691b3c87034a",
+      "size_bytes": 75
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/NVBP.STL": {
+      "sha256": "f8a3b7373c13475a706fd3d7be3d535028b38bfe77977257f55122ee4d84c71c",
+      "size_bytes": 5000034
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/backpack.STL": {
+      "sha256": "f19aabed4089733c81dc05703d407da76032da55bc9b6687958548fd4c9135c6",
+      "size_bytes": 1948234
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/head_link.STL": {
+      "sha256": "005fb67fbd3eff94aa8bf4a6e83238174e9f91b6721f7111594322f223724411",
+      "size_bytes": 932784
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/left_ankle_pitch_link.STL": {
+      "sha256": "d49e3abc6f5b12e532062cd575b87b5ef40cd2a3fc18f54a1ca5bba4f773d51d",
+      "size_bytes": 71184
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/left_ankle_roll_link.STL": {
+      "sha256": "c4092af943141d4d9f74232f3cfa345afc6565f46a077793b8ae0e68b39dc33f",
+      "size_bytes": 653384
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/left_elbow_link.STL": {
+      "sha256": "fa752198accd104d5c4c3a01382e45165b944fbbc5acce085059223324e5bed3",
+      "size_bytes": 88784
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/left_hand_index_0_link.STL": {
+      "sha256": "6b35f2f77211d5a366f0b9a4e47c4ee35e536731266f1a34e9efa12db579b892",
+      "size_bytes": 475984
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/left_hand_index_1_link.STL": {
+      "sha256": "9e315ebc8a7a0cb98e033985b586b20d81cf8aa761181ae61ce56fcb14077a06",
+      "size_bytes": 1521784
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/left_hand_middle_0_link.STL": {
+      "sha256": "6b35f2f77211d5a366f0b9a4e47c4ee35e536731266f1a34e9efa12db579b892",
+      "size_bytes": 475984
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/left_hand_middle_1_link.STL": {
+      "sha256": "9e315ebc8a7a0cb98e033985b586b20d81cf8aa761181ae61ce56fcb14077a06",
+      "size_bytes": 1521784
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/left_hand_palm_link.STL": {
+      "sha256": "23a486b75bd78a9bf03cec25d84d87f97f3dae038cf21a743b6d469b337e4004",
+      "size_bytes": 2140184
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/left_hand_thumb_0_link.STL": {
+      "sha256": "a90c721661c0622685488a3c74d1e122c7da89242d3a1daef75edb83422d05e0",
+      "size_bytes": 8884
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/left_hand_thumb_1_link.STL": {
+      "sha256": "445c54a45bc13ce36001556f66bc0f49c83cb40321205ae4d676bb2874325684",
+      "size_bytes": 475984
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/left_hand_thumb_2_link.STL": {
+      "sha256": "3d8dbe5085acfc213d21aa8b0782e89cd79084e9678f3a85fc7b04a86b029db5",
+      "size_bytes": 1521784
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/left_hip_pitch_link.STL": {
+      "sha256": "4725168105ee768ee31638ef22b53f6be2d7641bfd7cfefe803488d884776fa4",
+      "size_bytes": 181684
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/left_hip_roll_link.STL": {
+      "sha256": "91f25922ee8a7c3152790051bebad17b4d9cd243569c38fe340285ff93a97acf",
+      "size_bytes": 192184
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/left_hip_yaw_link.STL": {
+      "sha256": "a16d88aa6ddac8083aa7ad55ed317bea44b1fa003d314fba88965b7ed0f3b55b",
+      "size_bytes": 296284
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/left_knee_link.STL": {
+      "sha256": "8d92b9e3d3a636761150bb8025e32514c4602b91c7028d523ee42b3e632de477",
+      "size_bytes": 854884
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/left_rubber_hand.STL": {
+      "sha256": "cff2221a690fa69303f61fce68f2d155c1517b52efb6ca9262dd56e0bc6e70fe",
+      "size_bytes": 2287484
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/left_shoulder_pitch_link.STL": {
+      "sha256": "f0d1cfd02fcf0d42f95e678eeca33da3afbcc366ffba5c052847773ec4f31d52",
+      "size_bytes": 176784
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/left_shoulder_roll_link.STL": {
+      "sha256": "fb9df21687773522598dc384f1a2945c7519f11cbc8bd372a49170316d6eee88",
+      "size_bytes": 400284
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/left_shoulder_yaw_link.STL": {
+      "sha256": "1aa97e9748e924336567992181f78c7cd0652fd52a4afcca3df6b2ef6f9e712e",
+      "size_bytes": 249184
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/left_wrist_pitch_link.STL": {
+      "sha256": "b251d8e05047f695d0f536cd78c11973cfa4e78d08cfe82759336cc3471de3a9",
+      "size_bytes": 85984
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/left_wrist_roll_link.STL": {
+      "sha256": "edc387c9a0ba8c2237e9b296d32531426fabeb6f53e58df45c76106bca74148c",
+      "size_bytes": 356184
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/left_wrist_roll_rubber_hand.STL": {
+      "sha256": "e81030abd023bd9e4a308ef376d814a2c12d684d8a7670c335bbd5cd7809c909",
+      "size_bytes": 3484884
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/left_wrist_yaw_link.STL": {
+      "sha256": "83f8fb3a726bf9613d65dd14f0f447cb918c3c95b3938042a0c9c09749267d3b",
+      "size_bytes": 318684
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/logo_link.STL": {
+      "sha256": "8571a0a19bc4916fa55f91449f51d5fdefd751000054865a842449429d5f155b",
+      "size_bytes": 243384
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/pelvis.STL": {
+      "sha256": "5ba6bbc888e630550140d3c26763f10206da8c8bd30ed886b8ede41c61f57a31",
+      "size_bytes": 1060884
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/pelvis_contour_link.STL": {
+      "sha256": "5cc5c2c7a312329e3feeb2b03d3fc09fc29705bd01864f6767e51be959662420",
+      "size_bytes": 1805184
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/right_ankle_pitch_link.STL": {
+      "sha256": "15be426539ec1be70246d4d82a168806db64a41301af8b35c197a33348c787a9",
+      "size_bytes": 71184
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/right_ankle_roll_link.STL": {
+      "sha256": "4b66222ea56653e627711b56d0a8949b4920da5df091da0ceb343f54e884e3a5",
+      "size_bytes": 653784
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/right_elbow_link.STL": {
+      "sha256": "1be925d7aa268bb8fddf5362b9173066890c7d32092c05638608126e59d1e2ab",
+      "size_bytes": 88784
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/right_hand_index_0_link.STL": {
+      "sha256": "12ab4300c95e437e834f9aef772b3b431c671bf34338930b52ad11aef73bbd0d",
+      "size_bytes": 475984
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/right_hand_index_1_link.STL": {
+      "sha256": "c9c34efce4563cacdcfd29fc838a982976d40f5442c71219811dcbbf3923a33d",
+      "size_bytes": 1521784
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/right_hand_middle_0_link.STL": {
+      "sha256": "12ab4300c95e437e834f9aef772b3b431c671bf34338930b52ad11aef73bbd0d",
+      "size_bytes": 475984
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/right_hand_middle_1_link.STL": {
+      "sha256": "c9c34efce4563cacdcfd29fc838a982976d40f5442c71219811dcbbf3923a33d",
+      "size_bytes": 1521784
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/right_hand_palm_link.STL": {
+      "sha256": "86c0b231cc44477d64a6493e5a427ba16617a00738112dd187c652675b086fb9",
+      "size_bytes": 2140184
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/right_hand_thumb_0_link.STL": {
+      "sha256": "544298d0ea1088f5b276a10cc6a6a9e533efdd91594955fdc956c46211d07f83",
+      "size_bytes": 8884
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/right_hand_thumb_1_link.STL": {
+      "sha256": "0a9a820da8dd10f298778b714f1364216e8a5976f4fd3a05689ea26327d44bf6",
+      "size_bytes": 475984
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/right_hand_thumb_2_link.STL": {
+      "sha256": "3f1bfb37668e8f61801c8d25f171fa1949e08666be86c67acad7e0079937cc45",
+      "size_bytes": 1521784
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/right_hip_pitch_link.STL": {
+      "sha256": "e4f3c99d7f4a7d34eadbef9461fc66e3486cb5442db1ec50c86317d459f1a9c6",
+      "size_bytes": 181284
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/right_hip_roll_link.STL": {
+      "sha256": "4c254ef66a356f492947f360dd931965477b631e3fcc841f91ccc46d945d54f6",
+      "size_bytes": 192684
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/right_hip_yaw_link.STL": {
+      "sha256": "e479c2936ca2057e9eb2f7dff6c189b7419d7b8484dea0b298cbb36a2a6aa668",
+      "size_bytes": 296284
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/right_knee_link.STL": {
+      "sha256": "63c4008449c9bbe701a6e2b557b7a252e90cf3a5abcf54cee46862b9a69f8ec8",
+      "size_bytes": 852284
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/right_rubber_hand.STL": {
+      "sha256": "99533b778bca6246144fa511bb9d4e555e075c641f2a0251e04372869cd99d67",
+      "size_bytes": 2192684
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/right_shoulder_pitch_link.STL": {
+      "sha256": "24cdb387e0128dfe602770a81c56cdce3a0181d34d039a11d1aaf8819b7b8c02",
+      "size_bytes": 176784
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/right_shoulder_roll_link.STL": {
+      "sha256": "962b97c48f9ce9e8399f45dd9522e0865d19aa9fd299406b2d475a8fc4a53e81",
+      "size_bytes": 401884
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/right_shoulder_yaw_link.STL": {
+      "sha256": "a0b76489271da0c72461a344c9ffb0f0c6e64f019ea5014c1624886c442a2fe5",
+      "size_bytes": 249984
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/right_wrist_pitch_link.STL": {
+      "sha256": "d22f8f3b3127f15a63e5be1ee273cd5075786c3142f1c3d9f76cbf43d2a26477",
+      "size_bytes": 79584
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/right_wrist_roll_link.STL": {
+      "sha256": "a7ee9212ff5b94d6cb7f52bb1bbf3f352194d5b598acff74f4c77d340c5b344f",
+      "size_bytes": 356084
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/right_wrist_roll_rubber_hand.STL": {
+      "sha256": "0729aff1ac4356f9314de13a46906267642e58bc47f0d8a7f17f6590a6242ccf",
+      "size_bytes": 3481584
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/right_wrist_yaw_link.STL": {
+      "sha256": "bc9dece2d12509707e0057ba2e48df8f3d56db0c79410212963a25e8a50f61a6",
+      "size_bytes": 341484
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/torso_constraint_L_link.STL": {
+      "sha256": "82be7f93e85b3d303a1d1e1847e2c916939bd61c424ed1ebd28691ec33909dd1",
+      "size_bytes": 203584
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/torso_constraint_L_rod_link.STL": {
+      "sha256": "c10de1effa7ea797ac268006aa2a739036c7e1f326b2012d711ee2c20c5a6e96",
+      "size_bytes": 74884
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/torso_constraint_R_link.STL": {
+      "sha256": "54ded433a3a0c76027365856fdbd55215643de88846f7d436598a4071e682725",
+      "size_bytes": 203584
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/torso_constraint_R_rod_link.STL": {
+      "sha256": "cb83fd38a9f06c99e3f301c70f12d94ae770a8f0cf9501f83580a27f908990b4",
+      "size_bytes": 74884
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/torso_link.STL": {
+      "sha256": "e96d023f0368a4e3450b86ca5d4f10227d8141156a373e7da8cb3c93266523e0",
+      "size_bytes": 2232984
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/torso_link_23dof_rev_1_0.STL": {
+      "sha256": "3cd0d56fde14b73c1623304684805029971c4f84b596f9914e823ca70a107fd2",
+      "size_bytes": 7825434
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/torso_link_rev_1_0.STL": {
+      "sha256": "11ddb46f2098efbbd8816b1d65893632d8e78be936376c7cdcd6771899ccc723",
+      "size_bytes": 2570584
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/waist_constraint_L.STL": {
+      "sha256": "8ebafdcb4de6871113f0ca2c356618d6e46b1d50f6c0bf9e37f47b9d8e100d99",
+      "size_bytes": 114684
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/waist_constraint_R.STL": {
+      "sha256": "791902a291ffbd35ab97383b7b44ea5d975de7c80eef838797c970790b382ca9",
+      "size_bytes": 114684
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/waist_roll_link.STL": {
+      "sha256": "34f0aa73f41131230be4d25876c944fdf6c24d62553f199ff8b980c15e8913df",
+      "size_bytes": 24184
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/waist_roll_link_rev_1_0.STL": {
+      "sha256": "b67c347a05abc3e8ddae600d98a082bee273bb39f8e651647708b0a7140a8a97",
+      "size_bytes": 85884
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/waist_support_link.STL": {
+      "sha256": "1fae9e1bb609848a1667d32eed8d6083ae443538a306843056a2a660f1b2926a",
+      "size_bytes": 150484
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/waist_yaw_link.STL": {
+      "sha256": "2883f20e03f09b669b5b4ce10677ee6b5191c0934b584d7cbaef2d0662856ffb",
+      "size_bytes": 336284
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/waist_yaw_link_rev_1_0.STL": {
+      "sha256": "ec6db442b11f25eed898b5add07940c85d804f300de24dcbd264ccd8be7d554c",
+      "size_bytes": 619984
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/yam_gripper_base.STL": {
+      "sha256": "a7d87d009cf50a2f1a93bb71e0ba5f725e76a4fabe755becd14b28e03c52be3d",
+      "size_bytes": 6611434
+    },
+    "gear_sonic/data/assets/robot_description/meshes/g1/yam_gripper_finger.STL": {
+      "sha256": "d499a1acae04691a9c2e4b5bbb016976ad0335062aa1857b0cef0a1ce0a0eafb",
+      "size_bytes": 483884
+    },
+    "gear_sonic/data/assets/robot_description/mjcf/g1_29dof_rev_1_0.xml": {
+      "sha256": "15a330f1dbff68cdbeb8284be6162a857bdcd21a858f65a8617fb32d5115f209",
+      "size_bytes": 36030
+    },
+    "gear_sonic/data/assets/robot_description/mjcf/h2.xml": {
+      "sha256": "4a8957f29e8da8f0156d3a6b1b42f8fd42281953c62b84baf8b994b1fbd0f235",
+      "size_bytes": 25309
+    },
+    "gear_sonic/data/assets/robot_description/urdf/g1/main.urdf": {
+      "sha256": "6e107391d015ab27438026bb953b21ef8fa6a02305e65393985908941d7fd98d",
+      "size_bytes": 59662
+    },
+    "gear_sonic/data/exporter.py": {
+      "sha256": "5ebabae815e2ce45a10674fd60bdcd97f9e948cb1c50517e5d851008a9be204c",
+      "size_bytes": 16641
+    },
+    "gear_sonic/data/features_sonic_vla.py": {
+      "sha256": "16c82be34abbc4dace19485e0f806cd4022a182115e51062e05a54786447fd5a",
+      "size_bytes": 12965
+    },
+    "gear_sonic/data/robot_model/__init__.py": {
+      "sha256": "3fe6ac461e6dba6997491d4bf71f41ac1e033ba6af6e492eb8d133bb39b4e04f",
+      "size_bytes": 180
+    },
+    "gear_sonic/data/robot_model/instantiation/__init__.py": {
+      "sha256": "f69483729a10cafcf569972ab3b530438d1aee71141811454c6a38727280087f",
+      "size_bytes": 130
+    },
+    "gear_sonic/data/robot_model/instantiation/g1.py": {
+      "sha256": "801fe771bd3a61ec74d59f73952d34605dca089cbca5e42d8333e344d342f864",
+      "size_bytes": 2270
+    },
+    "gear_sonic/data/robot_model/robot_model.py": {
+      "sha256": "f69e637da1df27441ef86a3dfafc33f35fab41216d2a44cc87515b287989455d",
+      "size_bytes": 35644
+    },
+    "gear_sonic/data/robot_model/supplemental_info/__init__.py": {
+      "sha256": "e77f2d9d4cd77af7e9ec2e337b355a436a6e88ba6a3bb7b753c9261d520b68a8",
+      "size_bytes": 235
+    },
+    "gear_sonic/data/robot_model/supplemental_info/g1/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "gear_sonic/data/robot_model/supplemental_info/g1/g1_supplemental_info.py": {
+      "sha256": "d9b07ca20228442f806e9bb85cd082b6952bffee9ce1fcec53288f01a09b49da",
+      "size_bytes": 13099
+    },
+    "gear_sonic/data/robot_model/supplemental_info/robot_supplemental_info.py": {
+      "sha256": "57e15f85d92b6fd8fd0b978aadb5e24e9a1c53910024eda25d78fc07da932c41",
+      "size_bytes": 2994
+    },
+    "gear_sonic/data/video_writer.py": {
+      "sha256": "f4f18b22c222e8063cf3f61b480171b8ab49c68898ef7c76960ee2e12b45839e",
+      "size_bytes": 3263
+    },
+    "gear_sonic/data_process/convert_soma_csv_to_motion_lib.py": {
+      "sha256": "ab8361a08894c19b7160278d25cf3d47aad924f5be78c72fc0f1a38eba68e9dd",
+      "size_bytes": 21308
+    },
+    "gear_sonic/data_process/extract_soma_joints_from_bvh.py": {
+      "sha256": "8cad919b5eab31a5e4aabb6212ac02536b9a21127cd248585f48f251ec5ed692",
+      "size_bytes": 15016
+    },
+    "gear_sonic/data_process/filter_and_copy_bones_data.py": {
+      "sha256": "b6b50d441a4876a382eb3ff33ba940c487d1647230b5ecacaa37cfcf521258da",
+      "size_bytes": 8805
+    },
+    "gear_sonic/data_process/split_pkl_files.py": {
+      "sha256": "0fdeae9b7e7c38f5153e245d65f5c2cfb5808570289fe9274ba2b6b311159545",
+      "size_bytes": 6636
+    },
+    "gear_sonic/envs/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "gear_sonic/envs/env_utils/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "gear_sonic/envs/env_utils/joint_utils.py": {
+      "sha256": "b69a07f6bd1850370f8b7d6161e9e099222eebc6eec967b3dc5a936bc8b87f4a",
+      "size_bytes": 2684
+    },
+    "gear_sonic/envs/manager_env/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "gear_sonic/envs/manager_env/mdp/__init__.py": {
+      "sha256": "03d02f26cab1144d527a8091d6ebc02778e282b50f2d54563535f9aad452bc48",
+      "size_bytes": 756
+    },
+    "gear_sonic/envs/manager_env/mdp/actions.py": {
+      "sha256": "d678c1f4fbaa8e314ac3fd068e905d455cf2ebfcd88bb9c5f70a56827694e8b2",
+      "size_bytes": 1050
+    },
+    "gear_sonic/envs/manager_env/mdp/actuators.py": {
+      "sha256": "64e86ed1cce64f4a29c935a979b0703508e08a11247b39d27e450b796926f606",
+      "size_bytes": 3879
+    },
+    "gear_sonic/envs/manager_env/mdp/commands.py": {
+      "sha256": "a28a4f39e19d2ff6c1cb6248cf4e776ecbb263b0647441af589ecc00f8a95390",
+      "size_bytes": 193855
+    },
+    "gear_sonic/envs/manager_env/mdp/curriculum.py": {
+      "sha256": "5405accd219561c9a31d3c757dc83c215f19a813063a91d51ce2ea8e2c2eb625",
+      "size_bytes": 4072
+    },
+    "gear_sonic/envs/manager_env/mdp/events.py": {
+      "sha256": "0bb79771f02a891750aaae1bd7242f3316dd5acf0c95c170d03ac5f1c803879a",
+      "size_bytes": 5238
+    },
+    "gear_sonic/envs/manager_env/mdp/observations.py": {
+      "sha256": "08ebb1a7b919547fef657ea3f6644e7168ca7c5e2db6c18c9786ed6ecb8d45aa",
+      "size_bytes": 90284
+    },
+    "gear_sonic/envs/manager_env/mdp/recorders.py": {
+      "sha256": "eb1a53aed597281c72d0f14f95a87dd073acab435df3745533ac1b389ab643c4",
+      "size_bytes": 15333
+    },
+    "gear_sonic/envs/manager_env/mdp/rewards.py": {
+      "sha256": "9abdddef4bccaee337fc7e9dd5d975274694f25101b69012f42a6148e0a78661",
+      "size_bytes": 24065
+    },
+    "gear_sonic/envs/manager_env/mdp/terminations.py": {
+      "sha256": "0f1a01398bead2dea441b854f0fbd8fc627b5fbe7a4702a4cff257908a25db7f",
+      "size_bytes": 20602
+    },
+    "gear_sonic/envs/manager_env/mdp/terrain.py": {
+      "sha256": "cd18054abdfdad9c967e3abdf2f51ae7198d4ecb396256d60e4024297423b2e6",
+      "size_bytes": 1895
+    },
+    "gear_sonic/envs/manager_env/mdp/utils.py": {
+      "sha256": "a83c8be573e2eab142209fd7b891f935a0df0ad8057c9dbac5eb41d35ecdc3b4",
+      "size_bytes": 11162
+    },
+    "gear_sonic/envs/manager_env/modular_tracking_env_cfg.py": {
+      "sha256": "5451b745996e97d2917270dbbeba3fcda8816ca06e2db7fdc79cd5ec37946104",
+      "size_bytes": 48655
+    },
+    "gear_sonic/envs/manager_env/robots/__init__.py": {
+      "sha256": "cf8bfe34612e06ba2ec40007d76de24ac515e17c4270c5a50ffed4ac34f65763",
+      "size_bytes": 278
+    },
+    "gear_sonic/envs/manager_env/robots/g1.py": {
+      "sha256": "42f9b4394eb21512735da4b1ca78c2d0546c4221c7bdaf8b3a186d8dc5588ba9",
+      "size_bytes": 9830
+    },
+    "gear_sonic/envs/manager_env/robots/h2.py": {
+      "sha256": "82829432a1cb73220aadb94a6b11968812bf835e0bf79e5dcda389a1a4074f54",
+      "size_bytes": 10154
+    },
+    "gear_sonic/envs/wrapper/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "gear_sonic/envs/wrapper/manager_env_wrapper.py": {
+      "sha256": "b1568900f3ed8e52c5e7abc271e52f13e6de65565d5c894d74bad42cb4ca47f8",
+      "size_bytes": 99273
+    },
+    "gear_sonic/eval_agent_trl.py": {
+      "sha256": "2b77eb71e481d014e48eb6b81de62c4e70c8fd701640234e1a45765242d18f01",
+      "size_bytes": 28843
+    },
+    "gear_sonic/eval_exp.py": {
+      "sha256": "8c32777cb4b18a03afbbba7d39cb52c9165f94c3ac34c6f3026a8c5e824574b6",
+      "size_bytes": 29008
+    },
+    "gear_sonic/examples/live_camera_teleop/soma_pt_to_sonic_v3.py": {
+      "sha256": "5ea5c8b2353ed1a5bef351b087076826b148cf45144635140f1b0d18234fbb30",
+      "size_bytes": 4359
+    },
+    "gear_sonic/examples/live_camera_teleop/soma_to_smpl.py": {
+      "sha256": "f065d8c3506bd315cf00951a00450e389929f6587acc70bfedbb7070f0eab26c",
+      "size_bytes": 13453
+    },
+    "gear_sonic/examples/live_camera_teleop/webcam_stream.py": {
+      "sha256": "0342737f98302918e5fe10ca9536e08196277e2969845cf47608f60c0ae66fe2",
+      "size_bytes": 13837
+    },
+    "gear_sonic/isaac_utils/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "gear_sonic/isaac_utils/maths.py": {
+      "sha256": "6664aca11cf24e78d749a6c415422566a8c1c29ddd7b8221732874a423ce5bce",
+      "size_bytes": 1569
+    },
+    "gear_sonic/isaac_utils/rotations.py": {
+      "sha256": "b800cc97757ea452e04c12b16b70a2847b5cb08c041b521e32e7347b05479d99",
+      "size_bytes": 23728
+    },
+    "gear_sonic/pyproject.toml": {
+      "sha256": "7b007dd80366c0c8c7fa847c5cbaea6e832d59eab02fcf8fdf17f840e0619118",
+      "size_bytes": 3045
+    },
+    "gear_sonic/research/__init__.py": {
+      "sha256": "87e95e1230d8c95269eac25788b2075d687ee141af7dc8ee01dd6abb0010c658",
+      "size_bytes": 251
+    },
+    "gear_sonic/research/practice_utility/__init__.py": {
+      "sha256": "a1ed6e6e2ec652ca25528c89d9a23e29684c86eeb1e67a3d314a87d02b62f35c",
+      "size_bytes": 4351
+    },
+    "gear_sonic/research/practice_utility/actuator_patch.py": {
+      "sha256": "8234ce5afa3ee87f89d7f72ef06c85d058debe87d71925c2a4cbbf69c0f40977",
+      "size_bytes": 7222
+    },
+    "gear_sonic/research/practice_utility/branch_capsule.py": {
+      "sha256": "bec972c1c98ebbaf39b420285d7d2dd7c34c159807841114878b746124cf05a3",
+      "size_bytes": 14115
+    },
+    "gear_sonic/research/practice_utility/callbacks.py": {
+      "sha256": "3be6f27531f5456548c9e7194617b87b4dee3e5007ce2a1d2425572d7a68fe33",
+      "size_bytes": 47186
+    },
+    "gear_sonic/research/practice_utility/directional_calibration.py": {
+      "sha256": "fe49a4d486e4ec0f20482e2f7441b8a609521f27ece2993bf0b303a39180767b",
+      "size_bytes": 32721
+    },
+    "gear_sonic/research/practice_utility/dose_plan.py": {
+      "sha256": "ee35807eb185d52d903cf35457406e6577597f29f9885bcc714faa75bfe2b600",
+      "size_bytes": 21275
+    },
+    "gear_sonic/research/practice_utility/dr_controller.py": {
+      "sha256": "cbb9481e9e376c1f20c322146a8201d308c78d3f7dcf4e37a63ac8e875953755",
+      "size_bytes": 13549
+    },
+    "gear_sonic/research/practice_utility/dr_curriculum.py": {
+      "sha256": "2234f259754e402922bd35550cd9efc28daaea347ccc7ef7aa8718d44ccd85fa",
+      "size_bytes": 27957
+    },
+    "gear_sonic/research/practice_utility/dr_scaling.py": {
+      "sha256": "75af4f2d441d27a3f76423723085a1af91c838b496ceb3c297387c84ecbde6ea",
+      "size_bytes": 11782
+    },
+    "gear_sonic/research/practice_utility/eval_callback.py": {
+      "sha256": "76d0005b0de159239d61d8eb63d0757e20e8518fed21f7f463024d4bfdcef188",
+      "size_bytes": 6637
+    },
+    "gear_sonic/research/practice_utility/events_reset_safe.py": {
+      "sha256": "b5d36637d2567dce82fd6144068fd419244d9758b54a4eb166c62d1d941a2028",
+      "size_bytes": 28486
+    },
+    "gear_sonic/research/practice_utility/featured_observer.py": {
+      "sha256": "2949cf079963e4fd9f379236bc56e7c2213876f653f9eb706f6549d71bf69596",
+      "size_bytes": 38001
+    },
+    "gear_sonic/research/practice_utility/intervention.py": {
+      "sha256": "c114084dda4f92b6788ea3a35dbb0cfd18381c2179c97f13b4982e1f510cb8d8",
+      "size_bytes": 12150
+    },
+    "gear_sonic/research/practice_utility/latent_gap_probe.py": {
+      "sha256": "d5676bb28c6e7a8aa2d84e294c2fbbc1c43c7762709d981f8c5e5e1a6df47da9",
+      "size_bytes": 16265
+    },
+    "gear_sonic/research/practice_utility/motion_paired.py": {
+      "sha256": "ac53adf0cc5bd80cd53e9b3b4b44f3fc486531af89be4bf18bb7d7fccfc2e971",
+      "size_bytes": 14886
+    },
+    "gear_sonic/research/practice_utility/motion_pool.py": {
+      "sha256": "e386c2c957f40b10918108e5ea7a7acd2c6e48a8d5472a8cb5c08be0fec9cdd1",
+      "size_bytes": 15270
+    },
+    "gear_sonic/research/practice_utility/motion_signal.py": {
+      "sha256": "cdafd101b971dc19ae9c21b9dfe2817d938d0c0177cf2125173eb6d2152c66cf",
+      "size_bytes": 20117
+    },
+    "gear_sonic/research/practice_utility/observer.py": {
+      "sha256": "0d965c729faa9732e5bcf552db4136ddea4ee1e560b77f5495d6a88b5be84735",
+      "size_bytes": 13385
+    },
+    "gear_sonic/research/practice_utility/paths.py": {
+      "sha256": "7ef9110f80c9b41a3a03a9900d08dd65b18f2b4f74f8bbf331311d581adc890f",
+      "size_bytes": 2412
+    },
+    "gear_sonic/research/practice_utility/plr.py": {
+      "sha256": "60c9df9a244beec780dd9f4958f070da5d9a54be627f07931407cbb3eb044374",
+      "size_bytes": 42084
+    },
+    "gear_sonic/research/practice_utility/plr_signal_analysis.py": {
+      "sha256": "3624d02f1cfaa852602ba7c999e08ce7f7e57eabf064c72770d8822439905331",
+      "size_bytes": 16370
+    },
+    "gear_sonic/research/practice_utility/plr_signal_contract.py": {
+      "sha256": "0daa756d88842d71fa2635f0dc8cc4861495575c292acc6d279faa5770256295",
+      "size_bytes": 23142
+    },
+    "gear_sonic/research/practice_utility/probe_campaign.py": {
+      "sha256": "e37a5fd42242fb621a0438575889e0cc6219fe64ced6c0b9d84b838a6e9e7438",
+      "size_bytes": 116069
+    },
+    "gear_sonic/research/practice_utility/probe_manifest.py": {
+      "sha256": "19de0c9bb0dccbda96431ae0914495b9cbd275ffb6aeb1aae0b09ef259d5e8d7",
+      "size_bytes": 13267
+    },
+    "gear_sonic/research/practice_utility/proxy_audit.py": {
+      "sha256": "0f01cab1a1c3020253b4c335d8c6e712a0ba8aa8e7d3f9fab5f57ee8537e8c51",
+      "size_bytes": 15255
+    },
+    "gear_sonic/research/practice_utility/proxy_features.py": {
+      "sha256": "7c1728770076d81d2cfbcc1fc85606178de9e4514e3990355fcc2a6abc4312f1",
+      "size_bytes": 11860
+    },
+    "gear_sonic/research/practice_utility/quality_metrics.py": {
+      "sha256": "23363aee0b19950ad82a8f7c6b39c4cabeab954d31cebb95279d14180ac12c7b",
+      "size_bytes": 13586
+    },
+    "gear_sonic/research/practice_utility/quality_telemetry.py": {
+      "sha256": "95869bbc4894b4765b3e1a782a7ceb3a0688e2d3e6ffd420d52c27d5b97c6a89",
+      "size_bytes": 15351
+    },
+    "gear_sonic/research/practice_utility/rng_capsule.py": {
+      "sha256": "dd904d9b67522319d35e9149398920e0082c5c3d648535d7c9a2b19c5d665302",
+      "size_bytes": 8940
+    },
+    "gear_sonic/research/practice_utility/robustness_metrics.py": {
+      "sha256": "d987205c70e85ec583e0085c65c5c96a6d40be1cd0e3516f8e9edcf225230c6f",
+      "size_bytes": 14177
+    },
+    "gear_sonic/research/practice_utility/run_log.py": {
+      "sha256": "f111d1dd77e21bfc30ac92ee1ddd6339915310443dfe4bed278be72bec8bc15d",
+      "size_bytes": 7987
+    },
+    "gear_sonic/research/practice_utility/sampler_adapter.py": {
+      "sha256": "52c1931f56eb7e1c0664688d4fc9510e5e28f18d337ed4eac1b3aa30225c9570",
+      "size_bytes": 26131
+    },
+    "gear_sonic/research/practice_utility/schema.py": {
+      "sha256": "50e648509be0c48b083ee3f07febd005991600e2d3c248d76a081987eae11cf1",
+      "size_bytes": 18719
+    },
+    "gear_sonic/research/practice_utility/split.py": {
+      "sha256": "a73eb16515733645bb521281f5c4214cf071cee3cdc1c92e249e47fbe9a7dc5c",
+      "size_bytes": 15261
+    },
+    "gear_sonic/research/practice_utility/tace.py": {
+      "sha256": "df7ec4ba52dd58fff627066304c834b21370882c2f386660d2a048f89bb3c491",
+      "size_bytes": 19837
+    },
+    "gear_sonic/research/practice_utility/utility_label.py": {
+      "sha256": "de5684f9331ca84bea47afd59d3ab256d01b173d6fde5c77e51bb97383d2152e",
+      "size_bytes": 14362
+    },
+    "gear_sonic/scripts/launch_data_collection.py": {
+      "sha256": "82e52a49fddb50fc25a424379494a745649d897f4d59eea7710378208d8da6d6",
+      "size_bytes": 16597
+    },
+    "gear_sonic/scripts/launch_inference.py": {
+      "sha256": "2cd5a12c28a95a77878723edabcdde3459cceb7212a5e359666e06eb83de1d3b",
+      "size_bytes": 16076
+    },
+    "gear_sonic/scripts/pico_manager_thread_server.py": {
+      "sha256": "728557bea52ee8dddea0d8cc6f54d8a74779d071bd6bd193de194080b90e897c",
+      "size_bytes": 92049
+    },
+    "gear_sonic/scripts/process_dataset.py": {
+      "sha256": "af9971ab4fd96e3821a3423974a406fdb8432e1b0b75f720c819ff4e3e5127cc",
+      "size_bytes": 22647
+    },
+    "gear_sonic/scripts/run_camera_viewer.py": {
+      "sha256": "4ca5db17c3315fed814b2b27c52edefaa856948e7b35f9616bdfd4148494ac73",
+      "size_bytes": 7192
+    },
+    "gear_sonic/scripts/run_data_exporter.py": {
+      "sha256": "9be05e9d03496a9e9c775349ab228e523146ef2d2f70f3a57244a3b5d0653bca",
+      "size_bytes": 38088
+    },
+    "gear_sonic/scripts/run_sim_loop.py": {
+      "sha256": "6e79b61d43e94b81997a417f175971c3cb1d35bc2f361fb6d5f29ece27c3a40b",
+      "size_bytes": 2105
+    },
+    "gear_sonic/scripts/run_vla_inference.py": {
+      "sha256": "e626d57c87410151c272f7b367b6622f266f4ab16808d53df59aafd0a02da526",
+      "size_bytes": 29197
+    },
+    "gear_sonic/tests/test_input_readers.py": {
+      "sha256": "6a11b871ed87f94b979890b2c0da2ccc0982df10622d3ea525801d64c1dda0fb",
+      "size_bytes": 1741
+    },
+    "gear_sonic/train_agent_trl.py": {
+      "sha256": "168599e28709a48a70a3e7c1e96481a038bc4565a0f32d678a3ce7e9515b3fcf",
+      "size_bytes": 19277
+    },
+    "gear_sonic/trl/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "gear_sonic/trl/callbacks/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "gear_sonic/trl/callbacks/hv_callback_handler.py": {
+      "sha256": "d119b6cffc48eb4d465863204c85926dc2d462451dec1df1e6e3ea166319a705",
+      "size_bytes": 6278
+    },
+    "gear_sonic/trl/callbacks/im_eval_callback.py": {
+      "sha256": "9c21b68e556dbecaf7945be8c6253963f3f7307b1d8e37f5bc6dae117bbeb8c2",
+      "size_bytes": 39079
+    },
+    "gear_sonic/trl/callbacks/im_resample_callback.py": {
+      "sha256": "9b6133f50c58531ded01132df4e8be61f6618f80bc43ff592e5252370db2440d",
+      "size_bytes": 937
+    },
+    "gear_sonic/trl/callbacks/model_save_callback.py": {
+      "sha256": "a1bd4456d450dd1a5156c1e1801caf913f763284a9e805bc283927083c824af0",
+      "size_bytes": 7278
+    },
+    "gear_sonic/trl/callbacks/read_eval_callback.py": {
+      "sha256": "6c25bb37f23059d8d67cb764fb49287062cdd059facb76e8a3b573ab77ffd89a",
+      "size_bytes": 6131
+    },
+    "gear_sonic/trl/callbacks/wandb_callback.py": {
+      "sha256": "c3eb682ca2ec4db92882a741ae72dc72dff58af9f3fcf4266d8400e16acdb6b9",
+      "size_bytes": 514
+    },
+    "gear_sonic/trl/losses/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "gear_sonic/trl/losses/token_losses.py": {
+      "sha256": "193368ab72a35a2af9569fcbf05a9abafc017aabb3d830f99b579da03299de80",
+      "size_bytes": 68593
+    },
+    "gear_sonic/trl/modules/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "gear_sonic/trl/modules/actor_critic_modules.py": {
+      "sha256": "6050eca4ea29b312d509201667b1aa7681cbb79ad1f5c957b928c936cb9a85be",
+      "size_bytes": 26085
+    },
+    "gear_sonic/trl/modules/base_module.py": {
+      "sha256": "462dfc4be982f5d6e2d08275df00fccbc49a81f882bdb60fc257be81da8593b6",
+      "size_bytes": 25285
+    },
+    "gear_sonic/trl/modules/data_utils.py": {
+      "sha256": "b1d749c208c24306712c09ed5a647e3f4b9c97125ef287b12f18b65e939b67c8",
+      "size_bytes": 7641
+    },
+    "gear_sonic/trl/modules/universal_token_modules.py": {
+      "sha256": "46b6a460032932034a23411b10674adee4ce253e51f66af89d58678c41caf415",
+      "size_bytes": 58298
+    },
+    "gear_sonic/trl/trainer/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "gear_sonic/trl/trainer/ppo_trainer.py": {
+      "sha256": "f8bdf8930072aa7fe2bcdbcd03960444e51ba86d853bfc32f1186feaf3ad1b07",
+      "size_bytes": 103642
+    },
+    "gear_sonic/trl/trainer/ppo_trainer_aux_loss.py": {
+      "sha256": "28be258ef3a67cac33bc97b036b97073f17907333557dae3d9543fdba3cd1b7c",
+      "size_bytes": 12871
+    },
+    "gear_sonic/trl/utils/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "gear_sonic/trl/utils/common.py": {
+      "sha256": "26263d3a3dabcf2bfb9ad0766ba90b910c45246728719497481ec72b28f3e0ad",
+      "size_bytes": 6100
+    },
+    "gear_sonic/trl/utils/data.py": {
+      "sha256": "37048f5642f337998212bcddb988e4d1727fd77b745282f7405ddcc65060a304",
+      "size_bytes": 528
+    },
+    "gear_sonic/trl/utils/kornia_transform.py": {
+      "sha256": "576c2209f8f85f38c59c182d6f504cde34899adca68fea2ad50e626c5e03a0f1",
+      "size_bytes": 36506
+    },
+    "gear_sonic/trl/utils/math.py": {
+      "sha256": "280dbe8eaeb7413a703e441e2feae02b7d4388f73878f0d2ffe93f4f29324638",
+      "size_bytes": 6610
+    },
+    "gear_sonic/trl/utils/order_converter.py": {
+      "sha256": "236e2705d306ab1c938af5baf973fbcd291b04fbdd372bc87e3fa56c907d069f",
+      "size_bytes": 9330
+    },
+    "gear_sonic/trl/utils/rl.py": {
+      "sha256": "c74043b94c43914839cc4b17afc645a611b2fda9be862383e75f037d5776269b",
+      "size_bytes": 1308
+    },
+    "gear_sonic/trl/utils/rotation_conversion.py": {
+      "sha256": "a2c350e42cc4e7eb906755867f1d977733d190925f22419e4b2e285ffac2bfa1",
+      "size_bytes": 21160
+    },
+    "gear_sonic/trl/utils/scheduler.py": {
+      "sha256": "29c44006764ee6829addb9a655e868987bf1b0218d1a57b7606501f8b4ab7f13",
+      "size_bytes": 15841
+    },
+    "gear_sonic/trl/utils/smplx/body_model/__init__.py": {
+      "sha256": "f1b4969359ccb1f28dfeae0b53ff8c12f5135ff7227b0bcbda59c501fa029530",
+      "size_bytes": 179
+    },
+    "gear_sonic/trl/utils/smplx/body_model/body_model.py": {
+      "sha256": "2f46a415ce950e91566a70480b28fd8b2f3e641763f71a766244a5f931029450",
+      "size_bytes": 4794
+    },
+    "gear_sonic/trl/utils/smplx/body_model/body_model_smplh.py": {
+      "sha256": "90277cf05a574b5767e72670a8b8667420f60565306b1dac33eebe569a20bba4",
+      "size_bytes": 3741
+    },
+    "gear_sonic/trl/utils/smplx/body_model/body_model_smplx.py": {
+      "sha256": "f1aa79c0e26be560c6868fe542e4b1ec11e129e4f73728de80955c1edcf2cbd5",
+      "size_bytes": 4984
+    },
+    "gear_sonic/trl/utils/smplx/body_model/min_lbs.py": {
+      "sha256": "8ba6136666ef0494bc5702a29c3c5f7d7455f5c1197a14d5ab68d759187e97ed",
+      "size_bytes": 4752
+    },
+    "gear_sonic/trl/utils/smplx/body_model/rotation_conversions.py": {
+      "sha256": "9daad492a2a97f9a2123a693d96713acad2f940c816e18c6532b51d25d6c65fc",
+      "size_bytes": 18240
+    },
+    "gear_sonic/trl/utils/smplx/body_model/smpl_lite.py": {
+      "sha256": "598591180b37682447dd439d786cb09170946735450aae660455ced9371503a6",
+      "size_bytes": 5687
+    },
+    "gear_sonic/trl/utils/smplx/body_model/smpl_vert_segmentation.json": {
+      "sha256": "ec1e1e3de9896dafede4a1ac6a49ffb9a2d7b36d46510867fb0da91e8d2784ed",
+      "size_bytes": 102878
+    },
+    "gear_sonic/trl/utils/smplx/body_model/smplx_lite.py": {
+      "sha256": "87ca50b92c2bd77a3597e8c1e1d8c0f774cfab6299ae64ca7e68e5b8ce79f491",
+      "size_bytes": 14233
+    },
+    "gear_sonic/trl/utils/smplx/body_model/utils.py": {
+      "sha256": "62994f415081d30b38a8356c4935bb08299e3a3dd0cfd7d5518ea59871125c53",
+      "size_bytes": 14880
+    },
+    "gear_sonic/trl/utils/smplx/smplx_utils.py": {
+      "sha256": "e9c6dd87624ada2307ced20e2ee97350a3498842a43af67654ebb2494620add0",
+      "size_bytes": 17126
+    },
+    "gear_sonic/trl/utils/torch_transform.py": {
+      "sha256": "4d40e3ac765cb2541aacd8af60f1162914e4ce97b4cc8fadc871a7c6a2fe7b41",
+      "size_bytes": 20616
+    },
+    "gear_sonic/utils/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "gear_sonic/utils/average_meters.py": {
+      "sha256": "904dadb7ea7ada895ae428845db8b5c1223ff9d03ce20f898f3f9647ebb7a88c",
+      "size_bytes": 5605
+    },
+    "gear_sonic/utils/batch_normalizer.py": {
+      "sha256": "75d17e143e48120337257d65a1e7f36de772f460641f2ec3202068fc95fe0db4",
+      "size_bytes": 1729
+    },
+    "gear_sonic/utils/common.py": {
+      "sha256": "1636f063a9e3e5ad94582838a93c605c1df29e4b25328956d1c8f0c0df148b7d",
+      "size_bytes": 7366
+    },
+    "gear_sonic/utils/config_utils.py": {
+      "sha256": "90bbe6ee305c4984077154e289ebd562a2420362e762b300118185d84e881182",
+      "size_bytes": 854
+    },
+    "gear_sonic/utils/data_collection/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "gear_sonic/utils/data_collection/episode_state.py": {
+      "sha256": "bee11b69f6876932d0a7a16476c2d5f75b9471a202d47c9c2fe0ea669465a4a8",
+      "size_bytes": 955
+    },
+    "gear_sonic/utils/data_collection/keyboard_subscriber.py": {
+      "sha256": "1c2094fc7bd46a3a7e0a31b091bdff06f58d9d2044aa957c43c86006dd3567b2",
+      "size_bytes": 1145
+    },
+    "gear_sonic/utils/data_collection/telemetry.py": {
+      "sha256": "b554f415047016bb7d355ad42228e574037681a4852238ece20210e22f0f3d58",
+      "size_bytes": 3750
+    },
+    "gear_sonic/utils/data_collection/text_to_speech.py": {
+      "sha256": "9a5d6904ef01f84d592436b322ea94514f94e4addb9fc449fe96b5921ff778e2",
+      "size_bytes": 1503
+    },
+    "gear_sonic/utils/data_collection/transforms.py": {
+      "sha256": "879e1b9dfbecad90cd61d925886e1e22f368ead531c6b7a96de373d02dbc179d",
+      "size_bytes": 3405
+    },
+    "gear_sonic/utils/data_collection/zmq_state_subscriber.py": {
+      "sha256": "0aac4b05168a7659098a3dae915e1d4f925abbab0101b942153dbb1c25bbe14f",
+      "size_bytes": 4308
+    },
+    "gear_sonic/utils/inference/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "gear_sonic/utils/inference/initial_poses.py": {
+      "sha256": "bcc4943016efbd72b2abe744d78ab247984defa6b035347f18216ffdf029c5a1",
+      "size_bytes": 1534
+    },
+    "gear_sonic/utils/inference/vla_utils.py": {
+      "sha256": "7d4962f3282f2db8d5300e31c7b8e9b1457bf641563d5e2f0fbdbfa708007ca4",
+      "size_bytes": 3890
+    },
+    "gear_sonic/utils/inference_helpers.py": {
+      "sha256": "4a02e49ffe76594ac68adebcf7749fc007fa827bf49a80953f5d6151e70e8d43",
+      "size_bytes": 19042
+    },
+    "gear_sonic/utils/logging.py": {
+      "sha256": "585dd620c34e2e5b0fbf973f69bb10a243989947db6162ae5b139199d413b05a",
+      "size_bytes": 1332
+    },
+    "gear_sonic/utils/motion_lib/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "gear_sonic/utils/motion_lib/motion_lib_base.py": {
+      "sha256": "c4a5c0bb70339439a4cfa46db08d7d44d0b75ed70d39a422bf2ea14cd7419c94",
+      "size_bytes": 134790
+    },
+    "gear_sonic/utils/motion_lib/motion_lib_robot.py": {
+      "sha256": "db1d9ad5011e98f5e0c7de8710714753213fd8322beafe2d019035455f76bf75",
+      "size_bytes": 407
+    },
+    "gear_sonic/utils/motion_lib/skeleton.py": {
+      "sha256": "9e593ed72145add9e7b5711602913494128b0853a3ee3a682dfc4609deed0b8e",
+      "size_bytes": 59389
+    },
+    "gear_sonic/utils/motion_lib/torch_humanoid_batch.py": {
+      "sha256": "41e5d4a44497547784a1f22fb968d112039f0a7b0eb85e166022e6ac3c4988d1",
+      "size_bytes": 36315
+    },
+    "gear_sonic/utils/mujoco_sim/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "gear_sonic/utils/mujoco_sim/base_sim.py": {
+      "sha256": "15cd5a48e60dd34eef3696783b4d1def15ecb1ff9f69bb76c592c24e2b500dcb",
+      "size_bytes": 27260
+    },
+    "gear_sonic/utils/mujoco_sim/configs.py": {
+      "sha256": "06945b00653e7a8b8f3a4adfda64ad03b925be59ceb5c1482b4cf94ca273bff8",
+      "size_bytes": 10714
+    },
+    "gear_sonic/utils/mujoco_sim/image_publish_utils.py": {
+      "sha256": "3ffce7c7beae200db8de7422662eff3b7c1779bcb72a5d3eb2af92ac0f680233",
+      "size_bytes": 7017
+    },
+    "gear_sonic/utils/mujoco_sim/metric_utils.py": {
+      "sha256": "ce725c41c67140816aa980eb5e57b33e19b55d53af63056372506a82f294254e",
+      "size_bytes": 2706
+    },
+    "gear_sonic/utils/mujoco_sim/robot.py": {
+      "sha256": "9edd458c8c9397b57166f9f00ce951171b951d19144a47c2f1ef411e1ee224aa",
+      "size_bytes": 1276
+    },
+    "gear_sonic/utils/mujoco_sim/sensor_server.py": {
+      "sha256": "968f3dfee1b70eb743024e72b129c85f874272580cf4fa3be994df7dcf8cb9a7",
+      "size_bytes": 2645
+    },
+    "gear_sonic/utils/mujoco_sim/sim_utils.py": {
+      "sha256": "e99ca73a9403a3bfb0e87b4add2da09f403a0b2486f8ea508a66fa39f20a5ce5",
+      "size_bytes": 2652
+    },
+    "gear_sonic/utils/mujoco_sim/simulator_factory.py": {
+      "sha256": "b503df6c15ad7ac5411167be75265b63232f1e0efabedd2547e8a6c117728e29",
+      "size_bytes": 3487
+    },
+    "gear_sonic/utils/mujoco_sim/unitree_sdk2py_bridge.py": {
+      "sha256": "9873d67aa6b9dcbe2ceba2c9d0a8810ba0e303fbd3fc3a6bcfde24fb111ab3a3",
+      "size_bytes": 16855
+    },
+    "gear_sonic/utils/mujoco_sim/wbc_configs/g1_29dof_sonic_model12.yaml": {
+      "sha256": "28a7fb6b80692b081e880d11662a63fe179c7bb31354c3a98b9dbedc624abfae",
+      "size_bytes": 12453
+    },
+    "gear_sonic/utils/network/network_utils.py": {
+      "sha256": "23ec93b11e81f1e86f59303f18052ab5b4a3e1506d7255e93230c08d2d0fe911",
+      "size_bytes": 4409
+    },
+    "gear_sonic/utils/obs_utils.py": {
+      "sha256": "a044340abd0e9a0e0a34e59b993a1243f8a48fdeed4778c9c17b8354666c521d",
+      "size_bytes": 3866
+    },
+    "gear_sonic/utils/running_mean_std.py": {
+      "sha256": "1e5b0b01b72e9cf216229930409a2dc7522051c593d7f7b8ab61b1fb145fb7ea",
+      "size_bytes": 10911
+    },
+    "gear_sonic/utils/teleop/input_readers.py": {
+      "sha256": "ce1ec35c3e72e4341752ad04c6322bf6fc947fb554832516555147b20cf2a72d",
+      "size_bytes": 18222
+    },
+    "gear_sonic/utils/teleop/isaac_teleop_client.py": {
+      "sha256": "8ea5005570de0909481d478da213f6820d88bd0ec3e4c7e7e5cf93d712f1662d",
+      "size_bytes": 16526
+    },
+    "gear_sonic/utils/teleop/solver/hand/g1_gripper_ik_solver.py": {
+      "sha256": "1819bc011d022e2e9567e5209bc8c5b4f3f328c1275ab5cfeb0a8e0a2e9b9c25",
+      "size_bytes": 5760
+    },
+    "gear_sonic/utils/teleop/solver/solver.py": {
+      "sha256": "f7bbf30d54de3f58c9f55e205dbdcf374e3215ce506847fb0347480a0a613c83",
+      "size_bytes": 361
+    },
+    "gear_sonic/utils/teleop/vis/vr3pt_pose_visualizer.py": {
+      "sha256": "f223df8e7e1863e37a423aa80619e0ea42a67f1569df9c1d6e2487af08c4d3a6",
+      "size_bytes": 76939
+    },
+    "gear_sonic/utils/teleop/zmq/zmq_planner_sender.py": {
+      "sha256": "f33d7715d36cda8ae64b7ce48d4f5a4c74d73fb1eb9a6c17fe85b3456b023f63",
+      "size_bytes": 7942
+    },
+    "gear_sonic/utils/teleop/zmq/zmq_poller.py": {
+      "sha256": "2e445f7eb27691e075f47c81d915b420e3124f3bb278d106b7a7f00b49ef37b4",
+      "size_bytes": 1105
+    },
+    "gear_sonic/utils/torch_utils.py": {
+      "sha256": "4020c628709a593057824030aba7990a6f69cc50a37f0f84b64c8899ad577d8c",
+      "size_bytes": 16707
+    },
+    "gear_sonic/version.py": {
+      "sha256": "d26e5fa6b9479d30a9b66884fe17dacb8b308706b3145572291726b8d530c8fa",
+      "size_bytes": 203
+    },
+    "pyproject.toml": {
+      "sha256": "987169158c73b3affc52989409ac8416f6ef38ba0fa18cd9e5f7d44f3d2ed518",
+      "size_bytes": 1733
+    },
+    "scripts/practice_utility/analyze_latency_distribution_sweep.py": {
+      "sha256": "3c6273232c4086b370c2d478f7fe258664a83d332d0f6a965205780b1d878d19",
+      "size_bytes": 10847
+    },
+    "scripts/practice_utility/analyze_lucid_plr_signal.py": {
+      "sha256": "4f0e95e1cec6cff17fa943518bbd7df9186c266344168a2c1c1fd4fe82eb066c",
+      "size_bytes": 2285
+    },
+    "scripts/practice_utility/analyze_lucid_s.py": {
+      "sha256": "afb28c8b1a3d67fec10cb7fe8a838e49eb3be9fcaf6048948566372b211c3410",
+      "size_bytes": 20987
+    },
+    "scripts/practice_utility/analyze_tace_pilot.py": {
+      "sha256": "09dd3b071c8bbae46aeea48a0e010249496a61274edfb0207564c6407a4a6055",
+      "size_bytes": 7919
+    },
+    "scripts/practice_utility/audit_latency_curriculum.py": {
+      "sha256": "cb949e9b06db53829bd7ec4fb37bf9454b3f45f169df534b2d6985989cc1bf48",
+      "size_bytes": 8615
+    },
+    "scripts/practice_utility/audit_probe_screen.py": {
+      "sha256": "68a910a75a6484c9ca9dc53749586377964c8174ff5c2111fd44caf53ddc4803",
+      "size_bytes": 1881
+    },
+    "scripts/practice_utility/build_motion_pool.py": {
+      "sha256": "a7b6a564999185e8007ed190af3182f1d46872fe6791955889277845e2ae2334",
+      "size_bytes": 5832
+    },
+    "scripts/practice_utility/build_utility_labels.py": {
+      "sha256": "f5234d983359849d1027923e99b68649f4c6c20d7c927137597d83027cf69508",
+      "size_bytes": 56708
+    },
+    "scripts/practice_utility/create_passive_dose_plan.py": {
+      "sha256": "dad1e08f281c09820294c139034ad55c627ef1488a81ee60e67f1d0054cfad3b",
+      "size_bytes": 8023
+    },
+    "scripts/practice_utility/create_probe_manifest.py": {
+      "sha256": "26b2ba4630d1e7a548db732532b52ba4b6530f9d874f7827560bed85b7ec5569",
+      "size_bytes": 44300
+    },
+    "scripts/practice_utility/create_probe_origins.py": {
+      "sha256": "ce21ec5d99f1dc3b59c73acdaad2cace08f72a5ccccfdbd4127746af3e254aae",
+      "size_bytes": 41405
+    },
+    "scripts/practice_utility/eval_with_delay.py": {
+      "sha256": "471a011672bbe37041e62f64616bda14debe721f21ead555db7a0f618f34d8e5",
+      "size_bytes": 3230
+    },
+    "scripts/practice_utility/freeze_directional_calibration.py": {
+      "sha256": "ce366a805f19fcebdbeaa43f324b71693a226347f7a01db48665ea43836cefd7",
+      "size_bytes": 7882
+    },
+    "scripts/practice_utility/make_replicate_panel.py": {
+      "sha256": "e83059bbd9ce79ffd9021c0417db326e08d0d72cec62725652e0e74c00ab4f72",
+      "size_bytes": 6188
+    },
+    "scripts/practice_utility/make_settled_origin.py": {
+      "sha256": "b76a1b3f03b704ba54592a05a74fbd6cdaed36367b2c1f4aff8522ebbfaaec6f",
+      "size_bytes": 9651
+    },
+    "scripts/practice_utility/make_training_subset.py": {
+      "sha256": "5359b88b85081b01b24e4d477dab6e252ef9e9dc6519c29df7a577234941ba44",
+      "size_bytes": 6877
+    },
+    "scripts/practice_utility/pretrain_encoder.py": {
+      "sha256": "e4799312ff751decaa3c39aea3f24ba3485d3abda1c5a5f6e45c11bea4765170",
+      "size_bytes": 9749
+    },
+    "scripts/practice_utility/queue_lucid_plr_signal.py": {
+      "sha256": "75fc8349083d9e9f010af85ff10c73c08ca3353a75d8d694fc7f73592d85da15",
+      "size_bytes": 84211
+    },
+    "scripts/practice_utility/run_branch.py": {
+      "sha256": "e96c08f02f03801e45d6404286e8056ddfb6611808be83b79a278b67485fc40f",
+      "size_bytes": 13286
+    },
+    "scripts/practice_utility/run_curriculum_comparison.py": {
+      "sha256": "c20f41abdb8c98bd64aba7a867bea35e0f47250cef5fe4acbc4bba9465bdf27a",
+      "size_bytes": 31370
+    },
+    "scripts/practice_utility/run_curriculum_consolidation.py": {
+      "sha256": "167ca96ea787295e67defbb873d553c08c7323389b00e8329ecb85c97a6abca1",
+      "size_bytes": 16719
+    },
+    "scripts/practice_utility/run_curriculum_horizon_scaling.py": {
+      "sha256": "92d75fa7f263b601c8b074e0237e9a1ec477f4c56ada454c0a015d788b8846a0",
+      "size_bytes": 54120
+    },
+    "scripts/practice_utility/run_curriculum_robustness_eval.py": {
+      "sha256": "6331ea24b376ec7f4928d67cd27fdc374710865402d2002c48da596ed737f781",
+      "size_bytes": 44528
+    },
+    "scripts/practice_utility/run_curriculum_warmup_parity.py": {
+      "sha256": "5034b170e6abc5fef9dd4244e7886f7652fcf81e2b01d3b3eef214c036324e8f",
+      "size_bytes": 9241
+    },
+    "scripts/practice_utility/run_latency_ab.py": {
+      "sha256": "59e3933b1005b7c14bf1775ef662825ec8567b5ceb866077ec8a46ea69f0b775",
+      "size_bytes": 13437
+    },
+    "scripts/practice_utility/run_latency_distribution_sweep.py": {
+      "sha256": "6a0c18343b0443e4d673d8ba3771bfc0e7e640a63ef0fa281a5b94b38333e724",
+      "size_bytes": 28885
+    },
+    "scripts/practice_utility/run_lucid_campaign.sh": {
+      "sha256": "60885595813b1e2b690626025586f715dd52178741d202c6430a3163f6f57da9",
+      "size_bytes": 1980
+    },
+    "scripts/practice_utility/run_lucid_plr_signal.py": {
+      "sha256": "df7665e262d347c43ba0c63658c44ef545007bea17a54adf302da5972811bd14",
+      "size_bytes": 32092
+    },
+    "scripts/practice_utility/run_lucid_s_campaign.sh": {
+      "sha256": "480180bfbaf8d38c815ddaf336336b561ce8775137ca37ba328808e3f2e9aef0",
+      "size_bytes": 3218
+    },
+    "scripts/practice_utility/run_noise_floor.py": {
+      "sha256": "97b0a7f0cd3a9ab75a5ca72c7d6733f8f8b1092236185e3a7720acc3611b41de",
+      "size_bytes": 11790
+    },
+    "scripts/practice_utility/run_noop_parity.py": {
+      "sha256": "f81acd292ee9f08558cf581d10f302593b2754d97be8cf005254d6fb89731271",
+      "size_bytes": 5689
+    },
+    "scripts/practice_utility/run_passive_dose_smoke.py": {
+      "sha256": "de56719f8671f883daa7b6fe5c133dc5efaac42031233d030af6bc388944ec94",
+      "size_bytes": 57510
+    },
+    "scripts/practice_utility/run_restart_pair_equivalence.py": {
+      "sha256": "ae0fb810524f26f58c353ca9d77da101255e243ff402069045ae743469910df0",
+      "size_bytes": 5991
+    },
+    "scripts/practice_utility/run_resume_equivalence.py": {
+      "sha256": "9854643c0b9f1b6508e89944fb1905fffb1f39de92cb8c3938a344b4353fda22",
+      "size_bytes": 10795
+    },
+    "scripts/practice_utility/run_scratch_pilot.sh": {
+      "sha256": "43a3126cbe0c737f2c3bff0811eae247a23a8569c8414c8ba70a12f12d27fd32",
+      "size_bytes": 2269
+    },
+    "scripts/practice_utility/run_scratch_probe.sh": {
+      "sha256": "a5af20693a9443257e8af9d21041e5426b08824381259004319ead23bd4bac99",
+      "size_bytes": 3127
+    },
+    "scripts/practice_utility/run_single_motion_baseline.sh": {
+      "sha256": "02def9cbe39de39765084de5fa95f6058f7629dcb5f063ebc58ad0a849dfeac4",
+      "size_bytes": 1922
+    },
+    "scripts/practice_utility/run_stage8_recovery.sh": {
+      "sha256": "47759f10159ca20bffe6d8c5cd003a916b771441c7e3269400b4e30f15612636",
+      "size_bytes": 2527
+    },
+    "scripts/practice_utility/run_tace_channel_attr.sh": {
+      "sha256": "b88413fddf83608912fc4d8e729429adf429408c04a9f0a1721cbe064948831a",
+      "size_bytes": 1624
+    },
+    "scripts/practice_utility/run_tace_horizon.sh": {
+      "sha256": "5b4d0daae3762eef9e01bba132b53057ccb0d3bd754c7c33327d1572b0de9464",
+      "size_bytes": 1640
+    },
+    "scripts/practice_utility/run_tace_off128.sh": {
+      "sha256": "381208eebba1a05de5328cee83cd53d807d07f1e4960234236981ad3e23c94ca",
+      "size_bytes": 1573
+    },
+    "scripts/practice_utility/run_tace_pilot.sh": {
+      "sha256": "ab23bdd3f2a761f08e6f52b9fc1c6e60c3059901f4ab5674ab80214c5cbdfffe",
+      "size_bytes": 3739
+    },
+    "scripts/practice_utility/run_tace_yoked_cross.sh": {
+      "sha256": "a2d14c1182e89dca9fa4fa15de4ecc937d9509742781469de0044e8978d7d867",
+      "size_bytes": 1643
+    },
+    "scripts/practice_utility/run_tail.sh": {
+      "sha256": "78289fb22658236f7f31bba0c28a4aa3f133c8cf163dd0d3417810775575e945",
+      "size_bytes": 5397
+    },
+    "scripts/practice_utility/run_throughput_probe.py": {
+      "sha256": "09cdaf9a8c68c8389c7f57ce96586db2c0a86a9bbd9f9dc9d515002a5504210a",
+      "size_bytes": 8373
+    },
+    "scripts/practice_utility/run_vram_ladder.py": {
+      "sha256": "0f2ac6b189bb30bffd74379cdd44323580a5c89ad6388d1eb4cf1a1a2b6f2fc2",
+      "size_bytes": 8000
+    },
+    "scripts/practice_utility/train_with_delay.py": {
+      "sha256": "68530f220826109baf66989b562bbc9da9890bf51d1bae903158365bd5f5f84c",
+      "size_bytes": 5459
+    },
+    "scripts/practice_utility/train_with_lucid_plr.py": {
+      "sha256": "60eed62baeda0df65b63f50879168126b04dc29fdb228dd007925c0d3dc94451",
+      "size_bytes": 4729
+    }
+  },
+  "implementation_sha256": "a9ca3cbc63e8986cf1499659c5acb4d730b7a6fc7d846e97b48d9d4d885b9160",
+  "decision_rule": "Report all four paired contrasts on both ladders. Directional language requires across-training-seed agreement; per-episode intervals are precision only. A non-converged arm is labelled an equal-budget lower bound.",
+  "verified": [],
+  "not_yet_verified": [
+    "all mechanics and outcomes; written before launch"
+  ],
+  "git_sha": "2afa99886f00799a5681d251ebbc3444932595ea",
+  "launcher_sha256": "df7665e262d347c43ba0c63658c44ef545007bea17a54adf302da5972811bd14"
+}
