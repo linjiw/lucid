@@ -984,3 +984,64 @@ point. Writing starts Sept 1 as planned; the story is now positive and simple.
   third point on the dose–retention frontier — `fixed_lat50` (five channels at full
   strength, latency envelope halved to 0–20 ms) at 512 it, scored on seen, unseen and
   shared U(0,60 ms) panels (`dose_frontier_preregistration_20260829.json`).
+- **20:07 — Stage 18: dose frontier, `fixed_lat50` (latency 0–20 ms, rest full) @512**
+  (receipts `curriculum_robustness_ne128_20260829_{184734,193631}.json`):
+
+  | latency dose | seen clean | seen dr_full | seen U(0,60) | unseen clean | unseen dr_full |
+  |---|---:|---:|---:|---:|---:|
+  | 0 (off@128) | 93.1 | 60.1 | 51.3 | 95.0 | 60.3 |
+  | 0.5 (0–20 ms) | 93.1 | 79.4 | 59.5 | 88.8 | 77.2 |
+  | 1.0 (0–40 ms) | 91.5 | 81.4 | **73.5** | 87.8 | 79.8 |
+  | release | 97.4 | 69.6 | 53.3 | 97.3 | 63.8 |
+
+  H_F1–F3 ✗, informatively: half dose keeps seen clean and most in-envelope
+  robustness, but **only the full 40 ms dose buys extrapolation to 60 ms deployment
+  latency** (73.5 vs 59.5), and the unseen-motion clean cost (−6 to −9) appears at any
+  nonzero latency dose. Recommended operating point stays **fixed, full envelope, 512 it,
+  lossless regime**.
+
+## Consolidated results (2026-08-29 20:10) — everything receipted, on GitHub
+
+**Policies:** release = SONIC `model_step_041550` untrained; all fine-tuned policies start
+from the settled step-24 origin; "lossless regime" = 512 envs + adaptive LR floor 1e-6 /
+cap 2e-5 / 1 PPO epoch; fixed = all six DR channels at full range (latency 0–40 ms).
+
+| policy | seen clean | seen dr_050 | seen dr_full | seen U(0,60 ms) | unseen clean | unseen dr_full |
+|---|---:|---:|---:|---:|---:|---:|
+| release (untrained) | 97.4 | 71.2 | 69.6 | 53.3 | 97.3 | 63.8 |
+| off, default regime @32 | 83.0 | — | 50.7 | — | — | — |
+| off, lossless @128 | 93.1 | — | 60.1 | 51.3 | 95.0 | 60.3 |
+| fixed, default regime @32 | 80.4 | 66.0 | 56.5 | — | — | — |
+| fixed, lossless @128 (5 seeds) | 91.6 ± 3.3 | 84.3 ± 4.3 | 76.5 ± 3.3 | — | — | — |
+| fixed, lossless @256 | 94.1 | 85.9 | 79.1 | — | — | — |
+| **fixed, lossless @512** | 91.5 | 87.3 | **81.4** | **73.5** | 87.8 | **79.8** |
+| fixed_lat50, lossless @512 | 93.1 | — | 79.4 | 59.5 | 88.8 | 77.2 |
+| fixed on 2,972-motion pool @512 | 91.5 | — | 76.5 | — | 88.5 | 80.0 |
+| lucid (gap-gated λ), lossless @256 | 91.8 | 82.0 | 76.5 | — | — | — |
+| ta_lucid_50 (TACE), lossless @256 | 91.5 | 83.0 | 77.1 | — | — | — |
+
+**Mechanism table:** latency-only fine-tuning (default regime, 128 it) reproduces the
+collapse (clean 53.6 vs 57.2 all-channels); no-latency recovers it (70.9 > off 66.7).
+Online gap feedback beats cross-seed yoked replay 3/3 seeds (+3.6 dr_full, +6.2 clean).
+Same-seed yoking is bit-identical to its source. Post-hoc λ=1 consolidation, latency-only
+gating, and the anchor at every ratio are dominated by fixed once the base is stable.
+
+## Paper plan v3 — final
+
+**Title:** *Robustifying a Released Humanoid Whole-Body Tracker: The Bottleneck Was the
+Fine-Tuning Regime, Not the Curriculum.*
+**Abstract claims:** (i) evaluating the released policy first exposes that standard PPO
+fine-tuning is net-destructive (97 → 57 clean over 152 iterations) while training reward
+is flat; (ii) the cause is update magnitude at small batches, fixed by batch size and a
+learning-rate cap with one PPO epoch; (iii) under that regime, plain full-envelope DR
+raises out-of-distribution success from 69.6 to 81.4 on seen motions, 63.8 to 79.8 on
+unseen motions, and 53.3 to 73.5 under a shared 0–60 ms deployment lag never seen in
+training, at a 6–10 pt cost in nominal success; (iv) actuation latency is the sole
+destabilizing channel and the sole source of robustness, and only its full dose buys
+extrapolation; (v) gap-gated and target-anchored curricula are preregistered negatives
+across 32/128/256 iterations and two regimes, with online feedback's one demonstrable
+benefit isolated by a yoked control. **Figures:** degradation ladder; regime study;
+headline bars (seen / unseen / deployment latency, per-seed dots vs release); budget
+curve; channel attribution; dose frontier; curriculum comparison. **Limitations:**
+single robot/simulator, no hardware, 3–5 seeds, clean cost, 60 ms fixed lag still
+catastrophic (3.6%). Writing starts Sept 1; internal deadline Sept 14.
