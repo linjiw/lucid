@@ -1,0 +1,47 @@
+{
+  "kind": "lucid_partial_campaign_pseudo_training_receipt",
+  "created_at": "2026-08-29T21:42:08.959424-04:00",
+  "note": "Interim view of the running campaign: the three cells finished at seed 8600 (off, fixed, lucid_rg), each 8000 iterations from scratch on the single-motion testbed. The campaign's own receipt is not written until every cell completes, so this exists only to let the evaluator consume the finished checkpoints. It is NOT a campaign result: one seed, and lucid_s4_rg is still training.",
+  "experiment_id": "lucid_campaign_seed8600_partial",
+  "config": {
+    "num_envs": 1024,
+    "iterations": 8000,
+    "seeds": [
+      8600
+    ],
+    "modes": [
+      "off",
+      "fixed",
+      "lucid_rg"
+    ],
+    "from_scratch": true,
+    "motion": "walk_hands_on_back_loop_002__A066_M",
+    "termination_thresholds": "upstream term-file defaults"
+  },
+  "arms": {
+    "off_s8600": {
+      "seed": 8600,
+      "mode": "off",
+      "checkpoint": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260829_000249/seed_8600/off/final_checkpoint.pt",
+      "checkpoint_exported": true,
+      "complete": true,
+      "branch_id": "off_s8600"
+    },
+    "fixed_s8600": {
+      "seed": 8600,
+      "mode": "fixed",
+      "checkpoint": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260829_000249/seed_8600/fixed/final_checkpoint.pt",
+      "checkpoint_exported": true,
+      "complete": true,
+      "branch_id": "fixed_s8600"
+    },
+    "lucid_rg_s8600": {
+      "seed": 8600,
+      "mode": "lucid_rg",
+      "checkpoint": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260829_000249/seed_8600/lucid_rg/final_checkpoint.pt",
+      "checkpoint_exported": true,
+      "complete": true,
+      "branch_id": "lucid_rg_s8600"
+    }
+  }
+}

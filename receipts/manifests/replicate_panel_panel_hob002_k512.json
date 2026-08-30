@@ -1,0 +1,26 @@
+{
+  "kind": "lucid_replicate_panel",
+  "schema_version": 1,
+  "created_at": "2026-08-28T18:29:34.557041-04:00",
+  "name": "panel_hob002_k512",
+  "git_sha": "b4f88f1cae3bf13fc9e7b4ce1ba16d9011fb129b",
+  "why": "SONIC's eval callback slices scored quantities to [:num_unique_motions]. With one motion that is env 0 alone, and the eval loop's bound is driven by env 0, so every other env is frozen mid-episode and recorded as not-terminated with progress < 1 -- censored and mislabelled, biased toward overstating success. K distinct keys resolving to one clip make num_unique_motions = K, so every env is scored and every episode completes.",
+  "source_subset_receipt": "/home/linjiw/lucid-sonic/manifests/training_subset_m1_hob002.json",
+  "motion_key": "walk_hands_on_back_loop_002__A066_M",
+  "source_clip": "/home/linjiw/lucid-sonic/pools/debug512/robot_filtered/walk_hands_on_back_loop_002__A066_M.pkl",
+  "source_clip_sha256": "a7f10e7aa26e53cc4e346151d4ccd74e932e3aafa1cfaaac77dab8b8eec40929",
+  "replicates": 512,
+  "motion_file": "/home/linjiw/lucid-sonic/pools/panels/panel_hob002_k512/robot_filtered",
+  "alias_keys_sha256": "4b0fae026d8763e5cb1a39957ab8131e5372e1d47d4ec7e526791b76fe7f1430",
+  "pool_sha256": "b065a49854a497aaa82c891e89c32505c46f5122c86ef04f94f340d83cba0434",
+  "split_sha256": "33784622dd8c798edc6fc67bd7921edc8ebb716187f0c2d9b686758d527c4cdd",
+  "partition": "adaptation",
+  "verified": [
+    "512 aliases created, every one a symlink",
+    "every alias resolves to the single source clip, checked by resolved-path set equality",
+    "the panel directory holds nothing outside the alias set"
+  ],
+  "not_yet_verified": [
+    "that the evaluator actually reports motion_count == replicates and zero censoring; that is the instrument-validity gate and must be measured, not assumed"
+  ]
+}

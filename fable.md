@@ -1379,3 +1379,76 @@ have receipts for everything; keep the paper reproducible from them.
 
   This is now **the baseline every arm is measured against**: same motion, same fresh
   initialisation, same envs, same thresholds, same budget.
+
+- **2026-08-30 01:30 — Seed 8600 complete for all four arms; the controller's failure
+  caught live; two more silent defects; the MaxRL/PLR memo.**
+
+  *The gap does not gate — it anti-gates.* With all four seed-8600 cells finished, the
+  curriculum jsonl shows what the latent gap actually does over a from-scratch run.
+  In `lucid_s4_rg` the gap q90 **rose monotonically with competence** — 0.435 (it 1–500)
+  → 0.599 (2500–3000) → 0.705 (5500–6000) → 0.796 (7500–8000) — crossed the 0.778
+  set-point near iteration 7000, and the PI controller then **cut λ from 0.96 to 0.15
+  over the final 1,000 iterations**, with zero guard trips, while training return jumped
+  11.9 → 14.4 because the policy was suddenly on easy physics. The controller reduced
+  difficulty exactly when the policy was most capable. Its `final_checkpoint` is
+  therefore trained on λ ≈ 0.15 for its last 500 iterations and is not the mixture arm;
+  the **h6000 capsule** (λ ≈ 0.99) is, and has been exported and queued for evaluation.
+  `lucid_rg`'s gap followed a different single-env path (peak 0.658 at it 1500–2000, then
+  fell to 0.27) and stayed at λ = 1.000; both are one environment, 24 windows per
+  iteration, so the two trajectories differ by sampling noise and phase coverage as much
+  as by anything the policy did.
+
+  *Why: the gap is phase-censored.* At constant physics (`off`, λ = 0 throughout) the gap
+  is **non-monotone in competence**: 0.434 at 27-step episodes, **0.522 at 137 steps**,
+  0.161 at 186 steps. A 27-step episode covers only the first half-second of the clip —
+  the easiest phase, starting from the reference pose — so the 16-frame windows the
+  encoder sees are easy *by construction* early on; the gap reads low, the controller's
+  error term is positive, and λ ramps to 1 in 57 iterations. Only after ~2,500 iterations,
+  when episodes cover the whole clip, does the gap become a competence measure. Any
+  window-based error measured on short episodes will do the same. The error-vs-physics
+  picture at convergence (fixed ÷ off, both converged): latent gap 3.63×, **torque
+  saturation 3.80×**, undesired-contact 2.48×, anchor-pos (world) 2.34× but
+  length-confounded (drift accumulates), local body-pos/joint-pos only 1.15–1.27× but
+  clean in competence (corr −0.98). Physics shows up in *effort*, not kinematics, once
+  the policy is competent — a converged policy tracks almost as well at λ = 1 and pays in
+  torque. And the observer tracks **one environment** (`tracked_env=0`); per-stratum
+  control was never possible on that basis.
+
+  *Defect 6 — extrapolated friction was physically invalid.* At 1.5× the friction envelope
+  [0.3, 1.6] centred on 0.95 becomes **[−0.025, 1.925]**; verified in the phys_150 receipt.
+  PhysX does not accept negative friction, and dynamic could exceed static. Every
+  extrapolated cell reported so far (phys_125, phys_150) carried that low tail, so the
+  no-DR arm's 0.564 at phys_150 is partly a near-frictionless-ground number. Fixed at
+  `f9e273b`: `clamp_physical` (friction ≥ 0.05, dynamic ≤ static, restitution ≤ 1, mass
+  ratio ≥ 0.1), applied on the evaluation path only, recorded in the receipt. Those cells
+  plus new phys_175 / phys_200 / lat_50ms are being re-evaluated now; earlier
+  extrapolation numbers are superseded.
+
+  *Defect 7 — receipt provenance.* The evaluator symlinks one resolved `config.yaml`
+  beside every checkpoint it scores, so `fixed` and `lucid_rg` checkpoints sat beside a
+  config saying `mode=off`. Nothing loaded wrongly (shared architecture); the provenance
+  was false. Each arm now records its own `run_dir`. That is seven silent defects, every
+  one of which would have produced a plausible number.
+
+  *MaxRL / PLR memo (five verified reads).* Neither mechanism transfers as published:
+  MaxRL is REINFORCE over binary terminal reward with rollout groups and no critic; we
+  have PPO, GAE, dense reward, one trajectory per env, advantages normalised globally.
+  The only honest MaxRL object is a per-stratum completion rate, and its weight
+  w_T(p) = (1−(1−p)^T)/p is **inert everywhere we currently train** — in-envelope success
+  is 0.91–1.00 and even phys_150 is 0.924, so w₄ ∈ [1.00, 1.11]. PLR transfers in shape
+  (no external difficulty signal, score from the learner's own value error, a level
+  notion we already have in strata) but its Value Correction Hypothesis is only
+  half-satisfied here: the critic does not observe φ, and dense reward makes |GAE| on a
+  solved level nonzero and intensity-scaled. What both papers say in unison, and every
+  measurement agrees with, is a *target* not a mechanism: **the informative region is the
+  frontier, and our frontier is outside the training envelope.** Ranked: P1 extended-
+  support 2×2 (`fixed_150`, then `mix_150` only if a retention trade-off appears; 16.5
+  GPU-h; needs `allow_extrapolation` threaded through the controller, friction clamps,
+  `--max-delay 12` because the delay term **silently clamps** to capacity); P2 stratum-
+  level replay, gated on P1 showing a trade-off; P3 zero-GPU instrumentation (per-stratum
+  completion telemetry, per-episode φ in receipts, the set-point replay tool); P4 MaxRL
+  weighting, predicted null unless λ_top ≥ 2. Set-point replay on the recorded trace: 0.778
+  → mean λ 0.996; the manuscript's own μ+3σ rule → 1.075 → 0.998; the run mean 0.441 →
+  bang-bang (46% of iterations at λ ≤ 0.05, 41% at ≥ 0.95). **No set-point closes this
+  loop.** Committed story if P1 loses: the diagnosis, the frontier-centred instrument, and
+  the audit protocol.

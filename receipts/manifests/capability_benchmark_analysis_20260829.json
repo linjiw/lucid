@@ -1,0 +1,395 @@
+{
+  "kind": "lucid_capability_benchmark_analysis",
+  "schema_version": 1,
+  "created_at": "2026-08-29T22:15:03.247923-04:00",
+  "git_sha": "2afa99886f00799a5681d251ebbc3444932595ea",
+  "source_receipt": "/home/linjiw/lucid-sonic/manifests/curriculum_robustness_ne512_20260829_214540.json",
+  "scope": "INTERIM: seed 8600 only, 3 of 4 arms (lucid_s4_rg still training). The unit of analysis is the training seed, so a one-seed comparison is confounded with seed and supports NO directional claim. These are point estimates, not a campaign result.",
+  "instrument": {
+    "panel": "512-alias replicate panel of one clip",
+    "episodes_per_cell": 512,
+    "H0_gate": "PASSED: 512 episodes scored, 512 distinct keys, zero censoring"
+  },
+  "lambda_mechanism": {
+    "verdict": "H1a",
+    "lucid_rg": {
+      "reaches_0.95_at_iteration": 57,
+      "mean_lambda_after_1000": 1.0,
+      "guard_trips": 0,
+      "gap_q90_mean": 0.441,
+      "delta_target": 0.778,
+      "pct_iterations_above_target": 8.5
+    },
+    "consequence": "Preregistered: under H1a any LUCID result is reported as 'a brief lambda ramp followed by fixed DR', and the gap feedback is credited with the ramp rate only. 7943 of 8000 iterations ran at lambda=1, which IS fixed DR."
+  },
+  "arms": {
+    "off": {
+      "difficulty_curve_progress": {
+        "grid": {
+          "phys_000": 0.0,
+          "phys_025": 0.25,
+          "phys_050": 0.5,
+          "phys_075": 0.75,
+          "phys_100": 1.0
+        },
+        "score": "progress",
+        "per_cell": {
+          "phys_000": 1.0,
+          "phys_025": 1.0,
+          "phys_050": 0.9997070312965661,
+          "phys_075": 0.9938574219122529,
+          "phys_100": 0.9775292968843132
+        },
+        "capability_auc": 0.9955822754127439,
+        "auc_weights": {
+          "phys_000": 0.125,
+          "phys_025": 0.25,
+          "phys_050": 0.25,
+          "phys_075": 0.25,
+          "phys_100": 0.125
+        },
+        "worst_cell": {
+          "preset": "phys_100",
+          "value": 0.9775292968843132
+        },
+        "num_episodes_per_cell": 512
+      },
+      "difficulty_curve_success": {
+        "grid": {
+          "phys_000": 0.0,
+          "phys_025": 0.25,
+          "phys_050": 0.5,
+          "phys_075": 0.75,
+          "phys_100": 1.0
+        },
+        "score": "success",
+        "per_cell": {
+          "phys_000": 1.0,
+          "phys_025": 1.0,
+          "phys_050": 0.998046875,
+          "phys_075": 0.970703125,
+          "phys_100": 0.91015625
+        },
+        "capability_auc": 0.98095703125,
+        "auc_weights": {
+          "phys_000": 0.125,
+          "phys_025": 0.25,
+          "phys_050": 0.25,
+          "phys_075": 0.25,
+          "phys_100": 0.125
+        },
+        "worst_cell": {
+          "preset": "phys_100",
+          "value": 0.91015625
+        },
+        "num_episodes_per_cell": 512
+      },
+      "cvar20_pooled_in_envelope": {
+        "alpha": 0.2,
+        "score": "progress",
+        "cvar": 0.9710937500931323,
+        "n": 2560,
+        "tail_size": 512.0,
+        "var_threshold": 1.0,
+        "mean": 0.9942187500186265,
+        "pooled_over": [
+          "phys_000",
+          "phys_025",
+          "phys_050",
+          "phys_075",
+          "phys_100"
+        ]
+      },
+      "extrapolation": {
+        "phys_125": {
+          "progress": 0.9507812500232831,
+          "success": 0.802734375
+        },
+        "phys_150": {
+          "progress": 0.8590527351479977,
+          "success": 0.564453125
+        }
+      },
+      "latency_ladder": {
+        "lat_10ms": {
+          "progress": 1.0,
+          "success": 1.0
+        },
+        "lat_20ms": {
+          "progress": 1.0,
+          "success": 1.0
+        },
+        "lat_30ms": {
+          "progress": 1.0,
+          "success": 1.0
+        },
+        "lat_40ms": {
+          "progress": 0.8372851565945894,
+          "success": 0.52734375
+        }
+      },
+      "per_cell_success": {
+        "lat_10ms": 1.0,
+        "lat_20ms": 1.0,
+        "lat_30ms": 1.0,
+        "lat_40ms": 0.52734375,
+        "phys_000": 1.0,
+        "phys_025": 1.0,
+        "phys_050": 0.998046875,
+        "phys_075": 0.970703125,
+        "phys_100": 0.91015625,
+        "phys_125": 0.802734375,
+        "phys_150": 0.564453125
+      }
+    },
+    "fixed": {
+      "difficulty_curve_progress": {
+        "grid": {
+          "phys_000": 0.0,
+          "phys_025": 0.25,
+          "phys_050": 0.5,
+          "phys_075": 0.75,
+          "phys_100": 1.0
+        },
+        "score": "progress",
+        "per_cell": {
+          "phys_000": 1.0,
+          "phys_025": 1.0,
+          "phys_050": 1.0,
+          "phys_075": 0.9993847656296566,
+          "phys_100": 0.9987011719495058
+        },
+        "capability_auc": 0.9996838379011024,
+        "auc_weights": {
+          "phys_000": 0.125,
+          "phys_025": 0.25,
+          "phys_050": 0.25,
+          "phys_075": 0.25,
+          "phys_100": 0.125
+        },
+        "worst_cell": {
+          "preset": "phys_100",
+          "value": 0.9987011719495058
+        },
+        "num_episodes_per_cell": 512
+      },
+      "difficulty_curve_success": {
+        "grid": {
+          "phys_000": 0.0,
+          "phys_025": 0.25,
+          "phys_050": 0.5,
+          "phys_075": 0.75,
+          "phys_100": 1.0
+        },
+        "score": "success",
+        "per_cell": {
+          "phys_000": 1.0,
+          "phys_025": 1.0,
+          "phys_050": 1.0,
+          "phys_075": 0.998046875,
+          "phys_100": 0.994140625
+        },
+        "capability_auc": 0.998779296875,
+        "auc_weights": {
+          "phys_000": 0.125,
+          "phys_025": 0.25,
+          "phys_050": 0.25,
+          "phys_075": 0.25,
+          "phys_100": 0.125
+        },
+        "worst_cell": {
+          "preset": "phys_100",
+          "value": 0.994140625
+        },
+        "num_episodes_per_cell": 512
+      },
+      "cvar20_pooled_in_envelope": {
+        "alpha": 0.2,
+        "score": "progress",
+        "cvar": 0.9980859375791624,
+        "n": 2560,
+        "tail_size": 512.0,
+        "var_threshold": 1.0,
+        "mean": 0.9996171875158325,
+        "pooled_over": [
+          "phys_000",
+          "phys_025",
+          "phys_050",
+          "phys_075",
+          "phys_100"
+        ]
+      },
+      "extrapolation": {
+        "phys_125": {
+          "progress": 0.9952246093889698,
+          "success": 0.978515625
+        },
+        "phys_150": {
+          "progress": 0.9786816406995058,
+          "success": 0.923828125
+        }
+      },
+      "latency_ladder": {
+        "lat_10ms": {
+          "progress": 1.0,
+          "success": 1.0
+        },
+        "lat_20ms": {
+          "progress": 1.0,
+          "success": 1.0
+        },
+        "lat_30ms": {
+          "progress": 1.0,
+          "success": 1.0
+        },
+        "lat_40ms": {
+          "progress": 1.0,
+          "success": 1.0
+        }
+      },
+      "per_cell_success": {
+        "lat_10ms": 1.0,
+        "lat_20ms": 1.0,
+        "lat_30ms": 1.0,
+        "lat_40ms": 1.0,
+        "phys_000": 1.0,
+        "phys_025": 1.0,
+        "phys_050": 1.0,
+        "phys_075": 0.998046875,
+        "phys_100": 0.994140625,
+        "phys_125": 0.978515625,
+        "phys_150": 0.923828125
+      }
+    },
+    "lucid_rg": {
+      "difficulty_curve_progress": {
+        "grid": {
+          "phys_000": 0.0,
+          "phys_025": 0.25,
+          "phys_050": 0.5,
+          "phys_075": 0.75,
+          "phys_100": 1.0
+        },
+        "score": "progress",
+        "per_cell": {
+          "phys_000": 1.0,
+          "phys_025": 1.0,
+          "phys_050": 1.0,
+          "phys_075": 0.9994531250558794,
+          "phys_100": 0.9985839843284339
+        },
+        "capability_auc": 0.9996862793050241,
+        "auc_weights": {
+          "phys_000": 0.125,
+          "phys_025": 0.25,
+          "phys_050": 0.25,
+          "phys_075": 0.25,
+          "phys_100": 0.125
+        },
+        "worst_cell": {
+          "preset": "phys_100",
+          "value": 0.9985839843284339
+        },
+        "num_episodes_per_cell": 512
+      },
+      "difficulty_curve_success": {
+        "grid": {
+          "phys_000": 0.0,
+          "phys_025": 0.25,
+          "phys_050": 0.5,
+          "phys_075": 0.75,
+          "phys_100": 1.0
+        },
+        "score": "success",
+        "per_cell": {
+          "phys_000": 1.0,
+          "phys_025": 1.0,
+          "phys_050": 1.0,
+          "phys_075": 0.998046875,
+          "phys_100": 0.994140625
+        },
+        "capability_auc": 0.998779296875,
+        "auc_weights": {
+          "phys_000": 0.125,
+          "phys_025": 0.25,
+          "phys_050": 0.25,
+          "phys_075": 0.25,
+          "phys_100": 0.125
+        },
+        "worst_cell": {
+          "preset": "phys_100",
+          "value": 0.994140625
+        },
+        "num_episodes_per_cell": 512
+      },
+      "cvar20_pooled_in_envelope": {
+        "alpha": 0.2,
+        "score": "progress",
+        "cvar": 0.9980371093843132,
+        "n": 2560,
+        "tail_size": 512.0,
+        "var_threshold": 1.0,
+        "mean": 0.9996074218768627,
+        "pooled_over": [
+          "phys_000",
+          "phys_025",
+          "phys_050",
+          "phys_075",
+          "phys_100"
+        ]
+      },
+      "extrapolation": {
+        "phys_125": {
+          "progress": 0.9925390626303852,
+          "success": 0.974609375
+        },
+        "phys_150": {
+          "progress": 0.9800683598732576,
+          "success": 0.931640625
+        }
+      },
+      "latency_ladder": {
+        "lat_10ms": {
+          "progress": 1.0,
+          "success": 1.0
+        },
+        "lat_20ms": {
+          "progress": 1.0,
+          "success": 1.0
+        },
+        "lat_30ms": {
+          "progress": 1.0,
+          "success": 1.0
+        },
+        "lat_40ms": {
+          "progress": 1.0,
+          "success": 1.0
+        }
+      },
+      "per_cell_success": {
+        "lat_10ms": 1.0,
+        "lat_20ms": 1.0,
+        "lat_30ms": 1.0,
+        "lat_40ms": 1.0,
+        "phys_000": 1.0,
+        "phys_025": 1.0,
+        "phys_050": 1.0,
+        "phys_075": 0.998046875,
+        "phys_100": 0.994140625,
+        "phys_125": 0.974609375,
+        "phys_150": 0.931640625
+      }
+    }
+  },
+  "findings": [
+    "Inside the training envelope (lambda<=1) all three arms are at or near ceiling; the capability AUC saturates at 1.000 for both DR arms, so that grid has no resolution here.",
+    "All separation is OUTSIDE the envelope: at lambda=1.5 success is off 0.564 vs fixed 0.924 and lucid_rg 0.932; at 40 ms latency it is off 0.527 vs 1.000 for both DR arms.",
+    "lucid_rg and fixed are indistinguishable on every cell (C_AUC 1.000 vs 1.000, CVaR20 0.998 vs 0.998), which is exactly what H1a predicts when the controller saturates in 57 iterations.",
+    "Progress saturates (>=0.86 everywhere) and is a poor discriminator on this task; success rate separates the arms far better at the hard end."
+  ],
+  "not_yet_verified": [
+    "anything across seeds: this is one training seed",
+    "lucid_s4_rg, whose intensity mixture is the only LUCID mechanism that survives lambda saturation",
+    "that the differences between fixed and lucid_rg (0.008 at lambda=1.5) exceed seed noise; they almost certainly do not"
+  ]
+}

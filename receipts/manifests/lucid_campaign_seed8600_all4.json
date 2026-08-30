@@ -1,0 +1,64 @@
+{
+  "kind": "lucid_partial_campaign_pseudo_training_receipt",
+  "created_at": "2026-08-30T01:34:12.779894-04:00",
+  "note": "Interim: all four seed-8600 cells finished; seeds 8601-8602 still training. One seed supports no directional claim.",
+  "experiment_id": "lucid_campaign_seed8600_all4",
+  "config": {
+    "num_envs": 1024,
+    "iterations": 8000,
+    "seeds": [
+      8600
+    ],
+    "modes": [
+      "off",
+      "fixed",
+      "lucid_rg",
+      "lucid_s4_rg",
+      "lucid_s4_rg_h6000"
+    ],
+    "from_scratch": true
+  },
+  "arms": {
+    "off_s8600": {
+      "seed": 8600,
+      "mode": "off",
+      "checkpoint": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260829_000249/seed_8600/off/final_checkpoint.pt",
+      "checkpoint_exported": true,
+      "complete": true,
+      "branch_id": "off_s8600"
+    },
+    "fixed_s8600": {
+      "seed": 8600,
+      "mode": "fixed",
+      "checkpoint": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260829_000249/seed_8600/fixed/final_checkpoint.pt",
+      "checkpoint_exported": true,
+      "complete": true,
+      "branch_id": "fixed_s8600"
+    },
+    "lucid_rg_s8600": {
+      "seed": 8600,
+      "mode": "lucid_rg",
+      "checkpoint": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260829_000249/seed_8600/lucid_rg/final_checkpoint.pt",
+      "checkpoint_exported": true,
+      "complete": true,
+      "branch_id": "lucid_rg_s8600"
+    },
+    "lucid_s4_rg_s8600": {
+      "seed": 8600,
+      "mode": "lucid_s4_rg",
+      "checkpoint": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260829_000249/seed_8600/lucid_s4_rg/final_checkpoint.pt",
+      "checkpoint_exported": true,
+      "complete": true,
+      "branch_id": "lucid_s4_rg_s8600"
+    },
+    "lucid_s4_rg_h6000_s8600": {
+      "seed": 8600,
+      "mode": "lucid_s4_rg_h6000",
+      "checkpoint": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260829_000249/seed_8600/lucid_s4_rg/checkpoint_h6000.pt",
+      "checkpoint_exported": true,
+      "complete": true,
+      "branch_id": "lucid_s4_rg_h6000_s8600",
+      "note": "iteration-6000 capsule of lucid_s4_rg, exported because the controller collapsed lambda from 0.96 to 0.15 over iterations 7000-8000; this is the last checkpoint trained on the full mixture"
+    }
+  }
+}

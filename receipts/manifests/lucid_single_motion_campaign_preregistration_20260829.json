@@ -1,0 +1,58 @@
+{
+  "kind": "lucid_single_motion_campaign_preregistration",
+  "created_at": "2026-08-29T00:02:29.572830-04:00",
+  "author": "Claude (autonomous PI, second host)",
+  "stage": "LUCID vs fixed DR vs no DR, from scratch, single motion",
+  "budget_decision": {
+    "B": 8000,
+    "evidence": "The no-DR baseline ran 13,245 iterations. Capability metrics plateau early: episode length 183.2 at window 4001-4500 vs 187.4 at 12501-13000 (+2.3% over 9,000 further iterations), and time_out 0.9703 -> 0.9921 (+2.2 pts). Reward keeps creeping (15.08 -> 18.30, +21%) at 0.3-1.3%/500it, which is tracking PRECISION improving, not capability. Plateau reward sd over the last 1,000 iterations is 0.359 on a mean of 18.279 (cv 2.0%), so a 500-window mean has se ~0.09% of the mean and a 0.5%/window criterion sits well above noise.",
+    "why_not_20000": "20,000 was the baseline's configured horizon, not a measured requirement. At B=8000 every capability metric is within ~1% of its 13,000-iteration value, and the campaign costs 66 GPU-hours instead of 165.",
+    "why_not_4000": "DR arms train on a harder distribution and should converge later than the no-DR control. B=8000 is double the iteration at which the control's capability metrics plateaued, so a DR arm gets slack the control did not need.",
+    "equal_budget": "Every arm and every seed gets exactly B=8000 -- equal iterations, equal environment interactions (8000 x 1024 x 24 = 1.97e8 transitions per cell), equal wall-clock. The user's directive was 'converged AND at least the same training time as the baseline'; equal-B satisfies both without handing a slower arm more compute."
+  },
+  "convergence_rule": {
+    "computable_from": "the training log alone, via RL.parse_run_log",
+    "rule": "With W=500 non-overlapping windows from iteration 1, let M_k be the window mean of 'Mean rewards' and d_k = (M_k - M_{k-1})/|M_{k-1}|. An (arm, seed) is CONVERGED at B iff there exists k with 500k <= B such that d_k, d_{k-1}, d_{k-2} are all < 0.005, AND that arm's own max window-mean time_out >= 0.5x its own maximum, AND its max window-mean episode length >= 2x its first-window mean.",
+    "liveness_is_arm_relative": "An absolute time_out floor would stamp a DR arm FAILED for training on a harder distribution. Both constants (0.5x, 2x) are chosen and declared here.",
+    "if_an_arm_is_not_converged": "the headline reads 'at equal budget B=8000', that arm's result is a LOWER bound, and the deficit is reported as a learning-speed finding, not a policy-quality finding."
+  },
+  "design": {
+    "task": "walk_hands_on_back_loop_002__A066_M, one 4.03 s clip, adaptation partition, zero dev overlap",
+    "from_scratch": true,
+    "num_envs": 1024,
+    "iterations": 8000,
+    "warmup_iterations": 10,
+    "seeds": [
+      8600,
+      8601,
+      8602
+    ],
+    "termination_thresholds": "upstream term-file defaults (0.5/0.5/0.5/1.0)",
+    "arms": {
+      "off": "no event-manager DR. The control. NOT 'no randomization': the motion command term randomizes every reset regardless of lambda.",
+      "fixed": "full six-channel envelope at lambda=1 from iteration 0",
+      "lucid_rg": "gap-gated PI controller with the RELATIVE return guard",
+      "lucid_s4_rg": "the same plus a 4-stratum intensity mixture across environments"
+    },
+    "guard_choice_disclosure": "plain `lucid` uses an absolute return floor of 8.0. The no-DR baseline crosses 8.0 at iteration 975, and replaying the controller on the baseline's own traces gives ~499 guard trips with lambda pinned near 0.02. The relative guard was therefore chosen for the LUCID arm AFTER simulating both on baseline traces. That is a forking path and is declared rather than hidden."
+  },
+  "hypotheses": {
+    "H0_instrument": "GATE. On the 512-alias replicate panel at num_envs=512, evaluating the baseline checkpoint at phys_000, the receipt must report motion_count=512 and zero censoring. If H0 fails, no arm is evaluated and no endpoint is reported.",
+    "H1_lambda": "MECHANISM, evaluated before any endpoint. H1a: lucid_rg reaches lambda>=0.95 by iteration 500 and stays, with <=2 guard trips -> any LUCID result is reported as 'a brief ramp then fixed DR', and the gap feedback is credited with the ramp rate only. H1b: final lambda in [0.4,0.9] with >=3 trips -> the controller is genuinely modulating and a result may be attributed to the schedule. Neither (lambda<=0.05 throughout, or >5 trips/1000it sustained) -> both guards are mis-scaled in this regime, and that is the finding.",
+    "H2_fixed_learnable": "fixed is LIVE at B iff its own max window-mean time_out >= 0.10 and its max window-mean episode length >= 2x its first window. If fixed is not LIVE, 'LUCID beats fixed DR' is a win over an arm that never learned and must be reported that way.",
+    "H3_primary": "On the physics-only ladder (phys_000/050/100/125/150, latency pinned to 0), trapezoidal AUC of mean per-episode progress, normalised by the lambda span. C1: lucid_rg - off. C2: lucid_rg - fixed. Paired by training seed, Holm-corrected across the two.",
+    "H4_latency": "SECONDARY. Latency-only ladder AUC over 0/10/20/30/40 ms at nominal physics -- the axis on which the no-DR control has zero training exposure."
+  },
+  "statistics": {
+    "unit_of_analysis": "the TRAINING SEED. Per-episode n=512 quantifies episode noise for one trained policy and says nothing about the variability of the training procedure, which is the estimand. Two arms compared at one seed each with n=512 gives a tiny interval entirely confounded with seed -- the most likely way to manufacture a false LUCID win.",
+    "report_both": "the within-seed episode CI (precision) and the across-seed CI (the claim). Only the second supports a directional claim.",
+    "no_wilcoxon": "at 3 seeds the minimum two-sided p is 0.25; it cannot reach significance and will not be reported as if it could."
+  },
+  "if_lucid_loses": "Report it as the headline. The programme has already published that the latent gap does not rank DR channels by harm, that an absolute return guard is not scale-portable, and that a population return contaminates a focus-only controller. A fourth negative -- that gap-gated DR scheduling does not beat fixed DR when learning from scratch -- is a result, and the contribution is the diagnosis plus the audit protocol.",
+  "verified": [],
+  "not_yet_verified": [
+    "all endpoints; written before launch"
+  ],
+  "git_sha": "91836e341f351ccf2ee1a6c7e3a38cfb2137a9ec",
+  "logical_sha256": "c7de12e1f923e8b3fa44a0d4f195e3e7e16e0caa5ed9198a7b02942958d4da90"
+}
