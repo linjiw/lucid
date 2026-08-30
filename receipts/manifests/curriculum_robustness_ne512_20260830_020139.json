@@ -1,9 +1,9 @@
 {
   "kind": "lucid_frozen_checkpoint_robustness_evaluation",
   "schema_version": 1,
-  "created_at": "2026-08-30T02:10:43.818146-04:00",
+  "created_at": "2026-08-30T02:14:14.098444-04:00",
   "experiment_id": "curriculum_robustness_ne512_20260830_020139",
-  "git_sha": "cbc26690e024b48eea2da62b2bd1ab2823f8940c",
+  "git_sha": "106eeff09f18169b1626bb562b851d455710b340",
   "git_status_short": [
     "?? gear_sonic/research/practice_utility/bin_sampler.py",
     "?? gear_sonic/research/practice_utility/learnability_gate.py",
@@ -1931,6 +1931,654 @@
         "failed_count": 0
       },
       "complete": true
+    },
+    "curriculum_robustness_ne512_20260830_020139_s8600_lucid_s4_rg_h6000_lat_20ms": {
+      "checkpoint_seed": 8600,
+      "evaluation_seed": 8700,
+      "mode": "lucid_s4_rg_h6000",
+      "preset": "lat_20ms",
+      "checkpoint": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260829_000249/seed_8600/lucid_s4_rg/checkpoint_h6000.pt",
+      "checkpoint_sha256": "63533f282db83144a0384c262e91622c3ece1b92f29c46f266bc71a0f1aba3b5",
+      "metrics_path": "/home/linjiw/lucid-sonic/artifacts/curriculum_robustness_eval/curriculum_robustness_ne512_20260830_020139/seed_8600/lucid_s4_rg_h6000/lat_20ms/metrics_eval.json",
+      "log_path": "/home/linjiw/lucid-sonic/outputs/curriculum_robustness_ne512_20260830_020139_s8600_lucid_s4_rg_h6000_lat_20ms.log",
+      "runtime": {
+        "exit_code": 0,
+        "wall_seconds": 52.03353888000129,
+        "gpu": {
+          "samples": 26,
+          "start_free_mib": 8726.0,
+          "min_free_mib": 4227.0,
+          "max_used_mib": 11582.0,
+          "max_gpu_util_pct": 99.0
+        }
+      },
+      "summary": {
+        "success_rate": 1.0,
+        "progress_rate": 1.0,
+        "mpjpe_g": 158.28622667650822,
+        "mpjpe_l": 29.52896711317995,
+        "foot_slip_per_step_m": 0.0017201961328839569,
+        "undesired_contact_rate": 0.995,
+        "torque_saturation": 0.04882745150862069,
+        "energy_proxy": 143.86240761755954,
+        "quality_missing_signals": [],
+        "active_dr_terms": [
+          "add_joint_default_pos",
+          "base_com",
+          "physics_material",
+          "push_robot",
+          "randomize_action_delay",
+          "randomize_rigid_body_mass"
+        ],
+        "dr_ranges": {
+          "add_joint_default_pos": {
+            "pos_distribution_params": [
+              0.0,
+              0.0
+            ]
+          },
+          "base_com": {
+            "com_range": {
+              "x": [
+                0.0,
+                0.0
+              ],
+              "y": [
+                0.0,
+                0.0
+              ],
+              "z": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "physics_material": {
+            "static_friction_range": [
+              0.95,
+              0.95
+            ],
+            "dynamic_friction_range": [
+              0.75,
+              0.75
+            ],
+            "restitution_range": [
+              0.0,
+              0.0
+            ]
+          },
+          "push_robot": {
+            "velocity_range": {
+              "x": [
+                0.0,
+                0.0
+              ],
+              "y": [
+                0.0,
+                0.0
+              ],
+              "z": [
+                0.0,
+                0.0
+              ],
+              "roll": [
+                0.0,
+                0.0
+              ],
+              "pitch": [
+                0.0,
+                0.0
+              ],
+              "yaw": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "randomize_action_delay": {
+            "delay_range": [
+              4.0,
+              4.0
+            ]
+          },
+          "randomize_rigid_body_mass": {
+            "mass_distribution_params": [
+              1.0,
+              1.0
+            ]
+          }
+        },
+        "delay": {
+          "action_delay_actuator_groups": 5,
+          "action_delay_num_lags": 2560,
+          "action_delay_min_steps": 4,
+          "action_delay_max_steps": 4,
+          "action_delay_mean_steps": 4.0,
+          "action_delay_nonzero_fraction": 1.0,
+          "action_delay_histogram": [
+            0,
+            0,
+            0,
+            0,
+            2560
+          ],
+          "action_delay_cross_group_equal_fraction": 1.0,
+          "action_delay_cross_group_range_mean_steps": 0.0,
+          "action_delay_process_invocations": 3,
+          "action_delay_process_resampled_envs": 1536,
+          "action_delay_process_assignments": 7680,
+          "action_delay_process_mean_steps": 4.0,
+          "action_delay_process_histogram": [
+            0,
+            0,
+            0,
+            0,
+            7680
+          ],
+          "action_delay_process_cross_group_equal_fraction": 1.0,
+          "action_delay_process_distribution_counts": {
+            "uniform": 3
+          },
+          "action_delay_process_coupling_counts": {
+            "independent": 3
+          }
+        },
+        "motion_count": 512,
+        "failed_count": 0
+      },
+      "complete": true
+    },
+    "curriculum_robustness_ne512_20260830_020139_s8600_lucid_s4_rg_h6000_lat_30ms": {
+      "checkpoint_seed": 8600,
+      "evaluation_seed": 8700,
+      "mode": "lucid_s4_rg_h6000",
+      "preset": "lat_30ms",
+      "checkpoint": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260829_000249/seed_8600/lucid_s4_rg/checkpoint_h6000.pt",
+      "checkpoint_sha256": "63533f282db83144a0384c262e91622c3ece1b92f29c46f266bc71a0f1aba3b5",
+      "metrics_path": "/home/linjiw/lucid-sonic/artifacts/curriculum_robustness_eval/curriculum_robustness_ne512_20260830_020139/seed_8600/lucid_s4_rg_h6000/lat_30ms/metrics_eval.json",
+      "log_path": "/home/linjiw/lucid-sonic/outputs/curriculum_robustness_ne512_20260830_020139_s8600_lucid_s4_rg_h6000_lat_30ms.log",
+      "runtime": {
+        "exit_code": 0,
+        "wall_seconds": 52.22148029500386,
+        "gpu": {
+          "samples": 26,
+          "start_free_mib": 8727.0,
+          "min_free_mib": 4227.0,
+          "max_used_mib": 11582.0,
+          "max_gpu_util_pct": 99.0
+        }
+      },
+      "summary": {
+        "success_rate": 1.0,
+        "progress_rate": 1.0,
+        "mpjpe_g": 165.70675505825022,
+        "mpjpe_l": 30.537808469620355,
+        "foot_slip_per_step_m": 0.0017709777705813739,
+        "undesired_contact_rate": 0.995,
+        "torque_saturation": 0.05041352370689656,
+        "energy_proxy": 158.04389926668026,
+        "quality_missing_signals": [],
+        "active_dr_terms": [
+          "add_joint_default_pos",
+          "base_com",
+          "physics_material",
+          "push_robot",
+          "randomize_action_delay",
+          "randomize_rigid_body_mass"
+        ],
+        "dr_ranges": {
+          "add_joint_default_pos": {
+            "pos_distribution_params": [
+              0.0,
+              0.0
+            ]
+          },
+          "base_com": {
+            "com_range": {
+              "x": [
+                0.0,
+                0.0
+              ],
+              "y": [
+                0.0,
+                0.0
+              ],
+              "z": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "physics_material": {
+            "static_friction_range": [
+              0.95,
+              0.95
+            ],
+            "dynamic_friction_range": [
+              0.75,
+              0.75
+            ],
+            "restitution_range": [
+              0.0,
+              0.0
+            ]
+          },
+          "push_robot": {
+            "velocity_range": {
+              "x": [
+                0.0,
+                0.0
+              ],
+              "y": [
+                0.0,
+                0.0
+              ],
+              "z": [
+                0.0,
+                0.0
+              ],
+              "roll": [
+                0.0,
+                0.0
+              ],
+              "pitch": [
+                0.0,
+                0.0
+              ],
+              "yaw": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "randomize_action_delay": {
+            "delay_range": [
+              6.0,
+              6.0
+            ]
+          },
+          "randomize_rigid_body_mass": {
+            "mass_distribution_params": [
+              1.0,
+              1.0
+            ]
+          }
+        },
+        "delay": {
+          "action_delay_actuator_groups": 5,
+          "action_delay_num_lags": 2560,
+          "action_delay_min_steps": 6,
+          "action_delay_max_steps": 6,
+          "action_delay_mean_steps": 6.0,
+          "action_delay_nonzero_fraction": 1.0,
+          "action_delay_histogram": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2560
+          ],
+          "action_delay_cross_group_equal_fraction": 1.0,
+          "action_delay_cross_group_range_mean_steps": 0.0,
+          "action_delay_process_invocations": 3,
+          "action_delay_process_resampled_envs": 1536,
+          "action_delay_process_assignments": 7680,
+          "action_delay_process_mean_steps": 6.0,
+          "action_delay_process_histogram": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            7680
+          ],
+          "action_delay_process_cross_group_equal_fraction": 1.0,
+          "action_delay_process_distribution_counts": {
+            "uniform": 3
+          },
+          "action_delay_process_coupling_counts": {
+            "independent": 3
+          }
+        },
+        "motion_count": 512,
+        "failed_count": 0
+      },
+      "complete": true
+    },
+    "curriculum_robustness_ne512_20260830_020139_s8600_lucid_s4_rg_h6000_lat_40ms": {
+      "checkpoint_seed": 8600,
+      "evaluation_seed": 8700,
+      "mode": "lucid_s4_rg_h6000",
+      "preset": "lat_40ms",
+      "checkpoint": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260829_000249/seed_8600/lucid_s4_rg/checkpoint_h6000.pt",
+      "checkpoint_sha256": "63533f282db83144a0384c262e91622c3ece1b92f29c46f266bc71a0f1aba3b5",
+      "metrics_path": "/home/linjiw/lucid-sonic/artifacts/curriculum_robustness_eval/curriculum_robustness_ne512_20260830_020139/seed_8600/lucid_s4_rg_h6000/lat_40ms/metrics_eval.json",
+      "log_path": "/home/linjiw/lucid-sonic/outputs/curriculum_robustness_ne512_20260830_020139_s8600_lucid_s4_rg_h6000_lat_40ms.log",
+      "runtime": {
+        "exit_code": 0,
+        "wall_seconds": 52.45509312901413,
+        "gpu": {
+          "samples": 26,
+          "start_free_mib": 8727.0,
+          "min_free_mib": 4144.0,
+          "max_used_mib": 11665.0,
+          "max_gpu_util_pct": 99.0
+        }
+      },
+      "summary": {
+        "success_rate": 1.0,
+        "progress_rate": 1.0,
+        "mpjpe_g": 195.8664083487681,
+        "mpjpe_l": 33.29181933488593,
+        "foot_slip_per_step_m": 0.0022333996164408377,
+        "undesired_contact_rate": 0.995,
+        "torque_saturation": 0.04956761853448275,
+        "energy_proxy": 165.21214357655182,
+        "quality_missing_signals": [],
+        "active_dr_terms": [
+          "add_joint_default_pos",
+          "base_com",
+          "physics_material",
+          "push_robot",
+          "randomize_action_delay",
+          "randomize_rigid_body_mass"
+        ],
+        "dr_ranges": {
+          "add_joint_default_pos": {
+            "pos_distribution_params": [
+              0.0,
+              0.0
+            ]
+          },
+          "base_com": {
+            "com_range": {
+              "x": [
+                0.0,
+                0.0
+              ],
+              "y": [
+                0.0,
+                0.0
+              ],
+              "z": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "physics_material": {
+            "static_friction_range": [
+              0.95,
+              0.95
+            ],
+            "dynamic_friction_range": [
+              0.75,
+              0.75
+            ],
+            "restitution_range": [
+              0.0,
+              0.0
+            ]
+          },
+          "push_robot": {
+            "velocity_range": {
+              "x": [
+                0.0,
+                0.0
+              ],
+              "y": [
+                0.0,
+                0.0
+              ],
+              "z": [
+                0.0,
+                0.0
+              ],
+              "roll": [
+                0.0,
+                0.0
+              ],
+              "pitch": [
+                0.0,
+                0.0
+              ],
+              "yaw": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "randomize_action_delay": {
+            "delay_range": [
+              8.0,
+              8.0
+            ]
+          },
+          "randomize_rigid_body_mass": {
+            "mass_distribution_params": [
+              1.0,
+              1.0
+            ]
+          }
+        },
+        "delay": {
+          "action_delay_actuator_groups": 5,
+          "action_delay_num_lags": 2560,
+          "action_delay_min_steps": 8,
+          "action_delay_max_steps": 8,
+          "action_delay_mean_steps": 8.0,
+          "action_delay_nonzero_fraction": 1.0,
+          "action_delay_histogram": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2560
+          ],
+          "action_delay_cross_group_equal_fraction": 1.0,
+          "action_delay_cross_group_range_mean_steps": 0.0,
+          "action_delay_process_invocations": 3,
+          "action_delay_process_resampled_envs": 1536,
+          "action_delay_process_assignments": 7680,
+          "action_delay_process_mean_steps": 8.0,
+          "action_delay_process_histogram": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            7680
+          ],
+          "action_delay_process_cross_group_equal_fraction": 1.0,
+          "action_delay_process_distribution_counts": {
+            "uniform": 3
+          },
+          "action_delay_process_coupling_counts": {
+            "independent": 3
+          }
+        },
+        "motion_count": 512,
+        "failed_count": 0
+      },
+      "complete": true
+    },
+    "curriculum_robustness_ne512_20260830_020139_s8600_lucid_s4_rg_h6000_lat_50ms": {
+      "checkpoint_seed": 8600,
+      "evaluation_seed": 8700,
+      "mode": "lucid_s4_rg_h6000",
+      "preset": "lat_50ms",
+      "checkpoint": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260829_000249/seed_8600/lucid_s4_rg/checkpoint_h6000.pt",
+      "checkpoint_sha256": "63533f282db83144a0384c262e91622c3ece1b92f29c46f266bc71a0f1aba3b5",
+      "metrics_path": "/home/linjiw/lucid-sonic/artifacts/curriculum_robustness_eval/curriculum_robustness_ne512_20260830_020139/seed_8600/lucid_s4_rg_h6000/lat_50ms/metrics_eval.json",
+      "log_path": "/home/linjiw/lucid-sonic/outputs/curriculum_robustness_ne512_20260830_020139_s8600_lucid_s4_rg_h6000_lat_50ms.log",
+      "runtime": {
+        "exit_code": 0,
+        "wall_seconds": 52.4127752110071,
+        "gpu": {
+          "samples": 26,
+          "start_free_mib": 8740.0,
+          "min_free_mib": 4241.0,
+          "max_used_mib": 11568.0,
+          "max_gpu_util_pct": 99.0
+        }
+      },
+      "summary": {
+        "success_rate": 0.9921875,
+        "progress_rate": 0.9977929686428979,
+        "mpjpe_g": 251.3496972143607,
+        "mpjpe_l": 37.141590301886104,
+        "foot_slip_per_step_m": 0.0024897985303656534,
+        "undesired_contact_rate": 0.9949609375,
+        "torque_saturation": 0.05038018588362068,
+        "energy_proxy": 190.2975272950354,
+        "quality_missing_signals": [],
+        "active_dr_terms": [
+          "add_joint_default_pos",
+          "base_com",
+          "physics_material",
+          "push_robot",
+          "randomize_action_delay",
+          "randomize_rigid_body_mass"
+        ],
+        "dr_ranges": {
+          "add_joint_default_pos": {
+            "pos_distribution_params": [
+              0.0,
+              0.0
+            ]
+          },
+          "base_com": {
+            "com_range": {
+              "x": [
+                0.0,
+                0.0
+              ],
+              "y": [
+                0.0,
+                0.0
+              ],
+              "z": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "physics_material": {
+            "static_friction_range": [
+              0.95,
+              0.95
+            ],
+            "dynamic_friction_range": [
+              0.75,
+              0.75
+            ],
+            "restitution_range": [
+              0.0,
+              0.0
+            ]
+          },
+          "push_robot": {
+            "velocity_range": {
+              "x": [
+                0.0,
+                0.0
+              ],
+              "y": [
+                0.0,
+                0.0
+              ],
+              "z": [
+                0.0,
+                0.0
+              ],
+              "roll": [
+                0.0,
+                0.0
+              ],
+              "pitch": [
+                0.0,
+                0.0
+              ],
+              "yaw": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "randomize_action_delay": {
+            "delay_range": [
+              10.0,
+              10.0
+            ]
+          },
+          "randomize_rigid_body_mass": {
+            "mass_distribution_params": [
+              1.0,
+              1.0
+            ]
+          }
+        },
+        "delay": {
+          "action_delay_actuator_groups": 5,
+          "action_delay_num_lags": 2560,
+          "action_delay_min_steps": 10,
+          "action_delay_max_steps": 10,
+          "action_delay_mean_steps": 10.0,
+          "action_delay_nonzero_fraction": 1.0,
+          "action_delay_histogram": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2560
+          ],
+          "action_delay_cross_group_equal_fraction": 1.0,
+          "action_delay_cross_group_range_mean_steps": 0.0,
+          "action_delay_process_invocations": 7,
+          "action_delay_process_resampled_envs": 1536,
+          "action_delay_process_assignments": 7680,
+          "action_delay_process_mean_steps": 10.0,
+          "action_delay_process_histogram": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            7680
+          ],
+          "action_delay_process_cross_group_equal_fraction": 1.0,
+          "action_delay_process_distribution_counts": {
+            "uniform": 7
+          },
+          "action_delay_process_coupling_counts": {
+            "independent": 7
+          }
+        },
+        "motion_count": 512,
+        "failed_count": 4
+      },
+      "complete": true
     }
   },
   "mode_summary": {
@@ -1992,6 +2640,258 @@
               "8600": 142.65378858809083
             },
             "mean": 142.65378858809083,
+            "sample_std": null
+          }
+        }
+      }
+    },
+    "lat_20ms": {
+      "lucid_s4_rg_h6000": {
+        "num_runs": 1,
+        "metrics": {
+          "success_rate": {
+            "per_checkpoint_seed": {
+              "8600": 1.0
+            },
+            "mean": 1.0,
+            "sample_std": null
+          },
+          "progress_rate": {
+            "per_checkpoint_seed": {
+              "8600": 1.0
+            },
+            "mean": 1.0,
+            "sample_std": null
+          },
+          "mpjpe_g": {
+            "per_checkpoint_seed": {
+              "8600": 158.28622667650822
+            },
+            "mean": 158.28622667650822,
+            "sample_std": null
+          },
+          "mpjpe_l": {
+            "per_checkpoint_seed": {
+              "8600": 29.52896711317995
+            },
+            "mean": 29.52896711317995,
+            "sample_std": null
+          },
+          "foot_slip_per_step_m": {
+            "per_checkpoint_seed": {
+              "8600": 0.0017201961328839569
+            },
+            "mean": 0.0017201961328839569,
+            "sample_std": null
+          },
+          "undesired_contact_rate": {
+            "per_checkpoint_seed": {
+              "8600": 0.995
+            },
+            "mean": 0.995,
+            "sample_std": null
+          },
+          "torque_saturation": {
+            "per_checkpoint_seed": {
+              "8600": 0.04882745150862069
+            },
+            "mean": 0.04882745150862069,
+            "sample_std": null
+          },
+          "energy_proxy": {
+            "per_checkpoint_seed": {
+              "8600": 143.86240761755954
+            },
+            "mean": 143.86240761755954,
+            "sample_std": null
+          }
+        }
+      }
+    },
+    "lat_30ms": {
+      "lucid_s4_rg_h6000": {
+        "num_runs": 1,
+        "metrics": {
+          "success_rate": {
+            "per_checkpoint_seed": {
+              "8600": 1.0
+            },
+            "mean": 1.0,
+            "sample_std": null
+          },
+          "progress_rate": {
+            "per_checkpoint_seed": {
+              "8600": 1.0
+            },
+            "mean": 1.0,
+            "sample_std": null
+          },
+          "mpjpe_g": {
+            "per_checkpoint_seed": {
+              "8600": 165.70675505825022
+            },
+            "mean": 165.70675505825022,
+            "sample_std": null
+          },
+          "mpjpe_l": {
+            "per_checkpoint_seed": {
+              "8600": 30.537808469620355
+            },
+            "mean": 30.537808469620355,
+            "sample_std": null
+          },
+          "foot_slip_per_step_m": {
+            "per_checkpoint_seed": {
+              "8600": 0.0017709777705813739
+            },
+            "mean": 0.0017709777705813739,
+            "sample_std": null
+          },
+          "undesired_contact_rate": {
+            "per_checkpoint_seed": {
+              "8600": 0.995
+            },
+            "mean": 0.995,
+            "sample_std": null
+          },
+          "torque_saturation": {
+            "per_checkpoint_seed": {
+              "8600": 0.05041352370689656
+            },
+            "mean": 0.05041352370689656,
+            "sample_std": null
+          },
+          "energy_proxy": {
+            "per_checkpoint_seed": {
+              "8600": 158.04389926668026
+            },
+            "mean": 158.04389926668026,
+            "sample_std": null
+          }
+        }
+      }
+    },
+    "lat_40ms": {
+      "lucid_s4_rg_h6000": {
+        "num_runs": 1,
+        "metrics": {
+          "success_rate": {
+            "per_checkpoint_seed": {
+              "8600": 1.0
+            },
+            "mean": 1.0,
+            "sample_std": null
+          },
+          "progress_rate": {
+            "per_checkpoint_seed": {
+              "8600": 1.0
+            },
+            "mean": 1.0,
+            "sample_std": null
+          },
+          "mpjpe_g": {
+            "per_checkpoint_seed": {
+              "8600": 195.8664083487681
+            },
+            "mean": 195.8664083487681,
+            "sample_std": null
+          },
+          "mpjpe_l": {
+            "per_checkpoint_seed": {
+              "8600": 33.29181933488593
+            },
+            "mean": 33.29181933488593,
+            "sample_std": null
+          },
+          "foot_slip_per_step_m": {
+            "per_checkpoint_seed": {
+              "8600": 0.0022333996164408377
+            },
+            "mean": 0.0022333996164408377,
+            "sample_std": null
+          },
+          "undesired_contact_rate": {
+            "per_checkpoint_seed": {
+              "8600": 0.995
+            },
+            "mean": 0.995,
+            "sample_std": null
+          },
+          "torque_saturation": {
+            "per_checkpoint_seed": {
+              "8600": 0.04956761853448275
+            },
+            "mean": 0.04956761853448275,
+            "sample_std": null
+          },
+          "energy_proxy": {
+            "per_checkpoint_seed": {
+              "8600": 165.21214357655182
+            },
+            "mean": 165.21214357655182,
+            "sample_std": null
+          }
+        }
+      }
+    },
+    "lat_50ms": {
+      "lucid_s4_rg_h6000": {
+        "num_runs": 1,
+        "metrics": {
+          "success_rate": {
+            "per_checkpoint_seed": {
+              "8600": 0.9921875
+            },
+            "mean": 0.9921875,
+            "sample_std": null
+          },
+          "progress_rate": {
+            "per_checkpoint_seed": {
+              "8600": 0.9977929686428979
+            },
+            "mean": 0.9977929686428979,
+            "sample_std": null
+          },
+          "mpjpe_g": {
+            "per_checkpoint_seed": {
+              "8600": 251.3496972143607
+            },
+            "mean": 251.3496972143607,
+            "sample_std": null
+          },
+          "mpjpe_l": {
+            "per_checkpoint_seed": {
+              "8600": 37.141590301886104
+            },
+            "mean": 37.141590301886104,
+            "sample_std": null
+          },
+          "foot_slip_per_step_m": {
+            "per_checkpoint_seed": {
+              "8600": 0.0024897985303656534
+            },
+            "mean": 0.0024897985303656534,
+            "sample_std": null
+          },
+          "undesired_contact_rate": {
+            "per_checkpoint_seed": {
+              "8600": 0.9949609375
+            },
+            "mean": 0.9949609375,
+            "sample_std": null
+          },
+          "torque_saturation": {
+            "per_checkpoint_seed": {
+              "8600": 0.05038018588362068
+            },
+            "mean": 0.05038018588362068,
+            "sample_std": null
+          },
+          "energy_proxy": {
+            "per_checkpoint_seed": {
+              "8600": 190.2975272950354
+            },
+            "mean": 190.2975272950354,
             "sample_std": null
           }
         }
@@ -2567,6 +3467,10 @@
   },
   "paired_comparisons": {
     "lat_10ms": {},
+    "lat_20ms": {},
+    "lat_30ms": {},
+    "lat_40ms": {},
+    "lat_50ms": {},
     "phys_000": {},
     "phys_025": {},
     "phys_050": {},
@@ -2583,9 +3487,14 @@
   "checkpoint_sha256_after": {
     "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260829_000249/seed_8600/lucid_s4_rg/checkpoint_h6000.pt": "63533f282db83144a0384c262e91622c3ece1b92f29c46f266bc71a0f1aba3b5"
   },
-  "verified": [],
+  "verified": [
+    "all frozen checkpoints completed the matched motion panel",
+    "all six DR terms remained active in evaluation",
+    "all runs used five delayed-actuator groups with the prescribed live lag",
+    "checkpoint hashes were unchanged by evaluation",
+    "mode comparisons use matched checkpoint and evaluation seeds"
+  ],
   "not_yet_verified": [
-    "the full requested evaluation matrix",
     "unseen-motion generalization",
     "episode-masked physical-quality comparison; current batch diagnostics include auto-reset environments after their scored motion terminates",
     "hardware transfer or real-world safety",

@@ -1512,3 +1512,34 @@ have receipts for everything; keep the paper reproducible from them.
   Cost < 0.1 ms/step on device. Validation protocol V1–V7 preregistered on the logs on
   disk with frozen thresholds; on-disk analogues pass V1 (d = 3.9, twin ratio 4) and V2
   (monotone in the eval ladder, ≥ 5 SE per step); D2 is not evaluable on disk.
+
+- **2026-08-30 02:30 — Corrected extrapolation ladder, and the mixture verdict.** Receipt
+  `capability_benchmark_analysis_20260830.json` (supersedes every λ ≥ 1.25 cell of the
+  29th: those ran with friction extrapolated to −0.025; these are clamped and the clamp is
+  recorded per cell). Seed 8600, success over 512 episodes.
+
+  | arm | λ=1.0 | 1.25 | 1.5 | 1.75 | **2.0** | 40 ms | **50 ms** | AUC[1,2] |
+  |---|---:|---:|---:|---:|---:|---:|---:|---:|
+  | no DR | 0.910 | 0.803 | 0.512 | 0.398 | **0.334** | 0.527 | **0.016** | 0.597 |
+  | fixed | 0.994 | 0.979 | 0.924 | 0.891 | **0.820** | 1.000 | **1.000** | **0.925** |
+  | lucid_rg | 0.994 | 0.975 | 0.920 | 0.844 | 0.795 | 1.000 | 0.998 | 0.911 |
+  | lucid_s4_rg (final, post-collapse) | 0.969 | 0.908 | 0.732 | 0.646 | 0.518 | 0.998 | 0.918 | 0.758 |
+  | **lucid_s4_rg (h6000, λ ≈ 0.99)** | 0.961 | 0.914 | 0.832 | 0.721 | 0.643 | 1.000 | 0.992 | 0.817 |
+
+  Three things. **The extended ladder has resolution** — fixed falls to 0.820 at 2× physics
+  — so a support test past λ = 1 is answerable. **The controller collapse cost real
+  capability**: h6000 vs final is +10 pts at 1.5×, +12.5 at 2×, +7 at 50 ms. **But the intact
+  mixture is still well below fixed at the frontier** (0.832 vs 0.924 at 1.5×, 0.643 vs
+  0.820 at 2×; AUC[1,2] 0.817 vs 0.925) with **no nominal dividend** to show for it
+  (in-envelope AUC 0.992 vs 0.999, both at ceiling). Three quarters of its environments
+  train below the envelope edge; on a task where the envelope itself is learnable, that is
+  simply less exposure to the hard end. The stage-5 "widest mixture retains best" result
+  **does not transfer** from fine-tuning a competent policy to learning from scratch —
+  one seed, but 10–18 points outside per-cell noise. The mixture story is dropped.
+
+  What survives, and what it points at: capability tracks *exposure at the frontier*
+  (fixed ≥ lucid_rg ≥ mixture ≥ none, in order of time spent at λ = 1), the in-envelope
+  ladder cannot rank anything, and the one lever untested in training is support past
+  λ = 1 — the `fixed_150` gate from the MaxRL/PLR memo. The margin arm remains worth its
+  16.5 GPU-h because its claim is different: not "more capability" but "a loop that closes
+  and does not anti-gate", which no signal in this programme has yet achieved.
