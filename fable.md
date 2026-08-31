@@ -1605,3 +1605,42 @@ post-mortem, the ten-defect catalog, MaxRL/PLR verdicts, the margin design,
 and the queue. The PLR worktree audit workflow is still running; its verdict
 gates nothing mechanically (Codex's queue fires regardless) but lands well
 before the campaign ends, in time to flag anything fatal.
+
+## 2026-08-31 00:45 — PLR worktree audit complete: core sound, eight confirmed majors, bridge planned
+
+Seventeen agents, six dimensions, one skeptic per serious finding; receipt
+`lucid_plr_worktree_audit_20260831.json`. **The implementation is real science,
+not a rubber stamp**: PLR math reproduces Jiang et al. to ≤1e-12 (rank
+h(S)^{1/β}, staleness, (1−ρ)P_S+ρP_C; the proportionate replay schedule is the
+correct form for a fully-seen finite pool); `legacy_plant` is bit-identical to
+the campaign's gap path; the next-episode-credit trap that sank my own
+phase-clustering claim is genuinely avoided (bins captured pre-step, terminal
+GAE credits the dying episode); the 1,490-test claim is exact (205 new tests
+re-run green here). Levels = dataset-global 50-frame start bins (5 per clip).
+
+**Confirmed after adversarial verification (severity as corrected):**
+1. [major] All four arms override `pre_failure_sample_window` 200→0 — the 2×2
+   is internally valid but its arms trained on a different start distribution
+   than the campaign's; cross-campaign comparisons carry the caveat forever.
+2. [major] Its frozen evaluator predates `clamp_physical` — its phys_125/150
+   cells will carry the negative-friction tail my ladder superseded.
+3. [major] Ladder trimmed: no lat_50ms / phys_175 / phys_200.
+4. [major] The tracking-signal arms hard-code δ-target **0.778 — the legacy
+   signal's replay value — uncalibrated for the new signal.** Same defect
+   family as the anti-gating collapse; their λ trajectories must be read as
+   exploratory, and the margin arm remains the only properly-calibrated
+   signal test in the queue.
+5. [major] Prereg `git_sha` pins nothing (implementation untracked at that
+   commit); the per-file sha map does hold, so content identity survives.
+6. [major] Runner cells inherit `LUCID_GPU_WAIT_SECONDS=1800`, not 7200.
+7. [major] One-shot `gpu_idle_gate` (already defused on our side by the
+   margin re-chain; residual risk only from a foreign process at fire time).
+8. [major] No resume: one dead cell wastes the remaining hours and fails the
+   campaign at final receipt validation.
+
+Nothing on their side is editable — the queue validates its own file shas, so
+any fix would break its launch. **Bridge instead:** after its receipts land,
+re-score its 12 checkpoints on OUR clamped evaluator at phys_125..200 +
+lat_50ms (eval-only, ~5 GPU-h, after fixed_150) so every cross-campaign
+number shares one instrument. Caveat 1 is training-time and unbridgeable;
+it gets written next to any cross-campaign claim.
