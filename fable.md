@@ -1644,3 +1644,21 @@ re-score its 12 checkpoints on OUR clamped evaluator at phys_125..200 +
 lat_50ms (eval-only, ~5 GPU-h, after fixed_150) so every cross-campaign
 number shares one instrument. Caveat 1 is training-time and unbridgeable;
 it gets written next to any cross-campaign claim.
+
+## 2026-08-31 12:55 — eval-coverage audit: seeds 8601/8602 had no ladder queued; fixed
+
+PI question "does our eval contain all latest experiments" surfaced a real
+hole: the campaign driver only trains, and every capability number so far is
+seed 8600. Margin driver rewritten (v3, pid 1992816) — stage 3a now runs,
+before the margin arm itself: (1) the full 14-preset ladder for seeds
+8601/8602 × {off, fixed, lucid_rg, lucid_s4_rg} from the campaign receipt
+(--seeds selects checkpoint seeds; eval seeds derive from --eval-seed-base);
+(2) h6000 capsules for both seeds exported via BC.export_sonic_checkpoint and
+scored through a cloned pseudo receipt (lucid_campaign_h6000_s8601_s8602) —
+the collapse cost and the mixture verdict get cross-seed CIs. ~140 cells,
+~8-10 h, inside stage 3 so it cannot touch the PLR study's one-shot gate.
+Coverage after this: every trained cell in the program (campaign 12 + h6000
+×3 + margin ×3 + fixed_150 ×3 + comparator lat_60ms) has ladder numbers
+queued or done; the PLR study's 156 cells are its own, with the bridge
+re-eval planned on our clamped instrument. Campaign ETA tonight: seed 8602
+has lucid_rg + lucid_s4_rg done, off at ~1.4k/8000, fixed queued.
