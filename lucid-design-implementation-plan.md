@@ -867,3 +867,40 @@ episode-static and jittered cells rather than tune to the discovery winner. This
 fresh-physics evaluation on training-seen debug512 motions, not unseen-motion, hardware,
 or real-world evidence. MJLab is a later cross-simulator benchmark, not a fix for this
 identified training-distribution mismatch.
+
+### 25.11 Post-reboot Tier-1 ratchet screen (2026-08-31)
+
+The 13:11 host reboot killed the from-scratch campaign before seed-8602/off or
+seed-8602/fixed completed and before any multi-seed capability ladder ran. The
+interrupted cell is not resumed; the equal-budget resume contract remains
+unproven. At the user's direction, the first recovery experiment moves to the
+Tier-1 roadmap instead of rebuilding the old queue.
+
+`lucid_ratchet_rg` is the scalar `lucid_rg` arm with an upward-only projection
+on PI-law moves. The relative return guard remains the sole downward path.
+Historical replay reproduces every legacy lambda exactly with the flag off and
+predicts terminal lambda=1 with 1000/1000 final high-frontier iterations in all
+six completed latent-controller cells with the flag on. This is a mechanical
+prediction, not a capability result: policy and signal trajectories become
+counterfactual after the first blocked move.
+
+The preregistered first cell is seed 8601, selected because old `lucid_rg`
+collapsed there. It is explicitly a targeted screen. Frozen evaluation uses
+the 512-alias clamped ladder, with success and RMS-progress frontier AUC over
+phys_125–200 as co-primary outcomes. Noninferiority margins are 0.02 at the
+frontier and 0.01 in-envelope; a three-seed statement requires the margin in at
+least two of three paired seeds. Superiority over fixed DR is not a Tier-1
+hypothesis. The screen launched from scratch at 14:40 as
+`curriculum_comparison_ne1024_20260831_144022_s8601_lucid_ratchet_rg`; live
+outcomes remain unverified until its training and matched fixed-policy ladder
+receipts complete.
+
+The pre-evaluation endpoint clarification defines the compact term
+"RMS-progress" as restricted-mean normalized episode progress, exactly the
+existing `progress_rate` receipt field. The automatic follow-up driver is
+fail-closed: it requires the complete 8000-iteration training receipt, scores
+the ratchet and fixed seed-8601 checkpoints serially with eval seed 8701, and
+requires the exact 14-cell grid, panel/evaluator hashes, zero failed cells, and
+unchanged checkpoint hashes before the frozen analyzer will issue the targeted
+screen continuation decision. A one-seed `screen_pass` can authorize the two
+confirmatory ratchet cells; it cannot authorize a directional claim.

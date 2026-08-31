@@ -1,0 +1,56 @@
+{
+  "kind": "lucid_existing_training_cell_pseudo_receipt",
+  "schema_version": 1,
+  "created_at": "2026-08-31T14:35:00-04:00",
+  "purpose": "Frozen fixed-DR seed-8601 comparator for the preregistered lucid_ratchet_rg targeted regression. This receipt does not claim the interrupted campaign completed.",
+  "source_campaign": "curriculum_comparison_ne1024_20260829_000249",
+  "source_preregistration": "/home/linjiw/lucid-sonic/manifests/lucid_single_motion_campaign_preregistration_20260829.json",
+  "config": {
+    "checkpoint": "/home/linjiw/lucid/GR00T-WholeBodyControl/logs_rl/lucid-campaign/manager/universal_token/all_modes/sonic_release_test-20260830_002425/last.pt",
+    "from_scratch": true,
+    "num_envs": 1024,
+    "iterations": 8000,
+    "warmup_iterations": 10,
+    "seeds": [8601],
+    "modes": ["fixed"],
+    "motion_file": "/home/linjiw/lucid-sonic/pools/subsets/m1_hob002/robot_filtered",
+    "smpl_motion_file": "dummy",
+    "termination_thresholds": "default",
+    "fixed_lambda": 1.0,
+    "max_delay_steps": 8
+  },
+  "arms": {
+    "curriculum_comparison_ne1024_20260829_000249_s8601_fixed": {
+      "seed": 8601,
+      "mode": "fixed",
+      "branch_id": "curriculum_comparison_ne1024_20260829_000249_s8601_fixed",
+      "complete": true,
+      "checkpoint_exported": true,
+      "checkpoint": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260829_000249/seed_8601/fixed/final_checkpoint.pt",
+      "capsule": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260829_000249/seed_8601/fixed/capsules/curriculum_comparison_ne1024_20260829_000249_s8601_fixed_final.capsule.pt",
+      "curriculum_path": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260829_000249/seed_8601/fixed/curriculum_curriculum_comparison_ne1024_20260829_000249_s8601_fixed.jsonl",
+      "arm_spec": {
+        "run_dir": "logs_rl/lucid-campaign/manager/universal_token/all_modes/sonic_release_test-20260830_002425",
+        "curriculum_mode": "fixed",
+        "fixed_lambda": 1.0,
+        "spread_strata": 1,
+        "return_guard": "absolute"
+      }
+    }
+  },
+  "sha256": {
+    "checkpoint": "227a1c2f9822e8968fd17810ae2a2ea87193d0f5c00d052c37bb7f212df26bb1",
+    "resolved_config": "d8e20c259517bba97a0c6779e7537e52f85327124466cd46dd12d7137671d98d",
+    "motion": "a7f10e7aa26e53cc4e346151d4ccd74e932e3aafa1cfaaac77dab8b8eec40929"
+  },
+  "verified": [
+    "the seed-8601 fixed cell reached 8000 iterations before the reboot",
+    "its final capsule and exported checkpoint are present",
+    "the checkpoint, resolved config, and single-motion file are SHA-pinned"
+  ],
+  "not_yet_verified": [
+    "the frozen 14-cell ladder for seed 8601",
+    "the interrupted 12-cell campaign as a whole",
+    "any cross-seed directional claim"
+  ]
+}

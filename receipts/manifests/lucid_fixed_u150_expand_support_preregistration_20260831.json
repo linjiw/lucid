@@ -1,0 +1,65 @@
+{
+ "kind": "lucid_fixed_u150_expand_support_preregistration",
+ "schema_version": 1,
+ "created_at": "2026-08-31T20:00:00",
+ "written_before_gpu": true,
+ "motivation": "Seed-8600 capability ladder (capability_benchmark_analysis_20260830): all evaluative resolution lies outside the lambda=1 envelope, frontier capability tracks recency-weighted frontier exposure, and the equal-split s4 mixture (25% frontier mass, h6000 AUC[1,2] 0.817) lost to fixed (0.925) with no in-envelope dividend. The scalar gap controller anti-gated seed-randomly (2/6 cells, zero guard trips) and is abandoned. The one combination never tested: SUPPORT past lambda=1 (the fixed_150 lever, P1 in the MaxRL/PLR memo ranking) with FRONTIER MASS preserved (75% of envs at the 1.5x frontier) plus a thin retention tail over the lower doses (expand-don't-replace). fixed_u150 is that arm: open-loop fixed mode, controller inert, so no signal can evacuate the frontier.",
+ "design": {
+  "campaign_id_prefix": "fixed_u150_expand",
+  "task": "walk_hands_on_back_loop_002__A066_M",
+  "from_scratch": true,
+  "num_envs": 1024,
+  "iterations": 8000,
+  "seeds_screening": [8600],
+  "seeds_confirmatory_if_screening_passes": [8601, 8602],
+  "mode": "fixed_u150",
+  "fixed_lambda": 1.5,
+  "allow_extrapolation": "fixed-mode only; controller config stays in [0,1]",
+  "max_delay_steps": 12,
+  "termination_thresholds": "default",
+  "mixture": {
+   "spread_strata": 8,
+   "stratum_sizes": [37, 37, 37, 37, 36, 36, 36, 768],
+   "top_fraction": 0.75,
+   "stratum_lambdas": "1.5 * (k+1)/8 = [0.1875, 0.375, 0.5625, 0.75, 0.9375, 1.125, 1.3125, 1.5], physically clamped where > 1",
+   "assignment": "seeded permutation (anchor_seed = training seed), observer env in the top stratum, tail filled in permutation order"
+  },
+  "training_clamps": "clamp_physical after every extrapolated apply (top stratum) and clamp_params_physical on every extrapolated tail stratum; recorded in curriculum jsonl",
+  "evaluation": {
+   "panel_receipt": "replicate_panel_panel_hob002_k512.json",
+   "presets": ["phys_000", "phys_025", "phys_050", "phys_075", "phys_100", "phys_125", "phys_150", "phys_175", "phys_200", "lat_10ms", "lat_20ms", "lat_30ms", "lat_40ms", "lat_50ms"],
+   "eval_seeds": [8600],
+   "num_envs": 512,
+   "instrument": "main-repo clamped evaluator, eval_seed = 8700 + seed_index, identical to capability_benchmark_analysis_20260830",
+   "baseline_cells": "existing seed-8600 campaign receipts: fixed AUC[1,2] 0.925 / phys_150 0.924 / phys_175 0.891 / phys_200 0.820 / lat_50ms 1.000; lucid_rg 0.908; s4_h6000 0.817; off 0.584"
+  },
+  "queue_position": "first (prior queue dead after the 2026-08-31 13:11 reboot; margin/fixed_150/PLR arms deferred by explicit direction)"
+ },
+ "hypotheses": {
+  "H_U1_support_with_tail": "fixed_u150 success exceeds fixed by >= 3 pts averaged over phys_150/phys_175/phys_200. Seed 8600 is screening-grade (one seed, point estimate); the directional claim requires >= 2/3 seeds after confirmatory runs.",
+  "H_U2_no_nominal_price": "fixed_u150 in-envelope AUC (phys_000..phys_100) within 1 pt of fixed (0.9988).",
+  "H_U3_latency_frontier": "fixed_u150 >= 0.99 success at lat_40ms and lat_50ms (its trained delay support reaches 60 ms; fixed sits at 1.000 on both).",
+  "H_U4_manipulation_check": "curriculum_state tace section records stratum_sizes [37,37,37,37,36,36,36,768] and the 8 stratum lambdas; curriculum jsonl rows record allow_extrapolation and physical_clamp; the run trained with --max-delay 12. If any is absent, the arm did not train the intended mixture and every cell is void, reported as an implementation failure."
+ },
+ "decision_rule": "H_U1 pass -> support extension survives the retention tail: expand-don't-replace with preserved frontier mass is the capability recipe; queue seeds 8601/8602, and run pure fixed_150 later only to separate the support lever from the tail. H_U1 fail while H_U2 holds -> either capability saturates at the envelope or the 25% tail dilutes the support dose; disambiguate with pure fixed_150 before any further mixture work. fixed_u150 below fixed by > 2 pts at the frontier -> the tail costs frontier capability at this scale and the mixture needs frontier mass >= fixed's.",
+ "tie_margin_pts": 2,
+ "comparability_caveats": [
+  "fixed_u150 installs the cohort-dispatch machinery (8 strata) while campaign fixed trained without dispatchers; the top stratum samples the event manager's own lambda-scaled params (set_stratum None), the designed byte-identical frontier path.",
+  "single-seed screening: every contrast against the baseline is a point estimate on checkpoint seed 8600 / eval seed 8700."
+ ],
+ "budget": {
+  "training_gpu_h": 7.0,
+  "eval_cells": 14,
+  "eval_gpu_h": 3.0
+ },
+ "code_state": "working tree on top of fb57e86 (uncommitted diff, per-file shas below)",
+ "suite": "1408 passed / 3 pre-existing bin_sampler failures unrelated to this arm; test_expand_arms.py 18 passed",
+ "file_sha256": {
+  "gear_sonic/research/practice_utility/tace.py": "8f176ee152d0abbbe7af69741f1626be51eb723a307f78197c16c07fdd53ead0",
+  "gear_sonic/research/practice_utility/dr_controller.py": "318f75ebedd4c9e8fc3372346b4d586bf66271c5c17bed1317387c174144cf65",
+  "gear_sonic/research/practice_utility/dr_curriculum.py": "7f23b09be335dbe474fc56c02fe71e64030da7107bb52c7ebe01ca54181e34bb",
+  "scripts/practice_utility/run_curriculum_comparison.py": "50e4fa96c9c4384b3fa7474ef445a3ed138523007b522fcfc068a241be552c99",
+  "scripts/practice_utility/run_fixed_u150_arm.sh": "fe9f82d16ef70aac5bf4eb173e9baa38802d9254d52b0c63019d329bf359d153",
+  "tests/practice_utility/test_expand_arms.py": "704b220bf34ece077652bdd685d14a6a819ef5f00da086483d5cffc67c6b217f"
+ }
+}

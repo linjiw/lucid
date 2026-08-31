@@ -1662,3 +1662,58 @@ Coverage after this: every trained cell in the program (campaign 12 + h6000
 queued or done; the PLR study's 156 cells are its own, with the bridge
 re-eval planned on our clamped instrument. Campaign ETA tonight: seed 8602
 has lucid_rg + lucid_s4_rg done, off at ~1.4k/8000, fixed queued.
+
+## 2026-08-31 13:11–14:40 — reboot killed the queue; pivot to the Tier-1 monotone ratchet
+
+The host rebooted at 13:11:09. Every live LUCID process died: the campaign,
+PLR queue, margin driver, and fixed-150 driver. Seed-8602/off stopped at
+iteration 1675 and seed-8602/fixed never launched. No campaign completion
+receipt exists. Therefore the 12:55 statement that evaluation coverage was
+"queued or done" is false: coverage is open, not closed. The partial off run
+is evidence only and will not be resumed. The earlier s4/8600 collapse endpoint
+is also corrected precisely to **lambda=0.012**, not approximately 0.15.
+
+At the user's direction the dead legacy queue is not restarted first. The
+first post-reboot experiment is the smallest Tier-1 mechanism that directly
+deletes the measured anti-gate: `lucid_ratchet_rg`, the existing scalar
+`lucid_rg` controller with PI-law decreases projected away and the relative
+return guard retained as the sole downward path. It is a noninferiority/stability
+test against fixed DR, not a superiority claim.
+
+Offline replay was exact for the legacy controller (maximum lambda error zero)
+in all six completed latent-controller cells. With the ratchet, every replay
+finishes at lambda=1 and spends all of its final 1000 iterations at lambda>=0.95;
+in particular it prevents both zero-guard collapses. This corrects the roadmap
+claim that the ratchet changes 0/6 cells: it changes 2/6, s8600/s4 and
+s8601/rg. The competence-latch draft bound zero times because it compared a
+window mean with a noisy single-iteration maximum; its like-for-like window
+reference is fixed, but the latch remains default-off and is not the trained
+arm.
+
+The implementation also exposed a pre-launch Tier-2 defect: fixed extrapolated
+arms applied/reported the controller's capped lambda=1 during the first rollout
+and warmup, and TACE telemetry reported strata only through 1 even when the
+event manager received 1.5. Fixed-mode startup, warmup, and telemetry now use
+the actual applied lambda; focused contracts cover the 1.5 path.
+
+Preregistration `lucid_monotone_ratchet_preregistration_20260831.json` freezes
+the seed-8601 targeted screen, the clamped 14-cell instrument, frontier success
+and RMS-progress AUC co-primary endpoints, 2-point frontier / 1-point
+in-envelope noninferiority margins, and the three-seed confirmation rule.
+Seed 8601 is explicitly selected after observing its old collapse, so it is a
+mechanism screen only. At 14:40 the unrelated Scene2Motion driver had exited
+and the new from-scratch 1024-env x 8000-iteration ratchet cell launched as
+`curriculum_comparison_ne1024_20260831_144022_s8601_lucid_ratchet_rg`.
+
+Before any capability cell was scored, an independent ops audit tightened the
+handoff. `lucid_monotone_ratchet_endpoint_clarification_20260831.json` expands
+"RMS-progress" as **restricted-mean normalized episode progress** (the existing
+`progress_rate = mean(per-episode progress)`), not root-mean-square. The frozen
+analyzer now uses the preregistered >=95% terminal-exposure floor, treats
+lat_50ms as secondary, and fail-stops unless both receipts contain exactly the
+same 14 presets, seed-8601/eval-seed-8701 pairing, 512-alias panel, evaluator
+hash, and unchanged checkpoints. `run_ratchet_screen_followup.sh` is waiting on
+the exact training receipt; it will score treatment then fixed serially and
+write `lucid_ratchet_screen_analysis_s8601_20260831.json`. At iteration 568,
+lambda had first crossed 0.95 at iteration 70, remained at 1, and no guard had
+tripped. This is a live mechanism check, not a capability result.

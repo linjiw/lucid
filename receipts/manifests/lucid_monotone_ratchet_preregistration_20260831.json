@@ -1,0 +1,137 @@
+{
+  "kind": "lucid_monotone_ratchet_preregistration",
+  "schema_version": 1,
+  "created_at": "2026-08-31T14:38:00-04:00",
+  "written_before_gpu": true,
+  "experiment_name": "lucid_ratchet_rg",
+  "motivation": "The latent gap is not a valid scalar-difficulty signal, but the six completed LUCID cells isolate one repair that is signal-agnostic and mechanically testable: prevent the PI law from lowering difficulty after it has been earned, while preserving the relative return guard as the sole emergency brake. Two of six latent-controller cells anti-gated with zero guard trips and lost terminal frontier exposure. The ratchet is expected to recover fixed-DR-level robustness reliably; it is not expected or preregistered to outperform fixed DR.",
+  "selection_disclosure": {
+    "screening_seed": 8601,
+    "reason": "Seed 8601 is selected after observing that lucid_rg collapsed from lambda=1 to 0.062 there. This is a targeted mechanistic regression test, not a blinded efficacy seed.",
+    "claim_limit": "The seed-8601 result is screening-only. A directional/noninferiority claim requires the frozen three-seed rule below.",
+    "ledger_correction": "The proposed ratchet would change 2/6 historical latent-controller cells, not 0/6: seed-8601 lucid_rg and seed-8600 lucid_s4_rg are the two zero-guard collapse cells."
+  },
+  "design": {
+    "task": "walk_hands_on_back_loop_002__A066_M (4.03 s single walk)",
+    "from_scratch": true,
+    "num_envs": 1024,
+    "iterations": 8000,
+    "warmup_iterations": 10,
+    "screening_seeds": [8601],
+    "confirmatory_seeds_after_screen_pass": [8600, 8602],
+    "mode": "lucid_ratchet_rg",
+    "controller": {
+      "signal": "frozen TemporalVAE gap q90",
+      "delta_target": 0.778,
+      "kp": 1.0,
+      "ki": 0.02,
+      "alpha": 0.05,
+      "integral_max": 1.0,
+      "lambda_bounds": [0.0, 1.0],
+      "monotonic": true,
+      "return_guard": "relative",
+      "return_relative_drop": 0.25,
+      "return_window": 8,
+      "guard_semantics": "A guard trip may lower lambda; a PI-law decrease may not. Each blocked PI decrease is logged as latch_active and counted as ratchet_bind_rows."
+    },
+    "distribution": "one scalar lambda for all 1024 environments; no strata, anchor, yardstick, consolidation, extrapolation, PLR, latch, or residual allocator",
+    "termination_thresholds": "upstream term-file defaults (0.5/0.5/0.5/1.0)",
+    "max_delay_steps": 8,
+    "capsule_horizons": [500, 1000, 2000, 4000, 6000, 8000],
+    "motion_file": "/home/linjiw/lucid-sonic/pools/subsets/m1_hob002/robot_filtered",
+    "smpl_motion_file": "dummy",
+    "baseline": {
+      "screening": "reuse the completed seed-8601 fixed cell and score it afresh with the treatment under the same evaluator seed",
+      "pseudo_receipt": "/home/linjiw/lucid-sonic/manifests/lucid_ratchet_fixed_s8601_baseline.json",
+      "checkpoint_sha256": "227a1c2f9822e8968fd17810ae2a2ea87193d0f5c00d052c37bb7f212df26bb1",
+      "resolved_config_sha256": "d8e20c259517bba97a0c6779e7537e52f85327124466cd46dd12d7137671d98d",
+      "confirmatory": "reuse fixed seeds 8600/8601 after exact contract checks and retrain missing fixed seed 8602 from scratch; rerun all fixed seeds only if the contract hashes differ"
+    }
+  },
+  "offline_replay": {
+    "method": "Drop warmup rows from each historical curriculum jsonl; initialize the exact PI controller at lambda=0; feed each logged (gap_quantile, mean_return). Legacy replay reproduces every logged lambda with max absolute error 0. Enable only monotonic=true for the counterfactual replay.",
+    "columns": ["ratchet_bind_rows", "final_lambda", "iterations_lambda_ge_0.95", "terminal_1000_lambda_ge_0.95"],
+    "cells": {
+      "8600/lucid_rg": [610, 1.0, 7935, 1000],
+      "8600/lucid_s4_rg": [1978, 1.0, 7941, 1000],
+      "8601/lucid_rg": [2490, 1.0, 7937, 1000],
+      "8601/lucid_s4_rg": [1273, 1.0, 7936, 1000],
+      "8602/lucid_rg": [242, 1.0, 7936, 1000],
+      "8602/lucid_s4_rg": [432, 1.0, 7939, 1000]
+    },
+    "guard_trips": 0,
+    "interpretation": "The replay validates the mechanical prediction only. After the first blocked decrease, policy and gap trajectories become counterfactual, so capability still requires training and frozen-policy evaluation."
+  },
+  "evaluation": {
+    "instrument_version": "ratchet-frontier-v1",
+    "panel_receipt": "/home/linjiw/lucid-sonic/manifests/replicate_panel_panel_hob002_k512.json",
+    "num_envs": 512,
+    "screening_eval_seed": 8701,
+    "matched_seed_rule": "treatment and fixed use the identical evaluation seed, panel, preset order, config contract, and evaluator code",
+    "presets": [
+      "phys_000", "phys_025", "phys_050", "phys_075", "phys_100",
+      "phys_125", "phys_150", "phys_175", "phys_200",
+      "lat_10ms", "lat_20ms", "lat_30ms", "lat_40ms", "lat_50ms"
+    ],
+    "frontier_grid": ["phys_125", "phys_150", "phys_175", "phys_200"],
+    "in_envelope_grid": ["phys_000", "phys_025", "phys_050", "phys_075", "phys_100"],
+    "co_primary_outcomes": ["success AUC", "RMS-progress AUC"],
+    "secondary": ["lat_50ms success and progress", "per-cell success/progress", "failure-time summaries already present in the frozen receipt"],
+    "excluded_as_outcomes": ["training return", "unmasked eval/all MPJPE", "latent gap"]
+  },
+  "hypotheses": {
+    "H_R0_manipulation": "lambda reaches >=0.95 by iteration 500; no applied non-guard lambda decrease occurs; final-1000 exposure at lambda>=0.95 is >=95%; every guard trip and blocked PI decrease is separately logged. Failure voids capability interpretation and is reported as an implementation/mechanism failure.",
+    "H_R1_screening_noninferiority": "On seed 8601, ratchet-minus-fixed frontier success AUC and frontier RMS-progress AUC are each >= -0.02, and in-envelope AUCs are each >= -0.01. This is a targeted screen, not a directional claim.",
+    "H_R2_three_seed_noninferiority": "After confirmatory cells, each frontier co-primary is within 0.02 of fixed in >=2/3 paired training seeds, and each in-envelope co-primary is within 0.01 in >=2/3 paired seeds. Exact seed counts and deltas are reported; no p-value is claimed at n=3.",
+    "H_R3_collapse_deletion": "No ratchet cell exhibits a non-guard lambda drop >0.30 within any terminal 1000-iteration window while completion is rising. A guard-mediated drop is not an anti-gate and is reported separately.",
+    "superiority": "Not preregistered. A positive point estimate over fixed is descriptive and cannot turn the Tier-1 signal constraint into a superiority claim."
+  },
+  "decision_rule": "If H_R0 and H_R1 pass, run seeds 8600/8602 plus the missing fixed-8602 comparator. If H_R0 passes but H_R1 fails, the ratchet deletes controller collapse but does not preserve capability, so stop scalar-gap scheduling. If H_R2 passes, report the ratchet as a stability/noninferiority constraint; capability gains beyond fixed must come from Tier-2 support or Tier-3 optimization. If H_R2 fails, fixed DR remains the baseline and no LUCID performance claim is made.",
+  "queue_and_gpu": {
+    "old_queue": "abandoned after reboot; no old campaign, PLR, margin, or fixed150 process is alive",
+    "launch_condition": "wait for unrelated Scene2Motion driver PID 26924 and its children to exit; the free-memory gate alone is not an exclusivity lock",
+    "screen_runtime_estimate": "5.5-6.2 GPU-h training plus about 26 minutes to score ratchet and fixed on 14 cells",
+    "no_resume": true
+  },
+  "evidence_hashes": {
+    "panel_receipt": "e2e61933405e6701b0563eb4df793b6faf5c90d8ae5b7d8fc1e11f47142aefd7",
+    "motion": "a7f10e7aa26e53cc4e346151d4ccd74e932e3aafa1cfaaac77dab8b8eec40929",
+    "encoder": "a4195a6e49e4ec7098f58be4b04f464bbb14a9ce6c20ff508678faf4428a879d",
+    "baseline_pseudo_receipt": "089734629e188a48b5f1adc652c47f9af344531145e9a94b07995e3768345f73"
+  },
+  "code_state": {
+    "git_sha": "fb57e8613fdbcffbaeca4f5ab1e5f80935a4c095",
+    "dirty_worktree": true,
+    "reason": "Concurrent untracked Gate-A/bin-sampler work is intentionally not touched or committed; executable content is pinned per file.",
+    "file_sha256": {
+      "gear_sonic/research/practice_utility/dr_controller.py": "c70a7db5c21474a7e2daeaeb6759fa634aff82d0599b2fc26dfbfc9261b14f15",
+      "gear_sonic/research/practice_utility/dr_curriculum.py": "07d5abdc3011de1173321c4627db9d9e14d35c9aafb452843a65ed0ae21fbd74",
+      "gear_sonic/research/practice_utility/tace.py": "8f176ee152d0abbbe7af69741f1626be51eb723a307f78197c16c07fdd53ead0",
+      "scripts/practice_utility/run_curriculum_comparison.py": "a63347c16f7b1f1c7f8a12f2afacd6ea293bf565e639db2776703012901307fa",
+      "scripts/practice_utility/run_curriculum_robustness_eval.py": "308e24150e4d4f03d0abf0dc6a427063ac662904bb3a7765488a9bff63cd94ca",
+      "tests/practice_utility/test_expand_arms.py": "9bf544a3c66c31579bac304598a1964341c907ca08ad33fdc4b23d309c81e959",
+      "tests/practice_utility/test_dr_curriculum.py": "aaa893ebbac8017d51d854b3a38524fb6d9bb97f0dbc06e11ac746d7b42d0dc4",
+      "tests/practice_utility/test_curriculum_robustness_eval.py": "91fe0ff962b0d9ae4e49437f3621fe7cf83d87f4901d9b8be64e3424c75de7b4"
+    }
+  },
+  "validation_before_launch": {
+    "focused": "137 passed",
+    "suite_excluding_concurrent_untracked_bin_sampler": "1377 passed",
+    "concurrent_untracked_bin_sampler": "37 passed, 3 failed; outside this experiment and unchanged",
+    "git_diff_check": "pass",
+    "make_run_checks": "blocked at repository-wide isort by pre-existing upstream/nested-repository formatting failures; no formatter was applied to unrelated code"
+  },
+  "verified": [
+    "legacy controller replay is exact on all six completed latent-controller cells",
+    "ratchet command dry-run differs by the named monotonic flag while retaining the relative guard",
+    "CPU controller/callback/launcher/evaluator contracts pass",
+    "fixed seed-8601 comparator artifacts and hashes are present"
+  ],
+  "not_yet_verified": [
+    "live seed-8601 training",
+    "live ratchet manipulation gate",
+    "any frozen-policy ratchet capability endpoint",
+    "three-seed noninferiority",
+    "unseen-motion, hardware, or real-world transfer"
+  ]
+}

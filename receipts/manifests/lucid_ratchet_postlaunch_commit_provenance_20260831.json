@@ -1,0 +1,48 @@
+{
+  "kind": "lucid_postlaunch_commit_provenance",
+  "schema_version": 1,
+  "created_at": "2026-08-31T16:27:16-04:00",
+  "experiment_id": "curriculum_comparison_ne1024_20260831_144022",
+  "branch_id": "curriculum_comparison_ne1024_20260831_144022_s8601_lucid_ratchet_rg",
+  "launch": {
+    "started_at": "2026-08-31T14:40:20-04:00",
+    "git_head_at_launch": "fb57e8613fdbcffbaeca4f5ab1e5f80935a4c095",
+    "worktree_was_dirty": true,
+    "binding_content_identity": "per-file sha256 map in lucid_monotone_ratchet_preregistration_20260831.json"
+  },
+  "commit_while_process_live": {
+    "commit": "3457718f30b74bd6bca9d7dd439be0e53dbbde43",
+    "tree": "2991503d76e6845cd78df70014717b307d7a9c04",
+    "committed_at": "2026-08-31T16:25:31-04:00",
+    "subject": "research(practice-utility): add ratchet frontier screen",
+    "reason": "The user explicitly requested a durable commit and agent-readable handoff while the long-running experiment continued.",
+    "tracked_claim_files_match_commit_afterward": true,
+    "running_process_was_not_restarted": true,
+    "runtime_effect": "none: the trainer had already imported the code, and the commit captured the same preregistered bytes without changing them"
+  },
+  "receipt_interpretation": {
+    "expected_training_receipt_git_sha": "3457718f30b74bd6bca9d7dd439be0e53dbbde43",
+    "caveat": "run_curriculum_comparison.py resolves git_sha when it writes the terminal receipt, so the receipt will name the post-launch commit rather than the launch-time HEAD",
+    "authoritative_launch_identity": "Use the launch-time HEAD plus the preregistration's per-file sha256 map and this bridge receipt. The post-launch commit contains those exact bytes.",
+    "scientific_status": "disclosed provenance timing deviation; no executable-content drift"
+  },
+  "claim_file_sha256": {
+    "gear_sonic/research/practice_utility/dr_controller.py": "c70a7db5c21474a7e2daeaeb6759fa634aff82d0599b2fc26dfbfc9261b14f15",
+    "gear_sonic/research/practice_utility/dr_curriculum.py": "07d5abdc3011de1173321c4627db9d9e14d35c9aafb452843a65ed0ae21fbd74",
+    "gear_sonic/research/practice_utility/tace.py": "8f176ee152d0abbbe7af69741f1626be51eb723a307f78197c16c07fdd53ead0",
+    "scripts/practice_utility/run_curriculum_comparison.py": "a63347c16f7b1f1c7f8a12f2afacd6ea293bf565e639db2776703012901307fa",
+    "scripts/practice_utility/run_curriculum_robustness_eval.py": "308e24150e4d4f03d0abf0dc6a427063ac662904bb3a7765488a9bff63cd94ca",
+    "scripts/practice_utility/analyze_ratchet.py": "ff33604e05e8ad0c5f0303997c1c60d34911fa66ec8e617f654bb3de4172be05",
+    "scripts/practice_utility/run_ratchet_screen_followup.sh": "b1a5ab18c15dd0b7816757912fcd64f53dcac901acc475d3c04d182b4f110b2d"
+  },
+  "verified": [
+    "all preregistered training and evaluator file hashes still match",
+    "the committed claim files have no worktree diff from commit 3457718",
+    "the live trainer and follow-up supervisor remained running through the commit"
+  ],
+  "not_yet_verified": [
+    "terminal training receipt",
+    "seed-8601 frozen-policy capability screen",
+    "three-seed noninferiority"
+  ]
+}

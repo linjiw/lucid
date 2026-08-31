@@ -1,0 +1,68 @@
+{
+ "kind": "lucid_fixed150_support_preregistration",
+ "schema_version": 1,
+ "created_at": "2026-08-30T23:59:00",
+ "written_before_gpu": true,
+ "motivation": "Seed-8600 capability ladder (capability_benchmark_analysis_20260830): outside the envelope the arms order exactly by frontier exposure (fixed >= lucid_rg >= mixture >= off). The one untested lever is training SUPPORT past lambda=1. fixed_150 trains fixed DR at 1.5x with physical clamps and a delay buffer sized for 60 ms.",
+ "design": {
+  "campaign_id_prefix": "fixed150_support",
+  "task": "walk_hands_on_back_loop_002__A066_M",
+  "from_scratch": true,
+  "num_envs": 1024,
+  "iterations": 8000,
+  "seeds": [
+   8600,
+   8601,
+   8602
+  ],
+  "mode": "fixed_150",
+  "fixed_lambda": 1.5,
+  "allow_extrapolation": "fixed-mode only; controller config stays in [0,1]",
+  "max_delay_steps": 12,
+  "termination_thresholds": "default",
+  "training_clamps": "clamp_physical after every extrapolated apply; report in receipt",
+  "evaluation": {
+   "panel_receipt": "replicate_panel_panel_hob002_k512.json",
+   "presets": [
+    "phys_000",
+    "phys_025",
+    "phys_050",
+    "phys_075",
+    "phys_100",
+    "phys_125",
+    "phys_150",
+    "phys_175",
+    "phys_200",
+    "lat_10ms",
+    "lat_20ms",
+    "lat_30ms",
+    "lat_40ms",
+    "lat_50ms",
+    "lat_60ms"
+   ],
+   "eval_seeds": [
+    8600,
+    8601,
+    8602
+   ],
+   "num_envs": 512,
+   "comparator_topup": "campaign arms at lat_60ms only, eval-only, same panel"
+  },
+  "queue_position": "fourth: campaign -> lucid_plr_signal -> margin arm -> this"
+ },
+ "hypotheses": {
+  "H_X1_support": "fixed_150 success exceeds fixed by >= 3 pts averaged over phys_150/phys_175/phys_200, in >= 2/3 seeds (per-seed paired cells)",
+  "H_X2_no_nominal_price": "fixed_150 in-envelope AUC (phys_000..phys_100) within 1 pt of fixed per seed",
+  "H_X3_latency_frontier": "fixed_150 >= fixed + 5 pts at lat_60ms in >= 2/3 seeds; lat_50ms reported both ways (inside fixed_150's trained range, outside fixed's)",
+  "H_X4_manipulation_check": "receipts record physical_clamp on friction and realized actuator delay reaching ~12 steps; if absent, the arm did not train the extension and every cell is void, reported as an implementation failure"
+ },
+ "decision_rule": "H_X1 pass -> support extension is the causal capability lever; curricula must extend support to matter on this task; mix_150 (stratified variant) becomes the follow-up only if H_X2 fails (a nominal price appears that a mixture could avoid). H_X1 fail while H_X2 holds -> capability saturates at the lambda=1 envelope; the curriculum question on this testbed shifts from capability to efficiency, and that is what gets written.",
+ "budget": {
+  "training_gpu_h": 16.5,
+  "eval_cells": 57,
+  "eval_gpu_h": 5.0
+ },
+ "git_sha": "5e5931a",
+ "suite": "1320 passed / 13 skipped",
+ "logical_sha256": "d220c2490cfd07c039d5745638c412bfdeba9c6d75391cb151831c516de7aaf8"
+}

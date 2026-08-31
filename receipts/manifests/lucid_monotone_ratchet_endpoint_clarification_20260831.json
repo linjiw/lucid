@@ -1,0 +1,33 @@
+{
+  "kind": "lucid_preregistration_endpoint_clarification",
+  "schema_version": 1,
+  "created_at": "2026-08-31T15:00:37-04:00",
+  "written_before_any_ratchet_capability_cell_was_scored": true,
+  "parent_preregistration": "/home/linjiw/lucid-sonic/manifests/lucid_monotone_ratchet_preregistration_20260831.json",
+  "parent_sha256": "11c2dca351e38db7b240728e5f57069a731410e5517c9f36b1d96c125962da32",
+  "reason": "The parent uses the compact label 'RMS-progress' without expanding it. This note removes an acronym ambiguity before evaluation; it does not select a different outcome after seeing data.",
+  "binding_semantics": {
+    "expanded_name": "restricted-mean progress",
+    "receipt_field": "progress_rate",
+    "definition": "arithmetic mean of each scored episode's normalized progress fraction in [0,1]",
+    "not_root_mean_square": true,
+    "auc": "normalized trapezoidal AUC of progress_rate over the frozen intensity grid",
+    "relationship_to_failure_time": "For a fixed-duration clip, mean normalized progress is the restricted mean failure-time fraction, with completed episodes contributing 1.0.",
+    "historical_contract": "This is the progress_rate already emitted by the frozen practice evaluator and used by the existing campaign ladders."
+  },
+  "unchanged": [
+    "the 14 evaluation presets",
+    "success_rate as the other co-primary",
+    "the 0.02 frontier and 0.01 in-envelope margins",
+    "the seed-8601 screening-only scope",
+    "the component-wise 2-of-3 confirmatory rule"
+  ],
+  "code_sha256": {
+    "gear_sonic/research/practice_utility/robustness_metrics.py": "d987205c70e85ec583e0085c65c5c96a6d40be1cd0e3516f8e9edcf225230c6f",
+    "scripts/practice_utility/run_curriculum_robustness_eval.py": "308e24150e4d4f03d0abf0dc6a427063ac662904bb3a7765488a9bff63cd94ca"
+  },
+  "not_yet_verified": [
+    "the seed-8601 ratchet capability screen",
+    "three-seed noninferiority"
+  ]
+}

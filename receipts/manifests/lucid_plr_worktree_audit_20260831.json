@@ -1,0 +1,109 @@
+{
+ "kind": "lucid_plr_worktree_audit",
+ "schema_version": 1,
+ "created_at": "2026-08-31T00:40:00",
+ "subject": "GR00T-WholeBodyControl-plr worktree (lucid_plr_signal_ne1024_20260830, prereg sha 55727723...)",
+ "method": "read-only adversarial workflow, 6 dimensions x finder + 1 skeptic per serious finding; 17 agents, 573 tool calls; run wf_67fae148-155",
+ "core_verdict": [
+  "PLR math faithful to Jiang et al. 2021: rank h(S)^(1/beta), staleness, (1-rho)P_S+rho*P_C verified numerically to <=1e-12; proportionate replay schedule correct for the fully-seen finite pool",
+  "legacy_plant signal path bit-identical to the running campaign gap path",
+  "the known next-episode-credit trap is AVOIDED: bins captured pre-step, terminal GAE credits the dying episode",
+  "per-transition [T,N] bin credit, reset-safe windows, fail-closed queue validation; 1,490-test claim confirmed (205 new tests re-run green)",
+  "outputs fully isolated from the running campaign; WANDB offline fail-closed; 12 cells strictly serial"
+ ],
+ "confirmed_findings": [
+  {
+   "dimension": "level-credit",
+   "severity": "major",
+   "title": "All four arms override pre_failure_sample_window 200\u21920; results not comparable to the running baseline campaign",
+   "file": "/home/linjiw/lucid/GR00T-WholeBodyControl-plr/scripts/practice_utility/run_lucid_plr_signal.py",
+   "line": 380,
+   "claim": "build_command unconditionally appends '++manager_env.commands.motion.motion_lib_cfg.adaptive_sampling.pre_failure_sample_window=0' to every arm (needed so a sampled bin is an identifiable level), but upstream default is 200 and the running campaign does not override it. On a 201-frame clip, pre_failure=200 pulls nearly every episode start back toward frame 0 (offset U[0,200) clamped at 0), while =0 samples starts uniformly inside the drawn bin. So legacy_native/tracking_native are NOT the same t"
+  },
+  {
+   "dimension": "signal",
+   "severity": "major",
+   "title": "total_tracking set-point 0.778 is the legacy signal's replay value, uncalibrated for the new signal",
+   "file": "/home/linjiw/lucid/GR00T-WholeBodyControl-plr/scripts/practice_utility/run_lucid_plr_signal.py",
+   "line": 87,
+   "claim": "All four arms feed the SAME PIController (worktree dr_controller.update() is byte-identical to the reference for the gap path) via drain_gaps with error = delta_target - q90(gaps), delta_target=0.778, kp=1, ki=0.02, alpha=0.05, relative return guard \u2014 exactly the running campaign's lucid_s4_rg settings. 0.778 is precisely the healthy-training replay value of the LEGACY plant gap (the number that proved the old set-point unbindable). For total_tracking the pooled gaps are a different quantity (fr"
+  },
+  {
+   "dimension": "launch-safety",
+   "severity": "major",
+   "title": "Runner cells inherit a 30-minute GPU wait, not the protocol's 7200 s",
+   "file": "/home/linjiw/lucid/GR00T-WholeBodyControl-plr/scripts/practice_utility/run_latency_ab.py",
+   "line": 241,
+   "claim": "Every one of the 12 training cells and 156 eval cells gates on wait_for_gpu with max_wait = LUCID_GPU_WAIT_SECONDS defaulting to 1800 s; the live queue process (PID 1297554) does not set that variable, so any foreign job holding the GPU below 12000 MiB free for >30 min at a cell boundary raises RuntimeError, kills the runner mid-campaign without a final receipt, and the queue then marks the whole preregistered study failed with no resume path. Project drivers use 7200 s."
+  },
+  {
+   "dimension": "launch-safety",
+   "severity": "major",
+   "title": "Queue's gpu_idle_gate is one-shot: any GPU occupancy at firing time kills the study permanently",
+   "file": "/home/linjiw/lucid/GR00T-WholeBodyControl-plr/scripts/practice_utility/queue_lucid_plr_signal.py",
+   "line": 1241,
+   "claim": "gpu_idle_gate requires zero nvidia-smi compute PIDs AND >=12000 MiB free at a single instant (no polling, no wait) before training (line 1652) and before evaluation (line 1686); any transient GPU user at either instant raises QueueError, the except block at 1772 records phase=failed, and the O_EXCL status file plus _refuse_path preflight make a rerun with the same queue-id/paths impossible \u2014 the ~70 GPU-hour study dies unlaunched (a risk the margin-arm author documents verbatim in run_margin_arm"
+  },
+  {
+   "dimension": "launch-safety",
+   "severity": "major",
+   "title": "No resume: a single dead cell wastes the rest of the campaign's GPU hours then aborts everything",
+   "file": "/home/linjiw/lucid/GR00T-WholeBodyControl-plr/scripts/practice_utility/run_lucid_plr_signal.py",
+   "line": 513,
+   "claim": "If cell 7 of 12 dies (OOM/NaN, exit nonzero), the runner continues and completes the remaining ~27 GPU-hours of cells anyway, then mechanics_ok=False forces exit 1, the queue raises 'new training child exited 1' (queue line 1666), phase=failed, and eval/analysis never run; every output path (final receipt, partial receipt, artifact dirs, logs, queue status) is create-exclusive, so partial progress is not resumable \u2014 recovery is manual cleanup plus a fresh queue-id. A GPU-gate timeout or any edit"
+  },
+  {
+   "dimension": "eval-parity",
+   "severity": "major",
+   "title": "Frozen evaluator lacks the physical-validity clamp for extrapolated physics cells",
+   "file": "/home/linjiw/lucid/GR00T-WholeBodyControl-plr/gear_sonic/research/practice_utility/eval_callback.py",
+   "line": 83,
+   "claim": "phys_125 and phys_150 (2 of 7 rungs in the preregistered primary physics-AUC) will run with affinely extrapolated DR ranges that leave physical validity (e.g. friction [0.3,1.6] centred 0.95 becomes [-0.025,1.925] at 1.5x; PhysX does not accept negative friction). My reference repo fixed this in commit f9e273b ('clamp extrapolated evaluation ranges to physical validity', committed 2026-08-30 02:11) -- 25 minutes AFTER the preregistration was frozen (created_at 01:46) -- so Codex's frozen impleme"
+  },
+  {
+   "dimension": "eval-parity",
+   "severity": "major",
+   "title": "git_sha in the preregistration pins nothing: every audited file is uncommitted",
+   "file": "/home/linjiw/lucid/GR00T-WholeBodyControl-plr/scripts/practice_utility/run_lucid_plr_signal.py",
+   "line": 287,
+   "claim": "The prereg's git_sha (2afa99886f00...) equals worktree HEAD, but HEAD contains none of the audited implementation: git status shows plr.py, motion_signal.py, featured_observer.py, plr_signal_contract.py, plr_signal_analysis.py, run_lucid_plr_signal.py, queue_lucid_plr_signal.py, train_with_lucid_plr.py and all their tests as untracked (??), and run_curriculum_robustness_eval.py as modified-uncommitted. The prereg records no git_status (the training receipt will, but that is post-hoc). Reproducib"
+  },
+  {
+   "dimension": "eval-parity",
+   "severity": "major",
+   "title": "Robustness ladders trimmed vs my campaign: lat_50ms, phys_175, phys_200 deleted",
+   "file": "/home/linjiw/lucid/GR00T-WholeBodyControl-plr/scripts/practice_utility/run_curriculum_robustness_eval.py",
+   "line": 58,
+   "claim": "The 156 cells are 3 seeds (8700-8702) x 4 arms x 13 presets: id_clean + phys_000/025/050/075/100/125/150 (non-latency scale, latency pinned 0) + lat_10/20/30/40/60ms (fixed latency on tracking/lucid_eval_clean, zero physics DR). Codex deleted lat_50ms, phys_175, phys_200 from the evaluator's maps. My campaign's actual receipts already evaluate phys_000..phys_200 and lat_10..lat_50 (curriculum_robustness_ne512_20260830_013413/020139), and the margin-arm plan preregisters phys_000..200 + lat_10..5"
+  },
+  {
+   "dimension": "tests",
+   "severity": "major",
+   "title": "Queue GPU gate fails closed instantly; no wait-gate honoring LUCID_GPU_WAIT_SECONDS at orchestration level",
+   "file": "/home/linjiw/lucid/GR00T-WholeBodyControl-plr/scripts/practice_utility/queue_lucid_plr_signal.py",
+   "line": 1652,
+   "claim": "After the predecessor tree exits, the queue calls gpu_idle_gate exactly once before training (line 1652) and once before evaluation (line 1686); the gate raises QueueError on ANY compute PID or <12000 MiB free \u2014 it never waits. LUCID_GPU_WAIT_SECONDS appears nowhere in the queue. The competing margin-signal arm (~16.5 h) is queued on the same predecessor: whichever queue loses the race dies (status 'failed') instead of waiting. Child launchers reuse run_latency_ab.run_arm (byte-identical to refe"
+  },
+  {
+   "dimension": "tests",
+   "severity": "minor",
+   "title": "Known next-episode-credit trap avoided in code but has NO explicit regression test at the capture point",
+   "file": "/home/linjiw/lucid/GR00T-WholeBodyControl-plr/gear_sonic/research/practice_utility/featured_observer.py",
+   "line": 395,
+   "claim": "Credit correctness rests on one ordering: step_and_observe captures bins = _episode_start_bins(env) (derived from motion_command.motion_start_time_steps, i.e. the episode-start phase of the currently running episode) BEFORE calling observer._original_step. That makes the terminal transition carry the old episode's bin, avoiding the known trap. But no test pins this: the only test that calls _install (test_uninstall_restores_preexisting_instance_attributes_exactly, test_featured_observer.py:410) "
+  }
+ ],
+ "comparability_caveats": [
+  "all four arms train with pre_failure_sample_window=0 (campaign trained at upstream 200): training start-distribution differs; the 2x2 factorial is internally valid but cross-campaign arm comparisons carry this caveat, unbridgeable post hoc",
+  "its frozen evaluator predates the physical-validity clamp: phys_125/150 cells will carry the negative-friction tail my clamped ladder superseded",
+  "its ladder is trimmed (no lat_50ms, phys_175, phys_200): smaller common grid",
+  "tracking-signal arms inherit delta-target 0.778, the legacy signal replay value, uncalibrated for the new signal: read their lambda trajectories accordingly (a set-point defect of the same family as the anti-gating collapse)",
+  "prereg git_sha pins nothing: every audited file untracked at that commit (shas of file contents in the prereg map DO match, so content identity holds)"
+ ],
+ "operational_risks_accepted": [
+  "one-shot gpu_idle_gate at fire time (defused for our side by re-chaining the margin arm; residual risk only if a foreign process holds the card at campaign exit)",
+  "runner cells inherit LUCID_GPU_WAIT_SECONDS=1800 (not the 7200 protocol): a >30 min transient GPU hold mid-study kills a cell",
+  "no resume: a dead cell wastes the remaining hours and fails the campaign at final validation"
+ ],
+ "bridge_plan": "after its receipts land: re-score its 12 checkpoints on OUR clamped evaluator at phys_125..phys_200 + lat_50ms (eval-only, ~5 GPU-h) so every cross-campaign number shares one instrument; run after fixed_150 completes"
+}
