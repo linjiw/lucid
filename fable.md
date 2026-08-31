@@ -1543,3 +1543,65 @@ have receipts for everything; keep the paper reproducible from them.
   λ = 1 — the `fixed_150` gate from the MaxRL/PLR memo. The margin arm remains worth its
   16.5 GPU-h because its claim is different: not "more capability" but "a loop that closes
   and does not anti-gate", which no signal in this programme has yet achieved.
+
+## 2026-08-30 23:35 — the post-campaign queue had a mutual-kill race; margin arm re-chained third
+
+Codex's PLR queue service (pid 1297554) and my margin driver both fire when the
+campaign exits. Read the queue's code: its `gpu_idle_gate` is **one-shot** — any
+compute PID on the card, or free VRAM < 12000 MiB, raises QueueError and the whole
+~66 GPU-hour study records `failed` without launching. No wait, no retry. My margin
+launcher waits at most 7200 s. Every branch of the race loses:
+- Codex first (likely; 60 s tree-poll vs my 120 s): its 1024-env cell leaves
+  ~9.5 GB free ≥ my 8000 MiB threshold → margin arm starts **concurrently** — the
+  same 3-job collision that killed the stage-8 eval.
+- Me first: Codex's gate sees < 12000 free → one-shot failure of a preregistered study.
+
+Decision: re-chain my side only. Killed the sleeping driver (held no GPU), rewrote
+`run_margin_arm.sh` to wait for the campaign marker AND for the PLR queue to reach a
+terminal state (`phase` ∈ {complete, failed} in its queue_status manifest, or pid
+1297554 gone), then run as before. New driver pid 1609515. Shortest-job-first argued
+margin-first (16.5 h vs ~66 h) but forcing that means racing or killing another
+session's live service — asymmetric risk against the user's explicit interest in the
+PLR results. Serial order is now: campaign (seed 8602 running) → LUCID+PLR 2×2
+(12 cells + 156 eval cells) → margin arm (3 seeds + 14-preset ladder).
+
+Also launched: read-only adversarial audit workflow over the PLR worktree
+(6 dimensions: PLR math vs paper, level/credit assignment, signal machinery,
+launch safety, eval parity, test claims) — before it spends GPU-hours.
+
+## 2026-08-31 00:05 — fixed_150 built, tested, preregistered, queued fourth; the deep report published
+
+*The support-extension arm (memo P1) is implemented.* `allow_extrapolation` is
+fixed-mode-only — the controller's config stays hard-capped in [0,1], so no
+feedback loop can ever cross the envelope on its own initiative; only the
+open-loop fixed mode can, explicitly. After every extrapolated apply the live
+event config passes `clamp_physical` (friction floor 0.05, dynamic ≤ static)
+with the report kept in the curriculum record and surfaced in the receipt
+(`arm_spec.physical_clamp`); the dispatcher paths (strata, anchors) clamp their
+scaled params through a new `clamp_params_physical`. The launcher refuses an
+undersized delay buffer instead of letting `events_reset_safe` silently clamp
+60 ms back to 40 (`fixed_150` requires `--max-delay 12`). 12 new tests; suite
+**1,320 green**. Commits `5e5931a`, `45292b3`.
+
+*Preregistered before any GPU:* `lucid_fixed150_support_preregistration_20260830.json`
+(logical sha `d220c2490cfd07c0`). H_X1 support (+3 pts at phys_150/175/200 in
+≥2/3 seeds vs fixed), H_X2 no nominal price (in-envelope AUC within 1 pt),
+H_X3 latency frontier (+5 pts at 60 ms — the driver adds an eval-only
+comparator top-up scoring the campaign arms at lat_60ms, which they were never
+measured at), H_X4 manipulation check (clamp recorded, realized delay ~12
+steps, else all cells void). Decision rule frozen: H_X1 pass ⇒ support is the
+capability lever; H_X1 fail with H_X2 holding ⇒ capability saturates at the
+envelope and the curriculum question shifts to efficiency.
+
+*Queue is now four deep and strictly serial:* campaign (seed 8602 running) →
+LUCID+PLR 2×2 (Codex, fires on campaign exit) → margin arm (waits for the PLR
+study's terminal state) → fixed_150 (waits for "margin arm done"). Driver pids
+1609515 (margin) and 1628399 (fixed_150), both sleeping grep loops holding no GPU.
+
+*The deep status-and-analysis report is published* ("Anatomy of a Curriculum",
+claude.ai artifact 287a1362): the fine-tuning era and the pivot, the baseline,
+per-arm mechanistic reads with the live λ/gap trajectories, the five-way gap
+post-mortem, the ten-defect catalog, MaxRL/PLR verdicts, the margin design,
+and the queue. The PLR worktree audit workflow is still running; its verdict
+gates nothing mechanically (Codex's queue fires regardless) but lands well
+before the campaign ends, in time to flag anything fatal.
