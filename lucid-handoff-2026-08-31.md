@@ -1,5 +1,11 @@
 # LUCID handoff — post-reboot Tier-1 ratchet screen
 
+> Completion update (2026-08-31 22:32 EDT): the live chain described below
+> finished successfully. The ratchet passed its targeted seed-8601 screen;
+> no directional claim is yet authorized. Use `lucid-latest-report.md` as the
+> current status, result, Tier 1–4 ledger, and next-action handoff. The process
+> IDs and “training now” language below are retained as a historical snapshot.
+
 Snapshot: 2026-08-31 16:27 EDT. This document is intentionally operational: a
 later agent should be able to continue without reconstructing the 26-agent
 frontier audit or guessing which live process owns the GPU.

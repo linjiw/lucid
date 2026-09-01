@@ -1,0 +1,726 @@
+{
+  "arms": {
+    "fixed": {
+      "progress_rate": {
+        "frontier_auc": {
+          "complete_seeds": [
+            "8601"
+          ],
+          "grid": {
+            "phys_125": 1.25,
+            "phys_150": 1.5,
+            "phys_175": 1.75,
+            "phys_200": 2.0
+          },
+          "incomplete_seeds": {},
+          "mean_auc": 0.954954427286187,
+          "per_seed": {
+            "8601": {
+              "auc": 0.954954427286187,
+              "cells": {
+                "phys_125": 0.9945605468237773,
+                "phys_150": 0.9596289065520978,
+                "phys_175": 0.9416699221328599,
+                "phys_200": 0.9325683595234295
+              }
+            }
+          },
+          "weights": {
+            "phys_125": 0.16666666666666666,
+            "phys_150": 0.3333333333333333,
+            "phys_175": 0.3333333333333333,
+            "phys_200": 0.16666666666666666
+          }
+        },
+        "in_envelope_auc": {
+          "complete_seeds": [
+            "8601"
+          ],
+          "grid": {
+            "phys_000": 0.0,
+            "phys_025": 0.25,
+            "phys_050": 0.5,
+            "phys_075": 0.75,
+            "phys_100": 1.0
+          },
+          "incomplete_seeds": {},
+          "mean_auc": 0.9995385742076905,
+          "per_seed": {
+            "8601": {
+              "auc": 0.9995385742076905,
+              "cells": {
+                "phys_000": 1.0,
+                "phys_025": 1.0,
+                "phys_050": 1.0,
+                "phys_075": 0.9994433593237773,
+                "phys_100": 0.9974218750139698
+              }
+            }
+          },
+          "weights": {
+            "phys_000": 0.125,
+            "phys_025": 0.25,
+            "phys_050": 0.25,
+            "phys_075": 0.25,
+            "phys_100": 0.125
+          }
+        },
+        "lat_50ms": {
+          "mean": 1.0,
+          "per_seed": {
+            "8601": 1.0
+          },
+          "preset": "lat_50ms"
+        }
+      },
+      "success_rate": {
+        "frontier_auc": {
+          "complete_seeds": [
+            "8601"
+          ],
+          "grid": {
+            "phys_125": 1.25,
+            "phys_150": 1.5,
+            "phys_175": 1.75,
+            "phys_200": 2.0
+          },
+          "incomplete_seeds": {},
+          "mean_auc": 0.8818359375,
+          "per_seed": {
+            "8601": {
+              "auc": 0.8818359375,
+              "cells": {
+                "phys_125": 0.978515625,
+                "phys_150": 0.904296875,
+                "phys_175": 0.853515625,
+                "phys_200": 0.796875
+              }
+            }
+          },
+          "weights": {
+            "phys_125": 0.16666666666666666,
+            "phys_150": 0.3333333333333333,
+            "phys_175": 0.3333333333333333,
+            "phys_200": 0.16666666666666666
+          }
+        },
+        "in_envelope_auc": {
+          "complete_seeds": [
+            "8601"
+          ],
+          "grid": {
+            "phys_000": 0.0,
+            "phys_025": 0.25,
+            "phys_050": 0.5,
+            "phys_075": 0.75,
+            "phys_100": 1.0
+          },
+          "incomplete_seeds": {},
+          "mean_auc": 0.997802734375,
+          "per_seed": {
+            "8601": {
+              "auc": 0.997802734375,
+              "cells": {
+                "phys_000": 1.0,
+                "phys_025": 1.0,
+                "phys_050": 1.0,
+                "phys_075": 0.998046875,
+                "phys_100": 0.986328125
+              }
+            }
+          },
+          "weights": {
+            "phys_000": 0.125,
+            "phys_025": 0.25,
+            "phys_050": 0.25,
+            "phys_075": 0.25,
+            "phys_100": 0.125
+          }
+        },
+        "lat_50ms": {
+          "mean": 1.0,
+          "per_seed": {
+            "8601": 1.0
+          },
+          "preset": "lat_50ms"
+        }
+      }
+    },
+    "lucid_ratchet_rg": {
+      "progress_rate": {
+        "frontier_auc": {
+          "complete_seeds": [
+            "8601"
+          ],
+          "grid": {
+            "phys_125": 1.25,
+            "phys_150": 1.5,
+            "phys_175": 1.75,
+            "phys_200": 2.0
+          },
+          "incomplete_seeds": {},
+          "mean_auc": 0.9742871094325285,
+          "per_seed": {
+            "8601": {
+              "auc": 0.9742871094325285,
+              "cells": {
+                "phys_125": 0.994902343954891,
+                "phys_150": 0.9830371096904855,
+                "phys_175": 0.9670996091153938,
+                "phys_200": 0.9505468750285218
+              }
+            }
+          },
+          "weights": {
+            "phys_125": 0.16666666666666666,
+            "phys_150": 0.3333333333333333,
+            "phys_175": 0.3333333333333333,
+            "phys_200": 0.16666666666666666
+          }
+        },
+        "in_envelope_auc": {
+          "complete_seeds": [
+            "8601"
+          ],
+          "grid": {
+            "phys_000": 0.0,
+            "phys_025": 0.25,
+            "phys_050": 0.5,
+            "phys_075": 0.75,
+            "phys_100": 1.0
+          },
+          "incomplete_seeds": {},
+          "mean_auc": 0.9997375488310354,
+          "per_seed": {
+            "8601": {
+              "auc": 0.9997375488310354,
+              "cells": {
+                "phys_000": 1.0,
+                "phys_025": 1.0,
+                "phys_050": 1.0,
+                "phys_075": 0.9993945312453434,
+                "phys_100": 0.9991113281575963
+              }
+            }
+          },
+          "weights": {
+            "phys_000": 0.125,
+            "phys_025": 0.25,
+            "phys_050": 0.25,
+            "phys_075": 0.25,
+            "phys_100": 0.125
+          }
+        },
+        "lat_50ms": {
+          "mean": 0.9987207031226717,
+          "per_seed": {
+            "8601": 0.9987207031226717
+          },
+          "preset": "lat_50ms"
+        }
+      },
+      "success_rate": {
+        "frontier_auc": {
+          "complete_seeds": [
+            "8601"
+          ],
+          "grid": {
+            "phys_125": 1.25,
+            "phys_150": 1.5,
+            "phys_175": 1.75,
+            "phys_200": 2.0
+          },
+          "incomplete_seeds": {},
+          "mean_auc": 0.9130859375,
+          "per_seed": {
+            "8601": {
+              "auc": 0.9130859375,
+              "cells": {
+                "phys_125": 0.970703125,
+                "phys_150": 0.94140625,
+                "phys_175": 0.896484375,
+                "phys_200": 0.83203125
+              }
+            }
+          },
+          "weights": {
+            "phys_125": 0.16666666666666666,
+            "phys_150": 0.3333333333333333,
+            "phys_175": 0.3333333333333333,
+            "phys_200": 0.16666666666666666
+          }
+        },
+        "in_envelope_auc": {
+          "complete_seeds": [
+            "8601"
+          ],
+          "grid": {
+            "phys_000": 0.0,
+            "phys_025": 0.25,
+            "phys_050": 0.5,
+            "phys_075": 0.75,
+            "phys_100": 1.0
+          },
+          "incomplete_seeds": {},
+          "mean_auc": 0.9990234375,
+          "per_seed": {
+            "8601": {
+              "auc": 0.9990234375,
+              "cells": {
+                "phys_000": 1.0,
+                "phys_025": 1.0,
+                "phys_050": 1.0,
+                "phys_075": 0.998046875,
+                "phys_100": 0.99609375
+              }
+            }
+          },
+          "weights": {
+            "phys_000": 0.125,
+            "phys_025": 0.25,
+            "phys_050": 0.25,
+            "phys_075": 0.25,
+            "phys_100": 0.125
+          }
+        },
+        "lat_50ms": {
+          "mean": 0.998046875,
+          "per_seed": {
+            "8601": 0.998046875
+          },
+          "preset": "lat_50ms"
+        }
+      }
+    }
+  },
+  "claim_scope": {
+    "directional_claim_authorized": false,
+    "num_paired_training_seeds": 1,
+    "paired_training_seeds": [
+      "8601"
+    ],
+    "statement": "Only one paired training seed is available. Results are screening point estimates confounded with training seed and support no directional claim.",
+    "status": "screening_only"
+  },
+  "created_at": "2026-08-31T20:30:56.551535-04:00",
+  "frozen_contract": {
+    "expected_paired_seeds": 3,
+    "fixed_mode": "fixed",
+    "frontier_grid": {
+      "phys_125": 1.25,
+      "phys_150": 1.5,
+      "phys_175": 1.75,
+      "phys_200": 2.0
+    },
+    "frontier_margin": 0.02,
+    "high_lambda_threshold": 0.95,
+    "in_envelope_grid": {
+      "phys_000": 0.0,
+      "phys_025": 0.25,
+      "phys_050": 0.5,
+      "phys_075": 0.75,
+      "phys_100": 1.0
+    },
+    "in_envelope_margin": 0.01,
+    "latency_cell": "lat_50ms",
+    "latency_margin": 0.02,
+    "ratchet_mode": "lucid_ratchet_rg",
+    "reach_by_step": 500,
+    "required_within_margin_seeds": 2,
+    "terminal_min_high_lambda_fraction": 0.95,
+    "terminal_window": 1000
+  },
+  "git_sha": "3457718f30b74bd6bca9d7dd439be0e53dbbde43",
+  "git_status_short": "?? gear_sonic/research/practice_utility/bin_sampler.py\n?? gear_sonic/research/practice_utility/learnability_gate.py\n?? scripts/practice_utility/audit_evaluation_receipt.py\n?? scripts/practice_utility/run_fixed_u150_arm.sh\n?? scripts/practice_utility/run_gate_a.py\n?? tests/practice_utility/test_bin_sampler.py\n?? tests/practice_utility/test_learnability_gate.py",
+  "inputs": {
+    "robustness_receipts": [
+      {
+        "path": "/home/linjiw/lucid-sonic/manifests/ratchet_screen_20260831/treatment/curriculum_robustness_ne512_20260831_201524.json",
+        "sha256": "82d918525b600fea25d415d6d3d17c0cf6c2400905c9f37428548a305b591b9b"
+      },
+      {
+        "path": "/home/linjiw/lucid-sonic/manifests/ratchet_screen_20260831/fixed/curriculum_robustness_ne512_20260831_202312.json",
+        "sha256": "1e4412413d45bc22384dc35924a932d6d41d745d62de0f2cd81df19ddb06cbb2"
+      }
+    ],
+    "training_receipts": [
+      {
+        "path": "/home/linjiw/lucid-sonic/manifests/curriculum_comparison_ne1024_20260831_144022.json",
+        "sha256": "72d8f5cec69790e7ee34c867784c062e6abde68ee6f592ea635b225e51e5a169"
+      },
+      {
+        "path": "/home/linjiw/lucid-sonic/manifests/lucid_ratchet_fixed_s8601_baseline.json",
+        "sha256": "089734629e188a48b5f1adc652c47f9af344531145e9a94b07995e3768345f73"
+      }
+    ]
+  },
+  "instrument_audit": {
+    "cell_count": 28,
+    "errors": [],
+    "evaluation_seed_by_training_seed": {
+      "8601": 8701
+    },
+    "expected_presets": [
+      "phys_000",
+      "phys_025",
+      "phys_050",
+      "phys_075",
+      "phys_100",
+      "phys_125",
+      "phys_150",
+      "phys_175",
+      "phys_200",
+      "lat_10ms",
+      "lat_20ms",
+      "lat_30ms",
+      "lat_40ms",
+      "lat_50ms"
+    ],
+    "launcher_sha256": [
+      "308e24150e4d4f03d0abf0dc6a427063ac662904bb3a7765488a9bff63cd94ca"
+    ],
+    "paired_training_seeds": [
+      "8601"
+    ],
+    "panel_sha256": [
+      "e2e61933405e6701b0563eb4df793b6faf5c90d8ae5b7d8fc1e11f47142aefd7"
+    ],
+    "passed": true,
+    "receipts": [
+      {
+        "launcher_sha256": "308e24150e4d4f03d0abf0dc6a427063ac662904bb3a7765488a9bff63cd94ca",
+        "path": "/home/linjiw/lucid-sonic/manifests/ratchet_screen_20260831/treatment/curriculum_robustness_ne512_20260831_201524.json",
+        "run_count": 14,
+        "verified": true
+      },
+      {
+        "launcher_sha256": "308e24150e4d4f03d0abf0dc6a427063ac662904bb3a7765488a9bff63cd94ca",
+        "path": "/home/linjiw/lucid-sonic/manifests/ratchet_screen_20260831/fixed/curriculum_robustness_ne512_20260831_202312.json",
+        "run_count": 14,
+        "verified": true
+      }
+    ]
+  },
+  "joint_noninferiority": {
+    "progress_co_primary": {
+      "components": [
+        "in_envelope_auc",
+        "frontier_auc",
+        "lat_50ms"
+      ],
+      "criterion": "with exactly three paired training seeds, at least two must satisfy every named component's frozen noninferiority margin",
+      "num_paired_seeds": 1,
+      "paired_seeds": [
+        "8601"
+      ],
+      "per_seed": {
+        "8601": {
+          "components": {
+            "frontier_auc": true,
+            "in_envelope_auc": true,
+            "lat_50ms": true
+          },
+          "within_all_margins": true
+        }
+      },
+      "verdict": "screening_only",
+      "within_all_margin_seeds": 1
+    },
+    "success_and_progress": {
+      "components": [
+        "success_rate:in_envelope_auc",
+        "success_rate:frontier_auc",
+        "success_rate:lat_50ms",
+        "progress_rate:in_envelope_auc",
+        "progress_rate:frontier_auc",
+        "progress_rate:lat_50ms"
+      ],
+      "criterion": "with exactly three paired training seeds, at least two must satisfy every named component's frozen noninferiority margin",
+      "num_paired_seeds": 1,
+      "paired_seeds": [
+        "8601"
+      ],
+      "per_seed": {
+        "8601": {
+          "components": {
+            "progress_rate:frontier_auc": true,
+            "progress_rate:in_envelope_auc": true,
+            "progress_rate:lat_50ms": true,
+            "success_rate:frontier_auc": true,
+            "success_rate:in_envelope_auc": true,
+            "success_rate:lat_50ms": true
+          },
+          "within_all_margins": true
+        }
+      },
+      "verdict": "screening_only",
+      "within_all_margin_seeds": 1
+    },
+    "success_primary": {
+      "components": [
+        "in_envelope_auc",
+        "frontier_auc",
+        "lat_50ms"
+      ],
+      "criterion": "with exactly three paired training seeds, at least two must satisfy every named component's frozen noninferiority margin",
+      "num_paired_seeds": 1,
+      "paired_seeds": [
+        "8601"
+      ],
+      "per_seed": {
+        "8601": {
+          "components": {
+            "frontier_auc": true,
+            "in_envelope_auc": true,
+            "lat_50ms": true
+          },
+          "within_all_margins": true
+        }
+      },
+      "verdict": "screening_only",
+      "within_all_margin_seeds": 1
+    }
+  },
+  "kind": "lucid_ratchet_analysis",
+  "mechanism": {
+    "ignored_training_modes": [
+      "fixed"
+    ],
+    "per_seed": {
+      "8601": {
+        "configuration_gate": "pass",
+        "configured_monotonic": true,
+        "lambda_rows": 8000,
+        "pi_decrease_control": {
+          "actual_decrease_rows": 0,
+          "blocked_hold_violations": 0,
+          "blocked_pi_decrease_rows": 951,
+          "blocking_observed": true,
+          "guard_is_only_legal_decrease_gate": "pass",
+          "guard_trip_rows": 0,
+          "receipt_bind_count_consistent": true,
+          "receipt_ratchet_bind_rows": 951,
+          "transition_rows": 7990,
+          "unguarded_decrease_rows": 0
+        },
+        "reach_lambda_095_by_step_500": {
+          "deadline_step": 500,
+          "first_reach_step": 70,
+          "gate": "pass",
+          "threshold": 0.95
+        },
+        "rows": 8000,
+        "source": {
+          "curriculum_path": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260831_144022/seed_8601/lucid_ratchet_rg/curriculum_curriculum_comparison_ne1024_20260831_144022_s8601_lucid_ratchet_rg.jsonl",
+          "curriculum_sha256": "f1c334b00c0de4b8e70d57ae7817bbfe7d33eee9471fd376988d5a2e7d69d1e0",
+          "training_receipt": "/home/linjiw/lucid-sonic/manifests/curriculum_comparison_ne1024_20260831_144022.json"
+        },
+        "terminal_1000_high_lambda_exposure": {
+          "contiguous": true,
+          "end_step": 8000,
+          "gate": "pass",
+          "high_lambda_fraction": 1.0,
+          "high_lambda_iterations": 1000,
+          "high_lambda_threshold": 0.95,
+          "minimum_high_lambda_fraction": 0.95,
+          "observed_iterations": 1000,
+          "requested_iterations": 1000,
+          "start_step": 7001
+        }
+      }
+    },
+    "summary": {
+      "all_available_seeds_pass": true,
+      "blocking_observed_seeds": [
+        "8601"
+      ],
+      "interpretation": "A zero blocked-row count means the PI law did not request a logged decrease; it is not treated as a mechanism failure. Any actual lambda decrease must be guard-tripped, and at least 95% of the final 1000 logged iterations must be at lambda>=0.95.",
+      "per_seed_all_gates_pass": {
+        "8601": true
+      }
+    }
+  },
+  "not_yet_verified": [
+    "three-seed noninferiority verdict"
+  ],
+  "preregistered_decision": {
+    "capability_components": [
+      "success_rate:frontier_auc",
+      "success_rate:in_envelope_auc",
+      "progress_rate:frontier_auc",
+      "progress_rate:in_envelope_auc"
+    ],
+    "capability_components_pass": true,
+    "directional_claim_authorized": false,
+    "interpretation": "Targeted one-seed continuation gate only; no directional or three-seed noninferiority claim is authorized.",
+    "lat_50ms_is_secondary": true,
+    "mechanism_complete": true,
+    "mechanism_pass": true,
+    "paired_training_seeds": [
+      "8601"
+    ],
+    "status": "screen_pass"
+  },
+  "ratchet_vs_fixed": {
+    "progress_rate": {
+      "frontier_auc": {
+        "criterion": "with exactly three paired training seeds, at least two must have ratchet-minus-fixed >= -margin",
+        "margin": 0.02,
+        "margin_pts": 2.0,
+        "mean_delta": 0.01933268214634154,
+        "mean_delta_pts": 1.933268214634154,
+        "num_paired_seeds": 1,
+        "paired_seeds": [
+          "8601"
+        ],
+        "per_seed": {
+          "8601": {
+            "delta": 0.01933268214634154,
+            "delta_pts": 1.933268214634154,
+            "fixed": 0.954954427286187,
+            "ratchet": 0.9742871094325285,
+            "strictly_favorable": true,
+            "within_noninferiority_margin": true
+          }
+        },
+        "required_within_margin_seeds": null,
+        "strictly_favorable_seeds_descriptive": 1,
+        "verdict": "screening_only",
+        "within_margin_seeds": 1
+      },
+      "in_envelope_auc": {
+        "criterion": "with exactly three paired training seeds, at least two must have ratchet-minus-fixed >= -margin",
+        "margin": 0.01,
+        "margin_pts": 1.0,
+        "mean_delta": 0.00019897462334483862,
+        "mean_delta_pts": 0.019897462334483862,
+        "num_paired_seeds": 1,
+        "paired_seeds": [
+          "8601"
+        ],
+        "per_seed": {
+          "8601": {
+            "delta": 0.00019897462334483862,
+            "delta_pts": 0.019897462334483862,
+            "fixed": 0.9995385742076905,
+            "ratchet": 0.9997375488310354,
+            "strictly_favorable": true,
+            "within_noninferiority_margin": true
+          }
+        },
+        "required_within_margin_seeds": null,
+        "strictly_favorable_seeds_descriptive": 1,
+        "verdict": "screening_only",
+        "within_margin_seeds": 1
+      },
+      "lat_50ms": {
+        "criterion": "with exactly three paired training seeds, at least two must have ratchet-minus-fixed >= -margin",
+        "margin": 0.02,
+        "margin_pts": 2.0,
+        "mean_delta": -0.0012792968773283064,
+        "mean_delta_pts": -0.12792968773283064,
+        "num_paired_seeds": 1,
+        "paired_seeds": [
+          "8601"
+        ],
+        "per_seed": {
+          "8601": {
+            "delta": -0.0012792968773283064,
+            "delta_pts": -0.12792968773283064,
+            "fixed": 1.0,
+            "ratchet": 0.9987207031226717,
+            "strictly_favorable": false,
+            "within_noninferiority_margin": true
+          }
+        },
+        "required_within_margin_seeds": null,
+        "strictly_favorable_seeds_descriptive": 0,
+        "verdict": "screening_only",
+        "within_margin_seeds": 1
+      }
+    },
+    "success_rate": {
+      "frontier_auc": {
+        "criterion": "with exactly three paired training seeds, at least two must have ratchet-minus-fixed >= -margin",
+        "margin": 0.02,
+        "margin_pts": 2.0,
+        "mean_delta": 0.03125,
+        "mean_delta_pts": 3.125,
+        "num_paired_seeds": 1,
+        "paired_seeds": [
+          "8601"
+        ],
+        "per_seed": {
+          "8601": {
+            "delta": 0.03125,
+            "delta_pts": 3.125,
+            "fixed": 0.8818359375,
+            "ratchet": 0.9130859375,
+            "strictly_favorable": true,
+            "within_noninferiority_margin": true
+          }
+        },
+        "required_within_margin_seeds": null,
+        "strictly_favorable_seeds_descriptive": 1,
+        "verdict": "screening_only",
+        "within_margin_seeds": 1
+      },
+      "in_envelope_auc": {
+        "criterion": "with exactly three paired training seeds, at least two must have ratchet-minus-fixed >= -margin",
+        "margin": 0.01,
+        "margin_pts": 1.0,
+        "mean_delta": 0.001220703125,
+        "mean_delta_pts": 0.1220703125,
+        "num_paired_seeds": 1,
+        "paired_seeds": [
+          "8601"
+        ],
+        "per_seed": {
+          "8601": {
+            "delta": 0.001220703125,
+            "delta_pts": 0.1220703125,
+            "fixed": 0.997802734375,
+            "ratchet": 0.9990234375,
+            "strictly_favorable": true,
+            "within_noninferiority_margin": true
+          }
+        },
+        "required_within_margin_seeds": null,
+        "strictly_favorable_seeds_descriptive": 1,
+        "verdict": "screening_only",
+        "within_margin_seeds": 1
+      },
+      "lat_50ms": {
+        "criterion": "with exactly three paired training seeds, at least two must have ratchet-minus-fixed >= -margin",
+        "margin": 0.02,
+        "margin_pts": 2.0,
+        "mean_delta": -0.001953125,
+        "mean_delta_pts": -0.1953125,
+        "num_paired_seeds": 1,
+        "paired_seeds": [
+          "8601"
+        ],
+        "per_seed": {
+          "8601": {
+            "delta": -0.001953125,
+            "delta_pts": -0.1953125,
+            "fixed": 1.0,
+            "ratchet": 0.998046875,
+            "strictly_favorable": false,
+            "within_noninferiority_margin": true
+          }
+        },
+        "required_within_margin_seeds": null,
+        "strictly_favorable_seeds_descriptive": 0,
+        "verdict": "screening_only",
+        "within_margin_seeds": 1
+      }
+    }
+  },
+  "schema_version": 1,
+  "verified": [
+    "normalized trapezoidal success/progress AUCs computed without imputation",
+    "ratchet-minus-fixed comparisons paired on training seed",
+    "ratchet lambda trajectories audited from curriculum JSONL rows"
+  ]
+}

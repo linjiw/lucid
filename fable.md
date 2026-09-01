@@ -1717,3 +1717,45 @@ the exact training receipt; it will score treatment then fixed serially and
 write `lucid_ratchet_screen_analysis_s8601_20260831.json`. At iteration 568,
 lambda had first crossed 0.95 at iteration 70, remained at 1, and no guard had
 tripped. This is a live mechanism check, not a capability result.
+
+## 2026-08-31 20:15–22:32 — the monotone ratchet finished and passed its targeted screen
+
+The complete post-reboot chain exited cleanly. Seed-8601
+`lucid_ratchet_rg` trained from scratch for 8000/8000 iterations at 1024 envs
+in 20,075 seconds, exported its final checkpoint, and wrote a verified training
+receipt. The follow-up then scored the ratchet and existing seed-8601 fixed
+checkpoint on the same 14-cell clamped ladder with eval seed 8701 and 512
+episodes per cell. All 28 cells completed; checkpoint, panel, evaluator, and
+seed identities matched; no checkpoint changed.
+
+H_R0 passed in the strongest useful sense: lambda reached 0.95 at iteration 70,
+finished at 1, and stayed at or above 0.95 for 1000/1000 terminal iterations.
+The PI law requested 951 decreases. The ratchet blocked all 951, with zero guard
+trips, zero applied decreases, and zero unguarded decreases. The controller did
+not merely happen to avoid collapse; the constraint actively prevented the old
+wrong-direction behavior throughout training.
+
+The frozen one-seed H_R1 screen also passed. Ratchet-minus-fixed frontier
+success AUC was +3.125 points (0.9131 vs 0.8818), and restricted-mean progress
+AUC was +1.933 points (0.9743 vs 0.9550). In-envelope deltas were +0.122 and
++0.020 points. At 50 ms latency the ratchet was lower by 0.195 success points
+and 0.128 progress points, still inside the frozen 2-point margin. Every
+capability component passed.
+
+This is `screen_pass` but explicitly `screening_only`. Seed 8601 was selected
+after observing its historical latent-gap collapse, so one paired seed cannot
+authorize a directional, superiority, or three-seed noninferiority claim. The
+result permits confirmatory ratchet seeds 8600/8602 plus the missing fixed-8602
+comparator. It validates monotone frontier retention as a safety mechanism; it
+does not rehabilitate raw latent gap as an adaptive difficulty signal.
+
+The strict analysis additionally exposed a documentation hazard for the next
+stage: both evaluator receipts contain all 14 frozen run cells but their
+`protocol.presets` metadata still names the legacy three-preset protocol. The
+current analyzer audited the actual run set and the point estimates stand. Fix
+and version that metadata prospectively before confirmation; changing it also
+changes the pinned evaluator hash and therefore requires an amendment.
+
+`lucid-latest-report.md` is now the canonical Tier 1–4 status and evidence
+ledger. Final training, treatment, fixed, and analysis receipts are mirrored
+under `receipts/manifests/`.
