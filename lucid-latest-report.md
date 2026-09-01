@@ -1,8 +1,40 @@
-# LUCID latest report — Tier 1–4 status and ratchet screen
+# LUCID latest report — Tier 1–4 status and ratchet confirmation
 
-Snapshot: 2026-08-31 22:32 EDT. This is the current result and handoff ledger.
-It supersedes the live-process state in `lucid-handoff-2026-08-31.md` and the
-pre-result ending of `fable.md`.
+Snapshot: 2026-08-31 23:25 EDT. This is the current result and handoff ledger.
+It supersedes the older live-process state in `lucid-handoff-2026-08-31.md`
+and the pre-result ending of `fable.md`.
+
+## Confirmation package update
+
+The positive one-seed screen has now been converted into a prospective,
+reboot-safe three-seed continuation package. No new confirmation policy or
+capability cell had run when the amendment was frozen.
+
+- SONIC commit `ca057e658acc59773e798057980b827d65988441` hardens the analyzer,
+  checkpoint freezer, and serial confirmation driver. The claim-bearing code
+  runs from a clean detached worktree at `~/lucid-ratchet-confirm`; concurrent
+  untracked Tier-2 files cannot enter its import path or Git state.
+- The immutable [confirmation amendment](receipts/manifests/lucid_monotone_ratchet_confirmation_amendment_20260831.json)
+  has SHA-256 `2064bf7a16ca159092c6ebeabfbf09bc2fe3c1b30ce359a64505503a83786044`.
+  It preserves the parent endpoints, margins, seed mapping, panel, evaluator,
+  and component-wise 2-of-3 H_R2 decision.
+- Historical fixed seeds 8600/8601 now have explicit reconstructed bridge
+  receipts. Seed 8600 uses a clean byte-identical checkpoint bundle and the
+  real run config; the known invalid off-arm config beside the old artifact is
+  excluded and disclosed.
+- Preflight passed end to end: every frozen input hash, old seed-8601 receipt,
+  checkpoint identity, resolved config source/SHA, 14-cell run set, and
+  training contract reconciled.
+- The continuation will train exactly three new from-scratch cells in serial:
+  ratchet seed 8600, fixed seed 8602, and ratchet seed 8602. It freezes all six
+  claim-bearing checkpoints before scoring four new 14-cell ladders, then
+  combines them with the two immutable seed-8601 ladders for an 84-cell H_R2
+  analysis.
+
+This is a program continuation, not an independent blinded confirmation:
+seed 8601 was post-selected and fixed-8600 capability was already known.
+Even if all new deltas are positive, this design authorizes only the narrow
+stability/noninferiority conclusion. Superiority remains unauthorized.
 
 ## Executive verdict
 
@@ -201,10 +233,10 @@ instrument.
 | Workstream | Current truth |
 |---|---|
 | Reboot recovery | Partial seed-8602/off remains evidence only; do not resume it. Old campaign fixed-8602 and the original multi-seed ladder remain missing. |
-| Ratchet chain | Training, treatment evaluation, fixed evaluation, and strict analysis all complete; no process remains. |
-| GPU | Idle apart from desktop use. |
-| New code | Nested SONIC commit `3457718f30b74bd6bca9d7dd439be0e53dbbde43`. |
-| Focused validation | 144 focused committed tests pass. A broader committed practice-utility run passed 1,372 tests when concurrent untracked suites were excluded. |
+| Ratchet chain | Seed-8601 screen complete; three-seed H_R2 continuation preregistered and preflight-verified, with new GPU cells not yet scored at this snapshot. |
+| GPU | Idle apart from desktop use at the report lock; the serial confirmation driver is the next authorized owner. |
+| New code | Initial implementation `3457718`; hardened confirmation commit `ca057e658acc59773e798057980b827d65988441`. |
+| Focused validation | 28 confirmation tests pass; all 1,385 tracked practice-utility tests pass with four existing warnings. Three failures belong only to concurrent untracked Tier-2 sampler tests and are excluded. |
 | Repository checks | `git diff --check` passes; full `make run-checks` remains blocked by unrelated pre-existing isort failures. |
 
 The launch began at commit `fb57e86`, while the terminal receipt records
@@ -214,10 +246,12 @@ byte-identical. Keep this disclosed as a timing deviation; do not rewrite it.
 
 ## Ordered next plan
 
-1. **Version the confirmation instrument.** File a prospective amendment for
-   the evaluator metadata correction while preserving the exact 14-cell metric
-   semantics, panel, seeds, endpoints, and frozen margins.
-2. **Confirm Tier 1.** Train ratchet seeds 8600 and 8602 from scratch and the
+1. **Confirmation instrument locked — complete.** The prospective amendment
+   preserves the exact 14-cell semantics and treats stale legacy
+   `protocol.presets` prose as non-authoritative; the immutable evaluator and
+   audited run set remain binding so seed-8601 evidence is byte-identically
+   reusable.
+2. **Confirm Tier 1 — authorized next.** Train ratchet seeds 8600 and 8602 from scratch and the
    missing fixed seed 8602; evaluate all paired seeds on that exact instrument.
    Apply the frozen 2-of-3 rule. Do not call the current +3.125-point result a
    superiority finding.

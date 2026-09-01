@@ -1,0 +1,82 @@
+{
+  "kind": "lucid_historical_training_cell_bridge",
+  "schema_version": 1,
+  "created_at": "2026-08-31T23:12:19-04:00",
+  "purpose": "Reconstruct the complete seed-8600 fixed cell for the monotone-ratchet confirmation without claiming that the reboot-interrupted parent campaign completed.",
+  "source_campaign": "curriculum_comparison_ne1024_20260829_000249",
+  "source_preregistration": "/home/linjiw/lucid-sonic/manifests/lucid_single_motion_campaign_preregistration_20260829.json",
+  "provenance_limitations": [
+    "This is a reconstructed bridge, not the missing campaign-completion receipt.",
+    "The checkpoint was trained in the earlier campaign generation and fixed-arm performance for seed 8600 was observed before this continuation.",
+    "The config.yaml beside the historical artifact is an invalid off-arm export and is explicitly excluded; the SHA-pinned live run config is copied into the confirmation bundle."
+  ],
+  "config": {
+    "checkpoint": null,
+    "from_scratch": true,
+    "num_envs": 1024,
+    "iterations": 8000,
+    "warmup_iterations": 10,
+    "seeds": [
+      8600
+    ],
+    "modes": [
+      "fixed"
+    ],
+    "motion_file": "/home/linjiw/lucid-sonic/pools/subsets/m1_hob002/robot_filtered",
+    "smpl_motion_file": "dummy",
+    "termination_thresholds": "default",
+    "consolidation_fraction": 0,
+    "max_delay_steps": 8,
+    "controller": {
+      "delta_target": 0.778,
+      "kp": 1.0,
+      "ki": 0.02,
+      "alpha": 0.05,
+      "integral_max": 1.0,
+      "return_floor": 8.0
+    }
+  },
+  "arms": {
+    "curriculum_comparison_ne1024_20260829_000249_s8600_fixed": {
+      "seed": 8600,
+      "mode": "fixed",
+      "branch_id": "curriculum_comparison_ne1024_20260829_000249_s8600_fixed",
+      "complete": true,
+      "checkpoint_exported": true,
+      "iterations_parsed": 8000,
+      "curriculum_rows": 8000,
+      "checkpoint": "/home/linjiw/lucid-sonic/artifacts/ratchet_confirmation_20260831/baseline/fixed_s8600/final_checkpoint.pt",
+      "capsule": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260829_000249/seed_8600/fixed/capsules/curriculum_comparison_ne1024_20260829_000249_s8600_fixed_final.capsule.pt",
+      "curriculum_path": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260829_000249/seed_8600/fixed/curriculum_curriculum_comparison_ne1024_20260829_000249_s8600_fixed.jsonl",
+      "arm_spec": {
+        "run_dir": "/home/linjiw/lucid/GR00T-WholeBodyControl/logs_rl/lucid-campaign/manager/universal_token/all_modes/sonic_release_test-20260829_063238",
+        "curriculum_mode": "fixed",
+        "anchor_ratio": 0.0,
+        "spread_strata": 1,
+        "return_guard": "absolute",
+        "monotonic": false,
+        "fixed_lambda": 1.0,
+        "allow_extrapolation": false,
+        "margin": null
+      }
+    }
+  },
+  "sha256": {
+    "copied_checkpoint": "e7fe72a0a48d6d4d534368ee9870b7a5e382bf2c51bb025d35eadee0818aaa8d",
+    "source_checkpoint": "e7fe72a0a48d6d4d534368ee9870b7a5e382bf2c51bb025d35eadee0818aaa8d",
+    "resolved_config": "dc69ca702713318ddedb41ca100bc6ddff89e3d780bdb9c3e62af7d7cefe2aad",
+    "curriculum": "34a846347244f4ec3d39cd14cae25c470e9e7b48ef73ba91a6267f68526dfad8",
+    "final_capsule": "33dff3477b2acf63f1731d7cc84414b516b6ccc45a97fe6cbabd969e80a5d602",
+    "motion": "a7f10e7aa26e53cc4e346151d4ccd74e932e3aafa1cfaaac77dab8b8eec40929"
+  },
+  "verified": [
+    "the historical fixed cell reached exactly 8000 iterations and has 8000 valid curriculum rows",
+    "the clean bundle checkpoint is byte-identical to the source exported checkpoint",
+    "the final capsule, curriculum, motion, and true run config are SHA-pinned",
+    "the invalid artifact-sibling config is excluded from evaluation provenance"
+  ],
+  "not_yet_verified": [
+    "the new matched 14-cell evaluation for seed 8600",
+    "the three-seed H_R2 noninferiority decision"
+  ]
+}

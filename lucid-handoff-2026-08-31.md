@@ -1,4 +1,68 @@
-# LUCID handoff — post-reboot Tier-1 ratchet screen
+# LUCID handoff — Tier-1 ratchet confirmation
+
+> Confirmation update (2026-08-31 23:25 EDT): the one-seed screen passed and
+> the parent-preregistered H_R2 continuation is now frozen, committed, and
+> preflight-verified. This section supersedes the older process snapshot below.
+
+## Active confirmation handoff
+
+The exact claim-bearing SONIC state is commit
+`ca057e658acc59773e798057980b827d65988441`
+(`research(practice-utility): harden ratchet confirmation`). It is checked out
+detached and clean at `/home/linjiw/lucid-ratchet-confirm`. Do not launch the
+confirmation from the dirty source worktree.
+
+Binding prospective amendment:
+
+- external: `~/lucid-sonic/manifests/lucid_monotone_ratchet_confirmation_amendment_20260831.json`
+- repository mirror: `receipts/manifests/lucid_monotone_ratchet_confirmation_amendment_20260831.json`
+- SHA-256: `2064bf7a16ca159092c6ebeabfbf09bc2fe3c1b30ce359a64505503a83786044`
+- preflight: passed, including every frozen file hash and the exact old/new
+  config provenance contract
+
+The serial driver is
+`/home/linjiw/lucid-ratchet-confirm/scripts/practice_utility/run_ratchet_confirmation.sh`.
+Its only valid launch environment is:
+
+```bash
+LUCID_RATCHET_CONFIRM_PREREG_SHA256=2064bf7a16ca159092c6ebeabfbf09bc2fe3c1b30ce359a64505503a83786044 \
+  /home/linjiw/lucid-ratchet-confirm/scripts/practice_utility/run_ratchet_confirmation.sh
+```
+
+The driver performs one-cell receipt boundaries in this order:
+
+1. validate the immutable seed-8601 screen and fixed 8600/8601 historical
+   bridges;
+2. mark reused fixed-8600, fixed-8601, and ratchet-8601 checkpoints read-only;
+3. train/freeze ratchet seed 8600 from scratch;
+4. train/freeze missing fixed seed 8602 from scratch;
+5. train/freeze ratchet seed 8602 from scratch;
+6. only after all six checkpoints are frozen, score ratchet/fixed seed 8600
+   with eval seed 8700 and ratchet/fixed seed 8602 with eval seed 8702;
+7. reuse the exact two seed-8601 eval-seed-8701 receipts and write the strict
+   84-cell H_R2 analysis.
+
+Canonical continuation root:
+`~/lucid-sonic/manifests/ratchet_confirmation_20260831/`. Training receipts,
+evaluation receipts, frozen-checkpoint manifests, and the final
+`lucid_ratchet_confirmation_analysis.json` live below it. Logs and bulky eval
+artifacts remain under `~/lucid-sonic/outputs/ratchet_confirmation_20260831/`
+and `~/lucid-sonic/artifacts/ratchet_confirmation_eval_20260831/`.
+
+Recovery is deliberately fail-closed. A `.started` directory without exactly
+one complete receipt means the cell was interrupted: preserve it, do not
+resume or auto-retrain, and file a new deviation before any replacement. A
+completed receipt may be reused only after the driver revalidates its hashes,
+config source, seed map, and full run set. An existing final analysis is
+recomputed into a temporary file and must match every scientific field before
+reuse.
+
+H_R2 passes only if all three ratchet H_R0 trajectories pass and each of the
+four AUC components separately stays within its frozen margin in at least two
+of three paired seeds. Latency is secondary. A pass authorizes
+stability/noninferiority only; a fail retains fixed DR as the baseline. Tier 2
+is outside this driver and requires a separate prospective preregistration
+after H_R2 is immutable.
 
 > Completion update (2026-08-31 22:32 EDT): the live chain described below
 > finished successfully. The ratchet passed its targeted seed-8601 screen;

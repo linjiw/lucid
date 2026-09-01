@@ -1,0 +1,302 @@
+{
+  "kind": "lucid_monotone_ratchet_confirmation_amendment",
+  "schema_version": 1,
+  "created_at": "2026-08-31T23:20:00-04:00",
+  "prospective_timing": {
+    "written_after_seed_8601_screen": true,
+    "written_before_any_new_confirmation_training_or_evaluation": true,
+    "known_when_written": [
+      "The targeted seed-8601 screen passed H_R0 and H_R1.",
+      "Seed-8601 ratchet-minus-fixed point deltas were +3.125 success points and +1.933 restricted-mean-progress points on frontier AUC.",
+      "Historical fixed seed-8600 capability had already been observed in the interrupted parent campaign."
+    ],
+    "scope": "Activate only the parent-preregistered conditional H_R2 continuation. No endpoint, margin, seed, panel, evaluator, or decision rule is changed."
+  },
+  "parent": {
+    "preregistration": "/home/linjiw/lucid-sonic/manifests/lucid_monotone_ratchet_preregistration_20260831.json",
+    "sha256": "11c2dca351e38db7b240728e5f57069a731410e5517c9f36b1d96c125962da32",
+    "endpoint_clarification": "/home/linjiw/lucid-sonic/manifests/lucid_monotone_ratchet_endpoint_clarification_20260831.json",
+    "endpoint_clarification_sha256": "d371f550c1e7c8f092eaa199c9fd369d6514ecf4f5aaa3d83c42d32b0dd5ef7c",
+    "activation_condition": "H_R0 and H_R1 both pass on the targeted seed-8601 screen",
+    "activation_observed": true,
+    "screen_analysis": "/home/linjiw/lucid/receipts/manifests/lucid_ratchet_screen_analysis_s8601_20260831.json",
+    "screen_analysis_sha256": "7c41e42ab378aeee1d22d57f113af7e09f2ed7672e124ed2068b2b5fa4e066d4"
+  },
+  "claim_scope": {
+    "classification": "frozen three-seed program continuation, not an independent blinded efficacy confirmation",
+    "selection_disclosure": "Seed 8601 was selected after its historical lucid_rg collapse was observed and was evaluated before this amendment.",
+    "comparator_disclosure": "Fixed seed-8600 performance was observed previously; fixed seeds 8600/8601 come from the earlier campaign generation, while fixed seed 8602 is newly trained.",
+    "authorized_if_H_R2_passes": "A narrow same-task stability/noninferiority statement: the monotone ratchet deletes PI anti-gating while preserving fixed-DR capability under the frozen component-wise rule.",
+    "never_authorized_by_this_continuation": [
+      "superiority over fixed DR",
+      "generalization beyond the single training motion and its 512 aliases",
+      "hardware or real-world transfer",
+      "a claim that the latent gap became a calibrated difficulty signal"
+    ],
+    "positive_deltas": "descriptive only"
+  },
+  "training_design": {
+    "task": "walk_hands_on_back_loop_002__A066_M",
+    "num_envs": 1024,
+    "iterations": 8000,
+    "from_scratch_for_new_cells": true,
+    "no_resume": true,
+    "ratchet_mode": "lucid_ratchet_rg",
+    "fixed_mode": "fixed",
+    "new_cells_in_frozen_order": [
+      "seed 8600 lucid_ratchet_rg",
+      "seed 8602 fixed",
+      "seed 8602 lucid_ratchet_rg"
+    ],
+    "reused_cells": [
+      "seed 8600 fixed via reconstructed historical bridge",
+      "seed 8601 fixed via reconstructed historical bridge",
+      "seed 8601 lucid_ratchet_rg via the completed screen receipt"
+    ],
+    "operational_unblinding_control": "All three new training cells and all six claim-bearing checkpoints must be complete, SHA-pinned, and marked evaluation-only before any new capability cell is scored.",
+    "reboot_rule": "A start marker without one complete validated receipt is fail-closed. Preserve the partial cell and file a deviation; do not resume or silently retrain it."
+  },
+  "ratchet_contract": {
+    "warmup_iterations": 10,
+    "lambda_bounds": [
+      0.0,
+      1.0
+    ],
+    "monotonic": true,
+    "return_guard": "relative",
+    "return_relative_drop": 0.25,
+    "return_window": 8,
+    "spread_strata": 1,
+    "anchor_ratio": 0.0,
+    "consolidation_fraction": 0.0,
+    "allow_extrapolation": false,
+    "max_delay_steps": 8,
+    "controller": {
+      "signal": "frozen TemporalVAE gap q90",
+      "delta_target": 0.778,
+      "kp": 1.0,
+      "ki": 0.02,
+      "alpha": 0.05,
+      "integral_max": 1.0,
+      "return_floor": 8.0
+    }
+  },
+  "baseline_bridges": {
+    "fixed_seed_8600": {
+      "receipt": "/home/linjiw/lucid-sonic/manifests/ratchet_confirmation_20260831/baseline/fixed_s8600_bridge.json",
+      "receipt_sha256": "1db66d9d29244b7768416bd5bc7f027a98a5ed5af8942b6f9735818b417b5f46",
+      "checkpoint_bundle": "/home/linjiw/lucid-sonic/artifacts/ratchet_confirmation_20260831/baseline/fixed_s8600/final_checkpoint.pt",
+      "checkpoint_sha256": "e7fe72a0a48d6d4d534368ee9870b7a5e382bf2c51bb025d35eadee0818aaa8d",
+      "resolved_config": "/home/linjiw/lucid-sonic/artifacts/ratchet_confirmation_20260831/baseline/fixed_s8600/config.yaml",
+      "resolved_config_sha256": "dc69ca702713318ddedb41ca100bc6ddff89e3d780bdb9c3e62af7d7cefe2aad",
+      "limitation": "Reconstructed historical bridge, not a parent-campaign completion receipt. The invalid off-arm config beside the historical artifact is excluded."
+    },
+    "fixed_seed_8601": {
+      "receipt": "/home/linjiw/lucid-sonic/manifests/ratchet_confirmation_20260831/baseline/fixed_s8601_bridge.json",
+      "receipt_sha256": "487f73ac6dd3c5ece5ae0ed5eb5467ee66a50616ea231805aabbf360a1608c85",
+      "checkpoint_sha256": "227a1c2f9822e8968fd17810ae2a2ea87193d0f5c00d052c37bb7f212df26bb1",
+      "resolved_config_sha256": "d8e20c259517bba97a0c6779e7537e52f85327124466cd46dd12d7137671d98d"
+    }
+  },
+  "evaluation": {
+    "instrument_version": "ratchet-frontier-v1",
+    "evaluator_sha256": "308e24150e4d4f03d0abf0dc6a427063ac662904bb3a7765488a9bff63cd94ca",
+    "panel_receipt": "/home/linjiw/lucid-sonic/manifests/replicate_panel_panel_hob002_k512.json",
+    "panel_sha256": "e2e61933405e6701b0563eb4df793b6faf5c90d8ae5b7d8fc1e11f47142aefd7",
+    "num_envs": 512,
+    "evaluation_seed_by_training_seed": {
+      "8600": 8700,
+      "8601": 8701,
+      "8602": 8702
+    },
+    "presets": [
+      "phys_000",
+      "phys_025",
+      "phys_050",
+      "phys_075",
+      "phys_100",
+      "phys_125",
+      "phys_150",
+      "phys_175",
+      "phys_200",
+      "lat_10ms",
+      "lat_20ms",
+      "lat_30ms",
+      "lat_40ms",
+      "lat_50ms"
+    ],
+    "new_receipts": [
+      "seed 8600 lucid_ratchet_rg at eval seed 8700",
+      "seed 8600 fixed at eval seed 8700",
+      "seed 8602 lucid_ratchet_rg at eval seed 8702",
+      "seed 8602 fixed at eval seed 8702"
+    ],
+    "reused_receipts": [
+      "seed 8601 lucid_ratchet_rg at eval seed 8701",
+      "seed 8601 fixed at eval seed 8701"
+    ],
+    "final_cell_count": 84,
+    "config_provenance_gate": "Every receipt must bind protocol.resolved_training_config.source and SHA-256 to the supplied frozen config.",
+    "legacy_metadata_disclosure": "Legacy protocol.presets prose is stale and non-authoritative. The immutable evaluator SHA and the exact audited set of 14 completed run presets are binding. This prospective continuation does not repair that metadata because doing so would change the evaluator and prevent byte-identical reuse of the seed-8601 screen.",
+    "co_primary": [
+      "normalized trapezoidal success_rate AUC",
+      "normalized trapezoidal progress_rate AUC (restricted-mean progress)"
+    ],
+    "frontier_grid": [
+      "phys_125",
+      "phys_150",
+      "phys_175",
+      "phys_200"
+    ],
+    "in_envelope_grid": [
+      "phys_000",
+      "phys_025",
+      "phys_050",
+      "phys_075",
+      "phys_100"
+    ],
+    "secondary_nonbinding": [
+      "lat_50ms success_rate",
+      "lat_50ms progress_rate",
+      "per-cell tables and failure-time summaries"
+    ],
+    "excluded_outcomes": [
+      "training return",
+      "unmasked eval/all MPJPE",
+      "latent gap"
+    ]
+  },
+  "binding_decision": {
+    "H_R0": "Each of all three ratchet seeds must reach lambda>=0.95 by iteration 500, contain no applied unguarded decrease, and spend at least 95% of the final 1000 iterations at lambda>=0.95, with complete 8000-row telemetry.",
+    "H_R2": "For each of four components separately, at least 2 of 3 paired training seeds must be within its noninferiority margin.",
+    "components": {
+      "frontier_success_auc": 0.02,
+      "frontier_progress_auc": 0.02,
+      "in_envelope_success_auc": 0.01,
+      "in_envelope_progress_auc": 0.01
+    },
+    "pass": "All ratchet H_R0 gates pass and all four H_R2 components pass the separate 2-of-3 rule.",
+    "fail": "Any ratchet H_R0 gate fails or any one H_R2 component fails its separate 2-of-3 rule.",
+    "no_imputation": true,
+    "no_p_value_at_n3": true,
+    "superiority_preregistered": false
+  },
+  "tier_2_separation": {
+    "included_in_this_driver": false,
+    "gate": "Tier 2 may be preregistered and launched only after the immutable H_R2 analysis is written.",
+    "panel_reuse_limit": "This confirmation panel may not be used to tune a Tier-2 threshold or sampler; Tier 2 requires its own prospective design and claim scope."
+  },
+  "frozen_inputs": {
+    "parent_preregistration": {
+      "path": "/home/linjiw/lucid-sonic/manifests/lucid_monotone_ratchet_preregistration_20260831.json",
+      "sha256": "11c2dca351e38db7b240728e5f57069a731410e5517c9f36b1d96c125962da32"
+    },
+    "endpoint_clarification": {
+      "path": "/home/linjiw/lucid-sonic/manifests/lucid_monotone_ratchet_endpoint_clarification_20260831.json",
+      "sha256": "d371f550c1e7c8f092eaa199c9fd369d6514ecf4f5aaa3d83c42d32b0dd5ef7c"
+    },
+    "screen_analysis": {
+      "path": "/home/linjiw/lucid/receipts/manifests/lucid_ratchet_screen_analysis_s8601_20260831.json",
+      "sha256": "7c41e42ab378aeee1d22d57f113af7e09f2ed7672e124ed2068b2b5fa4e066d4"
+    },
+    "screen_training": {
+      "path": "/home/linjiw/lucid-sonic/manifests/curriculum_comparison_ne1024_20260831_144022.json",
+      "sha256": "72d8f5cec69790e7ee34c867784c062e6abde68ee6f592ea635b225e51e5a169"
+    },
+    "screen_ratchet_evaluation": {
+      "path": "/home/linjiw/lucid-sonic/manifests/ratchet_screen_20260831/treatment/curriculum_robustness_ne512_20260831_201524.json",
+      "sha256": "82d918525b600fea25d415d6d3d17c0cf6c2400905c9f37428548a305b591b9b"
+    },
+    "screen_fixed_evaluation": {
+      "path": "/home/linjiw/lucid-sonic/manifests/ratchet_screen_20260831/fixed/curriculum_robustness_ne512_20260831_202312.json",
+      "sha256": "1e4412413d45bc22384dc35924a932d6d41d745d62de0f2cd81df19ddb06cbb2"
+    },
+    "panel_receipt": {
+      "path": "/home/linjiw/lucid-sonic/manifests/replicate_panel_panel_hob002_k512.json",
+      "sha256": "e2e61933405e6701b0563eb4df793b6faf5c90d8ae5b7d8fc1e11f47142aefd7"
+    },
+    "motion": {
+      "path": "/home/linjiw/lucid-sonic/pools/subsets/m1_hob002/robot_filtered/walk_hands_on_back_loop_002__A066_M.pkl",
+      "sha256": "a7f10e7aa26e53cc4e346151d4ccd74e932e3aafa1cfaaac77dab8b8eec40929"
+    },
+    "encoder": {
+      "path": "/home/linjiw/lucid-sonic/artifacts/lucid_encoder_debug512.pt",
+      "sha256": "a4195a6e49e4ec7098f58be4b04f464bbb14a9ce6c20ff508678faf4428a879d"
+    },
+    "fixed_seed_8600_bridge": {
+      "path": "/home/linjiw/lucid-sonic/manifests/ratchet_confirmation_20260831/baseline/fixed_s8600_bridge.json",
+      "sha256": "1db66d9d29244b7768416bd5bc7f027a98a5ed5af8942b6f9735818b417b5f46"
+    },
+    "fixed_seed_8601_bridge": {
+      "path": "/home/linjiw/lucid-sonic/manifests/ratchet_confirmation_20260831/baseline/fixed_s8601_bridge.json",
+      "sha256": "487f73ac6dd3c5ece5ae0ed5eb5467ee66a50616ea231805aabbf360a1608c85"
+    },
+    "fixed_seed_8600_checkpoint_bundle": {
+      "path": "/home/linjiw/lucid-sonic/artifacts/ratchet_confirmation_20260831/baseline/fixed_s8600/final_checkpoint.pt",
+      "sha256": "e7fe72a0a48d6d4d534368ee9870b7a5e382bf2c51bb025d35eadee0818aaa8d"
+    },
+    "fixed_seed_8600_config": {
+      "path": "/home/linjiw/lucid-sonic/artifacts/ratchet_confirmation_20260831/baseline/fixed_s8600/config.yaml",
+      "sha256": "dc69ca702713318ddedb41ca100bc6ddff89e3d780bdb9c3e62af7d7cefe2aad"
+    },
+    "fixed_seed_8601_checkpoint": {
+      "path": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260829_000249/seed_8601/fixed/final_checkpoint.pt",
+      "sha256": "227a1c2f9822e8968fd17810ae2a2ea87193d0f5c00d052c37bb7f212df26bb1"
+    },
+    "fixed_seed_8601_config": {
+      "path": "/home/linjiw/lucid/GR00T-WholeBodyControl/logs_rl/lucid-campaign/manager/universal_token/all_modes/sonic_release_test-20260830_002425/config.yaml",
+      "sha256": "d8e20c259517bba97a0c6779e7537e52f85327124466cd46dd12d7137671d98d"
+    },
+    "ratchet_seed_8601_checkpoint": {
+      "path": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260831_144022/seed_8601/lucid_ratchet_rg/final_checkpoint.pt",
+      "sha256": "7df270768f6d4c424fb7f8d82516e516fed154dc3a6c4ef7d5f597b72a689a41"
+    },
+    "ratchet_seed_8601_config": {
+      "path": "/home/linjiw/lucid/GR00T-WholeBodyControl/logs_rl/lucid-campaign/manager/universal_token/all_modes/sonic_release_test-20260831_144024/config.yaml",
+      "sha256": "3e0e4d3b0e2dd2f7a9abd57d61eb90daceb3b95bb2154d238005b15ff8776727"
+    }
+  },
+  "code_state": {
+    "git_sha": "ca057e658acc59773e798057980b827d65988441",
+    "worktree": "/home/linjiw/lucid-ratchet-confirm",
+    "clean_detached_worktree_required": true,
+    "file_sha256": {
+      "gear_sonic/research/practice_utility/dr_controller.py": "c70a7db5c21474a7e2daeaeb6759fa634aff82d0599b2fc26dfbfc9261b14f15",
+      "gear_sonic/research/practice_utility/dr_curriculum.py": "07d5abdc3011de1173321c4627db9d9e14d35c9aafb452843a65ed0ae21fbd74",
+      "gear_sonic/research/practice_utility/tace.py": "8f176ee152d0abbbe7af69741f1626be51eb723a307f78197c16c07fdd53ead0",
+      "gear_sonic/research/practice_utility/robustness_metrics.py": "d987205c70e85ec583e0085c65c5c96a6d40be1cd0e3516f8e9edcf225230c6f",
+      "scripts/practice_utility/run_curriculum_comparison.py": "a63347c16f7b1f1c7f8a12f2afacd6ea293bf565e639db2776703012901307fa",
+      "scripts/practice_utility/run_curriculum_robustness_eval.py": "308e24150e4d4f03d0abf0dc6a427063ac662904bb3a7765488a9bff63cd94ca",
+      "scripts/practice_utility/analyze_ratchet.py": "f2f90c038ce560909ca18694d91399e29383352bcc8d3e2e8cea4b25fa5f93d0",
+      "scripts/practice_utility/freeze_training_checkpoint.py": "9c07e6894c9a56392bf7c1485f065b67b8259a2f45315043e593c2bfbe519dbb",
+      "scripts/practice_utility/run_ratchet_confirmation.sh": "bb27f15ebacef06077ccd1aa7487984eeb4ed87003d806d8f530c82c62eba957",
+      "tests/practice_utility/test_analyze_ratchet.py": "f6a561cb4f7920f53122c7b5b85c4352b49a5b5c0e0b67f94ed4af1e2fd5d905",
+      "tests/practice_utility/test_freeze_training_checkpoint.py": "40d3ef8563f4d13cca929d25a3c3c51a52a8500228ba362d9f8160b4afe29abf",
+      "tests/practice_utility/test_ratchet_confirmation_driver.py": "a97ed42306fd6f86d9cd7855ecb03739284ab5429febaf71d02175690a7cbfa1"
+    }
+  },
+  "validation_before_launch": {
+    "focused_confirmation_tests": "28 passed",
+    "tracked_practice_utility_suite": "1385 passed, 4 existing warnings",
+    "full_directory_note": "The directory-wide run additionally collected concurrent untracked Tier-2 sampler tests and reported 3 failures there; those files are excluded from this commit and this experiment.",
+    "screen_replay": "28/28 cells, identical point estimates, screen_pass, complete 8000-row mechanism telemetry",
+    "bash_syntax": "pass",
+    "ruff": "pass",
+    "black": "pass",
+    "git_diff_check": "pass",
+    "independent_reviews": "code and science reviews found no remaining blocker after exact config-source/SHA binding was added"
+  },
+  "verified": [
+    "the clean detached worktree matches the pinned commit and is free of tracked and untracked changes",
+    "the hardened analyzer exactly replays the immutable seed-8601 evidence without changing any scientific endpoint",
+    "all historical comparator bridges and their true configs are explicit and SHA-pinned",
+    "the evaluator remains byte-identical to the screen instrument",
+    "the launch driver freezes all six checkpoints before new capability evaluation and fails closed after interrupted starts"
+  ],
+  "not_yet_verified": [
+    "completion and H_R0 for new ratchet seeds 8600 and 8602",
+    "completion of the missing fixed seed-8602 comparator",
+    "the 84-cell three-seed H_R2 decision",
+    "any Tier-2 benefit"
+  ]
+}
