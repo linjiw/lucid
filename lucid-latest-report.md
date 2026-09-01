@@ -1,6 +1,6 @@
 # LUCID latest report — Tier 1–4 status and ratchet confirmation
 
-Snapshot: 2026-09-01 11:37 EDT. This is the current result and handoff ledger.
+Snapshot: 2026-09-01 14:45 EDT. This is the current result and handoff ledger.
 It supersedes the older live-process state in `lucid-handoff-2026-08-31.md`
 and the pre-result ending of `fable.md`; the current operational companion is
 `lucid-handoff-2026-09-01.md`.
@@ -111,6 +111,16 @@ relative to the seed-8601 fixed baseline, the ratchet gained 3.125 percentage
 points of frontier success AUC and 1.933 points of restricted-mean progress AUC.
 Those gains are descriptive, not yet a superiority claim.
 
+**Superseded 2026-09-01 14:45.** The `+3.125` figure must no longer be
+described as promising. The ratchet's applied lambda is exactly 1.0 for
+iterations 101-8000, so it and `fixed` share an identical training
+distribution over 98.75% of training; the gap equals the full range of the
+four-arm identical-exposure cluster and is not distinguishable from seed
+noise. See "Zero-GPU findings of 2026-09-01" below. The Tier-1 contribution is
+the deletion of the collapse mode (2 of 6 unconstrained cells evacuate
+difficulty terminally; 0 of 3 ratchet cells move down at all), not a frontier
+gain over fixed.
+
 The scientific status is therefore deliberately narrower than “solved”:
 
 - **Mechanism:** pass. The ratchet deleted the observed collapse path.
@@ -202,6 +212,121 @@ The result also reinforces three earlier findings:
 3. Seed variation is material. Historical fixed seed 8600 had frontier success
    AUC 0.925, while fixed seed 8601 has 0.882. One paired seed cannot establish
    a training-procedure effect.
+
+## Zero-GPU findings of 2026-09-01 (reframes Tier 1)
+
+Three results were established from artifacts already on disk, while the H_R2
+chain continued to train. They are preregistered in
+[exposure law](receipts/manifests/lucid_frontier_exposure_law_preregistration_20260901.json),
+[grid v2](receipts/manifests/lucid_frontier_grid_v2_preregistration_20260901.json)
+and their [amendment](receipts/manifests/lucid_frontier_preregistration_amendment_20260901.json)
+(commits `c9ccedb`, `4c40504`).
+
+### 1. The ratchet is distributionally identical to fixed
+
+`lucid_ratchet_rg` seed 8601 holds exactly one distinct applied lambda over
+iterations 101-8000, equal to 1.0. The 951 blocked PI decrease requests never
+moved the applied lambda by a float epsilon.
+
+The ratchet and fixed arms therefore share an **identical training
+distribution over 98.75% of training**, differing only by a ~78-iteration
+warm-up ramp and RNG stream divergence. Two consequences follow:
+
+- H_R2 noninferiority is close to structurally guaranteed and carries little
+  information. It should be reported as a safety check, not a hard-won pass.
+- The `+3.125` point seed-8601 gap is exactly the full range of the four-arm
+  identical-exposure cluster (SD 1.57 pts). It is not distinguishable from
+  seed noise, and no evaluation can make it a superiority result.
+- A "fixed plus warm-up" control arm is unnecessary; the question is already
+  settled arithmetically at zero GPU cost.
+
+The ratchet's informative comparator is therefore the **unconstrained
+controller**, not fixed.
+
+### 2. Anti-gating frequency, and what it costs
+
+| arm class | 8,000-iteration cells | any downward lambda movement | terminal evacuation |
+|---|---:|---:|---:|
+| unconstrained (`lucid_rg`, `lucid_s4_rg`) | 6 | 6 | **2** |
+| monotone ratchet | 3 | **0** | 0 |
+
+The two evacuations were total: `lucid_rg` seed 8601 ended at lambda 0.062 and
+`lucid_s4_rg` seed 8600 at lambda 0.012. The failure is arm-independent -- seed
+8600 killed `s4_rg` while seed 8601 killed `lucid_rg`. This corroborates the
+2/6 ledger correction already recorded in the August preregistration. The
+ratchet's zero is by construction, not by luck.
+
+Harmonized onto the frozen `phys_125`-`phys_200` grid, the one scored collapse
+cost **-7.97 points** of frontier success AUC between its intact h6000 capsule
+(0.7770) and its collapsed final checkpoint (0.6973).
+
+### 3. Training return is inverted, not merely uninformative
+
+| arm | final lambda | mean return, last 500 | frontier success AUC |
+|---|---:|---:|---:|
+| `lucid_ratchet_rg` s8601 | 1.000 | 10.981 | 0.9131 |
+| `lucid_rg` s8600 | 1.000 | 11.268 | 0.8828 |
+| `lucid_s4_rg` s8600 | 0.012 | 14.401 | 0.6973 |
+| `lucid_rg` s8601 | 0.062 | 15.286 | unscored |
+
+The two collapsed arms carry the two highest terminal returns; the ratchet
+carries the lowest return and the highest robustness. The mechanism is direct:
+the controller evacuates difficulty, environments get easier, and return rises
+exactly as robustness falls. Three scored pairs is suggestive, not established;
+the mechanism is the load-bearing part.
+
+### 4. The exposure law is NOT established, and P3 is the test
+
+A regression of frontier success AUC on recency-weighted exposure fits at
+R-squared 0.9882. **That is an artifact, not evidence.** The five
+non-stratified points alone give residual SD 0.015709 -- equal to the replicate
+noise floor -- and adding the two stratified points raises residual SD to
+0.018306. Lack-of-fit F(2,3) is 1.90 against F_crit 9.55. Only three of seven
+points carry exposure leverage, exactly one arm in the fit is stratified, and
+the two stratified points are the same run at 6000 and 8000 iterations.
+
+Recency is likewise unidentified: uniform mean exposure scores 0.9806, and a
+boxcar trailing mean beats the exponential kernel out of sample (LOO Q-squared
+0.977 against 0.969). The phrase "recency-weighted" is not yet earned.
+
+One measurement discriminates. `lucid_rg` seed 8601 -- the predeclared collapse
+-- has a complete lambda series and **no frontier AUC of any kind**. Scored on
+the frozen grid it separates the candidate laws:
+
+| hypothesis | predicted frontier success AUC | t(5) prediction interval |
+|---|---:|---|
+| recency, H=2000 | 0.7247 | [0.6738, 0.7757] |
+| uniform | 0.8257 | [0.7609, 0.8905] |
+| evacuation is free | ~0.8818 (= `fixed` s8601) | -- |
+
+The intervals overlap on [0.7609, 0.7757]; an outcome there discriminates
+nothing. Across single-variable models with R-squared above 0.97 the P3 point
+prediction spans 25 points, so P3 selects a member of an equivalence class at
+least as much as it confirms a law. It remains the cheapest and most
+informative GPU-hour available, and it produces the collapse figure the whole
+narrative rests on.
+
+### 5. The Phase-2 endpoint is contaminated
+
+The frozen `phys_125`-`phys_200` frontier grid stops being held out the moment
+any arm trains at lambda 1.5. At that lambda the evaluation boxes for
+`phys_125` and `phys_150` are subsets of the training box (verified: static
+friction training range is `[0.05, 1.925]` after the physical clamp, and
+`phys_150` evaluation is `[0.05, 1.925]` -- identical), and those two cells
+carry exactly **50% of the frontier-AUC trapezoid weight**. `phys_150` is
+bit-for-bit the arm's own training marginal with latency pinned to zero.
+
+The fix needs no new evaluation cells: `{phys_175, phys_200}` at weights
+`[1/2, 1/2]` is strictly outside every arm's support and is already in the
+15-preset panel the support driver runs. It costs about 16% of endpoint
+resolution in spread-per-noise-SD, which is the price of an uncontaminated
+endpoint. `H_X1` is contaminated by the same mechanism and must be recomputed
+or explicitly demoted.
+
+Two silent-failure traps are now recorded as blocking: a `lat_120ms` cell run
+at the default `--max-delay 12` would silently produce a 60 ms cell, and a
+`ratchet-150` arm would silently train latency at 1.0x while claiming 1.5x
+because the delay-buffer check is gated on `mode in ARM_FIXED_LAMBDA`.
 
 ## Latest findings by tier
 
@@ -314,35 +439,58 @@ byte-identical. Keep this disclosed as a timing deviation; do not rewrite it.
 
 ## Ordered next plan
 
-1. **Confirmation instrument locked — complete.** The prospective amendment
-   preserves the exact 14-cell semantics and treats stale legacy
-   `protocol.presets` prose as non-authoritative; the immutable evaluator and
-   audited run set remain binding so seed-8601 evidence is byte-identically
-   reusable.
-2. **Finish Tier 1 — active.** Complete/freeze ratchet seed 8602, run the four
-   queued 14-cell ladders, combine them with the two reused seed-8601 ladders,
-   and apply the immutable component-wise 2-of-3 rule. Then record a
-   post-evaluation panel inventory. Do not call the current +3.125-point result
-   a superiority finding.
-3. **Close the old-controller mechanism descriptively.** After terminal H_R2
-   and all H_R0 passes, preregister/run the 42-cell historical `lucid_rg`
-   bridge. It is cheap relative to new training and cannot alter H_R2.
-4. **Run Tier 2 only after H_R2 pass and a fresh preregistration.** Use the
-   reviewed `run_support_screen.sh`, a clean detached worktree, and the exact
-   historical/fresh fixed, fixed-150, and fixed-u150 four-policy design. Do not
-   launch the stale untracked shell. Treat any winner as one-seed screening.
-5. **Use Tier-2 evidence to gate Tier 3.** If a support mixture retains the
-   frontier but shows optimizer interference, preregister per-stratum
-   advantage normalization. If pure fixed-150 wins, confirm support extension
-   across seeds before adding optimizer complexity. Critic context is a new
-   campaign generation.
-6. **Advance Tier 4 in a separately frozen v2 instrument.** Add
-   first-termination-safe quality and held-out motions first; then realized
-   draws/channel attribution, one compositional cell, and capsule retention.
-7. **Close legacy evidence separately.** Rebuild—not resume—the killed
-   seed-8602 comparators only where they are required by an explicit decision.
-   Keep the dead PLR/margin/fixed-150 preregistrations isolated or amend them;
-   their pinned hashes do not authorize launch from current HEAD.
+Revised 2026-09-01 14:45 after the zero-GPU findings above. The ordering is no
+longer a preference: it is enforced by hash pins.
+
+1. **Finish Tier 1 — active, unchanged.** Complete/freeze ratchet seed 8602,
+   run the four queued 14-cell ladders, apply the immutable component-wise
+   2-of-3 rule, and record the post-evaluation panel inventory. Report the
+   verdict as a safety check. Do not call `+3.125` a superiority finding, and
+   state plainly that the arms share a training distribution.
+2. **Score P3 next, before any code change to the evaluator.** The 42-cell
+   historical `lucid_rg` bridge is the single most informative remaining
+   GPU-hour: it produces the collapse figure, tests the exposure hypothesis
+   out of sample, and discriminates recency from uniform. Its activation
+   accepts an H_R2 verdict of `pass` **or** `fail` and is gated only on the
+   H_R0 mechanism gates, so an H_R2 fail does not block it.
+   Blocking construction work: no commit on `research/practice-utility`
+   satisfies the bridge's four-file additive closure from `ca057e6`, so a new
+   clean detached worktree must be built with only those four files added.
+3. **Then, and only then, change the evaluator.** `run_curriculum_robustness_eval.py`
+   is byte-pinned at `308e2415` by the bridge and by the screen followup.
+   Adding grid-v2 presets or the `--max-delay` assertion before P3 runs would
+   break the bridge's own instrument pin. The v2 latency ladder additionally
+   needs `--max-delay 24` against seven files that assert the literal command
+   slice `['--max-delay','12','--']`.
+4. **Land the Tier-2 endpoint fix before writing the Tier-2 preregistration.**
+   `analyze_support_screen.py` must gain `HELD_OUT_GRID` and
+   `IN_SUPPORT_FRONTIER`, and `H_X1` must be recomputed on held-out cells or
+   explicitly demoted. The analyzer hashes itself and asserts the live git SHA,
+   so the patch must be committed first and the preregistration pinned against
+   the new commit afterwards. The patch as currently drafted breaks four
+   existing tests and must ship with its fixture updates.
+5. **Run Tier 2 only after that, with the corrected endpoint.** Primary is
+   `{phys_175, phys_200}` at `[1/2, 1/2]`, threshold `>= 0.05` (2.26 SD of the
+   recomputed band noise). `{phys_125, phys_150}` is report-only and must be
+   labelled in-support for the extrapolating arms. Treat any winner as a
+   one-seed screen.
+6. **Do not build `ratchet-150` yet.** It is blocked at three independent code
+   layers, costs about 40 production lines, and carries a silent-failure trap
+   in the launcher's delay-buffer gate. More importantly, P3 decides whether
+   the exposure framing survives at all; if evacuation turns out to be free,
+   the safety-constrained-frontier narrative loses its motivating cost.
+   A candidate monotone expansion gate already exists with zero new
+   instrumentation: `Env/Episode_Termination/time_out` is in `state.log_history`
+   every iteration, in the same dict the curriculum callback already reads.
+7. **Advance Tier 4 in a separately frozen v2 instrument.** Held-out motion
+   panels are feasible today (`m1_ffloop`, `m1_fwd003`, `m1_hob003` are
+   siblings of the training pool). First-termination-masked quality is NOT
+   recoverable offline -- no per-frame trajectories are saved anywhere -- so it
+   requires a re-run with new instrumentation. The contamination is now
+   demonstrated: at `phys_200`, failed episodes score mpjpe_g 262 against 434
+   for successful ones, i.e. failures look better.
+8. **Close legacy evidence separately.** Unchanged from the prior plan:
+   rebuild rather than resume, and keep the dead preregistrations isolated.
 
 ## Durable evidence
 

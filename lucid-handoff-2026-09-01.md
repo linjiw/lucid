@@ -1,6 +1,6 @@
 # LUCID handoff — active H_R2 confirmation and next-tier gate
 
-Snapshot: 2026-09-01 11:37 EDT. Read
+Snapshot: 2026-09-01 14:45 EDT. Read
 `lucid-latest-report.md` for the scientific result and Tier 1–4 ledger. This
 file is the operational continuation record.
 
@@ -95,6 +95,39 @@ Evaluation artifacts and logs:
 
 - `/home/linjiw/lucid-sonic/artifacts/ratchet_confirmation_eval_20260831`
 - `/home/linjiw/lucid-sonic/outputs/ratchet_confirmation_20260831`
+
+## Zero-GPU work completed while the chain trained
+
+Three receipts were committed without touching the confirmation worktree, the
+GPU, or any artifact (commits `c9ccedb`, `4c40504`):
+
+- `receipts/manifests/lucid_frontier_exposure_law_preregistration_20260901.json`
+- `receipts/manifests/lucid_frontier_grid_v2_preregistration_20260901.json`
+- `receipts/manifests/lucid_frontier_preregistration_amendment_20260901.json`
+
+They establish that ratchet and fixed share an identical training distribution
+over 98.75% of training, record the 2-of-6 anti-gating frequency and the return
+inversion, freeze prediction P3, and fix the Phase-2 endpoint contamination
+before any extrapolation cell exists. See `lucid-latest-report.md`.
+
+**Next operational step after the driver completes**, in this exact order:
+
+1. Read out the H_R2 verdict and score P1/P2 against the committed bands.
+   A readout script is drafted in the session scratchpad.
+2. Build the bridge worktree. No commit on `research/practice-utility`
+   satisfies the four-file additive closure from `ca057e6`; a new clean
+   detached worktree must be constructed with ONLY
+   `analyze_ratchet_historical_bridge.py`, `run_ratchet_historical_bridge.sh`
+   and their two tests added, modes 100755/100644, non-symlink, nlink 1.
+3. Author and freeze the bridge preregistration. It requires 29 named
+   frozen inputs, seven pinned code files, an exact 14-preset list, and its own
+   SHA-256 exported as `LUCID_RATCHET_HISTORICAL_BRIDGE_PREREG_SHA256`. Six
+   frozen inputs can only be filled after the H_R2 analysis exists. A draft
+   with every computable value is in the session scratchpad.
+4. Run the 42-cell bridge to score P3. Its activation accepts an H_R2 verdict
+   of `pass` OR `fail`; only an H_R0 mechanism failure blocks it.
+5. Only after P3: change the evaluator. It is byte-pinned at `308e2415` by the
+   bridge and the screen followup.
 
 ## Decision boundary
 
