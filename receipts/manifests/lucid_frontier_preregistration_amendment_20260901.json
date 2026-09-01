@@ -1,0 +1,64 @@
+{
+  "kind": "lucid_frontier_preregistration_amendment",
+  "schema_version": 1,
+  "created_at": "2026-09-01T14:40:00-04:00",
+  "written_before_data": true,
+  "amends": [
+    {
+      "file": "lucid_frontier_exposure_law_preregistration_20260901.json",
+      "sha256": "3fbf9c0b73e7eadc28c9d1ac26dcefaf65649ddd014b2e786a6b24d19530faae"
+    },
+    {
+      "file": "lucid_frontier_grid_v2_preregistration_20260901.json",
+      "sha256": "9d08173717514059ae75a787b9f7a2a0a2195b5d7c56a9501857944d3ce77e9b"
+    }
+  ],
+  "parent_commit": "c9ccedb",
+  "status": "Corrective amendment filed BEFORE any readout of P1, P2, P3 or P4 and before any Tier-2 or grid-v2 cell exists. The parent files are NOT rewritten; every correction below is additive and supersedes the named field. No correction is data-driven, because none of the amended quantities has been measured.",
+  "corrections": [
+    {
+      "id": "A1",
+      "severity": "blocking",
+      "target": "exposure law: P3 interval edges stated twice with different values",
+      "defect": "frozen_predictions.P3_collapse_arm_PRIMARY.recency_H2000 gives lo/hi 0.67376/0.77569, while outcomes_exhaustive and global_falsification use 0.67366/0.77571; uniform.lo is 0.76087 in one place and 0.76086 in another. The parent file rounded the interval object and the prose bucket edges independently.",
+      "authoritative": "The AUTHORITATIVE edges are the interval objects: recency [0.67376, 0.77569]; uniform [0.76087, 0.89047]. The outcomes_exhaustive and global_falsification bucket edges are hereby restated to those exact values. Differences are <= 2e-05 and can only matter if P3 lands on an edge; if it does, this amendment governs."
+    },
+    {
+      "id": "A2",
+      "severity": "blocking",
+      "target": "exposure law: P2 prediction is unsatisfiable as worded",
+      "defect": "P2 states prior_value 0.904622 and predicts |new - 0.904622| = 0.000000 exactly. But 0.904622 is a 6-dp rounding of the exact receipt rational 2779/3072 = 0.9046223958333334. Under PERFECT bit-determinism the literal difference is 3.958e-07, not 0, so the prediction as written cannot be satisfied by any real receipt.",
+      "authoritative": "P2 is restated as an EXACT-RATIONAL determinism check: the new fixed@s8600 frontier success AUC must satisfy round(new * 3072) == 2779, i.e. the four frontier cells must return the identical integer success counts 411/262/204/171 of 512. Any other value indicates evaluator or panel drift. P2 continues to carry NO falsification weight."
+    },
+    {
+      "id": "A3",
+      "severity": "major",
+      "target": "grid v2: the 'costs no resolution' inference does not follow from its own numbers",
+      "defect": "The parent file states the {phys_175, phys_200} held-out band 'costs no resolution' because it correlates r=0.9982 with the 4-cell frontier AUC and has a wider spread (49.8 vs 42.0 pts). Both figures are correct but the inference is wrong: noise grows faster than spread. Recomputed from the four identical-exposure arms, the held-out band's SD is 0.022119 against the frontier's 0.015707 -- spread +18.5% but noise +40.9%.",
+      "authoritative": "Spread-per-noise-SD is 22.51 SD for the held-out band against 26.74 SD for the frontier endpoint. The held-out band therefore costs roughly 16% of endpoint resolution. THAT IS THE PRICE OF AN UNCONTAMINATED ENDPOINT AND IT REMAINS WORTH PAYING: the frontier endpoint's superior signal-to-noise is partly measuring the contamination itself, since half its weight sits inside the treatment arm's training support. The 0.05 threshold is unchanged and remains 2.26 SD of the recomputed band SD.",
+      "additional": "Pearson r=0.9982 is driven by the 42-pt between-arm range. Spearman rho on the same 7 points is only 0.9643: the two endpoints disagree on the rank of one pair INSIDE the tight cluster (lucid_rg@8600 frontier 0.882812 > fixed@8601 0.881836, but held-out 0.819336 < 0.825195). Screening decisions live inside that cluster, so r must not be read as 'the two endpoints agree where it matters'."
+    },
+    {
+      "id": "A4",
+      "severity": "major",
+      "target": "grid v2: a SECOND contaminated binding gate was not disclosed",
+      "defect": "The parent file identifies only the frontier AUC as contaminated. analyze_support_screen.py's HARD_SUCCESS_PRESETS (line 79) also includes phys_150, which is worth 1/3 of the binding H_X1 mean-hard-success check (line 1675). H_X1 is a named hypothesis and is contaminated by exactly the same mechanism.",
+      "authoritative": "H_X1 must be recomputed on held-out cells only, or explicitly demoted to reported-only. Redefining a named hypothesis is a decision that must be signed off in the Tier-2 preregistration, not made silently inside a patch."
+    },
+    {
+      "id": "A5",
+      "severity": "major",
+      "target": "grid v2: sequencing is enforced by hash pins, not merely preferred",
+      "defect": "The parent file recommends scoring P3 before building extrapolation arms. That ordering is in fact MANDATORY: run_curriculum_robustness_eval.py is byte-pinned at SHA-256 308e24150e4d4f03d0abf0dc6a427063ac662904bb3a7765488a9bff63cd94ca by run_ratchet_historical_bridge.sh:23 (enforced :322, cross-checked :324, and hashed again via code_state.file_sha256 :262-279) and by run_ratchet_screen_followup.sh:177.",
+      "authoritative": "Adding the grid-v2 presets or the --max-delay assertion to the evaluator CHANGES that hash and would break the historical bridge's own instrument pin. P3 must therefore be scored with the UNMODIFIED evaluator before any grid-v2 evaluator change lands. Additionally, a v2 latency run needs --max-delay 24, but four drivers and three analyzers assert the literal command slice ['--max-delay','12','--'], so the latency ladder requires a coordinated change across seven files and cannot be done by editing the runner alone."
+    },
+    {
+      "id": "A6",
+      "severity": "minor",
+      "target": "grid v2: the four-file additive worktree does not yet exist on any commit",
+      "defect": "The historical bridge requires HEAD to differ from ca057e658acc59773e798057980b827d65988441 by EXACTLY four added files (analyze_ratchet_historical_bridge.py, run_ratchet_historical_bridge.sh and their two tests), with exact modes 100755/100644, non-symlink, nlink==1. No commit on research/practice-utility satisfies this: every candidate additionally adds the Tier-2 support files and modifies run_curriculum_robustness_eval.py and run_curriculum_comparison.py.",
+      "authoritative": "A new clean detached worktree must be constructed at ca057e6 with only those four files added and committed. This is construction work, not a blocker on the science, but it must happen before P3 can run and it cannot reuse any existing branch head."
+    }
+  ],
+  "unchanged": "Every frozen prediction VALUE, every fitted law parameter, the P3 point estimates and bands (subject to A1), the held-out grid, the Phase-B primary endpoint and its 0.05 threshold, and the global falsification rule keyed on P3 alone are UNCHANGED by this amendment."
+}
