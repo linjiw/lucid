@@ -1,0 +1,111 @@
+{
+  "kind": "lucid_ratchet_confirmation_panel_preservation_amendment",
+  "schema_version": 1,
+  "created_at": "2026-09-01T00:39:43-04:00",
+  "status": "prospective_before_any_new_h_r2_capability_evaluation",
+  "parent_confirmation_amendment": {
+    "path": "/home/linjiw/lucid-sonic/manifests/lucid_monotone_ratchet_confirmation_amendment_20260831.json",
+    "sha256": "2064bf7a16ca159092c6ebeabfbf09bc2fe3c1b30ce359a64505503a83786044"
+  },
+  "chronology": {
+    "confirmation_training_started": true,
+    "new_confirmation_evaluation_marker_exists": false,
+    "new_confirmation_capability_cells_scored": 0,
+    "classification": "postlaunch_pre_evaluation_preservation_action"
+  },
+  "scientific_contract": {
+    "endpoint_change": false,
+    "preset_change": false,
+    "seed_change": false,
+    "policy_change": false,
+    "evaluator_change": false,
+    "panel_path_change": false,
+    "panel_bytes_change": false,
+    "alias_name_change": false,
+    "alias_target_change": false,
+    "action": "remove write bits from the exact panel receipt, panel root, alias-entry directory, and canonical source inode"
+  },
+  "pre_lock_inventory": {
+    "panel_receipt": {
+      "path": "/home/linjiw/lucid-sonic/manifests/replicate_panel_panel_hob002_k512.json",
+      "sha256": "e2e61933405e6701b0563eb4df793b6faf5c90d8ae5b7d8fc1e11f47142aefd7",
+      "mode_octal": "664",
+      "uid": 1000,
+      "gid": 1000,
+      "inode": 9064962,
+      "nlink": 1,
+      "size": 1815,
+      "mtime_epoch": 1787956174,
+      "ctime_epoch": 1787956174
+    },
+    "panel_root": {
+      "path": "/home/linjiw/lucid-sonic/pools/panels/panel_hob002_k512",
+      "mode_octal": "775",
+      "uid": 1000,
+      "gid": 1000,
+      "inode": 22020892,
+      "nlink": 3,
+      "size": 4096,
+      "mtime_epoch": 1787956174,
+      "ctime_epoch": 1787956174
+    },
+    "alias_directory": {
+      "path": "/home/linjiw/lucid-sonic/pools/panels/panel_hob002_k512/robot_filtered",
+      "mode_octal": "775",
+      "uid": 1000,
+      "gid": 1000,
+      "inode": 22020903,
+      "nlink": 2,
+      "size": 36864,
+      "mtime_epoch": 1787956174,
+      "ctime_epoch": 1787956174,
+      "entry_count": 512,
+      "symlink_count": 512,
+      "other_entry_count": 0,
+      "sorted_stems_sha256": "4b0fae026d8763e5cb1a39957ab8131e5372e1d47d4ec7e526791b76fe7f1430",
+      "sorted_filenames_sha256": "6ac426ec6d3f80cc9aa30c62cfa78ad4077211a1bcee137e5f656c93a0085d53",
+      "sorted_name_and_link_text_sha256": "edb9bf2a9dd1d747a7942e8a924d54fc62168c5765cdb2218fdaf2ad4e5b3c74",
+      "sorted_lstat_and_link_text_sha256": "5ada1f12740f05b100597792fb63bdc530bb4de1bd3cd69657f05e39f78a9b67",
+      "canonical_target_count": 1
+    },
+    "canonical_source": {
+      "path": "/home/linjiw/lucid-sonic/pools/debug512/robot_filtered/walk_hands_on_back_loop_002__A066_M.pkl",
+      "sha256": "a7f10e7aa26e53cc4e346151d4ccd74e932e3aafa1cfaaac77dab8b8eec40929",
+      "mode_octal": "664",
+      "uid": 1000,
+      "gid": 1000,
+      "inode": 11169791,
+      "nlink": 3,
+      "size": 33022,
+      "mtime_epoch": 1787905505,
+      "ctime_epoch": 1787905508
+    },
+    "frozen_training_motion": {
+      "path": "/home/linjiw/lucid-sonic/pools/subsets/m1_hob002/robot_filtered/walk_hands_on_back_loop_002__A066_M.pkl",
+      "resolved_path": "/home/linjiw/lucid-sonic/pools/debug512/robot_filtered/walk_hands_on_back_loop_002__A066_M.pkl",
+      "sha256": "a7f10e7aa26e53cc4e346151d4ccd74e932e3aafa1cfaaac77dab8b8eec40929"
+    }
+  },
+  "planned_post_lock_modes": {
+    "/home/linjiw/lucid-sonic/manifests/replicate_panel_panel_hob002_k512.json": "444",
+    "/home/linjiw/lucid-sonic/pools/panels/panel_hob002_k512": "555",
+    "/home/linjiw/lucid-sonic/pools/panels/panel_hob002_k512/robot_filtered": "555",
+    "/home/linjiw/lucid-sonic/pools/debug512/robot_filtered/walk_hands_on_back_loop_002__A066_M.pkl": "444"
+  },
+  "post_lock_receipt": "/home/linjiw/lucid-sonic/manifests/ratchet_confirmation_20260831/ratchet_confirmation_panel_preservation_activation_20260901.json",
+  "verified": [
+    "The pre-lock panel receipt hash equals the H_R2 amendment's frozen panel hash.",
+    "The alias directory contains exactly 512 live .pkl symlinks and no other entries.",
+    "The sorted alias-stem digest equals the frozen instrument digest.",
+    "Every alias resolves to the one panel-receipt source path.",
+    "The source bytes equal the H_R2 amendment's frozen training-motion bytes.",
+    "Panel and alias ctime/mtime predate the reused seed-8601 evaluations and remain at their August 28 creation values.",
+    "No new H_R2 evaluation directory or .started marker existed when this amendment was written."
+  ],
+  "limitations": [
+    "This preservation action is prospective for the four new H_R2 ladders and cannot retroactively make the reused seed-8601 panel immutable.",
+    "Unchanged creation-time metadata supports continuity for seed 8601 but is forensic evidence, not cryptographic WORM proof.",
+    "Unix write-bit removal protects against accidental mutation; the file owner or root can restore permissions, and writable higher ancestors remain a trusted boundary.",
+    "The source inode has three hardlinks; its read-only mode is shared by those names."
+  ]
+}
