@@ -1,5 +1,8 @@
 # LUCID handoff — Tier-1 ratchet confirmation
 
+> Superseded operationally by `lucid-handoff-2026-09-01.md`; retain this file
+> for the complete pre-confirmation chronology.
+
 > Confirmation update (2026-08-31 23:58 EDT): the one-seed screen passed and
 > the parent-preregistered H_R2 continuation is now frozen, committed, and
 > preflight-verified. This section supersedes the older process snapshot below.

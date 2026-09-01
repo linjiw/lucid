@@ -1,17 +1,19 @@
 # LUCID latest report — Tier 1–4 status and ratchet confirmation
 
-Snapshot: 2026-08-31 23:58 EDT. This is the current result and handoff ledger.
+Snapshot: 2026-09-01 00:56 EDT. This is the current result and handoff ledger.
 It supersedes the older live-process state in `lucid-handoff-2026-08-31.md`
-and the pre-result ending of `fable.md`.
+and the pre-result ending of `fable.md`; the current operational companion is
+`lucid-handoff-2026-09-01.md`.
 
 ## Live continuation update
 
 The targeted seed-8601 screen described below is complete, but the prospective
 three-seed H_R2 continuation is still running. The first new cell is ratchet
 seed 8600 under driver PID 221231 and trainer PID 222101. At the latest audited
-snapshot it had 875/8,000 contiguous curriculum rows, reached lambda >= 0.95 at
-iteration 64, remained at lambda 1.0, blocked 24 PI-requested decreases, and
-had zero guard trips, zero applied lambda decreases, and no error signature.
+snapshot it had 2,282/8,000 contiguous curriculum rows, reached lambda >= 0.95
+at iteration 64, remained at lambda 1.0, blocked 190 PI-requested decreases,
+and had zero guard trips, zero applied lambda decreases, and no error
+signature. The H0500, H1000, and H2000 capsules exist.
 No new capability cell has been scored, so H_R2 remains undecidable.
 
 The exact serial order remains ratchet-8600, fresh fixed-8602, ratchet-8602,
@@ -26,13 +28,25 @@ worktree:
 - SONIC commit `fca5576` hardens the expanding-support sampler state contract.
 - SONIC commit `4ab0e8f` hardens fixed-150/fixed-u150 launch, telemetry, and
   evaluator contracts.
-- SONIC commit `c62e506` adds the nonbinding historical `lucid_rg` bridge. It
-  activates only after all three H_R0 mechanism gates pass, validates 126 exact
-  cells and frozen checkpoint/config provenance, and cannot alter H_R2.
-- The Tier-2 support-screen analyzer is not committed yet. Independent review
-  found incorrect candidate-preference semantics plus provenance and live
-  mechanics gaps. Those are being fixed and adversarially tested before a
-  commit or preregistration. No Tier-2 policy has launched.
+- SONIC commits `c62e506`, `bee67e8`, and `c64487a` provide the nonbinding
+  historical `lucid_rg` bridge, bind its live alias tree, and add its dormant
+  fail-closed supervisor. It activates only after all three H_R0 mechanism
+  gates pass, validates 126 exact cells and frozen checkpoint/config/raw-eval
+  provenance, and cannot alter H_R2.
+- SONIC commits `c33662d`, `1290416`, and `1c947d2` add the Tier-2 support
+  analyzer, pin its environment bootstrap, and add its dormant supervisor.
+  The package requires a future immutable preregistration, exact H_R2 pass,
+  fresh three-arm training, frozen checkpoints, and a 60-cell raw evaluation.
+  No Tier-2 policy has launched.
+
+Before any new H_R2 capability cell, an audit found that the frozen panel JSON
+did not itself make its mutable 512-symlink tree immutable. The tree was still
+exactly intact from its August 28 creation. Root commits `10849b9` and
+`9726720` prospectively recorded and activated a byte-preserving permission
+lock on the exact panel receipt, panel root/tree, and source inode. Names,
+targets, hashes, inodes, and source bytes did not change, and active training
+continued. This protects the four new ladders from accidental mutation; it is
+not WORM storage and cannot retroactively prove the reused seed-8601 tree.
 
 ## Confirmation package update
 
@@ -208,7 +222,8 @@ comparator.
 
 ### Tier 2 — distribution and support expansion
 
-**State:** implementation seams are ready; no Tier-2 policy has trained.
+**State:** implementation, strict analyzer, and dormant supervisor are ready;
+no Tier-2 policy has trained.
 
 - `fixed_u` and `fixed_u150` are committed and tested with eight deterministic
   levels and stratum sizes `[37,37,37,37,36,36,36,768]`, keeping 75% of the
@@ -221,7 +236,10 @@ comparator.
   0.817 versus fixed at 0.925 while placing only 25% of environments at the
   frontier. The proposed arm deliberately keeps 75% there.
 - No `fixed_u`, `fixed_u150`, or pure fixed-150 training/evaluation receipt
-  exists. PLR over motion-bin x lambda-level cells is not implemented or run.
+  exists. The 52-test support supervisor remains inert until a clean detached
+  worktree and new frozen preregistration bind its code, environment, inputs,
+  comparator, and output roots. PLR over motion-bin x lambda-level cells is
+  not implemented or run.
 
 **Verdict:** code-ready but experimentally unknown. The existing `fixed_u150`
 preregistration is not launch-grade: its chronology is blemished and several
@@ -275,10 +293,10 @@ instrument.
 | Workstream | Current truth |
 |---|---|
 | Reboot recovery | Partial seed-8602/off remains evidence only; do not resume it. Old campaign fixed-8602 and the original multi-seed ladder remain missing. |
-| Ratchet chain | Seed-8601 screen complete; three-seed H_R2 continuation active on the first new training cell, ratchet seed 8600. No new capability cell has been scored. |
+| Ratchet chain | Seed-8601 screen complete; three-seed H_R2 continuation active on ratchet seed 8600 at 2,282/8,000. H0500/H1000/H2000 capsules exist. No new capability cell has been scored. |
 | GPU | Owned by trainer PID 222101 under serial driver PID 221231. Do not start another GPU workflow. |
-| New code | Initial implementation `3457718`; hardened confirmation commit `ca057e658acc59773e798057980b827d65988441`. |
-| Focused validation | 28 confirmation tests pass; all 1,385 tracked practice-utility tests pass with four existing warnings. Three failures belong only to concurrent untracked Tier-2 sampler tests and are excluded. |
+| New code | Confirmation `3457718`/`ca057e6`; historical bridge through `c64487a`; support screen through `1c947d2`. The active confirmation still runs only detached `ca057e6`. |
+| Focused validation | 235 controller/freeze/confirmation/historical/support tests pass on current SONIC HEAD; focused historical and support supervisor suites pass 44/44 and 52/52 respectively. |
 | Repository checks | `git diff --check` passes; full `make run-checks` remains blocked by unrelated pre-existing isort failures. |
 
 The launch began at commit `fb57e86`, while the terminal receipt records
@@ -327,6 +345,10 @@ Repository mirrors:
 - [preregistration](receipts/manifests/lucid_monotone_ratchet_preregistration_20260831.json)
 - [endpoint clarification](receipts/manifests/lucid_monotone_ratchet_endpoint_clarification_20260831.json)
 - [post-launch provenance bridge](receipts/manifests/lucid_ratchet_postlaunch_commit_provenance_20260831.json)
+- [panel preservation amendment](receipts/manifests/ratchet_confirmation_20260831/ratchet_confirmation_panel_preservation_amendment_20260901.json), SHA-256
+  `9366af3faa0ff6714ddb50368937f88e5b3211dead2a6882427d6c168fe31af9`
+- [panel preservation activation](receipts/manifests/ratchet_confirmation_20260831/ratchet_confirmation_panel_preservation_activation_20260901.json), SHA-256
+  `8889cd94477a35278776c4481ea12dea9bd3b1ca77b6a9269b9dd82a04ce94e0`
 
 External primary artifacts remain under `~/lucid-sonic/`. The final ratchet
 checkpoint is:
@@ -339,11 +361,11 @@ Generated checkpoints and per-episode artifacts remain outside Git by design.
 
 ## Workspace handoff notes
 
-Do not fold the concurrent untracked Gate-A/bin-sampler files or the separate
-`GR00T-WholeBodyControl-plr/` worktree into this result. The untracked sampler
-is not trainer-wired and still has three failing tests. The untracked generic
-receipt auditor also misreads the stale evaluator metadata; it is not the
-validated strict ratchet analyzer.
+Do not fold the concurrent untracked Gate-A/learnability files or the separate
+`GR00T-WholeBodyControl-plr/` worktree into this result. In particular,
+`learnability_gate.py`, `run_gate_a.py`, `run_fixed_u150_arm.sh`, and the
+generic `audit_evaluation_receipt.py` remain unrelated and uncommitted. The
+generic auditor is not the validated strict ratchet/support analyzer.
 
 The large modified PLR queue-status mirror is preserved but excluded from this
 report commit because its append-only polling history belongs to the dead queue,
