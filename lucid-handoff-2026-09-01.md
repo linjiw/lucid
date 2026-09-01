@@ -129,6 +129,46 @@ before any extrapolation cell exists. See `lucid-latest-report.md`.
 5. Only after P3: change the evaluator. It is byte-pinned at `308e2415` by the
    bridge and the screen followup.
 
+### P3 input inventory — verified 2026-09-01 15:15, all present
+
+Every pinned input the 42-cell bridge needs for the collapse arm `lucid_rg`
+seed 8601 exists and hashes correctly against the driver's hard-coded tables:
+
+| input | path | sha-256 | driver table |
+|---|---|---|---|
+| checkpoint | `.../ne1024_20260829_000249/seed_8601/lucid_rg/final_checkpoint.pt` | `e8ece9de91b5…d70e` | matches `EXPECTED_LUCID_CHECKPOINT_SHA256[8601]` |
+| true config | `GR00T-WholeBodyControl/logs_rl/…/sonic_release_test-20260830_060944/config.yaml` | `9997fe63…3568` | matches `EXPECTED_LUCID_CONFIG_SHA256[8601]` |
+| curriculum | `.../seed_8601/lucid_rg/curriculum_*.jsonl` | `3e98983a34b8896f…` | matches `EXPECTED_LUCID_CURRICULUM_SHA256[8601]` |
+| environment | `/home/linjiw/lucid/env/lucid_env.sh` | `aa1827d1…d743` | matches the prereg pin |
+
+Two traps worth knowing before staging:
+
+- **The config is NOT adjacent to the checkpoint.** Six of eleven campaign arms
+  have no `config.yaml` beside their artifact (`seed_8601/{lucid_rg,lucid_s4_rg,off}`
+  and all three `seed_8602` arms); only the seed-8600 arms and `seed_8601/fixed`
+  do. The true config lives in the training run's `logs_rl` output. This is
+  exactly why the bridge stages a bundle with the config copied adjacent to the
+  checkpoint, and why `--training-config` must be passed explicitly.
+- **Staging must copy or reflink, never hardlink.** The driver asserts
+  `st_nlink == 1` on both staged files and rejects symlinks.
+
+Reading that config is safe for the live run: the confirmation driver pins
+`sonic_release_test-20260830_002425` and `-20260831_144024` (plus `-231903` and
+`-044119` in freeze manifests). The collapse arm's config is `-20260830_060944`,
+a different directory.
+
+Remaining construction, all absent today and all clean to create:
+`/home/linjiw/lucid-ratchet-historical-bridge` (detached worktree),
+`manifests/ratchet_historical_bridge_20260901`, the preregistration JSON, and
+`artifacts/ratchet_historical_bridge_eval_20260901`.
+
+The worktree needs a commit whose diff from `ca057e6` is EXACTLY four additions.
+HEAD `1c947d2` differs by ten additions and four modifications, so no existing
+commit qualifies. All four bridge blobs are already in the object store with the
+required modes (`100755` for the `.sh`, `100644` for the other three), so the
+commit can be built deterministically with `read-tree` + `update-index --cacheinfo`
++ `write-tree` + `commit-tree`.
+
 ## Decision boundary
 
 H_R2 is a component-wise 2-of-3 noninferiority rule. All three ratchet
