@@ -1,6 +1,6 @@
 # LUCID latest report — Tier 1–4 status and ratchet confirmation
 
-Snapshot: 2026-09-01 00:56 EDT. This is the current result and handoff ledger.
+Snapshot: 2026-09-01 11:37 EDT. This is the current result and handoff ledger.
 It supersedes the older live-process state in `lucid-handoff-2026-08-31.md`
 and the pre-result ending of `fable.md`; the current operational companion is
 `lucid-handoff-2026-09-01.md`.
@@ -8,19 +8,27 @@ and the pre-result ending of `fable.md`; the current operational companion is
 ## Live continuation update
 
 The targeted seed-8601 screen described below is complete, but the prospective
-three-seed H_R2 continuation is still running. The first new cell is ratchet
-seed 8600 under driver PID 221231 and trainer PID 222101. At the latest audited
-snapshot it had 2,282/8,000 contiguous curriculum rows, reached lambda >= 0.95
-at iteration 64, remained at lambda 1.0, blocked 190 PI-requested decreases,
-and had zero guard trips, zero applied lambda decreases, and no error
-signature. The H0500, H1000, and H2000 capsules exist.
-No new capability cell has been scored, so H_R2 remains undecidable.
+three-seed H_R2 continuation is still running. Ratchet seed 8600 completed and
+was frozen read-only after 8,000 iterations: first lambda >= 0.95 at iteration
+64, final lambda 1.0, 453 blocked PI decreases, zero guard trips/decreases, and
+1,000/1,000 terminal high-lambda iterations. Fresh fixed seed 8602 also
+completed 8,000 iterations and was frozen read-only. Their checkpoint hashes
+are respectively `0a178eff...b2cc8` and `1e230abf...3e4e8`.
 
-The exact serial order remains ratchet-8600, fresh fixed-8602, ratchet-8602,
-then four new 14-cell ladders and the immutable 84-cell analysis. Reused
-fixed-8600, fixed-8601, and ratchet-8601 checkpoints are already frozen
-read-only. The driver is fail-closed at every cell boundary: an interrupted
-`.started` cell may not be resumed or silently retrained.
+The third and final training cell is ratchet seed 8602 under driver PID 221231,
+launcher PID 411832, and trainer PID 411845. At the latest audited snapshot it
+had 2,303/8,000 rows, reached lambda >= 0.95 at iteration 65, held lambda 1.0,
+blocked 84 downward PI requests, and had zero guard trips or applied decreases.
+H0500/H1000/H2000 capsules exist and no fatal log signature is present. Five
+of six claim-bearing checkpoints are now frozen. No new capability cell has
+been scored (0/4 ladders, 0/56 new cells), so H_R2 remains undecidable. At the
+observed rate, training is due around 15:31 EDT and the final analysis around
+16:05 EDT if every remaining boundary succeeds.
+
+After ratchet-8602 freezes, the driver will score four new 14-cell ladders and
+write the immutable 84-cell analysis using the two frozen seed-8601 ladders.
+The driver is fail-closed at every boundary: an interrupted `.started` cell
+may not be resumed or silently retrained.
 
 CPU-side research has advanced without entering the clean confirmation
 worktree:
@@ -69,15 +77,14 @@ capability cell had run when the amendment was frozen.
 - Preflight passed end to end: every frozen input hash, old seed-8601 receipt,
   checkpoint identity, resolved config source/SHA, 14-cell run set, and
   training contract reconciled.
-- The continuation will train exactly three new from-scratch cells in serial:
-  ratchet seed 8600, fixed seed 8602, and ratchet seed 8602. It freezes all six
-  claim-bearing checkpoints before scoring four new 14-cell ladders, then
-  combines them with the two immutable seed-8601 ladders for an 84-cell H_R2
-  analysis.
-- The serial driver is now live: PID 221231, with ratchet seed-8600 trainer PID
-  222101 on experiment `curriculum_comparison_ne1024_20260831_231901`.
-  Reused fixed-8600, fixed-8601, and ratchet-8601 checkpoints were frozen
-  read-only before this first new cell started.
+- The continuation trains exactly three new from-scratch cells in serial.
+  Ratchet seed 8600 and fixed seed 8602 are complete/frozen; ratchet seed 8602
+  is active. It freezes all six claim-bearing checkpoints before scoring four
+  new 14-cell ladders, then combines them with the two immutable seed-8601
+  ladders for an 84-cell H_R2 analysis.
+- The serial driver remains live at PID 221231. The current experiment is
+  `curriculum_comparison_ne1024_20260901_100208`, ratchet seed 8602. Reused
+  fixed-8600, fixed-8601, and ratchet-8601 checkpoints remain read-only.
 
 Chronology disclosure: the amendment's manually typed `created_at` was rounded
 forward to 23:20 even though the file was written at 23:16:10, committed at
@@ -200,13 +207,14 @@ The result also reinforces three earlier findings:
 
 ### Tier 1 — signal and controller safety
 
-**State:** one arm implemented, trained, and evaluated; continuation gate
-passed.
+**State:** selected-seed arm evaluated; two additional ratchet mechanism cells
+complete/active; multi-seed capability decision pending.
 
 - `lucid_ratchet_rg` is committed and tested. It projects away PI-law
   decreases while retaining the relative-return guard as the only legal brake.
-- The seed-8601 run proves that this constraint deletes the known zero-guard
-  anti-gate path in a live from-scratch run.
+- The completed seeds 8601 and 8600 both show that this constraint deletes the
+  known zero-guard anti-gate path in live from-scratch runs. Active seed 8602
+  is consistent so far but is not final.
 - The default-off competence latch is implemented and tested but has never
   trained. It is not part of this result.
 - The top-stratum failure band, dose/regret signal, twin-normalized gap cohort,
@@ -216,9 +224,9 @@ passed.
   signal semantically valid.
 
 **Verdict:** Tier 1 is promising and has crossed its screening gate, but is not
-confirmed. The next honest experiment is the frozen ratchet confirmation on
-seeds 8600 and 8602, paired with fixed 8600/8601 and a newly trained fixed-8602
-comparator.
+confirmed. That frozen confirmation is now active: ratchet-8600 and the new
+fixed-8602 comparator are complete, ratchet-8602 is training, and the paired
+capability ladders remain unscored.
 
 ### Tier 2 — distribution and support expansion
 
@@ -292,9 +300,9 @@ instrument.
 
 | Workstream | Current truth |
 |---|---|
-| Reboot recovery | Partial seed-8602/off remains evidence only; do not resume it. Old campaign fixed-8602 and the original multi-seed ladder remain missing. |
-| Ratchet chain | Seed-8601 screen complete; three-seed H_R2 continuation active on ratchet seed 8600 at 2,282/8,000. H0500/H1000/H2000 capsules exist. No new capability cell has been scored. |
-| GPU | Owned by trainer PID 222101 under serial driver PID 221231. Do not start another GPU workflow. |
+| Reboot recovery | Partial seed-8602/off remains evidence only; do not resume it. The original campaign fixed-8602 and original ladder remain missing. A distinct H_R2 replacement fixed-8602 cell is now complete/frozen; it does not retroactively complete the dead campaign. |
+| Ratchet chain | Ratchet-8600 and fresh fixed-8602 complete/frozen; ratchet-8602 active at 2,303/8,000 with a clean interim mechanism trajectory. Five of six checkpoints are frozen. No new capability cell has been scored. |
+| GPU | Owned by trainer PID 411845 under serial driver PID 221231. Do not start another GPU workflow. |
 | New code | Confirmation `3457718`/`ca057e6`; historical bridge through `c64487a`; support screen through `1c947d2`. The active confirmation still runs only detached `ca057e6`. |
 | Focused validation | 235 controller/freeze/confirmation/historical/support tests pass on current SONIC HEAD; focused historical and support supervisor suites pass 44/44 and 52/52 respectively. |
 | Repository checks | `git diff --check` passes; full `make run-checks` remains blocked by unrelated pre-existing isort failures. |
@@ -311,21 +319,27 @@ byte-identical. Keep this disclosed as a timing deviation; do not rewrite it.
    `protocol.presets` prose as non-authoritative; the immutable evaluator and
    audited run set remain binding so seed-8601 evidence is byte-identically
    reusable.
-2. **Confirm Tier 1 — authorized next.** Train ratchet seeds 8600 and 8602 from scratch and the
-   missing fixed seed 8602; evaluate all paired seeds on that exact instrument.
-   Apply the frozen 2-of-3 rule. Do not call the current +3.125-point result a
-   superiority finding.
-3. **Run Tier 2 only after a fresh preregistration.** Re-pin `fixed_u`/`fixed_u150`
-   code hashes, choose an honest fixed comparator, and test the 75%-frontier
-   support design. Do not launch the stale shell/prereg pair.
-4. **Use Tier-2 evidence to gate Tier 3.** If the support mixture retains the
-   frontier but still shows optimization interference, preregister per-stratum
-   advantage normalization as a clean ablation. Treat critic context as a new
+2. **Finish Tier 1 — active.** Complete/freeze ratchet seed 8602, run the four
+   queued 14-cell ladders, combine them with the two reused seed-8601 ladders,
+   and apply the immutable component-wise 2-of-3 rule. Then record a
+   post-evaluation panel inventory. Do not call the current +3.125-point result
+   a superiority finding.
+3. **Close the old-controller mechanism descriptively.** After terminal H_R2
+   and all H_R0 passes, preregister/run the 42-cell historical `lucid_rg`
+   bridge. It is cheap relative to new training and cannot alter H_R2.
+4. **Run Tier 2 only after H_R2 pass and a fresh preregistration.** Use the
+   reviewed `run_support_screen.sh`, a clean detached worktree, and the exact
+   historical/fresh fixed, fixed-150, and fixed-u150 four-policy design. Do not
+   launch the stale untracked shell. Treat any winner as one-seed screening.
+5. **Use Tier-2 evidence to gate Tier 3.** If a support mixture retains the
+   frontier but shows optimizer interference, preregister per-stratum
+   advantage normalization. If pure fixed-150 wins, confirm support extension
+   across seeds before adding optimizer complexity. Critic context is a new
    campaign generation.
-5. **Advance Tier 4 in a frozen v2 instrument.** Add termination-safe quality
-   metrics and held-out motions first; then realized-draw/channel attribution,
-   compositional cells, and capsule retention.
-6. **Close legacy evidence separately.** Rebuild—not resume—the killed
+6. **Advance Tier 4 in a separately frozen v2 instrument.** Add
+   first-termination-safe quality and held-out motions first; then realized
+   draws/channel attribution, one compositional cell, and capsule retention.
+7. **Close legacy evidence separately.** Rebuild—not resume—the killed
    seed-8602 comparators only where they are required by an explicit decision.
    Keep the dead PLR/margin/fixed-150 preregistrations isolated or amend them;
    their pinned hashes do not authorize launch from current HEAD.

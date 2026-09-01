@@ -1,16 +1,18 @@
 # LUCID handoff — active H_R2 confirmation and next-tier gate
 
-Snapshot: 2026-09-01 00:56 EDT. Read
+Snapshot: 2026-09-01 11:37 EDT. Read
 `lucid-latest-report.md` for the scientific result and Tier 1–4 ledger. This
 file is the operational continuation record.
 
 ## Current truth
 
 The selected-seed Tier-1 screen passed, but the three-seed H_R2
-stability/noninferiority decision is still running. No new confirmation
-capability cell has been scored. Do not describe the current seed-8601
-`+3.125` frontier-success point estimate as a confirmed improvement or a
-superiority result.
+stability/noninferiority decision is still running. Ratchet seed 8600 and the
+fresh fixed seed-8602 comparator completed and are frozen read-only. Ratchet
+seed 8602 is the third and final training cell. No new confirmation capability
+cell has been scored, so H_R2 remains undecidable. Do not describe the current
+seed-8601 `+3.125` frontier-success point estimate as a confirmed improvement
+or a superiority result.
 
 The active claim-bearing worktree is detached and clean at
 `/home/linjiw/lucid-ratchet-confirm`, commit
@@ -20,36 +22,66 @@ with the newer development branch.
 Active ownership:
 
 - serial driver PID: `221231`
-- cell launcher PID: `222084`
-- Isaac trainer PID: `222101`
-- current cell: `lucid_ratchet_rg`, training seed 8600
-- experiment: `curriculum_comparison_ne1024_20260831_231901`
-- latest audited state: 2,282/8,000 rows, first lambda >= 0.95 at iteration
-  64, lambda 1.0, 190 blocked PI decreases, zero guard trips, zero applied
-  decreases
+- cell launcher PID: `411832`
+- Isaac trainer PID: `411845`
+- current cell: `lucid_ratchet_rg`, training seed 8602
+- experiment: `curriculum_comparison_ne1024_20260901_100208`
+- latest audited state: 2,303/8,000 rows, first lambda >= 0.95 at iteration
+  65, lambda 1.0, 84 blocked PI decreases, zero guard trips, zero applied
+  decreases, and all of the trailing 1,000 available rows at high lambda
 - capsules present: H0500, H1000, H2000
-- GPU: trainer PID 222101 only; do not launch another GPU process
+- GPU: trainer PID 411845 only; do not launch another GPU process
+- current log ETA: about 15:31 EDT for training completion; prior ladder
+  timings put the final analysis near 16:05 EDT if no boundary fails
 
 Current curriculum:
 
-`/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260831_231901/seed_8600/lucid_ratchet_rg/curriculum_curriculum_comparison_ne1024_20260831_231901_s8600_lucid_ratchet_rg.jsonl`
+`/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260901_100208/seed_8602/lucid_ratchet_rg/curriculum_curriculum_comparison_ne1024_20260901_100208_s8602_lucid_ratchet_rg.jsonl`
 
 Current log:
 
-`/home/linjiw/lucid-sonic/outputs/curriculum_comparison_ne1024_20260831_231901_s8600_lucid_ratchet_rg.log`
+`/home/linjiw/lucid-sonic/outputs/curriculum_comparison_ne1024_20260901_100208_s8602_lucid_ratchet_rg.log`
+
+## Completed overnight evidence
+
+Ratchet seed 8600 completed all 8,000 iterations in 19,324.6 seconds (5.37 h)
+with exit code 0. Its mechanism trajectory independently passes H_R0: first
+lambda >= 0.95 at iteration 64, final lambda 1.0, 453 blocked PI decreases,
+zero guard trips, zero applied decreases, and 1,000/1,000 terminal iterations
+at high lambda. Its frozen checkpoint is read-only, SHA-256
+`0a178eff5b746323cb87217b412637b6391d33b5276254edb57786bf5b4b2cc8`.
+
+Fresh fixed seed 8602 completed all 8,000 iterations in 19,238.6 seconds
+(5.34 h) with exit code 0 and final lambda 1.0. Its frozen checkpoint is
+read-only, SHA-256
+`1e230abf2230362e2ad32e798fa85c50bf6130390dfdba4069dc3e0acb33e4e8`.
+This is the H_R2 replacement comparator; the original reboot-killed campaign
+cell remains absent and must not be described as recovered or resumed.
+
+Five of six claim-bearing checkpoints are now frozen. Every recorded section
+of those manifests currently matches its on-disk hash and size. Seed 8601 and
+seed 8600 ratchet trajectories pass H_R0; seed 8602 is an interim mechanism
+pass only until it reaches iteration 8,000. Training return is reported only
+as telemetry and does not rank capability.
+
+Checkpoint files and freeze manifests are mode 0444. Referenced configs,
+curricula, and capsules are hash/size pinned and currently match, but remain
+mode 0664; do not describe those auxiliary files as permission-immutable.
+New evaluation status is 0/4 ladders and 0/56 new cells. The reused seed-8601
+receipts contribute 28 cells only after the new ladders are complete.
 
 ## Automatic sequence
 
-The running supervisor owns this exact serial order:
+The running supervisor owns this exact remaining serial order:
 
-1. finish and freeze ratchet seed 8600;
-2. train and freeze fresh fixed seed 8602;
-3. train and freeze ratchet seed 8602;
-4. only after all six paired checkpoints are frozen, score four new 14-cell
+1. finish and freeze ratchet seed 8602;
+2. only after all six paired checkpoints are frozen, score four new 14-cell
    ladders: ratchet/fixed seed 8600 at eval seed 8700 and ratchet/fixed seed
    8602 at eval seed 8702;
-5. reuse the exact ratchet/fixed seed-8601 ladders at eval seed 8701;
-6. write the immutable 84-cell H_R2 analysis.
+3. reuse the exact ratchet/fixed seed-8601 ladders at eval seed 8701;
+4. write the immutable 84-cell H_R2 analysis;
+5. re-audit the locked panel tree after all four new ladders and record the
+   post-evaluation inventory before making the final report claim.
 
 Canonical root:
 
@@ -149,21 +181,78 @@ Focused validation on current SONIC HEAD:
 - repository-wide `make run-checks`: still blocked by unrelated pre-existing
   isort failures
 
-## Tier progression
+## Tier status and contingent research plan
 
-- Tier 1: wait for immutable H_R2. Do not infer capability from training return.
-- Tier 2: launch only if H_R2 passes and only after creating a new immutable
-  preregistration and clean detached worktree for `run_support_screen.sh`.
-- Tier 3: do not launch. Use Tier-2 evidence to decide whether per-stratum
-  advantage normalization is warranted.
-- Tier 4: keep the current H_R2 instrument fixed. Termination-safe quality,
-  held-out motions, realized draws, channel cells, and retention belong to a
-  separately preregistered v2 instrument.
+### Tier 1 — controller safety
+
+**Status:** active confirmation. The selected seed-8601 screen remains a pass
+with descriptive ratchet-minus-fixed gains of +3.125 points frontier success
+AUC and +1.933 points frontier restricted-mean progress AUC. Seeds 8600 and
+8601 now give two complete clean ratchet mechanism passes; seed 8602 is clean
+so far. There are no new seed-8600/8602 capability results.
+
+**Next:** finish the automatic H_R2 chain and apply only the frozen 84-cell,
+component-wise 2-of-3 rule. If it passes, claim stability/noninferiority of the
+ratchet constraint only. If it fails, retain fixed DR, stop the ratchet line,
+and diagnose the failed paired components before authorizing another GPU arm.
+Raw latent gap remains invalid either way.
+
+### Historical closure — nonbinding
+
+If H_R2 is terminal and all three H_R0 trajectories pass, the cheapest useful
+follow-up is the separately preregistered 42-cell historical `lucid_rg` bridge.
+It directly describes whether the ratchet recovered the predeclared seed-8601
+collapse interaction under the identical instrument. It cannot alter H_R2 and
+must use the clean four-file additive `ca057e6` worktree.
+
+### Tier 2 — support expansion
+
+**Status:** code-ready, experimentally unknown, and blocked on H_R2 pass. The
+strict one-seed screen compares historical fixed, fresh fixed, pure fixed-150,
+and the 75%-frontier `fixed_u150` distribution on 60 raw k512 cells. It needs
+three fresh 1,024-env x 8,000-iteration seed-8600 training cells and a new
+immutable preregistration; the stale untracked `run_fixed_u150_arm.sh` is not
+authorized.
+
+**Next if H_R2 passes:** create a clean detached worktree at current reviewed
+code, freeze a new preregistration and comparator lineage, then run
+`run_support_screen.sh`. A candidate must gain at least 2 points of frontier
+success AUC and 3 points of mean hard-cell success while meeting progress and
+in-envelope noninferiority floors. If neither fixed-150 nor fixed-u150 passes,
+stop support expansion. If both pass, prefer fixed-u150 only for a >2-point
+frontier advantage or >1-point nominal recovery with frontier loss no worse
+than 2 points; otherwise prefer pure fixed-150. Any winner remains a one-seed
+screen and needs a later multi-seed confirmation.
+
+### Tier 3 — difficulty-aware optimization
+
+**Status:** no performance evidence. Only the consolidation override plumbing
+bug is fixed; per-stratum advantage normalization, PopArt-lite, critic DR
+context, and phase-change coupling are unrun.
+
+**Next:** authorize per-stratum advantage normalization only if Tier 2 shows
+that a support mixture retains frontier exposure but loses through optimizer
+interference. If pure fixed-150 wins cleanly, first confirm support extension
+across seeds rather than adding optimizer complexity. Critic-only DR context
+defines a new campaign generation.
+
+### Tier 4 — evaluation and claim boundaries
+
+**Status:** the locked v1 instrument is valid for this narrow same-motion H_R2
+decision and must not change mid-chain. It still measures 512 aliases of the
+training clip, not held-out-motion generalization.
+
+**Next:** immediately after H_R2, compare the post-evaluation panel inventory
+with the pre-lock receipt and publish survival/restricted-mean failure-time
+tables from existing arrays. In a separately preregistered v2, prioritize
+first-termination-masked quality and four held-out k128 motion panels; then add
+realized-draw/channel attribution, one compositional cell, and capsule
+retention curves.
 
 ## Read-only monitoring
 
 ```bash
-ps -o pid,ppid,etimes,stat,cmd -p 221231,222084,222101
+ps -o pid,ppid,etimes,stat,cmd -p 221231,411832,411845
 
 jq -sc '{
   rows:length,
@@ -172,7 +261,7 @@ jq -sc '{
   binds:([.[]|select(.latch_active)]|length),
   guards:([.[]|select(.guard_tripped)]|length),
   decreases:([.[]|select((.lambda_after // .lambda) < ((.lambda_before // .lambda)-1e-12))]|length)
-}' /home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260831_231901/seed_8600/lucid_ratchet_rg/curriculum_curriculum_comparison_ne1024_20260831_231901_s8600_lucid_ratchet_rg.jsonl
+}' /home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260901_100208/seed_8602/lucid_ratchet_rg/curriculum_curriculum_comparison_ne1024_20260901_100208_s8602_lucid_ratchet_rg.jsonl
 ```
 
 Do not stage the unrelated untracked Gate-A/learnability files or the
