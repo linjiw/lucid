@@ -1,0 +1,102 @@
+{
+  "kind": "lucid_ratchet_confirmation_panel_preservation_activation",
+  "schema_version": 1,
+  "created_at": "2026-09-01T00:41:19-04:00",
+  "state": "active_before_any_new_h_r2_capability_evaluation",
+  "preservation_amendment": {
+    "external_path": "/home/linjiw/lucid-sonic/manifests/ratchet_confirmation_20260831/ratchet_confirmation_panel_preservation_amendment_20260901.json",
+    "repository_path": "receipts/manifests/ratchet_confirmation_20260831/ratchet_confirmation_panel_preservation_amendment_20260901.json",
+    "sha256": "9366af3faa0ff6714ddb50368937f88e5b3211dead2a6882427d6c168fe31af9",
+    "repository_commit": "10849b9"
+  },
+  "chronology": {
+    "new_confirmation_evaluation_marker_exists": false,
+    "new_confirmation_capability_cells_scored": 0,
+    "active_training_cell": "lucid_ratchet_rg seed 8600",
+    "active_training_rows_observed_after_lock": 1940
+  },
+  "actions": [
+    {
+      "path": "/home/linjiw/lucid-sonic/manifests/replicate_panel_panel_hob002_k512.json",
+      "action": "chmod a-w",
+      "mode_before": "664",
+      "mode_after": "444"
+    },
+    {
+      "path": "/home/linjiw/lucid-sonic/pools/panels/panel_hob002_k512",
+      "action": "chmod a-w",
+      "mode_before": "775",
+      "mode_after": "555"
+    },
+    {
+      "path": "/home/linjiw/lucid-sonic/pools/panels/panel_hob002_k512/robot_filtered",
+      "action": "chmod a-w",
+      "mode_before": "775",
+      "mode_after": "555"
+    },
+    {
+      "path": "/home/linjiw/lucid-sonic/pools/debug512/robot_filtered/walk_hands_on_back_loop_002__A066_M.pkl",
+      "action": "chmod a-w",
+      "mode_before": "664",
+      "mode_after": "444",
+      "hardlink_count": 3
+    }
+  ],
+  "post_lock_inventory": {
+    "panel_receipt": {
+      "sha256": "e2e61933405e6701b0563eb4df793b6faf5c90d8ae5b7d8fc1e11f47142aefd7",
+      "inode": 9064962,
+      "size": 1815,
+      "mtime_epoch": 1787956174,
+      "ctime_epoch": 1788237658
+    },
+    "panel_root": {
+      "inode": 22020892,
+      "size": 4096,
+      "mtime_epoch": 1787956174,
+      "ctime_epoch": 1788237658
+    },
+    "alias_directory": {
+      "inode": 22020903,
+      "size": 36864,
+      "mtime_epoch": 1787956174,
+      "ctime_epoch": 1788237658,
+      "entry_count": 512,
+      "symlink_count": 512,
+      "other_entry_count": 0,
+      "sorted_stems_sha256": "4b0fae026d8763e5cb1a39957ab8131e5372e1d47d4ec7e526791b76fe7f1430",
+      "sorted_name_and_link_text_sha256": "edb9bf2a9dd1d747a7942e8a924d54fc62168c5765cdb2218fdaf2ad4e5b3c74",
+      "sorted_lstat_and_link_text_sha256": "5ada1f12740f05b100597792fb63bdc530bb4de1bd3cd69657f05e39f78a9b67",
+      "canonical_target_count": 1,
+      "canonical_target": "/home/linjiw/lucid-sonic/pools/debug512/robot_filtered/walk_hands_on_back_loop_002__A066_M.pkl"
+    },
+    "canonical_source": {
+      "sha256": "a7f10e7aa26e53cc4e346151d4ccd74e932e3aafa1cfaaac77dab8b8eec40929",
+      "inode": 11169791,
+      "nlink": 3,
+      "size": 33022,
+      "mtime_epoch": 1787905505,
+      "ctime_epoch": 1788237658
+    },
+    "frozen_training_motion_sha256": "a7f10e7aa26e53cc4e346151d4ccd74e932e3aafa1cfaaac77dab8b8eec40929"
+  },
+  "verified": [
+    "All four planned objects lost every write bit.",
+    "No scientific input bytes, panel paths, alias names, link texts, resolved targets, or inode identities changed across the lock.",
+    "The panel receipt and source SHA-256 values still equal the frozen H_R2 amendment.",
+    "The 512-name, link-text, and per-alias lstat digests are byte-identical to the pre-lock inventory.",
+    "The active seed-8600 training process remained alive and continued writing curriculum rows after the lock.",
+    "No new H_R2 capability evaluation had started when activation was recorded."
+  ],
+  "claim_effect": {
+    "h_r2_decision_rule_changed": false,
+    "h_r2_instrument_changed": false,
+    "new_evaluation_claim_authorization": false,
+    "purpose": "accidental-mutation protection and contemporaneous evidence continuity"
+  },
+  "limitations": [
+    "This lock is prospective for the four new evaluation ladders; reused seed-8601 receipts retain the disclosed forensic-continuity limitation.",
+    "Unix permission bits are not WORM storage and higher writable ancestors remain trusted.",
+    "The source inode's read-only mode applies to its three hardlink names."
+  ]
+}
