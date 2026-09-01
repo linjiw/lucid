@@ -9,7 +9,6 @@
     "parent_commit": "707fc90"
   },
   "status": "Filed BEFORE any Phase-2 policy was trained and before any Phase-2 cell existed. Additive: the parent is not rewritten. No decision rule, threshold, endpoint, arm definition or prediction is changed. The parent's own amendment_rule requires this record because a pinned code file changed.",
-
   "corrections": [
     {
       "id": "A1",
@@ -30,15 +29,34 @@
       "cause": "pytest was run without LUCID_ROOT set, so gear_sonic/research/practice_utility/paths.py fell back to DEFAULT_LUCID_ROOT = /data/robotixx/lucid-sonic, which does not exist on this host. The pristine-worktree check that appeared to confirm the failures inherited the same missing variable, so it confirmed the environment fault rather than ruling it out.",
       "corrected_status": "With LUCID_ROOT=/home/linjiw/lucid-sonic as env/lucid_env.sh exports, the suite is 1635 passed, 0 failed.",
       "consequence_for_phase_2": "None for the design. Operationally it matters: any driver or analysis invoked without sourcing env/lucid_env.sh will silently resolve manifests, artifacts, outputs and pools under a non-existent root."
+    },
+    {
+      "id": "A3",
+      "severity": "design_correction_before_any_data",
+      "target": "design.max_delay (was 14), arms.gate_150.probe_max (was 2.0), and the probe's maximum applied intensity",
+      "defect": "The probe stratum was allowed to sit one step above the frontier without a ceiling, so a gate or ramp arm at frontier 1.5 would apply lambda 1.625 in its probe cohort. fixed_150 and fixed_u150 top out at 1.5. The expansion arms would therefore have trained on strictly MORE support than the arms they are compared against, and a win would have been confounded with a support difference -- the same class of error as reading the ratchet's difficulty increase as a method effect.",
+      "discovered_by": "a dry run of the full five-arm launch, which fixed_u150's frozen delay contract refused at --max-delay 14",
+      "correction": "The probe is capped at the frontier ceiling: gate_probe_max = 1.5 for both expansion arms. Maximum applied intensity is now exactly 1.5 for all four 1.5 arms. At the ceiling the probe stratum becomes a second frontier stratum, which is harmless because the gate has stopped expanding. --max-delay for the campaign changes from 14 to 12, which is also fixed_u150's frozen requirement.",
+      "authoritative_values": {
+        "max_delay": 12,
+        "gate_probe_max": 1.5,
+        "max_applied_lambda_all_1_5_arms": 1.5
+      },
+      "code": {
+        "commit": "fc70562108942fa73884001c2ec3296be49b3848",
+        "gear_sonic/research/practice_utility/dr_curriculum.py": "4dce428ae753ffec9d3ebb325f53421b3b64203e8fae4136dd112ffaddc7cfb2",
+        "scripts/practice_utility/run_curriculum_comparison.py": "a4ec08016d812a84e05156fb9abc07f69eaeeb4137e13e81ccf8f5e5e159dba3"
+      },
+      "data_driven": false,
+      "note": "Filed before any Phase-2 policy was trained. No endpoint, threshold, decision rule or prediction changes; the comparison becomes cleaner, not easier."
     }
   ],
-
   "unchanged": "Every arm definition, stratum layout, endpoint, weight, threshold, decision rule, mechanism gate, frozen prediction and limitation in the parent preregistration is unchanged by this amendment.",
-
   "verified": [
     "dr_curriculum.py at commit d65514c hashes to 2ff8471b69f4114b34256d1a91565e3be5e650f0d6e41d616f2a1aed890a4e40",
     "tests/practice_utility: 1635 passed, 0 failed, with LUCID_ROOT set",
-    "black --check and ruff check pass on every changed file"
+    "black --check and ruff check pass on every changed file",
+    "five-arm Phase-2 launch dry run builds at --max-delay 12; tests 1640 passed"
   ],
   "not_yet_verified": [
     "every Phase-2 outcome; no policy has been trained"
