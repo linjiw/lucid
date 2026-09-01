@@ -5,6 +5,89 @@ It supersedes the older live-process state in `lucid-handoff-2026-08-31.md`
 and the pre-result ending of `fable.md`; the current operational companion is
 `lucid-handoff-2026-09-01.md`.
 
+## H_R2 READ OUT — 2026-09-01 16:08 EDT
+
+The three-seed confirmation completed cleanly and the analysis receipt is
+frozen read-only at SHA-256
+`8656575f94925eb43527bd74be68f613aed41dfba57e4ca759c29e693670cc3c`. Every
+boundary marker is `OK`; the instrument audit passed at 84 cells.
+
+**Verdict: `pass`.** Noninferiority is authorized. Superiority is explicitly
+NOT authorized, and the receipt records that itself
+(`superiority_claim_authorized: false`).
+
+All four preregistered AUC components passed their frozen 2-of-3 margin at 3/3:
+
+| component | margin (pts) | mean delta (pts) | within/paired |
+|---|---|---|---|
+| success_rate : frontier AUC | 2.000 | +0.597 | 3/3 |
+| success_rate : in-envelope AUC | 1.000 | +0.065 | 3/3 |
+| progress_rate : frontier AUC | 2.000 | +0.495 | 3/3 |
+| progress_rate : in-envelope AUC | 1.000 | +0.010 | 3/3 |
+
+### The +3.125 is now settled: it was seed noise
+
+Ratchet minus fixed on frontier success AUC, per seed:
+
+| seed | ratchet | fixed | delta (pts) |
+|---|---|---|---|
+| 8600 | 0.902995 | 0.904622 | **−0.163** |
+| 8601 | 0.913086 | 0.881836 | **+3.125** |
+| 8602 | 0.820312 | 0.832031 | **−1.172** |
+
+Mean +0.597 pts, paired SD 2.247 pts. **Two of three seeds favour fixed.** The
+seed-8601 gain that the earlier draft called promising is the single positive
+draw of three, and the sign flips across seeds. The superseding note filed on
+2026-09-01 14:45 is confirmed by measurement rather than by argument.
+
+The preregistered informative sub-test — ratchet minus fixed positive on BOTH
+8600 and 8602 with each gap above +3.0 pts, prior probability about 0.4% under
+pure seed noise — did **not** trigger. Both new seeds are negative. Nothing
+beyond exposure needs to be invoked to explain the ratchet arm.
+
+### The safety claim is now three-seed
+
+All six H_R0 mechanism gates pass on all three ratchet seeds:
+
+| seed | first lambda >= 0.95 | blocked PI decreases | applied decreases | unguarded | terminal high-lambda |
+|---|---|---|---|---|---|
+| 8600 | iteration 64 | 453 | **0** | 0 | 1.000 |
+| 8601 | iteration 70 | 951 | **0** | 0 | 1.000 |
+| 8602 | iteration 65 | 629 | **0** | 0 | 1.000 |
+
+2,033 downward requests refused across three runs, zero applied. Against 6 of 6
+unconstrained cells moving difficulty down and 2 of 6 evacuating it terminally.
+That contrast, not a frontier gain, is the Tier-1 contribution.
+
+### New: the between-seed effect is large, and it is not the arm
+
+Seed means of frontier success AUC, pooling both arms: 8600 = 0.904,
+8601 = 0.898, **8602 = 0.826**. Seed 8602 sits about 7.8 points below the other
+two for *both* arms. Pooled across the six arm-seeds the SD is 4.0 points and
+the range is 9.3 points, far wider than the 1.57-point identical-exposure
+cluster the earlier analysis was calibrated on.
+
+Two consequences. P1's band test reads FAIL for `fixed@s8602` and
+`lucid_ratchet_rg@s8602`, both below the recency band — but P1 carries no
+falsification weight by preregistration, and this is a seed effect on absolute
+capability rather than evidence about exposure. And the honest noise figure for
+a *paired* comparison is now measured, not assumed: **2.25 points on the
+four-cell frontier AUC**. Any one-seed screen, including Phase 2, must be read
+against that.
+
+P2 passed exactly: fixed@s8600 re-scored to 2779/3072, bit-identical to the
+prior value. The 3.958e-07 difference is entirely the preregistration's 6-dp
+transcription. The evaluator and panel did not drift.
+
+### What this authorizes
+
+- The monotone ratchet is a stable, noninferior safety constraint against late
+  anti-gating. Nothing more.
+- It does not rehabilitate the latent gap, which the same-day signal audit
+  disqualified on five runs.
+- The historical bridge (P3) and the Tier-2 support screen are both unblocked
+  by this receipt.
+
 ## Live continuation update
 
 The targeted seed-8601 screen described below is complete, but the prospective
