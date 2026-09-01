@@ -1,6 +1,6 @@
 # LUCID handoff — Tier-1 ratchet confirmation
 
-> Confirmation update (2026-08-31 23:25 EDT): the one-seed screen passed and
+> Confirmation update (2026-08-31 23:20 EDT): the one-seed screen passed and
 > the parent-preregistered H_R2 continuation is now frozen, committed, and
 > preflight-verified. This section supersedes the older process snapshot below.
 
@@ -48,6 +48,31 @@ evaluation receipts, frozen-checkpoint manifests, and the final
 `lucid_ratchet_confirmation_analysis.json` live below it. Logs and bulky eval
 artifacts remain under `~/lucid-sonic/outputs/ratchet_confirmation_20260831/`
 and `~/lucid-sonic/artifacts/ratchet_confirmation_eval_20260831/`.
+
+Active process snapshot at 23:20 EDT:
+
+- driver PID 221231, started 23:18:41;
+- first-cell launcher PID 222084;
+- trainer PID 222101;
+- experiment `curriculum_comparison_ne1024_20260831_231901`;
+- log `~/lucid-sonic/outputs/curriculum_comparison_ne1024_20260831_231901_s8600_lucid_ratchet_rg.log`;
+- first observed curriculum state: 13 rows, lambda 0.05835, zero guard trips.
+
+Do not start another GPU job while this tree is alive. Read-only monitoring:
+
+```bash
+ps -o pid,ppid,etimes,stat,cmd -p 221231,222084,222101
+tail -n 30 ~/lucid-sonic/outputs/curriculum_comparison_ne1024_20260831_231901_s8600_lucid_ratchet_rg.log
+jq -sc '{rows:length,last:.[-1],binds:([.[]|select(.latch_active)]|length),guards:([.[]|select(.guard_tripped)]|length)}' \
+  ~/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260831_231901/seed_8600/lucid_ratchet_rg/curriculum_curriculum_comparison_ne1024_20260831_231901_s8600_lucid_ratchet_rg.jsonl
+```
+
+The amendment's embedded `created_at=23:20:00` is a manual timestamp error:
+the exact file mtime is 23:16:10, root commit `9b5879f` locked its blob at
+23:18:08, and the active driver began at 23:18:41. Do not rewrite the binding
+file. The post-launch correction is
+`receipts/manifests/ratchet_confirmation_20260831/ratchet_confirmation_launch_provenance_20260831.json`
+(SHA-256 `189de9bb43610325cf4ac6931f064efe4372ae88344d8524fa9dd33adbcbed2b`).
 
 Recovery is deliberately fail-closed. A `.started` directory without exactly
 one complete receipt means the cell was interrupted: preserve it, do not

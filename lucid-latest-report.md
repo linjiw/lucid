@@ -1,6 +1,6 @@
 # LUCID latest report — Tier 1–4 status and ratchet confirmation
 
-Snapshot: 2026-08-31 23:25 EDT. This is the current result and handoff ledger.
+Snapshot: 2026-08-31 23:20 EDT. This is the current result and handoff ledger.
 It supersedes the older live-process state in `lucid-handoff-2026-08-31.md`
 and the pre-result ending of `fable.md`.
 
@@ -30,6 +30,18 @@ capability cell had run when the amendment was frozen.
   claim-bearing checkpoints before scoring four new 14-cell ladders, then
   combines them with the two immutable seed-8601 ladders for an 84-cell H_R2
   analysis.
+- The serial driver is now live: PID 221231, with ratchet seed-8600 trainer PID
+  222101 on experiment `curriculum_comparison_ne1024_20260831_231901`.
+  Reused fixed-8600, fixed-8601, and ratchet-8601 checkpoints were frozen
+  read-only before this first new cell started.
+
+Chronology disclosure: the amendment's manually typed `created_at` was rounded
+forward to 23:20 even though the file was written at 23:16:10, committed at
+23:18:08, and the driver started at 23:18:41. The exact blob was therefore
+prospective, but its display timestamp is inaccurate. It was not rewritten
+after launch; the immutable [launch provenance receipt](receipts/manifests/ratchet_confirmation_20260831/ratchet_confirmation_launch_provenance_20260831.json)
+records the correction (SHA-256
+`189de9bb43610325cf4ac6931f064efe4372ae88344d8524fa9dd33adbcbed2b`).
 
 This is a program continuation, not an independent blinded confirmation:
 seed 8601 was post-selected and fixed-8600 capability was already known.
@@ -233,8 +245,8 @@ instrument.
 | Workstream | Current truth |
 |---|---|
 | Reboot recovery | Partial seed-8602/off remains evidence only; do not resume it. Old campaign fixed-8602 and the original multi-seed ladder remain missing. |
-| Ratchet chain | Seed-8601 screen complete; three-seed H_R2 continuation preregistered and preflight-verified, with new GPU cells not yet scored at this snapshot. |
-| GPU | Idle apart from desktop use at the report lock; the serial confirmation driver is the next authorized owner. |
+| Ratchet chain | Seed-8601 screen complete; three-seed H_R2 continuation active on the first new training cell, ratchet seed 8600. No new capability cell has been scored. |
+| GPU | Owned by trainer PID 222101 under serial driver PID 221231. Do not start another GPU workflow. |
 | New code | Initial implementation `3457718`; hardened confirmation commit `ca057e658acc59773e798057980b827d65988441`. |
 | Focused validation | 28 confirmation tests pass; all 1,385 tracked practice-utility tests pass with four existing warnings. Three failures belong only to concurrent untracked Tier-2 sampler tests and are excluded. |
 | Repository checks | `git diff --check` passes; full `make run-checks` remains blocked by unrelated pre-existing isort failures. |

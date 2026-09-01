@@ -1,0 +1,77 @@
+{
+  "kind": "lucid_ratchet_confirmation_launch_provenance",
+  "schema_version": 1,
+  "created_at": "2026-08-31T23:20:22-04:00",
+  "status": "running_first_new_training_cell",
+  "preregistration": {
+    "path": "/home/linjiw/lucid-sonic/manifests/lucid_monotone_ratchet_confirmation_amendment_20260831.json",
+    "sha256": "2064bf7a16ca159092c6ebeabfbf09bc2fe3c1b30ce359a64505503a83786044",
+    "embedded_created_at": "2026-08-31T23:20:00-04:00",
+    "filesystem_mtime": "2026-08-31T23:16:10.476489256-04:00",
+    "root_commit": "9b5879fc7c48d30a5164a187f69f5c49ce0c3420",
+    "root_commit_time": "2026-08-31T23:18:08-04:00",
+    "root_blob": "59696161597b9f9da83421b5d3b0e31208400dfa"
+  },
+  "chronology_correction": {
+    "issue": "The amendment's manually entered created_at was rounded forward to 23:20:00, although the immutable file was actually written at 23:16:10 and committed at 23:18:08. The active driver began at 23:18:41 and the first trainer at 23:19:01.",
+    "scientific_effect": "none; the exact amendment bytes and hash were demonstrably frozen before any new training process began",
+    "action": "Do not rewrite the preregistration after launch. Preserve the inaccurate display timestamp and use this post-launch chronology receipt as the explicit correction."
+  },
+  "code": {
+    "sonic_commit": "ca057e658acc59773e798057980b827d65988441",
+    "sonic_commit_time": "2026-08-31T23:10:21-04:00",
+    "worktree": "/home/linjiw/lucid-ratchet-confirm",
+    "worktree_clean_at_launch": true,
+    "root_commit": "9b5879fc7c48d30a5164a187f69f5c49ce0c3420"
+  },
+  "launch": {
+    "driver_pid": 221231,
+    "driver_start": "2026-08-31T23:18:41-04:00",
+    "first_cell_launcher_pid": 222084,
+    "first_cell_launcher_start": "2026-08-31T23:19:00-04:00",
+    "first_cell_trainer_pid": 222101,
+    "first_cell_trainer_start": "2026-08-31T23:19:01-04:00",
+    "first_cell": "seed 8600 lucid_ratchet_rg, 1024 envs, 8000 iterations, from scratch",
+    "experiment_id": "curriculum_comparison_ne1024_20260831_231901",
+    "log": "/home/linjiw/lucid-sonic/outputs/curriculum_comparison_ne1024_20260831_231901_s8600_lucid_ratchet_rg.log",
+    "receipt_boundary": "/home/linjiw/lucid-sonic/manifests/ratchet_confirmation_20260831/training/ratchet_s8600",
+    "first_observed_telemetry": {
+      "rows": 13,
+      "global_step": 13,
+      "lambda": 0.05834984925651551,
+      "guard_trips": 0,
+      "ratchet_binds": 0
+    }
+  },
+  "nonexecuting_attempt": {
+    "pid_reported": 220981,
+    "outcome": "The initial nohup wrapper exited before preflight output, start markers, freeze manifests, or training. It made no experiment-state change and is not the active launch."
+  },
+  "reused_checkpoints_frozen_before_new_capability": {
+    "fixed_s8600": {
+      "manifest": "/home/linjiw/lucid-sonic/manifests/ratchet_confirmation_20260831/frozen_checkpoints/fixed_s8600.json",
+      "manifest_sha256": "e61b4a8edd10a680f055ff78faac12dfcec69b4de543e2a4098dd51d5ea88e15",
+      "checkpoint_sha256": "e7fe72a0a48d6d4d534368ee9870b7a5e382bf2c51bb025d35eadee0818aaa8d",
+      "mode": "0o444"
+    },
+    "fixed_s8601": {
+      "manifest": "/home/linjiw/lucid-sonic/manifests/ratchet_confirmation_20260831/frozen_checkpoints/fixed_s8601.json",
+      "manifest_sha256": "bf0b103b2584df906d12551701e82934ee5a07c111c3f0de1cf589e983d6b0c0",
+      "checkpoint_sha256": "227a1c2f9822e8968fd17810ae2a2ea87193d0f5c00d052c37bb7f212df26bb1",
+      "mode": "0o444"
+    },
+    "lucid_ratchet_rg_s8601": {
+      "manifest": "/home/linjiw/lucid-sonic/manifests/ratchet_confirmation_20260831/frozen_checkpoints/lucid_ratchet_rg_s8601.json",
+      "manifest_sha256": "d24925437407c70de430a2a1ca119b758633ff216de53e1e7995a09e8a8dec71",
+      "checkpoint_sha256": "7df270768f6d4c424fb7f8d82516e516fed154dc3a6c4ef7d5f597b72a689a41",
+      "mode": "0o444"
+    }
+  },
+  "verified": [
+    "the preflight completed before checkpoint freezing and training",
+    "the exact preregistration blob was committed 33 seconds before the active driver started",
+    "the exact code commit and all frozen input hashes passed at active launch",
+    "all three reused checkpoints were marked read-only before the first new training cell began",
+    "no capability evaluation has started"
+  ]
+}
