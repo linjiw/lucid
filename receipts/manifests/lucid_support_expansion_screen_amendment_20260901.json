@@ -63,6 +63,35 @@
       ],
       "zero_gpu_followup": "gate_150 records probe survival every iteration in survival_<branch>.jsonl, so the gate law can be replayed against the ACTUAL probe series at any threshold for no GPU cost: tools/simulate_gate.py --survival-jsonl <path> --thresholds ... . That measures how conservative 0.80 was on real data and fixes the threshold for a second seed on evidence rather than on a guess. This analysis is authorized in advance and its result may set the threshold for Phase 3, but it may NOT revise any Phase-2 decision.",
       "data_driven": false
+    },
+    {
+      "id": "A5",
+      "severity": "power_correction_frozen_before_data",
+      "target": "the PRIMARY endpoint's threshold justification (parent: 'SD 0.0221, so 0.05 is about 2.3 SD')",
+      "defect": "The parent justified the +0.05 threshold using the identical-exposure noise cluster's SD of 0.0221. The H_R2 readout of 2026-09-01 16:08 supplies something better: three genuinely PAIRED ratchet-minus-fixed deltas on the exact {phys_175, phys_200} band, from three training seeds on the same instrument.",
+      "measured": {
+        "endpoint": "mean success on phys_175 and phys_200, equal weight",
+        "paired_deltas_pts": [
+          0.9766,
+          3.9062,
+          -1.5624
+        ],
+        "seeds": [
+          8600,
+          8601,
+          8602
+        ],
+        "mean_pts": 1.1068,
+        "sd_pts": 2.7366,
+        "n": 3,
+        "source": "lucid_ratchet_confirmation_analysis.json sha256 8656575f94925eb43527bd74be68f613aed41dfba57e4ca759c29e693670cc3c"
+      },
+      "consequence": "The frozen +0.05 threshold is 1.83 SD of a measured paired delta, not the 2.3 SD the parent claimed. A 2.3-SD threshold on this endpoint would be 0.063. The screen therefore has LESS power than preregistered, and a single-seed pass at 0.05-0.06 is weaker evidence than the parent's wording implies.",
+      "threshold_NOT_changed": "0.05 stays. Raising it after seeing a noise estimate would be as much a post-hoc adjustment as lowering it, and the parent's rule forbids revising thresholds. What changes is the STRENGTH claimed for a pass, which is a reporting obligation, not a decision rule.",
+      "reporting_obligation": "Any Phase-2 result at or near the threshold must be reported as ~1.8 SD of the measured paired noise, explicitly, and must not be described as clearing a 2.3-SD bar. Phase 3 multi-seed confirmation is mandatory before ANY directional language, which the parent already required and this measurement reinforces.",
+      "related_finding": "The between-seed effect on absolute capability is large and is not the arm: pooling both arms, seed means of frontier success AUC are 0.904 (8600), 0.898 (8601), 0.826 (8602), so seed 8602 sits ~7.8 pts below the others for BOTH arms. Pooled six-arm SD 4.0 pts, range 9.3 pts.",
+      "data_driven": true,
+      "data_driven_note": "This correction IS data-driven, unlike A1-A4, but the data is from a DIFFERENT and already-decided experiment (H_R2), not from any Phase-2 cell. No Phase-2 policy has been trained. It changes no threshold and no decision rule; it corrects a power claim."
     }
   ],
   "unchanged": "Every arm definition, stratum layout, endpoint, weight, threshold, decision rule, mechanism gate, frozen prediction and limitation in the parent preregistration is unchanged by this amendment.",
@@ -71,7 +100,8 @@
     "tests/practice_utility: 1635 passed, 0 failed, with LUCID_ROOT set",
     "black --check and ruff check pass on every changed file",
     "five-arm Phase-2 launch dry run builds at --max-delay 12; tests 1640 passed",
-    "gate feasibility replay over the real fixed@s8600 survival series; tool at tools/simulate_gate.py"
+    "gate feasibility replay over the real fixed@s8600 survival series; tool at tools/simulate_gate.py",
+    "paired H_R2 deltas on the Phase-2 primary band recomputed from the frozen analysis receipt"
   ],
   "not_yet_verified": [
     "every Phase-2 outcome; no policy has been trained"
