@@ -1,0 +1,67 @@
+{
+  "kind": "lucid_p3_readout",
+  "schema_version": 1,
+  "arm": "lucid_rg@s8601",
+  "arm_note": "the predeclared collapse: held lambda 1.0 for thousands of iterations, final lambda 0.062",
+  "preregistration": "/home/linjiw/lucid/receipts/manifests/lucid_frontier_exposure_law_preregistration_20260901.json",
+  "preregistration_sha256": null,
+  "receipts_read": [
+    "/home/linjiw/lucid-sonic/manifests/curriculum_robustness_ne512_20260829_214540.json",
+    "/home/linjiw/lucid-sonic/manifests/curriculum_robustness_ne512_20260830_013413.json",
+    "/home/linjiw/lucid-sonic/manifests/curriculum_robustness_ne512_20260830_015345.json",
+    "/home/linjiw/lucid-sonic/manifests/curriculum_robustness_ne512_20260830_020139.json",
+    "/home/linjiw/lucid-sonic/manifests/curriculum_robustness_ne512_20260901_161202.json",
+    "/home/linjiw/lucid-sonic/manifests/curriculum_robustness_ne512_20260901_161720.json"
+  ],
+  "frozen_bands": {
+    "readout": "42-cell historical lucid_rg bridge, arm lucid_rg seed 8601 (the predeclared collapse), scored on the frozen phys_125..200 grid",
+    "status_today": "UNSCORED and UNSCHEDULED. Verified: no phys_* cell exists for this arm on the 512-alias panel anywhere under /home/linjiw/lucid-sonic; the only lucid_rg@8601 evaluations on disk are old ne128 cells from a different 128-env run on the old cell grid. The bridge instrument is also not built: HIST_PREREG, HIST_REPO (/home/linjiw/lucid-ratchet-historical-bridge), HIST_ROOT and HIST_EVAL_ARTIFACT_ROOT are all absent from disk. P3 is therefore a planned measurement, not a scheduled one.",
+    "hygiene_hazard": "A synthetic pytest fixture at /home/linjiw/lucid-sonic/tmp/pytest-of-linjiw/pytest-212/ratchet_historical_bridge0/historical_eval/lucid_rg_8601.json contains a complete phys ladder with every cell at 0.5. No glob-based collector may mistake it for a real result.",
+    "comparator": {
+      "fixed@s8601": 0.881836
+    },
+    "recency_H2000": {
+      "exposure": 0.556184,
+      "point": 0.72473,
+      "lo": 0.67376,
+      "hi": 0.77569,
+      "interval_type": "t(5) prediction interval for one new observation"
+    },
+    "uniform": {
+      "exposure": 0.822335,
+      "point": 0.82567,
+      "lo": 0.76087,
+      "hi": 0.89047,
+      "interval_type": "t(5) prediction interval for one new observation"
+    },
+    "discrimination_honest": "The recency band [0.67366, 0.77571] and the uniform band [0.76086, 0.89046] OVERLAP on [0.76086, 0.77571]. P3 separates the two laws only if it lands BELOW 0.76086 (favors recency) or ABOVE 0.77571 (favors uniform). An outcome inside the overlap discriminates nothing.",
+    "model_family_span": "Across tested single-variable models with in-sample R^2 > 0.97 the P3 point prediction spans 0.6438 (boxcar last-2000) to 0.8940 (stratum_mean alone) -- 25 pts, covering every declared bucket. The best cross-validating model (boxcar last-4000, Q^2 0.9771) predicts 0.76087. P3 therefore selects a member of an equivalence class at least as much as it confirms or falsifies 'the exposure law'.",
+    "outcomes_exhaustive": {
+      "law_falsified_low": "< 0.67366 -- evacuation costs far more than any fitted law predicts",
+      "recency_favored": "[0.67366, 0.76086)",
+      "ambiguous_no_discrimination": "[0.76086, 0.77571]",
+      "uniform_favored": "(0.77571, 0.88184)",
+      "collapse_is_cosmetic_LAW_FALSIFIED": ">= 0.881836 -- indistinguishable from fixed@s8601, i.e. terminal difficulty evacuation is free and the exposure framing is wrong"
+    },
+    "floor_effect_addressed": "A reviewer argued the arm should read near off (0.4928). Refuted by the fit set itself: lucid_s4_rg@s8600 has a LONGER, DEEPER terminal evacuation (206 contiguous iterations at dose < 0.05, final dose 0.0075) than lucid_rg@s8601 (zero such iterations; mean lambda over its last 1000 iterations is 0.3528) and still scored 0.697266, more than 20 pts above off."
+  },
+  "global_falsification_rule": "Keyed on P3 alone and two-sided, because P1 and P2 are near-certain passes and P4 has no readout. The exposure hypothesis is REJECTED if P3 >= 0.881836 (evacuation is free) or P3 < 0.67366 (evacuation costs far more than any fitted law). The RECENCY term specifically is rejected if P3 > 0.77571. If P3 lands in [0.76086, 0.77571] the design has failed to discriminate and no model selection is authorized.",
+  "per_cell_success": {
+    "phys_000": 1.0,
+    "phys_025": 1.0,
+    "phys_050": 1.0,
+    "phys_075": 0.998047,
+    "phys_100": 0.988281,
+    "phys_125": 0.945312,
+    "phys_150": 0.792969,
+    "phys_175": 0.662109,
+    "phys_200": 0.583984
+  },
+  "frontier_success_auc": 0.739909,
+  "held_out_band_success": 0.623047,
+  "status": "SCORED",
+  "verdict": [
+    "Exposure hypothesis SURVIVES: the value is inside the fitted range.",
+    "Consistent with the recency-weighted dose and below the uniform prediction. Recency is not thereby established: a boxcar trailing mean beats the exponential kernel out of sample."
+  ]
+}

@@ -102,17 +102,33 @@ log "instrument verified: evaluator ${observed:0:12} at ${PIN_COMMIT:0:7}"
 # the endpoint.
 readonly PRESETS="phys_000 phys_025 phys_050 phys_075 phys_100 phys_125 phys_150 phys_175 phys_200"
 
-run_seed() {
-    local seed="$1" eval_seed="$2"
-    shift 2
-    local modes=("$@")
-    log "seed ${seed} -> eval seed ${eval_seed}, modes: ${modes[*]}"
+# Each arm carries its OWN true adjacent config.yaml from its Hydra run
+# directory, and they differ between arms. ensure_checkpoint_configs installs a
+# single config beside every checkpoint in one invocation, so each arm is scored
+# in its own invocation with its own pinned config -- the same discipline the
+# historical bridge uses when it stages checkpoints with their true configs.
+score_one() {
+    local seed="$1" mode="$2" eval_seed="$3"
+    local config sha
+    config="$("${PY}" -c "
+import json,sys
+d=json.load(open('${RECEIPT}'))
+for a in d['arms'].values():
+    if a['seed']==${seed} and a['mode']=='${mode}':
+        print(a['training_config']); break
+else:
+    raise SystemExit('no arm ${mode}@${seed} in receipt')
+")"
+    [[ -f "${config}" ]] || { echo "training config missing: ${config}" >&2; exit 1; }
+    sha="$(sha256sum "${config}" | cut -d' ' -f1)"
+    log "${mode}@s${seed} -> eval seed ${eval_seed}, config ${sha:0:12}"
     local args=(
         "${PY}" "${evaluator}"
         --training-receipt "${RECEIPT}"
+        --training-config "${config}"
         --num-envs 512
         --seeds "${seed}"
-        --modes "${modes[@]}"
+        --modes "${mode}"
         --presets ${PRESETS}
         --eval-seed-base "${eval_seed}"
         --max-delay 12
@@ -130,10 +146,12 @@ run_seed() {
 
 mkdir -p "${LUCID_ROOT}/outputs/${EXPERIMENT}"
 
-# Seed 8601 first: it carries P3, the only measurement on this list that can
-# change the paper's framing.
-run_seed 8601 8701 lucid_rg lucid_s4_rg
-run_seed 8602 8702 lucid_rg lucid_s4_rg
+# P3 first: it is the only measurement on this list that can change the
+# paper's framing, and if anything goes wrong later it is the one to have.
+score_one 8601 lucid_rg     8701
+score_one 8601 lucid_s4_rg  8701
+score_one 8602 lucid_rg     8702
+score_one 8602 lucid_s4_rg  8702
 
 log "Phase-0 scoring complete. Receipts in ${LUCID_ROOT}/manifests"
 log "Score P3 with: tools/score_p3.py"
