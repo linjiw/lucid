@@ -1,8 +1,38 @@
 # LUCID latest report — Tier 1–4 status and ratchet confirmation
 
-Snapshot: 2026-08-31 23:20 EDT. This is the current result and handoff ledger.
+Snapshot: 2026-08-31 23:58 EDT. This is the current result and handoff ledger.
 It supersedes the older live-process state in `lucid-handoff-2026-08-31.md`
 and the pre-result ending of `fable.md`.
+
+## Live continuation update
+
+The targeted seed-8601 screen described below is complete, but the prospective
+three-seed H_R2 continuation is still running. The first new cell is ratchet
+seed 8600 under driver PID 221231 and trainer PID 222101. At the latest audited
+snapshot it had 875/8,000 contiguous curriculum rows, reached lambda >= 0.95 at
+iteration 64, remained at lambda 1.0, blocked 24 PI-requested decreases, and
+had zero guard trips, zero applied lambda decreases, and no error signature.
+No new capability cell has been scored, so H_R2 remains undecidable.
+
+The exact serial order remains ratchet-8600, fresh fixed-8602, ratchet-8602,
+then four new 14-cell ladders and the immutable 84-cell analysis. Reused
+fixed-8600, fixed-8601, and ratchet-8601 checkpoints are already frozen
+read-only. The driver is fail-closed at every cell boundary: an interrupted
+`.started` cell may not be resumed or silently retrained.
+
+CPU-side research has advanced without entering the clean confirmation
+worktree:
+
+- SONIC commit `fca5576` hardens the expanding-support sampler state contract.
+- SONIC commit `4ab0e8f` hardens fixed-150/fixed-u150 launch, telemetry, and
+  evaluator contracts.
+- SONIC commit `c62e506` adds the nonbinding historical `lucid_rg` bridge. It
+  activates only after all three H_R0 mechanism gates pass, validates 126 exact
+  cells and frozen checkpoint/config provenance, and cannot alter H_R2.
+- The Tier-2 support-screen analyzer is not committed yet. Independent review
+  found incorrect candidate-preference semantics plus provenance and live
+  mechanics gaps. Those are being fixed and adversarially tested before a
+  commit or preregistration. No Tier-2 policy has launched.
 
 ## Confirmation package update
 
@@ -68,8 +98,8 @@ The scientific status is therefore deliberately narrower than “solved”:
 - **Adaptive-signal claim:** not supported. The raw latent gap remains invalid.
 - **Motion generalization or hardware robustness:** not tested.
 
-The training/evaluation supervisor has exited, no experiment process remains,
-and the GPU is idle apart from the desktop.
+The earlier seed-8601 screen supervisor exited cleanly. The separate H_R2
+continuation now owns the GPU as described in the live update above.
 
 ## What ran
 

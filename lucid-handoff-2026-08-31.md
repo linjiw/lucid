@@ -1,6 +1,6 @@
 # LUCID handoff — Tier-1 ratchet confirmation
 
-> Confirmation update (2026-08-31 23:20 EDT): the one-seed screen passed and
+> Confirmation update (2026-08-31 23:58 EDT): the one-seed screen passed and
 > the parent-preregistered H_R2 continuation is now frozen, committed, and
 > preflight-verified. This section supersedes the older process snapshot below.
 
@@ -49,14 +49,27 @@ evaluation receipts, frozen-checkpoint manifests, and the final
 artifacts remain under `~/lucid-sonic/outputs/ratchet_confirmation_20260831/`
 and `~/lucid-sonic/artifacts/ratchet_confirmation_eval_20260831/`.
 
-Active process snapshot at 23:20 EDT:
+Active process snapshot at 23:58 EDT:
 
 - driver PID 221231, started 23:18:41;
 - first-cell launcher PID 222084;
 - trainer PID 222101;
 - experiment `curriculum_comparison_ne1024_20260831_231901`;
 - log `~/lucid-sonic/outputs/curriculum_comparison_ne1024_20260831_231901_s8600_lucid_ratchet_rg.log`;
-- first observed curriculum state: 13 rows, lambda 0.05835, zero guard trips.
+- latest audited curriculum state: 875 rows, lambda 1.0, first lambda >= 0.95
+  at iteration 64, 24 ratchet-bind rows, zero guard trips, and zero applied
+  decreases.
+
+No confirmation capability cell has been scored. The next automatic boundary
+is completion and freezing of ratchet seed 8600; the driver then trains fresh
+fixed seed 8602 and ratchet seed 8602 before any new evaluation starts.
+
+Concurrent CPU-only work is isolated from this detached worktree. The nested
+SONIC branch has advanced through `fca5576` (sampler hardening), `4ab0e8f`
+(support-arm contracts), and `c62e506` (strict nonbinding historical bridge).
+The Tier-2 support analyzer and supervisors remain uncommitted until their
+independent review blockers are closed. Do not copy those work-in-progress
+files into `~/lucid-ratchet-confirm`.
 
 Do not start another GPU job while this tree is alive. Read-only monitoring:
 
