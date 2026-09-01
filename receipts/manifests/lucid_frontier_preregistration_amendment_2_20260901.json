@@ -1,0 +1,34 @@
+{
+  "kind": "lucid_frontier_preregistration_amendment",
+  "schema_version": 1,
+  "amendment_index": 2,
+  "created_at": "2026-09-01T15:40:00-04:00",
+  "written_before_data": true,
+  "amends": [
+    {
+      "file": "lucid_frontier_grid_v2_preregistration_20260901.json",
+      "sha256": "9d08173717514059ae75a787b9f7a2a0a2195b5d7c56a9501857944d3ce77e9b",
+      "field": "ratchet_150_scope.gate_signal_found"
+    }
+  ],
+  "prior_amendment": {
+    "file": "lucid_frontier_preregistration_amendment_20260901.json",
+    "sha256": "f76d8b5c13ffef7585afb2eb592885def5ad30349ced75a6f1ead25f848dc883"
+  },
+  "parent_commit": "4c40504",
+  "status": "Filed before any ratchet-150 arm exists and before any expansion gate has been implemented. Corrects a claim in the parent file that would have misdirected the next experiment.",
+  "corrections": [
+    {
+      "id": "A7",
+      "severity": "major",
+      "target": "grid v2: the proposed expansion gate carries the same inversion pathology it was meant to avoid",
+      "parent_claim": "'Env/Episode_Termination/time_out is ALREADY in state.log_history every iteration ... a population-wide, bounded, outcome-linked survival signal available with ZERO new instrumentation. It is a candidate monotone expansion gate.'",
+      "defect": "The signal inverts under difficulty evacuation exactly as training return does. Verified independently from the campaign training logs: the collapsed arm lucid_rg seed 8601 ends with a mean terminal time-out rate of 0.9878 against fixed seed 8601's 0.9483. The arm that evacuated difficulty scores HIGHER on survival, because it eased its own exam. A naive survival gate would therefore reward evacuation, which is the precise failure the ratchet exists to delete.",
+      "second_defect": "It also saturates. Across fixed seeds 8600/8601/8602 and ratchet seeds 8600/8601 the time-out rate rises monotonically from below 0.02 to approximately 0.95 by iteration 5,000-6,000 and then stays there, so it carries no discriminating information over roughly the final third of training - the same saturation failure that retired the lat_50ms cell and the latency ladder.",
+      "authoritative": "Survival is admissible as an expansion signal ONLY under two conditions, both of which must hold: (1) the actuator is monotone, so the gate cannot be satisfied by lowering difficulty; and (2) it is measured at a PROBE difficulty strictly above the current training difficulty, never at the current difficulty. Measured at the current difficulty it is a self-graded exam and is disqualified for the same reason training return is. Condition (2) requires new instrumentation - a probe evaluation at lambda above the training level - so the parent file's 'ZERO new instrumentation' claim is withdrawn.",
+      "status_of_gate": "No expansion gate is preregistered. The candidate is downgraded from 'available today' to 'requires a probe-difficulty measurement that does not yet exist'."
+    }
+  ],
+  "unchanged": "The frozen grid v2, the held-out ladder phys_225..300, the latency ladder lat_80/100/120ms, the Phase-B primary endpoint {phys_175, phys_200} with its 0.05 threshold, the two silent-failure traps, and the sequencing rule that P3 precedes any evaluator change are ALL unchanged. This amendment touches only the expansion-gate candidate, which gated nothing.",
+  "cross_reference": "Consistent with the independent signal audit recorded the same day: the latent gap is unanchored at constant lambda=1 (p90 wanders 0.20-0.95 with no monotone relation to progress), so neither candidate signal is valid as a difficulty controller measured in-distribution."
+}
