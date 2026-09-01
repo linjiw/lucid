@@ -1,0 +1,468 @@
+{
+  "kind": "lucid_frontier_grid_v2_and_phase_b_endpoint_preregistration",
+  "schema_version": 1,
+  "created_at": "2026-09-01T13:35:00-04:00",
+  "written_before_data": true,
+  "author_note": "Frozen BEFORE any extrapolation cell above lambda=2.0 has ever been evaluated and before any fixed_150 / fixed_u150 / ratchet-150 policy has been trained. Its purpose is to fix the endpoint before the data exists, so that a grid cannot be chosen after seeing which cells help.",
+  "companion": {
+    "file": "lucid_frontier_exposure_law_preregistration_20260901.json",
+    "sha256": "3fbf9c0b73e7eadc28c9d1ac26dcefaf65649ddd014b2e786a6b24d19530faae"
+  },
+  "motivation": "The frozen H_R2 frontier grid (phys_125..200) is a valid held-out endpoint for arms trained at lambda<=1. It STOPS being held out the moment any arm trains at lambda=1.5. This file fixes the endpoint structure for every future extrapolation arm.",
+  "training_support_ceiling": {
+    "feedback_arms": "hard-capped at 1.0 (dr_controller.py:106-107 asserts 0 <= lambda_min < lambda_max <= 1.0; dr_curriculum.py:203-207 raises on allow_extrapolation for any controller mode; dr_scaling.py:115-117 raises on lambda>ceiling as a final backstop).",
+    "fixed_extrapolation_arms": "1.5 (run_curriculum_comparison.py:129 ARM_FIXED_LAMBDA={'fixed_150':1.5}; :147 adds fixed_u150).",
+    "docstring_correction": "dr_scaling.py:83-89 still states the curriculum is hard-capped at 1 because training beyond the scored envelope 'would make the training distribution unfalsifiable'. That text predates the fixed-mode carve-out (commit 5e5931a, dr_curriculum.py:198-216) by two days and was never updated. The carve-out changed the mechanism and left the epistemic objection unanswered; this file answers it by moving the band, not by ignoring the objection.",
+    "held_out_means": "strictly greater than 1.5"
+  },
+  "contamination_finding": {
+    "statement": "At lambda=1.5, the evaluation parameter boxes for phys_125 and phys_150 are SUBSETS of the fixed_150/fixed_u150 training box; for fixed (lambda=1) only 6.9% and 0.8% of draws fall inside its training box.",
+    "verified_exactly": "static_friction at lambda=1.5 training is [0.05, 1.925] after clamp_physical. phys_150 evaluation is [0.05, 1.925] -- IDENTICAL. phys_125 is [0.1375, 1.7625], a strict subset. phys_175 reaches 2.0875 and phys_200 reaches 2.25, both outside.",
+    "weight_at_risk": "phys_125 (1/6) + phys_150 (1/3) = exactly 50% of the frozen frontier-AUC trapezoid weight.",
+    "sharpest_form": "phys_150 is bit-for-bit the arm's own training marginal on all five non-latency channels (same apply_lambda + clamp_physical path) with latency pinned to 0 -- its training distribution minus its hardest factor."
+  },
+  "channel_saturation": {
+    "limits_source": "dr_scaling.PHYSICAL_LIMITS (only 4 of 15 scalar sub-ranges have an entry; com_range, velocity_range, pos_distribution_params and delay_range never clamp).",
+    "saturation_lambda": {
+      "static_friction_low": 1.384615,
+      "dynamic_friction_low": 1.555556,
+      "restitution_high": 2.0,
+      "mass_low": 4.5,
+      "mass_high": 18.0,
+      "static_friction_high": 4.692308,
+      "dynamic_friction_high": 7.222222,
+      "note": "MAX_EXTRAPOLATION is 4.0, so every value above 4.0 is unreachable. Only three saturations occur in the usable range, and ALL of them are at or below lambda=2.0."
+    },
+    "realized_ranges": {
+      "lambda_1.0": {
+        "static_friction_range": {
+          "raw": [
+            0.3,
+            1.6
+          ],
+          "clamped": [
+            0.3,
+            1.6
+          ]
+        },
+        "dynamic_friction_range": {
+          "raw": [
+            0.3,
+            1.2
+          ],
+          "clamped": [
+            0.3,
+            1.2
+          ]
+        },
+        "restitution_range": {
+          "raw": [
+            0.0,
+            0.5
+          ],
+          "clamped": [
+            0.0,
+            0.5
+          ]
+        },
+        "mass_distribution_params": {
+          "raw": [
+            0.8,
+            1.5
+          ],
+          "clamped": [
+            0.8,
+            1.5
+          ]
+        }
+      },
+      "lambda_1.5": {
+        "static_friction_range": {
+          "raw": [
+            -0.025,
+            1.925
+          ],
+          "clamped": [
+            0.05,
+            1.925
+          ]
+        },
+        "dynamic_friction_range": {
+          "raw": [
+            0.075,
+            1.425
+          ],
+          "clamped": [
+            0.075,
+            1.425
+          ]
+        },
+        "restitution_range": {
+          "raw": [
+            0.0,
+            0.75
+          ],
+          "clamped": [
+            0.0,
+            0.75
+          ]
+        },
+        "mass_distribution_params": {
+          "raw": [
+            0.7,
+            1.75
+          ],
+          "clamped": [
+            0.7,
+            1.75
+          ]
+        }
+      },
+      "lambda_1.75": {
+        "static_friction_range": {
+          "raw": [
+            -0.1875,
+            2.0875
+          ],
+          "clamped": [
+            0.05,
+            2.0875
+          ]
+        },
+        "dynamic_friction_range": {
+          "raw": [
+            -0.0375,
+            1.5375
+          ],
+          "clamped": [
+            0.05,
+            1.5375
+          ]
+        },
+        "restitution_range": {
+          "raw": [
+            0.0,
+            0.875
+          ],
+          "clamped": [
+            0.0,
+            0.875
+          ]
+        },
+        "mass_distribution_params": {
+          "raw": [
+            0.65,
+            1.875
+          ],
+          "clamped": [
+            0.65,
+            1.875
+          ]
+        }
+      },
+      "lambda_2.0": {
+        "static_friction_range": {
+          "raw": [
+            -0.35,
+            2.25
+          ],
+          "clamped": [
+            0.05,
+            2.25
+          ]
+        },
+        "dynamic_friction_range": {
+          "raw": [
+            -0.15,
+            1.65
+          ],
+          "clamped": [
+            0.05,
+            1.65
+          ]
+        },
+        "restitution_range": {
+          "raw": [
+            0.0,
+            1.0
+          ],
+          "clamped": [
+            0.0,
+            1.0
+          ]
+        },
+        "mass_distribution_params": {
+          "raw": [
+            0.6,
+            2.0
+          ],
+          "clamped": [
+            0.6,
+            2.0
+          ]
+        }
+      },
+      "lambda_2.25": {
+        "static_friction_range": {
+          "raw": [
+            -0.5125,
+            2.4125
+          ],
+          "clamped": [
+            0.05,
+            2.4125
+          ]
+        },
+        "dynamic_friction_range": {
+          "raw": [
+            -0.2625,
+            1.7625
+          ],
+          "clamped": [
+            0.05,
+            1.7625
+          ]
+        },
+        "restitution_range": {
+          "raw": [
+            0.0,
+            1.125
+          ],
+          "clamped": [
+            0.0,
+            1.0
+          ]
+        },
+        "mass_distribution_params": {
+          "raw": [
+            0.55,
+            2.125
+          ],
+          "clamped": [
+            0.55,
+            2.125
+          ]
+        }
+      },
+      "lambda_2.5": {
+        "static_friction_range": {
+          "raw": [
+            -0.675,
+            2.575
+          ],
+          "clamped": [
+            0.05,
+            2.575
+          ]
+        },
+        "dynamic_friction_range": {
+          "raw": [
+            -0.375,
+            1.875
+          ],
+          "clamped": [
+            0.05,
+            1.875
+          ]
+        },
+        "restitution_range": {
+          "raw": [
+            0.0,
+            1.25
+          ],
+          "clamped": [
+            0.0,
+            1.0
+          ]
+        },
+        "mass_distribution_params": {
+          "raw": [
+            0.5,
+            2.25
+          ],
+          "clamped": [
+            0.5,
+            2.25
+          ]
+        }
+      },
+      "lambda_2.75": {
+        "static_friction_range": {
+          "raw": [
+            -0.8375,
+            2.7375
+          ],
+          "clamped": [
+            0.05,
+            2.7375
+          ]
+        },
+        "dynamic_friction_range": {
+          "raw": [
+            -0.4875,
+            1.9875
+          ],
+          "clamped": [
+            0.05,
+            1.9875
+          ]
+        },
+        "restitution_range": {
+          "raw": [
+            0.0,
+            1.375
+          ],
+          "clamped": [
+            0.0,
+            1.0
+          ]
+        },
+        "mass_distribution_params": {
+          "raw": [
+            0.45,
+            2.375
+          ],
+          "clamped": [
+            0.45,
+            2.375
+          ]
+        }
+      },
+      "lambda_3.0": {
+        "static_friction_range": {
+          "raw": [
+            -1.0,
+            2.9
+          ],
+          "clamped": [
+            0.05,
+            2.9
+          ]
+        },
+        "dynamic_friction_range": {
+          "raw": [
+            -0.6,
+            2.1
+          ],
+          "clamped": [
+            0.05,
+            2.1
+          ]
+        },
+        "restitution_range": {
+          "raw": [
+            0.0,
+            1.5
+          ],
+          "clamped": [
+            0.0,
+            1.0
+          ]
+        },
+        "mass_distribution_params": {
+          "raw": [
+            0.4,
+            2.5
+          ],
+          "clamped": [
+            0.4,
+            2.5
+          ]
+        }
+      }
+    },
+    "semantic_consequence": {
+      "restitution": "carries ZERO discriminating information anywhere above lambda=2.0; phys_200/225/250/275/300 all ship restitution [0.0, 1.0].",
+      "slip": "Above lambda~1.385 the static-friction floor is pinned at 0.05, so raising lambda makes the ladder LESS slippery, not more. P(static friction < 0.3) = 13.33% at lambda 1.5, 9.9% at 2.5, 8.77% at 3.0. Above ~1.385 this ladder no longer tests slip; it tests grip, mass, CoM, joint bias and push. Any claim about slip robustness must cite a cell at or below lambda 1.385.",
+      "phys_300_vs_phys_250": "aggregate effective width +17.9% against a +20.0% nominal step; restitution 0% different; friction widths +12.9%/+12.3% with identical lower bounds; mass, CoM, joint offsets and all six push axes +20% exactly."
+    }
+  },
+  "frozen_grid_v2": {
+    "held_out_physics_ladder": {
+      "cells": {
+        "phys_225": 2.25,
+        "phys_250": 2.5,
+        "phys_275": 2.75,
+        "phys_300": 3.0
+      },
+      "weights": [
+        0.166667,
+        0.333333,
+        0.333333,
+        0.166667
+      ],
+      "construction": "identical in form to the frozen H_R2 frontier grid, so v1 and v2 AUCs differ ONLY in support",
+      "max_lambda_rationale": "3.00. Nothing new saturates in (2.0,4.0], so degeneracy is not binding; discrimination is. Extrapolating measured per-cell decrements, the weakest trained arm (lucid_s4_rg) reaches ~0.12-0.25 at 3.00 and is projected to floor at 0.00 somewhere in 3.5-4.0. A floored cell cannot rank policies -- the exact failure that retired lat_60ms.",
+      "excluded": "phys_200 is deliberately NOT in the headline v2 grid; it is already a v1 cell and including it would couple the two endpoints. A 5-cell continuity figure (2.00..3.00, weights [1/8,1/4,1/4,1/4,1/8]) may be reported as secondary."
+    },
+    "held_out_latency_ladder": {
+      "cells": {
+        "lat_80ms": 16,
+        "lat_100ms": 20,
+        "lat_120ms": 24
+      },
+      "unit": "physics steps at 5 ms (sim_dt 0.005, decimation 4 -> 20 ms control step)",
+      "rationale": "training latency tops out at 12 steps = 60 ms for lambda=1.5 arms (delay_range scales to [0, 8*lambda]), so lat_60ms is IN support and lat_10..50ms are deep in support. Only 16/20/24 steps are held out."
+    },
+    "BLOCKING_operational_assertion": {
+      "trap": "eval cells set delay_range=[steps,steps], but events_reset_safe.py:398 silently truncates via min(high, capacity), and the runner's --max-delay default is 12. A lat_120ms cell run at the default would SILENTLY produce a 60 ms cell, and lat_80/100/120 would all collapse to the SAME measurement with no error.",
+      "required": "run_curriculum_robustness_eval.py must assert requested_steps <= max_delay before launching any latency cell, and --max-delay must be >= 24 for the 80/100/120 ms ladder.",
+      "status": "NOT YET IMPLEMENTED. No v2 latency cell may be run until this assertion exists."
+    }
+  },
+  "phase_b_endpoint": {
+    "principle": "The primary endpoint must lie strictly outside the training support of EVERY arm compared, treatment and control alike. No new evaluation cells are required -- every cell below is already in the 15-preset panel run_support_screen.sh runs.",
+    "PRIMARY_held_out_band": {
+      "cells": {
+        "phys_175": 1.75,
+        "phys_200": 2.0
+      },
+      "weights": [
+        0.5,
+        0.5
+      ],
+      "metric": "success_rate",
+      "why": "both strictly above 1.5, so treatment and control are BOTH extrapolating. Correlates r=0.9982 with the contaminated 4-cell frontier AUC across the 7 historically scored arm-seeds, with a WIDER spread (49.8 vs 42.0 pts), so the band costs no resolution.",
+      "threshold": "candidate minus fresh_fixed >= 0.05",
+      "threshold_justification": "the identical-exposure noise cluster has SD 0.0221 and range 0.0449 on this band, so 0.05 is ~2.3 SD. The existing 0.02 threshold must NOT be carried across: it is 1.3 SD of the same cluster on the endpoint it was written for.",
+      "companion_noninferiority": "held-out progress_rate >= fresh_fixed - 0.02"
+    },
+    "SECONDARY_A_same_support_safety": {
+      "cells": "phys_000..phys_100",
+      "weights": [
+        0.125,
+        0.25,
+        0.25,
+        0.25,
+        0.125
+      ],
+      "floor": -0.01,
+      "logic": "the ONLY genuinely same-support comparison; those boxes are subsets of both the lambda=1 and lambda=1.5 training boxes. One-sided: fixed already reads 0.998779 and even 'off' reads 0.980957, so this endpoint can falsify 'no nominal price' but can never support a capability claim. A pass is weak evidence; a fail is strong evidence."
+    },
+    "SECONDARY_B_in_support_manipulation_check": {
+      "cells": [
+        "phys_125",
+        "phys_150"
+      ],
+      "use": "REPORT ONLY, NEVER GATE",
+      "labelling": "must be labelled IN-SUPPORT for fixed_150/fixed_u150 and OUT-OF-SUPPORT for fixed wherever it appears",
+      "one_directional_use": "if fixed_150 does NOT beat fixed at phys_150 -- a cell whose five non-latency ranges are bit-for-bit its own training distribution with latency pinned to 0 -- the manipulation failed and the arm is void. That is a floor, not a result."
+    },
+    "required_code_change": "analyze_support_screen.py currently hard-codes the contaminated frontier endpoint. Add HELD_OUT_GRID = (('phys_175',1.75),('phys_200',2.00)) and a held_out_auc key in profile(), plus IN_SUPPORT_FRONTIER = ('phys_125','phys_150') so the split lives in code rather than prose. The Tier-2 preregistration must be written and SHA-pinned AFTER these land, not before."
+  },
+  "ratchet_150_scope": {
+    "block_is_real": "defended at three independent layers (dr_curriculum.py:203-207, dr_controller.py:106-107, dr_scaling.py:115-117). lambda_max is genuinely never plumbed: the only production PIConfig( construction is dr_curriculum.py:241 and omits the field.",
+    "cost": "~40 production lines across 3 files plus ~10 in the analyzer.",
+    "BLOCKING_silent_failure": "run_curriculum_comparison.py:687-698 gates the delay-buffer check on `mode in ARM_FIXED_LAMBDA`, so it would NOT fire for a ratchet arm. A ratchet-150 launched at --max-delay 8 would silently train latency at 1.0x while telemetry claimed 1.5x. This check must be re-gated on the effective lambda ceiling before any such arm runs.",
+    "live_run_hazard": "assert_preregistered_state re-hashes every file in code_state.file_sha256 before each remaining boundary of the RUNNING confirmation. Any edit to dr_curriculum.py or dr_controller.py would abort the in-flight H_R2 chain. The change must land on a branch the live run never sees, and not before it completes.",
+    "gate_signal_found": "Env/Episode_Termination/time_out is ALREADY in state.log_history every iteration -- the same dict the curriculum callback already reads at dr_curriculum.py:606-623 -- and the live ratchet-8602 run shows it climbing 0.0011 -> 0.8988 over 4370 iterations. That is a population-wide, bounded, outcome-linked survival signal available with ZERO new instrumentation. It is a candidate monotone expansion gate; it is NOT per-stratum, so it does not by itself supply the top-stratum failure rate.",
+    "recommendation": "Do not implement before P3 is scored. P3 decides whether the exposure framing survives at all, and it is far cheaper than any new training arm."
+  },
+  "sequencing": [
+    "Score P3 (42-cell historical bridge) before building any extrapolation arm.",
+    "Land the run_curriculum_robustness_eval --max-delay assertion before any v2 latency cell.",
+    "Land HELD_OUT_GRID in analyze_support_screen.py before writing the Tier-2 preregistration.",
+    "Re-gate the delay-buffer check before any ratchet-150 arm.",
+    "Every code change above must wait for the live H_R2 confirmation to finish."
+  ]
+}

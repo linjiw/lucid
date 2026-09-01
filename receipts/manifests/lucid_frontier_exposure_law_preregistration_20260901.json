@@ -1,0 +1,345 @@
+{
+  "kind": "lucid_frontier_exposure_law_preregistration",
+  "schema_version": 2,
+  "supersedes": {
+    "version": 1,
+    "sha256": "2c51e36178ba55122037659ef77e3aad229d63b762836280cb4700c788cdf392",
+    "reason": "Version 1 was revised after an adversarial methodological review and BEFORE any readout of P1-P4. Every change is a methodological correction (interval construction, one transcription error, prediction purpose, falsification logic, identifiability scope); none is data-driven, because none of the predicted quantities has been measured. Version 1 is superseded, not deleted, and its defects are enumerated in review_corrections."
+  },
+  "created_at": "2026-09-01T13:20:00-04:00",
+  "written_before_data": true,
+  "author_note": "Authored and revised while the H_R2 confirmation was still training ratchet seed 8602 (driver PID 221231 alive, ~4k/8000 rows). None of the four pending H_R2 ladders and no cell of the historical bridge had been scored. No GPU process was started to produce this file.",
+  "scope": "Descriptive mechanism hypothesis plus frozen out-of-sample predictions. Authorizes NO directional claim about any training procedure and does not alter, gate, or reinterpret the frozen H_R2 decision rule.",
+  "review_corrections": [
+    "v1 intervals were point +/- 1.96*residual_sd: neither a CI nor a prediction interval, ignoring parameter uncertainty on df=5. Replaced with t(5) prediction intervals (1.42x wider).",
+    "v1 claimed the P3 recency and uniform intervals do not overlap. FALSE under correct intervals; they overlap on [0.7609, 0.7757]. The discrimination claim is weakened accordingly.",
+    "v1 preregistered 'between 0.762 and 0.778' as falsifying BOTH laws; that band lies inside the two-law overlap, i.e. the outcome most consistent with both. Removed.",
+    "v1 recorded off@s8600 = 0.492676, which is arithmetically impossible (any four 512-env cells force 3072*AUC integral). Corrected to 757/1536 = 0.4928385.",
+    "v1 described P2 as an evaluation-noise estimate. It re-scores the same checkpoint at the SAME evaluation seed 8700 on the same panel, and the evaluator is bit-deterministic. Restated as a determinism check with no falsification weight.",
+    "v1 listed P4 with a readout that does not exist: the historical bridge asserts per_mode_cell_count {fixed:42, lucid_ratchet_rg:42, lucid_rg:42} and never references s4_rg. P4 demoted to NO SCHEDULED READOUT.",
+    "v1's global falsification rule was inoperative (P1 near-certain pass, P2 pre-satisfied, P4 unreadable), leaving the law rejectable only upward. Restated two-sided on P3 alone.",
+    "v1 cited CohortAssignment stratum_weights as evidence for the dose; that field is a pure function of K and tautological. Citation swapped to per-iteration stratum_lambdas/stratum_sizes telemetry, which does confirm it."
+  ],
+  "established_facts_not_predictions": {
+    "applied_lambda_identity": {
+      "statement": "lucid_ratchet_rg seed 8601 has exactly one distinct applied lambda over iterations 101-8000, equal to 1.0. The 951 blocked PI decrease requests never moved the applied lambda.",
+      "consequence": "lucid_ratchet_rg and fixed share an identical training distribution over 98.75% of training, differing only by a ~78-iteration warm-up ramp and RNG divergence. H_R2 noninferiority is therefore close to structurally guaranteed and carries little information; the ratchet's informative comparator is the UNCONSTRAINED controller, not fixed. It also means the ratchet's 'may only climb' mechanism was never exercised above 1.0."
+    },
+    "anti_gating_frequency": {
+      "unconstrained_controller_cells_8000it": 6,
+      "terminal_evacuation": 2,
+      "evacuated": [
+        "lucid_rg@s8601 final lambda 0.062",
+        "lucid_s4_rg@s8600 final lambda 0.012"
+      ],
+      "any_downward_movement": 6,
+      "ratchet_cells": 3,
+      "ratchet_downward_movement": 0,
+      "note": "Corroborates the 2/6 ledger_correction already recorded in lucid_monotone_ratchet_preregistration_20260831.json. The ratchet's zero is by construction, not by luck."
+    },
+    "return_is_inverted": {
+      "statement": "Across the three scored controller arms, terminal training return is anti-correlated with frontier success AUC.",
+      "pairs": [
+        {
+          "arm": "lucid_ratchet_rg@s8601",
+          "mean_return_last500": 10.981,
+          "frontier_auc": 0.913086
+        },
+        {
+          "arm": "lucid_rg@s8600",
+          "mean_return_last500": 11.268,
+          "frontier_auc": 0.882812
+        },
+        {
+          "arm": "lucid_s4_rg@s8600",
+          "mean_return_last500": 14.401,
+          "frontier_auc": 0.697266
+        }
+      ],
+      "unscored_highest_return": {
+        "arm": "lucid_rg@s8601",
+        "mean_return_last500": 15.286
+      },
+      "caveat": "Three scored pairs. Suggestive, not established; the mechanism (evacuation makes environments easier, raising return) is the load-bearing part."
+    }
+  },
+  "exposure_definition": {
+    "per_iteration_dose": "D_t = (num_anchor*1.0 + sum_k size_k*w_k + num_yardstick*0.0)/num_envs * lambda_t, with w_k=(k+1)/K the TACE stratum weights applied by dr_curriculum._apply_strata. Every arm in this fit has anchor_ratio=0 and num_yardstick=0, so this reduces to 0.625*lambda_t for lucid_s4_rg and 1.0*lambda_t otherwise. Verified from per-iteration telemetry stratum_lambdas [0.25,0.5,0.75,1.0] and stratum_sizes [256,256,256,256], NOT from CohortAssignment.to_dict()['stratum_weights'] (a pure function of K).",
+    "scope_limit": "The frontier grid pins actuation latency to zero. For the current arms all six channels carry identical stratum weights so the physics-only dose is also exactly 0.625 and the refit is identical to 6 dp, but the law must NOT be extended to any arm that caps, pins, or resizes the latency channel (fixed_nolat, fixed_latonly, latcap, latonly, fixed_150, fixed_u150) without recomputing the dose over the five non-latency channels only.",
+    "exposure": "E(H,T) = sum_{t<=T} exp(-(T-t)/H)*D_t / sum_{t<=T} exp(-(T-t)/H); H=None is the unweighted mean.",
+    "endpoint": "Frontier success AUC on the FROZEN H_R2 grid phys_125/150/175/200, normalized trapezoid weights [1/6,1/3,1/3,1/6]. The older capability_auc_extrapolation used phys_100..200 and is NOT interchangeable (off = 0.583740 there vs 0.492839 here).",
+    "supersession": "Per-cell selection follows capability_benchmark_analysis_20260830.json .arms[*].sources. The 20260829_214540 lambda>1 cells predate dr_scaling.clamp_physical and are excluded at phys_125+. off@s8600 frontier cells come from receipt 20260830_013413: 411/262/204/171 of 512, AUC = 1514/3072.",
+    "instrument_heterogeneity": "evaluation_seed is 8700 for all five seed-8600 points and 8701 for both seed-8601 points, so the four-arm E~1 cluster pools two evaluation draws with two training seeds. The seven points span three evaluator builds (52d9b526; 106eeff0 for lucid_s4_rg_h6000, one of only three leverage points; 3457718f for the seed-8601 pair). Mitigation: recorded per-cell dr_ranges hash identically at all four frontier cells across all seven arms, and the evaluator is bit-deterministic across builds (phys_125 identical to 9 dp under two git trees)."
+  },
+  "fitted_laws": {
+    "recency_H2000": {
+      "time_constant_H": 2000,
+      "implied_half_life": 1386.3,
+      "intercept": 0.504791,
+      "slope": 0.395436,
+      "r_squared": 0.988258,
+      "residual_sd": 0.018284,
+      "n_points": 7,
+      "n_distinct_training_runs": 6,
+      "n_stratified_runs": 1,
+      "distinct_exposure_levels": 4,
+      "points": [
+        {
+          "arm": "off@s8600",
+          "exposure": 0.0,
+          "observed_frontier_success_auc": 0.492839
+        },
+        {
+          "arm": "lucid_s4_rg@s8600",
+          "exposure": 0.476972,
+          "observed_frontier_success_auc": 0.697266
+        },
+        {
+          "arm": "lucid_s4_rg@s8600_h6000",
+          "exposure": 0.621957,
+          "observed_frontier_success_auc": 0.777018
+        },
+        {
+          "arm": "lucid_rg@s8600",
+          "exposure": 0.99948,
+          "observed_frontier_success_auc": 0.882812
+        },
+        {
+          "arm": "fixed@s8600",
+          "exposure": 1.0,
+          "observed_frontier_success_auc": 0.904622
+        },
+        {
+          "arm": "fixed@s8601",
+          "exposure": 1.0,
+          "observed_frontier_success_auc": 0.881836
+        },
+        {
+          "arm": "lucid_ratchet_rg@s8601",
+          "exposure": 0.999612,
+          "observed_frontier_success_auc": 0.913086
+        }
+      ]
+    },
+    "uniform_no_recency": {
+      "time_constant_H": null,
+      "implied_half_life": null,
+      "intercept": 0.493035,
+      "slope": 0.404503,
+      "r_squared": 0.980601,
+      "residual_sd": 0.023502,
+      "n_points": 7,
+      "n_distinct_training_runs": 6,
+      "n_stratified_runs": 1,
+      "distinct_exposure_levels": 4,
+      "points": [
+        {
+          "arm": "off@s8600",
+          "exposure": 0.0,
+          "observed_frontier_success_auc": 0.492839
+        },
+        {
+          "arm": "lucid_s4_rg@s8600",
+          "exposure": 0.578363,
+          "observed_frontier_success_auc": 0.697266
+        },
+        {
+          "arm": "lucid_s4_rg@s8600_h6000",
+          "exposure": 0.619502,
+          "observed_frontier_success_auc": 0.777018
+        },
+        {
+          "arm": "lucid_rg@s8600",
+          "exposure": 0.994459,
+          "observed_frontier_success_auc": 0.882812
+        },
+        {
+          "arm": "fixed@s8600",
+          "exposure": 1.0,
+          "observed_frontier_success_auc": 0.904622
+        },
+        {
+          "arm": "fixed@s8601",
+          "exposure": 1.0,
+          "observed_frontier_success_auc": 0.881836
+        },
+        {
+          "arm": "lucid_ratchet_rg@s8601",
+          "exposure": 0.994861,
+          "observed_frontier_success_auc": 0.913086
+        }
+      ]
+    }
+  },
+  "fit_quality_honest_assessment": {
+    "pure_error_sd": 0.015707,
+    "pure_error_dof": 3,
+    "residual_over_pure_error": 1.17,
+    "lack_of_fit_F_2_3": 1.896,
+    "F_crit_0.05": 9.55,
+    "permutation_p_exact": {
+      "recency_H2000": 0.0032,
+      "uniform": 0.0032,
+      "stratum_mean_alone": 0.0095,
+      "n_relabelings": 5040
+    },
+    "verdict": "R^2 = 0.9882 is NOT evidence for the dose model. The five NON-stratified points alone (off at E=0 plus the four-arm E~1 cluster) give residual SD 0.015709, equal to this file's own identical-exposure noise SD; adding the two stratified points RAISES residual SD to 0.018306 (+16.5%), and that five-point line predicts them out-of-sample with residuals +0.0124 and +0.0337. The linear form cannot be rejected and equally cannot be shown to fit better than replicate noise. 1.8-pt residuals are the instrument's resolution, not the law's accuracy."
+  },
+  "identifiability_disclosure": {
+    "half_life_not_identified": "R^2 by time constant: H=250 0.8938, 500 0.9424, 1000 0.9778, 2000 0.9882, 4000 0.9866, uniform 0.9806.",
+    "kernel_not_identified": "A rectangular (boxcar) trailing mean of the same dose gives R^2 0.9880 at window 3000 and 0.9863 at 4000, with LOO Q^2 0.9758 and 0.9771 versus this exponential law's Q^2 0.9693. A boxcar matches in-sample and BEATS the exponential out-of-sample. The exponential kernel is unnecessary machinery.",
+    "dose_scalar_not_identified": "Exactly ONE arm in the fit is stratified, so the dose scalar c is one free parameter from one run. R^2 by aggregator at H=2000: top-stratum-fraction 0.25 -> 0.8290; max 1.0 -> 0.8748; harmonic 0.48 -> 0.9452; geometric 0.5533 -> 0.9715; ARITHMETIC 0.625 (PREREGISTERED) -> 0.9882; RMS 0.6847 -> 0.9939. Free-c argmax is 0.695; 95% profile interval [0.595, 0.789]. At least one alternative fits strictly better than the preregistered choice.",
+    "form_aliased": "stratum_mean ALONE -- a 3-valued constant (0/0.625/1.0) using no lambda series, no integral, no kernel -- gives R^2 0.9720, Q^2 0.9565. A stratified-arm dummy gives R^2 0.9932. 'The aggregator is c' and 'the stratified arm is worse by a constant' are not separable on this design. A free exponent gives gamma* 0.844, R^2 0.9925.",
+    "leverage": "Only 3 of 7 points carry exposure leverage (E = 0.000, 0.477, 0.622). off@s8600 supplies 63.2% of total SST at hat leverage 0.732 against an average of 0.286; the four E~1 arms are replicates supplying zero slope information. Dropping off moves the P3 point estimate by only +1.26 pts (the largest of all seven drop-one movements), so P3 is robust to single-point deletion.",
+    "nesting_and_length_confound": "lucid_s4_rg@s8600 and its _h6000 point are the SAME training run at 8000 and 6000 iterations -- nested, not independent -- and that pair confounds exposure with 2000 extra gradient steps while every other point sits at 8000. Training length is uncontrolled anywhere in the fit. Within that single arm the implied local slope is 0.550 at H=2000 (1.39x the fitted 0.396) and 1.939 under uniform (4.79x the fitted 0.405): the uniform law contradicts itself by a factor of five on its only interior evidence.",
+    "conclusion": "Neither the phrase 'recency-weighted' nor the phrase 'exposure integral' is yet earned by this data."
+  },
+  "frozen_predictions": {
+    "P1_pending_H_R2_ladders": {
+      "readout": "the four 14-cell ladders the live driver scores after ratchet-8602 freezes (~16:05 EDT 2026-09-01)",
+      "prediction": "All four arms have E >= 0.996 under either law; both laws predict a common value near 0.900 and NO systematic ratchet-minus-fixed difference.",
+      "per_arm": {
+        "lucid_ratchet_rg@s8600": {
+          "recency_H2000": {
+            "exposure": 0.999641,
+            "point": 0.90009,
+            "lo": 0.84807,
+            "hi": 0.9521,
+            "interval_type": "t(5) prediction interval for one new observation"
+          },
+          "uniform": {
+            "exposure": 0.99525,
+            "point": 0.89562,
+            "lo": 0.82893,
+            "hi": 0.96231,
+            "interval_type": "t(5) prediction interval for one new observation"
+          },
+          "note": null
+        },
+        "fixed@s8600": {
+          "recency_H2000": {
+            "exposure": 1.0,
+            "point": 0.90023,
+            "lo": 0.84821,
+            "hi": 0.95225,
+            "interval_type": "t(5) prediction interval for one new observation"
+          },
+          "uniform": {
+            "exposure": 1.0,
+            "point": 0.89754,
+            "lo": 0.83077,
+            "hi": 0.96431,
+            "interval_type": "t(5) prediction interval for one new observation"
+          },
+          "note": null
+        },
+        "fixed@s8602": {
+          "recency_H2000": {
+            "exposure": 1.0,
+            "point": 0.90023,
+            "lo": 0.84821,
+            "hi": 0.95225,
+            "interval_type": "t(5) prediction interval for one new observation"
+          },
+          "uniform": {
+            "exposure": 1.0,
+            "point": 0.89754,
+            "lo": 0.83077,
+            "hi": 0.96431,
+            "interval_type": "t(5) prediction interval for one new observation"
+          },
+          "note": null
+        },
+        "lucid_ratchet_rg@s8602": {
+          "recency_H2000": {
+            "exposure": 0.998129,
+            "point": 0.89949,
+            "lo": 0.84749,
+            "hi": 0.95148,
+            "interval_type": "t(5) prediction interval for one new observation"
+          },
+          "uniform": {
+            "exposure": 0.992052,
+            "point": 0.89432,
+            "lo": 0.82769,
+            "hi": 0.96096,
+            "interval_type": "t(5) prediction interval for one new observation"
+          },
+          "note": "lambda series incomplete at authoring (4884/8000 rows); arm is at lambda=1.0 with zero applied decreases, so completion can only move E toward 1.0."
+        }
+      },
+      "falsification_weight": "NONE. The prediction band contains the entire observed identical-exposure cluster (0.8818..0.9131), so P1 is a consistency check that is near-certain to pass.",
+      "informative_sub_test": "Under a null of pure seed noise with SD 0.0157, the probability that ratchet-minus-fixed is positive on BOTH seed 8600 and seed 8602 with each gap exceeding +3.0 pts is approximately 0.4%. If that occurs, exposure alone does not explain the ratchet arm and a non-exposure mechanism (warm-up, RNG, optimizer path) must be investigated."
+    },
+    "P2_determinism_check": {
+      "readout": "fixed seed 8600, an already-frozen already-scored checkpoint, re-scored by the driver at evaluation seed 8700 on the same preserved 512-alias panel",
+      "prior_value": 0.904622,
+      "prediction": "|new - 0.904622| = 0.000000 exactly",
+      "purpose": "This is a DETERMINISM check, not a noise estimate. The manifests record evaluation_seed 8700 for all five seed-8600 arms, so this re-scores the SAME checkpoint at the SAME seed on the SAME panel, and the evaluator is bit-reproducible (phys_125 identical across receipts 20260829_214540 and 20260830_013413 under two evaluator builds). Any nonzero value indicates evaluator or panel drift, not sampling noise.",
+      "falsification_weight": "NONE.",
+      "note": "If an evaluation-noise estimate is wanted it must re-score fixed@s8600 at a NEW evaluation seed, and that must be preregistered before the readout. It is not preregistered here."
+    },
+    "P3_collapse_arm_PRIMARY": {
+      "readout": "42-cell historical lucid_rg bridge, arm lucid_rg seed 8601 (the predeclared collapse), scored on the frozen phys_125..200 grid",
+      "status_today": "UNSCORED and UNSCHEDULED. Verified: no phys_* cell exists for this arm on the 512-alias panel anywhere under /home/linjiw/lucid-sonic; the only lucid_rg@8601 evaluations on disk are old ne128 cells from a different 128-env run on the old cell grid. The bridge instrument is also not built: HIST_PREREG, HIST_REPO (/home/linjiw/lucid-ratchet-historical-bridge), HIST_ROOT and HIST_EVAL_ARTIFACT_ROOT are all absent from disk. P3 is therefore a planned measurement, not a scheduled one.",
+      "hygiene_hazard": "A synthetic pytest fixture at /home/linjiw/lucid-sonic/tmp/pytest-of-linjiw/pytest-212/ratchet_historical_bridge0/historical_eval/lucid_rg_8601.json contains a complete phys ladder with every cell at 0.5. No glob-based collector may mistake it for a real result.",
+      "comparator": {
+        "fixed@s8601": 0.881836
+      },
+      "recency_H2000": {
+        "exposure": 0.556184,
+        "point": 0.72473,
+        "lo": 0.67376,
+        "hi": 0.77569,
+        "interval_type": "t(5) prediction interval for one new observation"
+      },
+      "uniform": {
+        "exposure": 0.822335,
+        "point": 0.82567,
+        "lo": 0.76087,
+        "hi": 0.89047,
+        "interval_type": "t(5) prediction interval for one new observation"
+      },
+      "discrimination_honest": "The recency band [0.67366, 0.77571] and the uniform band [0.76086, 0.89046] OVERLAP on [0.76086, 0.77571]. P3 separates the two laws only if it lands BELOW 0.76086 (favors recency) or ABOVE 0.77571 (favors uniform). An outcome inside the overlap discriminates nothing.",
+      "model_family_span": "Across tested single-variable models with in-sample R^2 > 0.97 the P3 point prediction spans 0.6438 (boxcar last-2000) to 0.8940 (stratum_mean alone) -- 25 pts, covering every declared bucket. The best cross-validating model (boxcar last-4000, Q^2 0.9771) predicts 0.76087. P3 therefore selects a member of an equivalence class at least as much as it confirms or falsifies 'the exposure law'.",
+      "outcomes_exhaustive": {
+        "law_falsified_low": "< 0.67366 -- evacuation costs far more than any fitted law predicts",
+        "recency_favored": "[0.67366, 0.76086)",
+        "ambiguous_no_discrimination": "[0.76086, 0.77571]",
+        "uniform_favored": "(0.77571, 0.88184)",
+        "collapse_is_cosmetic_LAW_FALSIFIED": ">= 0.881836 -- indistinguishable from fixed@s8601, i.e. terminal difficulty evacuation is free and the exposure framing is wrong"
+      },
+      "floor_effect_addressed": "A reviewer argued the arm should read near off (0.4928). Refuted by the fit set itself: lucid_s4_rg@s8600 has a LONGER, DEEPER terminal evacuation (206 contiguous iterations at dose < 0.05, final dose 0.0075) than lucid_rg@s8601 (zero such iterations; mean lambda over its last 1000 iterations is 0.3528) and still scored 0.697266, more than 20 pts above off."
+    },
+    "P4_s4_rg_8601": {
+      "status": "NO SCHEDULED READOUT",
+      "readout_defect": "run_ratchet_historical_bridge.sh and analyze_ratchet_historical_bridge.py contain zero references to s4_rg and the analyzer asserts per_mode_cell_count == {fixed:42, lucid_ratchet_rg:42, lucid_rg:42}.",
+      "if_ever_scored": {
+        "recency_H2000": {
+          "exposure": 0.624379,
+          "point": 0.75169,
+          "lo": 0.70118,
+          "hi": 0.8022,
+          "interval_type": "t(5) prediction interval for one new observation"
+        },
+        "uniform": {
+          "exposure": 0.620851,
+          "point": 0.74417,
+          "lo": 0.67911,
+          "hi": 0.80923,
+          "interval_type": "t(5) prediction interval for one new observation"
+        },
+        "purpose": "Would test the stratification dose term independently of any collapse; both laws agree, so a miss falsifies the dose model rather than the recency term."
+      },
+      "falsification_weight": "NONE while unscheduled."
+    }
+  },
+  "global_falsification": "Keyed on P3 alone and two-sided, because P1 and P2 are near-certain passes and P4 has no readout. The exposure hypothesis is REJECTED if P3 >= 0.881836 (evacuation is free) or P3 < 0.67366 (evacuation costs far more than any fitted law). The RECENCY term specifically is rejected if P3 > 0.77571. If P3 lands in [0.76086, 0.77571] the design has failed to discriminate and no model selection is authorized.",
+  "limitations": [
+    "Seven points from six distinct training runs and two training seeds, with only four distinct exposure levels and exactly one stratified run. No directional claim about any training procedure is authorized.",
+    "The endpoint is a 512-alias panel of the SINGLE training clip. Every number here is memorized-motion-under-fresh-physics; there is zero motion-generalization evidence at the frontier.",
+    "Exposure and frontier AUC are related by construction (train high, score high). The non-trivial content is the inversion of training return and the predicted COST of evacuation, not the R^2.",
+    "lucid_ratchet_rg seed 8602's exposure uses an incomplete lambda series.",
+    "Above lambda 1.3846 the static-friction floor is clamped at 0.05, so the affine dose model is measurably wrong for one channel in any arm trained above that value. This does not affect the current fit (all arms train at lambda <= 1.0) but blocks naive extension to fixed_150 / fixed_u150 / any ratchet-150."
+  ]
+}
