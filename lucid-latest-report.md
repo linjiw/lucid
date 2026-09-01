@@ -260,6 +260,46 @@ Harmonized onto the frozen `phys_125`-`phys_200` grid, the one scored collapse
 cost **-7.97 points** of frontier success AUC between its intact h6000 capsule
 (0.7770) and its collapsed final checkpoint (0.6973).
 
+### 2b. The gap has no restoring force — why evacuation is total
+
+Established 2026-09-01 from the two collapse trajectories, zero GPU.
+
+The obvious reading of the collapse is that the controller chased a drifting
+signal. The telemetry says something worse: **cutting difficulty does not reduce
+the controller's own error**. Binned means over the collapse window:
+
+| arm | iterations | mean lambda | mean gap q90 |
+|---|---|---:|---:|
+| `lucid_rg` s8601 | 5,000-5,500 | 0.991 | 0.680 |
+| | 6,500-7,000 | 0.177 | 0.790 |
+| | 7,500-8,000 | 0.234 | **0.814** |
+| `lucid_s4_rg` s8600 | 5,000-5,500 | 0.997 | 0.687 |
+| | 7,500-8,000 | 0.160 | **0.795** |
+
+Over iterations 5,000-8,000 of `lucid_s4_rg` s8600 the correlation between
+applied lambda and the measured gap is **r = -0.201**. A working difficulty
+controller requires r > 0: lowering difficulty must lower the error. Here the
+sign is wrong, and in the final 1,000 iterations of `lucid_rg` s8601 the gap is
+still above its 0.778 target **474 times at lambda ~ 0.2**.
+
+This is the mechanism of totality. An *inverted* signal settles at some
+equilibrium; a signal the actuator cannot move gives the integrator no
+restoring force at all, so lambda winds to the rail. It explains why both
+collapses end near lambda = 0.01 rather than at a partial retreat.
+
+It also corrects a tempting over-generalization. The three candidate signals do
+not fail in the same way:
+
+- **latent gap** - no authority, wrongly signed (r = -0.20). Fails the loop.
+- **training return** - inverted. Improves when difficulty falls.
+- **episode survival** - inverted and saturating (~0.95 after iteration 5-6k);
+  the collapsed arm scores 0.988 against fixed's 0.948.
+
+The unifying requirement is narrower and more useful than "do not use return":
+a difficulty controller needs a signal whose response to its own actuator is
+both non-trivial and correctly signed. None of the three satisfies both, and
+two of them reward evacuation outright.
+
 ### 3. Training return is inverted, not merely uninformative
 
 | arm | final lambda | mean return, last 500 | frontier success AUC |
