@@ -176,15 +176,19 @@ python scripts/practice_utility/run_curriculum_comparison.py \
   --from-scratch --num-envs 1024 --iterations 8000 --warmup-iterations 10 \
   --horizons 500 1000 2000 4000 6000 --seeds 8600 \
   --modes gate_150 ramp_150 fixed_150 fixed_u150 fixed \
-  --max-delay 14 --termination-thresholds default \
+  --max-delay 12 --termination-thresholds default \
   --motion-file $LUCID_ROOT/pools/subsets/m1_hob002/robot_filtered \
   --smpl-motion-file dummy \
   --encoder $LUCID_ROOT/artifacts/lucid_encoder_debug512.pt \
   --execute
 ```
 
-`--max-delay 14` is mandatory and the launcher enforces it: the gate's probe
-can reach lambda 1.625, needing 13 delay steps.
+`--max-delay 12` is mandatory and the launcher enforces it. The probe is
+capped at the frontier ceiling, so every 1.5 arm's maximum applied intensity is
+exactly 1.5 and needs 12 delay steps. That cap is not packaging: an uncapped
+probe at 1.625 would give the expansion arms strictly more support than
+fixed_150 and fixed_u150, confounding "the gate helped" with "the gate trained
+harder".
 
 The decisive contrast is **gate_150 against ramp_150**, never against fixed.
 Beating fixed randomization would only show that difficulty rose. Decision
