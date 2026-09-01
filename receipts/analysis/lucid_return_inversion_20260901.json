@@ -1,0 +1,170 @@
+{
+  "kind": "lucid_return_inversion",
+  "schema_version": 1,
+  "return_definition": "mean of the last 500 iterations of 'Mean rewards'",
+  "endpoint": "frontier success AUC, frozen phys_125..200 trapezoid",
+  "pairs": [
+    {
+      "arm": "lucid_rg@s8601",
+      "seed": 8601,
+      "mode": "lucid_rg",
+      "final_lambda": 0.062,
+      "evacuated": true,
+      "terminal_return": 15.2859,
+      "frontier_success_auc": 0.739909,
+      "contested_cells": null,
+      "sources": [
+        "curriculum_robustness_ne512_20260901_161202.json"
+      ]
+    },
+    {
+      "arm": "lucid_s4_rg@s8600",
+      "seed": 8600,
+      "mode": "lucid_s4_rg",
+      "final_lambda": 0.012,
+      "evacuated": true,
+      "terminal_return": 14.401,
+      "frontier_success_auc": 0.697266,
+      "contested_cells": null,
+      "sources": [
+        "curriculum_robustness_ne512_20260830_013413.json"
+      ]
+    },
+    {
+      "arm": "lucid_rg@s8600",
+      "seed": 8600,
+      "mode": "lucid_rg",
+      "final_lambda": 1.0,
+      "evacuated": false,
+      "terminal_return": 11.2681,
+      "frontier_success_auc": 0.882812,
+      "contested_cells": null,
+      "sources": [
+        "curriculum_robustness_ne512_20260830_013413.json"
+      ]
+    },
+    {
+      "arm": "lucid_s4_rg@s8601",
+      "seed": 8601,
+      "mode": "lucid_s4_rg",
+      "final_lambda": 1.0,
+      "evacuated": false,
+      "terminal_return": 12.2843,
+      "frontier_success_auc": 0.778971,
+      "contested_cells": null,
+      "sources": [
+        "curriculum_robustness_ne512_20260901_161720.json"
+      ]
+    },
+    {
+      "arm": "lucid_rg@s8602",
+      "seed": 8602,
+      "mode": "lucid_rg",
+      "final_lambda": 1.0,
+      "evacuated": false,
+      "terminal_return": 11.5229,
+      "frontier_success_auc": null,
+      "contested_cells": null,
+      "sources": []
+    },
+    {
+      "arm": "lucid_s4_rg@s8602",
+      "seed": 8602,
+      "mode": "lucid_s4_rg",
+      "final_lambda": 1.0,
+      "evacuated": false,
+      "terminal_return": 12.2446,
+      "frontier_success_auc": null,
+      "contested_cells": null,
+      "sources": []
+    },
+    {
+      "arm": "lucid_ratchet_rg@s8601",
+      "seed": 8601,
+      "mode": "lucid_ratchet_rg",
+      "final_lambda": 1.0,
+      "evacuated": false,
+      "terminal_return": 10.9807,
+      "frontier_success_auc": 0.913086,
+      "contested_cells": null,
+      "sources": [
+        "curriculum_robustness_ne512_20260831_201524.json"
+      ]
+    },
+    {
+      "arm": "lucid_ratchet_rg@s8600",
+      "seed": 8600,
+      "mode": "lucid_ratchet_rg",
+      "final_lambda": 1.0,
+      "evacuated": false,
+      "terminal_return": 11.4662,
+      "frontier_success_auc": 0.902995,
+      "contested_cells": null,
+      "sources": [
+        "curriculum_robustness_ne512_20260901_153504.json"
+      ]
+    },
+    {
+      "arm": "lucid_ratchet_rg@s8602",
+      "seed": 8602,
+      "mode": "lucid_ratchet_rg",
+      "final_lambda": 1.0,
+      "evacuated": false,
+      "terminal_return": 11.3845,
+      "frontier_success_auc": 0.820312,
+      "contested_cells": null,
+      "sources": [
+        "curriculum_robustness_ne512_20260901_155953.json"
+      ]
+    },
+    {
+      "arm": "fixed@s8600",
+      "seed": 8600,
+      "mode": "fixed",
+      "final_lambda": 1.0,
+      "evacuated": false,
+      "terminal_return": 11.937,
+      "frontier_success_auc": 0.904622,
+      "contested_cells": null,
+      "sources": [
+        "curriculum_robustness_ne512_20260830_013413.json",
+        "curriculum_robustness_ne512_20260901_154323.json"
+      ]
+    },
+    {
+      "arm": "fixed@s8601",
+      "seed": 8601,
+      "mode": "fixed",
+      "final_lambda": 1.0,
+      "evacuated": false,
+      "terminal_return": 11.3125,
+      "frontier_success_auc": 0.881836,
+      "contested_cells": null,
+      "sources": [
+        "curriculum_robustness_ne512_20260831_202312.json"
+      ]
+    },
+    {
+      "arm": "fixed@s8602",
+      "seed": 8602,
+      "mode": "fixed",
+      "final_lambda": 1.0,
+      "evacuated": false,
+      "terminal_return": 11.6159,
+      "frontier_success_auc": 0.832031,
+      "contested_cells": null,
+      "sources": [
+        "curriculum_robustness_ne512_20260901_155138.json"
+      ]
+    }
+  ],
+  "n_scored_pairs": 10,
+  "pearson_return_vs_frontier": -0.844,
+  "pearson_controllers_only": -0.8705,
+  "evacuated_vs_held": {
+    "evacuated_mean_return": 14.8435,
+    "held_mean_return": 11.5312,
+    "evacuated_mean_frontier": 0.718588,
+    "held_mean_frontier": 0.864583
+  }
+}
