@@ -215,10 +215,24 @@ ol.steps li{margin-bottom:.7rem}
   over the final 1,000 iterations. Zero guard trips. The brake never fired because nothing was
   breaking &mdash; by the controller's own instrument, everything was fine.</p>
   <div class="callout evac">
-    <div class="h">The trap</div>
-    <p>Lowering difficulty makes environments easier, which raises return and lowers apparent
-    error, which justifies lowering difficulty further. Any scheduler whose signal improves when
-    difficulty falls has this fixed point. It is not a tuning failure.</p>
+    <div class="h">Why the retreat is total, not partial</div>
+    <p>The telemetry says something worse than "it chased a drifting signal."
+    <b>Cutting difficulty does not reduce the controller's own error.</b> Over the collapse window
+    of <span class="chip evac">lucid_s4_rg s8600</span> the correlation between applied &lambda; and
+    the measured gap is <b class="mono">r = &minus;0.201</b> &mdash; a working controller needs
+    <span class="mono">r &gt; 0</span>. In <span class="chip evac">lucid_rg s8601</span> the gap
+    <i>climbs</i> from 0.680 to 0.814 while &lambda; is cut from 0.99 to 0.23, and in the final
+    1,000 iterations it is still above its 0.778 target <b>474 times at &lambda; &asymp; 0.2</b>.</p>
+    <p>An <i>inverted</i> signal settles somewhere: as difficulty falls the signal improves until
+    the loop balances. A signal the actuator <i>cannot move</i> gives the integrator no restoring
+    force at all, so &lambda; winds to the rail. That is why both collapses end near
+    &lambda; = 0.01 rather than at a partial retreat.</p>
+    <p>The three candidate signals therefore fail <i>differently</i>, and the distinction decides
+    what to build next. The <b>latent gap</b> has no authority and the wrong sign.
+    <b>Training return</b> is inverted. <b>Episode survival</b> is inverted and saturates near 0.95
+    after iteration 5&ndash;6k &mdash; the collapsed arm scores 0.988 against fixed's 0.948. A
+    difficulty controller needs a signal whose response to its own actuator is both non-trivial and
+    correctly signed. None of the three is, and two reward evacuation outright.</p>
   </div>
 </section>
 
@@ -401,9 +415,11 @@ any data was read out.</p>
     <li><b>Adaptive curricula need a monotonicity argument, not just a stability argument.</b> A
     scheduler can be perfectly stable, never trip a guard, and still walk the training distribution
     somewhere useless. Stability is the wrong invariant; support retention is the right one.</li>
-    <li><b>Any signal that improves when difficulty falls is disqualified as a difficulty
-    controller</b>, however well it correlates with competence at fixed difficulty. Return is the
-    obvious instance; a learned reconstruction gap is a less obvious one.</li>
+    <li><b>A difficulty controller needs a signal whose response to its own actuator is both
+    non-trivial and correctly signed.</b> That is a stricter and more useful test than "don't use
+    return." Return and survival are inverted &mdash; they improve when difficulty falls, so they
+    reward evacuation. A learned reconstruction gap fails the other way: it does not respond to the
+    actuator at all (r = &minus;0.20), which is what turns a retreat into a rout.</li>
     <li><b>Sim-to-real robustness claims must state the training support alongside the evaluation
     range.</b> As soon as envelopes are widened &mdash; which is the whole point of domain randomization
     &mdash; "held-out" silently stops meaning held out. We nearly published that error ourselves.</li>
