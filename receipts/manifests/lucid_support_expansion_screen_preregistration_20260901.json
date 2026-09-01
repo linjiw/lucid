@@ -1,0 +1,195 @@
+{
+  "kind": "lucid_support_expansion_screen_preregistration",
+  "schema_version": 1,
+  "created_at": "2026-09-01T16:00:00-04:00",
+  "written_before_data": true,
+  "author_note": "Frozen before any gate_150 or ramp_150 policy has been trained and before any cell of the Phase-2 screen has been evaluated. The H_R2 confirmation was still scoring its ladders when this was written; nothing in this file reads, alters, or depends on the H_R2 verdict.",
+  "scope": "A one-seed SCREEN. It authorizes a preference ordering among five arms and a decision about whether to continue the feedback line. It authorizes no superiority claim, no directional language without across-seed agreement, and no claim about motion generalization or hardware.",
+
+  "motivation": {
+    "why_not_inside_the_envelope": "Fixed randomization reaches lambda = 1 by iteration ~80 and saturates in-envelope: phys_000..100 reads 0.9988 for fixed and 0.981 even for the no-randomization arm. Episode survival at lambda = 1 passes 0.93 by iteration 5,000-6,000 and stays there, so roughly the last third of training is spent on a solved distribution. There is no headroom for a scheduler to find inside [0, 1].",
+    "why_the_ratchet_settled_nothing": "lucid_ratchet_rg seed 8601 has exactly one distinct applied lambda over iterations 101-8000. It and fixed share an identical training distribution over 98.75% of training, so its noninferiority pass is close to structurally guaranteed and its +3.125 point frontier gap equals the full range of the four-arm identical-exposure cluster (SD 1.57 pts).",
+    "the_open_question": "Above lambda = 1 something has to decide when extrapolation is safe. That is the first place in this programme where a feedback rule can do work that a constant cannot.",
+    "signal_evidence": "receipts/analysis/lucid_signal_audit_20260901.json. Across the five runs with lambda pinned at 1.0, rank correlation against the iteration index is -0.30..+0.11 for the latent gap p90, +0.985..+0.992 for the episode time-out rate, and +0.967..+0.980 for mean return. The gap is not anchored; the time-out rate is. Mean return is anchored but unbounded and scale-drifting, so it admits no stable threshold."
+  },
+
+  "design": {
+    "campaign": "lucid_support_expansion_ne1024_20260902",
+    "from_scratch": true,
+    "seeds": [8600],
+    "seed_status": "ONE seed. This is a screen, not a decision. Seed SD is about 2.2 points on the primary band; a 5-point effect at one seed is a direction to test, never a result.",
+    "num_envs": 1024,
+    "iterations": 8000,
+    "motion_file": "/home/linjiw/lucid-sonic/pools/subsets/m1_hob002/robot_filtered",
+    "exp": "manager/universal_token/all_modes/sonic_release",
+    "max_delay": 14,
+    "max_delay_rationale": "The gate's probe may reach lambda 1.625, which needs ceil(1.625*8) = 13 delay steps. The delayed-actuator buffer clamps silently, so an undersized buffer would train latency at 1.0x while telemetry claimed more. 14 is used for headroom and the launcher asserts the requirement.",
+    "run_order": ["gate_150", "ramp_150", "fixed_150", "fixed_u150", "fixed"],
+    "run_order_rationale": "The feedback arm runs first so its mechanism telemetry is inspected earliest. If it stalls or misbehaves, the remaining four arms still answer the support-width question.",
+    "estimated_cost_gpu_hours": 27,
+    "arms": {
+      "fixed": {
+        "mode": "fixed",
+        "lambda": 1.0,
+        "strata": 1,
+        "role": "fresh comparator under the new code, and a code-identity check against historical fixed@s8600 (frontier success AUC 0.904622), expected to agree within seed noise"
+      },
+      "fixed_150": {
+        "mode": "fixed",
+        "lambda": 1.5,
+        "strata": 1,
+        "role": "Gate A. Direct mixed training at the wider support. If this alone works, a curriculum is not needed at 1.5 and the question moves to 2.0."
+      },
+      "fixed_u150": {
+        "mode": "fixed",
+        "lambda": 1.5,
+        "strata": 8,
+        "top_fraction": 0.75,
+        "role": "expand-don't-replace without scheduling: retention tail alone"
+      },
+      "ramp_150": {
+        "mode": "ramp",
+        "strata": 8,
+        "frontier_start": 1.0,
+        "frontier_end": 1.5,
+        "begin_iteration": 1000,
+        "end_iteration": 5000,
+        "role": "THE decisive control. Open loop, monotone, reads nothing. Same stratum count, same stratum sizes, same probe placement, same terminal support as gate_150."
+      },
+      "gate_150": {
+        "mode": "gate",
+        "strata": 8,
+        "frontier_start": 1.0,
+        "frontier_max": 1.5,
+        "probe_offset": 0.125,
+        "step_size": 0.125,
+        "threshold": 0.80,
+        "window": 200,
+        "dwell": 200,
+        "min_episodes": 200,
+        "guard_action": "freeze",
+        "role": "LUCID v2. Expands the frontier when the probe stratum, held one step ABOVE the frontier, averages >= 0.80 survival over a full 200-iteration window."
+      }
+    },
+    "stratum_sizes_1024": [43, 43, 43, 43, 42, 42, 640, 128],
+    "stratum_layout": "Six retained tail strata, then the frontier stratum (62.5%), then the probe stratum (12.5%). gate_150 and ramp_150 use exactly this layout; fixed_u150 uses the existing expand layout with a 75% top and 25% tail, so its tail share matches.",
+    "matched_control_assertion": "gate_150 and ramp_150 differ in exactly one thing: how the frontier moves. Verified by test_gate_and_ramp_place_strata_identically_at_equal_frontier."
+  },
+
+  "endpoints": {
+    "PRIMARY": {
+      "cells": ["phys_175", "phys_200"],
+      "weights": [0.5, 0.5],
+      "metric": "success_rate",
+      "why": "Strictly outside the training support of EVERY arm compared, treatment and control alike. At lambda = 1.5 the phys_150 evaluation box is bit-for-bit the arm's own training marginal, and phys_125/150 together carry 50% of the old frontier endpoint. Reporting a win there would be reporting training accuracy.",
+      "threshold": 0.05,
+      "threshold_justification": "The identical-exposure noise cluster has SD 0.0221 on this band, so 0.05 is about 2.3 SD. The old 0.02 threshold was written for a different endpoint and must not be carried across."
+    },
+    "COMPANION_noninferiority": {
+      "cells": ["phys_175", "phys_200"],
+      "metric": "progress_rate",
+      "floor": -0.02
+    },
+    "SECONDARY_A_same_support_safety": {
+      "cells": ["phys_000", "phys_025", "phys_050", "phys_075", "phys_100"],
+      "weights": [0.125, 0.25, 0.25, 0.25, 0.125],
+      "floor": -0.01,
+      "logic": "One-sided. fixed reads 0.9988 and off reads 0.981 here, so this endpoint can falsify 'no nominal price' but can never support a capability claim. A pass is weak evidence; a fail is strong evidence."
+    },
+    "SECONDARY_B_report_only": {
+      "cells": ["phys_125", "phys_150"],
+      "use": "REPORT ONLY, NEVER GATE",
+      "labelling": "IN-SUPPORT for fixed_150, fixed_u150, ramp_150, gate_150 (any arm whose frontier reaches 1.5); OUT-OF-SUPPORT for fixed"
+    },
+    "MANIPULATION_CHECK": {
+      "test": "fixed_150 success at phys_150 must strictly exceed fixed success at phys_150",
+      "consequence_if_failed": "the manipulation did not take and the 1.5 arms are void",
+      "status": "a floor, not a result"
+    },
+    "retired": {
+      "lat_60ms": "measured floor only, never a ranking metric",
+      "contaminated_frontier_auc": "phys_125..200 still computed and reported for continuity with the seven historically scored arms, gating nothing"
+    }
+  },
+
+  "decision_rules": {
+    "D1_width": {
+      "test": "fixed_150 minus fixed >= 0.05 on the PRIMARY, with SECONDARY_A within its floor",
+      "if_true": "direct mixed training at 1.5 works. The scientific question moves to lambda_max = 2.0 on the grid-v2 endpoint (phys_225..300), where direct mixed training is likelier to fail.",
+      "if_false": "widening support to 1.5 does not by itself buy held-out robustness, and D2 is the only remaining reason to continue this line."
+    },
+    "D2_feedback": {
+      "test": "gate_150 minus ramp_150 >= 0.05 on the PRIMARY, AND gate_150 minus fixed_150 >= -0.02",
+      "if_true": "feedback did work a schedule could not. This is the only outcome that authorizes continuing to a multi-seed confirmation of the gate.",
+      "if_false": "the recommendation is the open-loop ramp, or fixed_150 if D1 also passed. The LUCID v2 feedback claim is DROPPED, and the negative is recorded rather than retried with new gains.",
+      "note": "The comparator is ramp_150, never fixed. Beating fixed randomization only shows that difficulty rose."
+    },
+    "D3_mechanism_gates_for_gate_150": {
+      "G1_zero_applied_decreases": "receipt field applied_decreases == 0",
+      "G2_zero_frontier_drop": "receipt field max_frontier_drop == 0.0, computed from the written trajectory rather than from controller state",
+      "G3_probe_telemetry_present": "probe_rows >= 7000 of 8000 iterations",
+      "G4_reaches_ceiling": "final_frontier_lambda == 1.5 by iteration 6000",
+      "note": "G1-G3 are correctness gates: a failure invalidates the arm. G4 is NOT a correctness gate. A gate that never expands is a reportable scientific result -- it means probe survival never cleared 0.80 -- and ramp_150 still answers D1."
+    },
+    "D4_mixture": {
+      "test": "fixed_u150 versus fixed_150 on the PRIMARY",
+      "within_0.02": "the retention tail costs nothing and buys nothing at this support width",
+      "fixed_u150_worse_by_more_than_0.02_while_fixed_150_is_clean": "the ONLY trigger for Tier 3 (per-stratum advantage normalization, critic DR-context). Absent this, optimizer complexity is not authorized."
+    },
+    "reporting": {
+      "worst_cell": "worst-cell success is reported alongside every AUC. Never a single mean.",
+      "training_support": "every table prints each arm's training support next to the evaluation range",
+      "applied_support_log": "every report includes the per-iteration frontier trajectory and the count of refused or applied decreases"
+    }
+  },
+
+  "frozen_predictions": {
+    "note": "Ordering predictions only. The affine dose model does not extend above lambda ~1.385, where the static-friction floor clamps, so no point prediction of an AUC is offered for any 1.5 arm.",
+    "P1": "fixed_150 beats fixed at phys_150 (the manipulation check). Near-certain; a failure means the arm is inert.",
+    "P2": "gate_150 reaches its 1.5 ceiling before iteration 6,000, given that survival at lambda = 1 saturates near iteration 5,000 and each expansion needs a 200-iteration window plus 200 dwell.",
+    "P3": "ramp_150 ~= gate_150 on the PRIMARY, within the 0.05 threshold. This is the NULL and the outcome the design expects: reaching 1.5 is most of the benefit, and when you get there matters little.",
+    "P4": "fixed_150 > fixed on the PRIMARY by more than 0.05, because frontier exposure has ordered every arm scored so far.",
+    "P5": "All 1.5 arms lose less than 0.01 on SECONDARY_A. The in-envelope endpoint is saturated and a wider support should not disturb it.",
+    "falsification_of_the_programme_direction": "If P4 fails -- widening support to 1.5 does not improve held-out success -- then support width is not the lever the exposure ordering suggested, and both D1 and D2 lose their premise. That outcome retires the support-expansion line regardless of what the gate did."
+  },
+
+  "instrument": {
+    "panel": "/home/linjiw/lucid-sonic/manifests/replicate_panel_panel_hob002_k512.json",
+    "episodes_per_cell": 512,
+    "evaluator_note": "Phase-2 scoring uses the evaluator at the CURRENT reviewed commit, not the ca057e6-pinned build. That build is reserved for the historical bridge and for any cell that must be byte-comparable with the seven historically scored arms. The two must not be mixed within one comparison.",
+    "known_limitation_single_motion": "The panel is 512 fresh physics draws of ONE training clip. Every number this screen produces is memorized-motion-under-new-physics. There is no motion-generalization evidence at any support width.",
+    "known_limitation_ladder_not_uniformly_harder": "Above lambda 1.3846 the static-friction floor clamps at 0.05, so past that the ladder tests grip, mass and push rather than slip. Restitution carries no information above 2.0."
+  },
+
+  "code_state": {
+    "repository": "/home/linjiw/lucid/GR00T-WholeBodyControl",
+    "branch": "research/practice-utility",
+    "git_sha": "bfa484546c6704e7c9f204ace327ba7c934fbf82",
+    "file_sha256": {
+      "gear_sonic/research/practice_utility/survival_gate.py": "4087bc8794b9585e631773fc5af37a550b6f4b6f30e6db3ed0f904a1b2c6414d",
+      "gear_sonic/research/practice_utility/survival_observer.py": "86265745145c46ed9585fbf651aebab4f091fbf1f94049d7c405c8ec2f4aaa80",
+      "gear_sonic/research/practice_utility/dr_curriculum.py": "53bd11a7cfa3d496c43dc78cce749087eb83229b277381121b776553704e63fd",
+      "gear_sonic/research/practice_utility/dr_controller.py": "c70a7db5c21474a7e2daeaeb6759fa634aff82d0599b2fc26dfbfc9261b14f15",
+      "gear_sonic/research/practice_utility/dr_scaling.py": "f21be49267bef4517f1188d110b25b5547dedc4577d66ceeaec80a109ef38281",
+      "gear_sonic/research/practice_utility/tace.py": "8f176ee152d0abbbe7af69741f1626be51eb723a307f78197c16c07fdd53ead0",
+      "scripts/practice_utility/run_curriculum_comparison.py": "fcce3399bd47dc0dba90ee82a1eefd61fe3b58c3cfdda3dadab4639fa985364e",
+      "scripts/practice_utility/run_curriculum_robustness_eval.py": "b21863bb7150a566767214a1e9e3473d81406bfd83a3f92bbe39debaecb6a1ce",
+      "scripts/practice_utility/analyze_support_screen.py": "0fa1e90c0a2b948dea42518a9f216be3519ec142be8a6ca1f6d1ed21472c4d6c"
+    },
+    "amendment_rule": "If any pinned file changes before launch, an additive amendment recording the new SHA and the reason must be committed BEFORE the affected arm starts. Decision rules and thresholds in this file are not revisable after any Phase-2 cell has been scored."
+  },
+
+  "limitations": [
+    "One seed. Nothing here decides anything; it screens.",
+    "One motion. No motion-generalization evidence at any support width.",
+    "The gate has never run on hardware, and no arm in this programme has.",
+    "The probe stratum is 128 environments, so its per-iteration survival estimate is noisy. The 200-iteration window and the 200-episode coverage floor exist for that, and the gate may stall as a result. A stall is reported as an outcome, not repaired by lowering the threshold after seeing it.",
+    "gate_150 and ramp_150 both differ from fixed_u150 in stratum layout (a probe stratum above the frontier, and a 62.5% rather than 75% frontier share), so a gate-versus-fixed_u150 difference is not attributable to scheduling alone. Only the gate-versus-ramp contrast is clean.",
+    "Terms without a dispatcher apply the frontier intensity to every environment including the probe, so the probe is one step above the frontier only on dispatched channels. The dispatched set is recorded per run in the TACE telemetry."
+  ],
+
+  "verified": [],
+  "not_yet_verified": [
+    "every outcome; written before any Phase-2 policy was trained"
+  ]
+}
