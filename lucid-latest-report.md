@@ -5,6 +5,65 @@ It supersedes the older live-process state in `lucid-handoff-2026-08-31.md`
 and the pre-result ending of `fable.md`; the current operational companion is
 `lucid-handoff-2026-09-01.md`.
 
+## P3 READ OUT — 2026-09-01 16:19 EDT — the framing survives out of sample
+
+`lucid_rg` seed 8601, the predeclared collapse, is scored. It held lambda = 1.0
+for thousands of iterations and ended at 0.062, and until now had a complete
+lambda history and no robustness score of any kind. On the frozen
+phys_125..200 grid at 512 episodes per cell, with the evaluator byte-pinned at
+`308e2415` so it is comparable to every historically scored arm:
+
+**Frontier success AUC = 0.739909.**
+
+Against predictions frozen while the confirmation was still training, and read
+by the scorer from the committed preregistration rather than restated:
+
+| law | point | t(5) prediction interval | outcome |
+|---|---|---|---|
+| recency-weighted | 0.72473 | [0.67376, 0.77569] | **inside** |
+| uniform | 0.82567 | [0.76087, 0.89047] | **outside, below** |
+| "evacuation is free" | ~0.882 | — | **rejected** |
+
+The value falls outside the two-law overlap [0.76086, 0.77571], so the design
+discriminated rather than failing to. The exposure hypothesis is not rejected
+in either direction: it is neither at or above 0.881836 nor below 0.67366. The
+recency term is not rejected either, since 0.7399 is below 0.77571.
+
+### What this settles
+
+**Evacuation is not free.** That was the outcome that would have refuted this
+programme's central framing, and it did not occur. The prediction was
+accurate to 1.5 points, which is inside the instrument's own ~1.8-point
+resolution.
+
+**The cost is larger than we had measured.** The 7.97-point figure came from
+comparing one collapsed run against its own mid-training capsule. Measured
+directly against contemporaries on the same seed:
+
+| comparison | delta |
+|---|---|
+| collapsed `lucid_rg@s8601` vs `fixed@s8601` | **−14.19 pts** |
+| collapsed `lucid_rg@s8601` vs `lucid_ratchet_rg@s8601` | **−17.32 pts** |
+
+The second row is the cleanest statement of the Tier-1 contribution available:
+the same controller, the same seed, the same everything, differing only by the
+monotone projection that refuses downward requests. 17.3 points of frontier
+success AUC.
+
+**The return inversion is now extreme.** This arm carries the highest terminal
+training return in the entire campaign (15.286) and the lowest frontier
+robustness of any controller arm (0.7399). An evacuating controller grades
+itself on an easier exam every iteration, and the training-return monitor
+reports that as success.
+
+### What this does NOT settle
+
+Recency is **not** established. The preregistration's own identifiability
+disclosure stands: a boxcar trailing mean beats the exponential kernel out of
+sample (LOO Q^2 0.977 vs 0.969), only three of the fitted points carry exposure
+leverage, and one new point does not earn the phrase "recency-weighted". What
+is established is the direction of the effect and the magnitude of the cost.
+
 ## H_R2 READ OUT — 2026-09-01 16:08 EDT
 
 The three-seed confirmation completed cleanly and the analysis receipt is
