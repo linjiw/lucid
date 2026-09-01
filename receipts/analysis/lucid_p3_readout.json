@@ -57,6 +57,17 @@
     "phys_175": 0.662109,
     "phys_200": 0.583984
   },
+  "cell_provenance": {
+    "phys_000": "curriculum_robustness_ne512_20260901_161202.json",
+    "phys_025": "curriculum_robustness_ne512_20260901_161202.json",
+    "phys_050": "curriculum_robustness_ne512_20260901_161202.json",
+    "phys_075": "curriculum_robustness_ne512_20260901_161202.json",
+    "phys_100": "curriculum_robustness_ne512_20260901_161202.json",
+    "phys_125": "curriculum_robustness_ne512_20260901_161202.json",
+    "phys_150": "curriculum_robustness_ne512_20260901_161202.json",
+    "phys_175": "curriculum_robustness_ne512_20260901_161202.json",
+    "phys_200": "curriculum_robustness_ne512_20260901_161202.json"
+  },
   "frontier_success_auc": 0.739909,
   "held_out_band_success": 0.623047,
   "status": "SCORED",

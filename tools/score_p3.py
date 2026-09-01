@@ -102,6 +102,11 @@ def main(argv: list[str] | None = None) -> int:
     receipts = args.receipt or find_receipts()
     scores: dict[tuple[int, str], dict[str, float]] = {}
     used: list[str] = []
+    # Provenance per (arm, cell). Receipts written before dr_scaling.clamp_physical
+    # existed contain lambda>1 cells the preregistration EXCLUDES at phys_125 and
+    # above, so silently merging receipts can build an endpoint out of two
+    # different instruments. Track every contributor and refuse to merge.
+    provenance: dict[tuple[int, str, str], list[str]] = {}
     for path in receipts:
         if not Path(path).is_file():
             continue
@@ -112,10 +117,17 @@ def main(argv: list[str] | None = None) -> int:
         if found:
             used.append(str(path))
         for key, cells in found.items():
+            for preset, value in cells.items():
+                provenance.setdefault((*key, preset), []).append(Path(path).name)
             scores.setdefault(key, {}).update(cells)
 
     target = (8601, "lucid_rg")
     cells = scores.get(target)
+    contested = {
+        f"{preset}": sources
+        for (seed, mode, preset), sources in sorted(provenance.items())
+        if (seed, mode) == target and len(sources) > 1
+    }
     report: dict[str, Any] = {
         "kind": "lucid_p3_readout",
         "schema_version": 1,
@@ -145,6 +157,25 @@ def main(argv: list[str] | None = None) -> int:
 
     observed = frontier_auc(cells)
     report["per_cell_success"] = {k: round(v, 6) for k, v in sorted(cells.items())}
+    report["cell_provenance"] = {
+        preset: provenance[(*target, preset)][0]
+        for preset in sorted(cells)
+        if (*target, preset) in provenance
+    }
+    if contested:
+        # Fail loudly rather than average two instruments together.
+        report["status"] = "AMBIGUOUS_PROVENANCE"
+        report["contested_cells"] = contested
+        report["note"] = (
+            "More than one receipt supplies the same cell for this arm. The "
+            "preregistration excludes pre-clamp lambda>1 cells at phys_125 and above, "
+            "so these cannot be merged. Pass --receipt explicitly."
+        )
+        text = json.dumps(report, indent=2)
+        if args.out:
+            args.out.write_text(text)
+        print(text)
+        return 1
     report["frontier_success_auc"] = None if observed is None else round(observed, 6)
     report["held_out_band_success"] = (
         None if held_out(cells) is None else round(held_out(cells), 6)
