@@ -49,6 +49,20 @@
       },
       "data_driven": false,
       "note": "Filed before any Phase-2 policy was trained. No endpoint, threshold, decision rule or prediction changes; the comparison becomes cleaner, not easier."
+    },
+    {
+      "id": "A4",
+      "severity": "interpretation_rule_frozen_before_data",
+      "target": "how a stalled gate is read, and what is done about it",
+      "finding": "A feasibility replay of the frozen gate law over the real per-iteration time-out series of fixed@s8600 (receipts/analysis/lucid_gate_feasibility_20260901.json, tools/simulate_gate.py) shows the gate's trajectory is highly sensitive to how much harder the probe is than the frontier. At the frozen threshold 0.80 it reaches 1.5 by iteration ~3,500 only if the probe is as easy as the frontier, which it never is; under a 5-point-per-step penalty it stalls at 1.375, and under 12 points at 1.125. This is a PROXY, not a prediction: the series is a fixed-DR arm's population rate and the penalty model is invented.",
+      "threshold_NOT_changed": "The frozen threshold stays 0.80. It was chosen a priori as 'the probe should be surviving most of its episodes before we widen', and re-tuning it against a proxy simulation built to make the arm expand is precisely the post-hoc adjustment this programme exists to avoid.",
+      "interpretation_rule": [
+        "If gate_150 reaches 1.5 and still loses to ramp_150 on the primary, D2 fails on its merits: the feedback rule bought nothing that a schedule did not, at equal terminal support.",
+        "If gate_150 STALLS below 1.5, it necessarily trains on less support than ramp_150, so a loss on the primary is expected and is NOT evidence that feedback is useless. It is evidence that this threshold was too conservative for this task. D2 still records a fail -- the rule is not revised -- but the report must state which of the two cases occurred, because they license different next steps.",
+        "A stall is never repaired by lowering the threshold and rerunning the same seed."
+      ],
+      "zero_gpu_followup": "gate_150 records probe survival every iteration in survival_<branch>.jsonl, so the gate law can be replayed against the ACTUAL probe series at any threshold for no GPU cost: tools/simulate_gate.py --survival-jsonl <path> --thresholds ... . That measures how conservative 0.80 was on real data and fixes the threshold for a second seed on evidence rather than on a guess. This analysis is authorized in advance and its result may set the threshold for Phase 3, but it may NOT revise any Phase-2 decision.",
+      "data_driven": false
     }
   ],
   "unchanged": "Every arm definition, stratum layout, endpoint, weight, threshold, decision rule, mechanism gate, frozen prediction and limitation in the parent preregistration is unchanged by this amendment.",
@@ -56,7 +70,8 @@
     "dr_curriculum.py at commit d65514c hashes to 2ff8471b69f4114b34256d1a91565e3be5e650f0d6e41d616f2a1aed890a4e40",
     "tests/practice_utility: 1635 passed, 0 failed, with LUCID_ROOT set",
     "black --check and ruff check pass on every changed file",
-    "five-arm Phase-2 launch dry run builds at --max-delay 12; tests 1640 passed"
+    "five-arm Phase-2 launch dry run builds at --max-delay 12; tests 1640 passed",
+    "gate feasibility replay over the real fixed@s8600 survival series; tool at tools/simulate_gate.py"
   ],
   "not_yet_verified": [
     "every Phase-2 outcome; no policy has been trained"

@@ -1,0 +1,103 @@
+{
+  "kind": "lucid_gate_replay",
+  "schema_version": 1,
+  "source": "/home/linjiw/lucid-sonic/outputs/curriculum_comparison_ne1024_20260829_000249_s8600_fixed.log",
+  "source_kind": "population time-out rate of a fixed-DR run, used as a PROXY for probe survival. The probe trains above the frontier and is strictly harder, so the zero-penalty row is an upper bound on expansion speed, not a prediction.",
+  "iterations": 8000,
+  "replays": [
+    {
+      "threshold": 0.7,
+      "expansions": 4,
+      "final_frontier": 1.5,
+      "fired_at": [
+        2381,
+        2581,
+        2781,
+        2981
+      ],
+      "probe_penalty_per_step": 0.0
+    },
+    {
+      "threshold": 0.8,
+      "expansions": 4,
+      "final_frontier": 1.5,
+      "fired_at": [
+        2884,
+        3084,
+        3284,
+        3484
+      ],
+      "probe_penalty_per_step": 0.0
+    },
+    {
+      "threshold": 0.9,
+      "expansions": 4,
+      "final_frontier": 1.5,
+      "fired_at": [
+        4044,
+        4244,
+        4444,
+        4644
+      ],
+      "probe_penalty_per_step": 0.0
+    },
+    {
+      "threshold": 0.7,
+      "expansions": 4,
+      "final_frontier": 1.5,
+      "fired_at": [
+        2617,
+        2884,
+        3395,
+        4044
+      ],
+      "probe_penalty_per_step": 0.05
+    },
+    {
+      "threshold": 0.8,
+      "expansions": 3,
+      "final_frontier": 1.375,
+      "fired_at": [
+        3395,
+        4044,
+        5755
+      ],
+      "probe_penalty_per_step": 0.05
+    },
+    {
+      "threshold": 0.9,
+      "expansions": 1,
+      "final_frontier": 1.125,
+      "fired_at": [
+        5755
+      ],
+      "probe_penalty_per_step": 0.05
+    },
+    {
+      "threshold": 0.7,
+      "expansions": 2,
+      "final_frontier": 1.25,
+      "fired_at": [
+        3173,
+        5370
+      ],
+      "probe_penalty_per_step": 0.12
+    },
+    {
+      "threshold": 0.8,
+      "expansions": 1,
+      "final_frontier": 1.125,
+      "fired_at": [
+        4641
+      ],
+      "probe_penalty_per_step": 0.12
+    },
+    {
+      "threshold": 0.9,
+      "expansions": 0,
+      "final_frontier": 1.0,
+      "fired_at": [],
+      "probe_penalty_per_step": 0.12
+    }
+  ]
+}
