@@ -70,29 +70,44 @@ not evacuate, second of four in-envelope, and loses 42.0 points across the
 friction clamp against 17.9–26.6 for its siblings. It is brittle to loss of
 friction, not globally weaker.
 
-## Phase 2 — INTERRUPTED 2026-09-02 07:27 EDT after arm 1 of 5
+## Phase 2 — CLOSED BY DECISION 2026-09-02 07:35 EDT after arm 1 of 5
 
-The driver received SIGTERM during the second arm; its log ends `Terminated`.
-The session that launched it did not send the signal. At the same minute a
-different run was started from an interactive terminal using the
-development-branch box-mode code as a `--checkpoint` continuation, and an
-unrelated project's job queued behind it. **Do not kill those processes; they
-are not this programme's.**
+**This was the user's call, recorded in amendments A9 and A10** by the session
+that carried it out. A single-channel attribution
+(`receipts/analysis/lucid_channel_attribution_20260902.json`) reordered the
+programme toward per-channel expansion. At 07:27 the `ramp_150` trainer was
+SIGSTOPped so a warm-start prototype loop (`tools/run_queue_20260902.sh`, eight
+arms in two scored batches: box_150, gate_150, box_asym, ramp_asym, fixed_150;
+then ramp_150, fixed, fixed_asym) could use the GPU; at 07:35 the Phase 2 driver
+and the paused trainer were terminated to free memory for it. The unrelated
+`~/ardy` job on the GPU is the user's too. **Leave all of it alone.** The live
+plan for that queue is in the other session's memory note
+`lucid-queue-20260902-live`.
 
 | arm | state |
 |---|---|
-| `gate_150` | **complete and valid**, all four mechanism gates pass (G1 0 · G2 0.0000 · G3 7,990 · G4 5,891) |
-| `ramp_150` | **void** — interrupted at 1,787/8,000. Fail-closed: never resume. Directory preserved as evidence. |
-| `fixed_150`, `fixed_u150`, `fixed` | not started |
+| `gate_150` | **complete and valid**, all four mechanism gates pass (G1 0 · G2 0.0000 · G3 7,990 · G4 5,891); checkpoint sha256 `abd6d597…` recorded in A11 |
+| `ramp_150` | **void** — killed at 1,787/8,000. Fail-closed: never resume. Preserved as evidence. |
+| `fixed_150`, `fixed_u150`, `fixed` | never launched |
 
-No Phase-2 cell is scored; no rule changes. Amendment A9.
+Per A10, decision rules D1–D4 **cannot be evaluated**: the gate-vs-ramp contrast
+has no matched control. `gate_150` stands as a *mechanism* result (a probe-gated
+frontier expands from scratch on its own evidence and never contracts) and may
+be scored on the held-out band against historical `fixed@s8600`, labelled an
+unmatched single-seed comparison. The prototype queue's `ramp_150` is a
+warm-start continuation, not the preregistered from-scratch control, so it does
+not restore D2.
 
-**To resume** once `nvidia-smi` shows no compute process: rerun
-`tools/run_phase2_screen.sh --execute` through the env wrapper. It will refuse
-while the GPU is busy. It must either reuse `gate_150` after hash revalidation
-or the analysis must combine the preserved `gate_150` with a fresh four-arm
-experiment id; the interrupted `ramp_150` is excluded either way. The decisive
-D2 contrast cannot be read until `ramp_150` exists from scratch.
+**To restore the preregistered screen**, only if the prototype loop makes it
+worth 21 GPU-hours: rerun the pinned worktree with
+`PHASE2_MODES='ramp_150 fixed_150 fixed_u150 fixed'` once the GPU is idle, and
+combine with the preserved `gate_150` after hash revalidation.
+
+**Carried forward from `gate_150` (A11):** the relative return guard tripped
+914 times after the final expansion because its reference was set at easier
+support. A no-op at the ceiling; it would have stalled expansion for 500
+iterations earlier in a run. Reset the reference on expansion, or gate on probe
+survival, before any further from-scratch gate arm.
 
 ## Phase 2 — original launch record (superseded above)
 

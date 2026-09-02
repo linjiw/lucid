@@ -186,7 +186,12 @@
       "consequence": "No Phase-2 cell has been scored, so no decision rule, threshold, endpoint or prediction is affected. The D2 contrast (gate vs ramp) cannot be read until ramp_150 is retrained from scratch. The 5.4 GPU-h gate_150 arm is preserved; the ~1.2 GPU-h spent on the interrupted ramp cell is lost.",
       "resume_path": "Relaunch run_phase2_screen.sh for the four remaining arms once the GPU is idle (its gate 4 refuses while any compute process holds the GPU). The driver must either reuse gate_150 after revalidating its checkpoint hash, config source, seed mapping and complete run set, or the analysis must combine the preserved gate_150 with a fresh four-arm experiment id. Either way the interrupted ramp_150 directory is preserved as evidence and excluded.",
       "guard_defect_carried": "gate_150 also surfaced a design defect that changed nothing here: the relative return guard tripped 914 times after the final expansion because its reference return was set at easier support. Freeze at the ceiling is a no-op, so G1/G2 pass; before the ceiling it would have stalled expansion for 500 iterations. Fix before Phase 3 (reset reference on expansion, or gate on probe survival). Not patched in the live worktree.",
-      "data_driven": false
+      "data_driven": false,
+      "attribution_correction": "A11's 'event' paragraph was written before its author had read A9 and A10 and wrongly implies the SIGTERM was of unknown origin. A9 (07:22) and A10 (07:35) record the cause: the USER paused the ramp_150 trainer to run the warm-start expansion prototype loop (tools/run_queue_20260902.sh), then closed the Phase 2 queue by decision to free GPU memory and time for it. A11 stands only for what A9/A10 do not carry: the per-arm mechanism-gate readout, the gate_150 checkpoint hash, and the return-guard defect. Its resume_path is superseded by A10's: re-run with PHASE2_MODES='ramp_150 fixed_150 fixed_u150 fixed' from the same pinned worktree only if the prototype loop makes the 21 GPU-hours worth spending.",
+      "superseded_fields": [
+        "event",
+        "resume_path"
+      ]
     }
   ],
   "unchanged": "Every arm definition, stratum layout, endpoint, weight, threshold, decision rule, mechanism gate, frozen prediction and limitation in the parent preregistration is unchanged by this amendment.",
