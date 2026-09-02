@@ -1,0 +1,968 @@
+{
+  "kind": "lucid_channel_attribution_readout",
+  "schema_version": 1,
+  "sweep_dir": "/home/linjiw/lucid-sonic/manifests/channel_sweep_20260902_001226",
+  "cells_found": 55,
+  "arms": [
+    {
+      "arm": "fixed@s8600",
+      "cells": {
+        "ch_fric_125": {
+          "success_rate": 0.99609375,
+          "foot_slip_per_step_m": 0.0020261218450056176,
+          "torque_saturation": 0.030545191271551718,
+          "energy_proxy": 162.92379790685425,
+          "undesired_contact_rate": 0.99470703125,
+          "mpjpe_g": 220.15047909968723,
+          "drop_vs_phys_100": -0.002,
+          "channel_dr_scales": {
+            "physics_material": 1.25
+          }
+        },
+        "ch_fric_150": {
+          "success_rate": 0.97265625,
+          "foot_slip_per_step_m": 0.002647222649958141,
+          "torque_saturation": 0.027388873922413782,
+          "energy_proxy": 166.9744706679467,
+          "undesired_contact_rate": 0.9928125,
+          "mpjpe_g": 259.4990638135923,
+          "drop_vs_phys_100": 0.0215,
+          "channel_dr_scales": {
+            "physics_material": 1.5
+          }
+        },
+        "ch_fric_200": {
+          "success_rate": 0.974609375,
+          "foot_slip_per_step_m": 0.002446889114598679,
+          "torque_saturation": 0.02932684536637931,
+          "energy_proxy": 166.59967586844266,
+          "undesired_contact_rate": 0.99271484375,
+          "mpjpe_g": 240.47526108850616,
+          "drop_vs_phys_100": 0.0195,
+          "channel_dr_scales": {
+            "physics_material": 2.0
+          }
+        },
+        "ch_mass_200": {
+          "success_rate": 0.9921875,
+          "foot_slip_per_step_m": 0.002074855196953667,
+          "torque_saturation": 0.03161941002155174,
+          "energy_proxy": 170.99909352445616,
+          "undesired_contact_rate": 0.99509765625,
+          "mpjpe_g": 226.55226900931837,
+          "drop_vs_phys_100": 0.002,
+          "channel_dr_scales": {
+            "randomize_rigid_body_mass": 2.0
+          }
+        },
+        "ch_mass_300": {
+          "success_rate": 0.94921875,
+          "foot_slip_per_step_m": 0.0025180565686773225,
+          "torque_saturation": 0.03235250538793104,
+          "energy_proxy": 185.09074966170235,
+          "undesired_contact_rate": 0.995,
+          "mpjpe_g": 250.67276405175642,
+          "drop_vs_phys_100": 0.0449,
+          "channel_dr_scales": {
+            "randomize_rigid_body_mass": 3.0
+          }
+        },
+        "ch_com_200": {
+          "success_rate": 0.98828125,
+          "foot_slip_per_step_m": 0.001987874494311731,
+          "torque_saturation": 0.031725821659482775,
+          "energy_proxy": 166.13431616779292,
+          "undesired_contact_rate": 0.9948046875,
+          "mpjpe_g": 243.93568410551643,
+          "drop_vs_phys_100": 0.0059,
+          "channel_dr_scales": {
+            "base_com": 2.0
+          }
+        },
+        "ch_com_300": {
+          "success_rate": 0.98828125,
+          "foot_slip_per_step_m": 0.002132890072332506,
+          "torque_saturation": 0.03176084321120689,
+          "energy_proxy": 171.9718715600867,
+          "undesired_contact_rate": 0.99486328125,
+          "mpjpe_g": 294.0874433880304,
+          "drop_vs_phys_100": 0.0059,
+          "channel_dr_scales": {
+            "base_com": 3.0
+          }
+        },
+        "ch_joint_200": {
+          "success_rate": 0.9921875,
+          "foot_slip_per_step_m": 0.0019423273970013894,
+          "torque_saturation": 0.03175444504310343,
+          "energy_proxy": 163.02771733774685,
+          "undesired_contact_rate": 0.9948046875,
+          "mpjpe_g": 223.435214467812,
+          "drop_vs_phys_100": 0.002,
+          "channel_dr_scales": {
+            "add_joint_default_pos": 2.0
+          }
+        },
+        "ch_joint_300": {
+          "success_rate": 0.990234375,
+          "foot_slip_per_step_m": 0.002012027853268965,
+          "torque_saturation": 0.03170325969827588,
+          "energy_proxy": 163.33806194224908,
+          "undesired_contact_rate": 0.994873046875,
+          "mpjpe_g": 240.81808708284026,
+          "drop_vs_phys_100": 0.0039,
+          "channel_dr_scales": {
+            "add_joint_default_pos": 3.0
+          }
+        },
+        "ch_push_200": {
+          "success_rate": 0.912109375,
+          "foot_slip_per_step_m": 0.0025067264463537993,
+          "torque_saturation": 0.032011045258620696,
+          "energy_proxy": 177.62087682960092,
+          "undesired_contact_rate": 0.99453125,
+          "mpjpe_g": 277.0000570698428,
+          "drop_vs_phys_100": 0.082,
+          "channel_dr_scales": {
+            "push_robot": 2.0
+          }
+        },
+        "ch_push_300": {
+          "success_rate": 0.74609375,
+          "foot_slip_per_step_m": 0.0029457763603508475,
+          "torque_saturation": 0.032693965517241394,
+          "energy_proxy": 197.51780569638046,
+          "undesired_contact_rate": 0.994091796875,
+          "mpjpe_g": 327.973724869114,
+          "drop_vs_phys_100": 0.248,
+          "channel_dr_scales": {
+            "push_robot": 3.0
+          }
+        }
+      },
+      "scalar": {
+        "phys_100": {
+          "success_rate": 0.994140625,
+          "foot_slip_per_step_m": 0.001902440142801876,
+          "torque_saturation": 0.03173626077586206,
+          "energy_proxy": 162.4530331970254,
+          "undesired_contact_rate": 0.99482421875,
+          "mpjpe_g": 214.03711667030043
+        },
+        "phys_125": {
+          "success_rate": 0.978515625,
+          "foot_slip_per_step_m": 0.0021907625884613592,
+          "torque_saturation": 0.031502222521551715,
+          "energy_proxy": 170.75173899243634,
+          "undesired_contact_rate": 0.994658203125,
+          "mpjpe_g": 246.66458578992896
+        },
+        "phys_150": {
+          "success_rate": 0.923828125,
+          "foot_slip_per_step_m": 0.002522009877590008,
+          "torque_saturation": 0.031689789870689655,
+          "energy_proxy": 178.8350946764491,
+          "undesired_contact_rate": 0.9943359375,
+          "mpjpe_g": 275.8239548156694
+        },
+        "phys_175": {
+          "success_rate": 0.890625,
+          "foot_slip_per_step_m": 0.0032520782007435622,
+          "torque_saturation": 0.029398908943965515,
+          "energy_proxy": 188.28082220464057,
+          "undesired_contact_rate": 0.99376953125,
+          "mpjpe_g": 322.5668731163666
+        },
+        "phys_200": {
+          "success_rate": 0.8203125,
+          "foot_slip_per_step_m": 0.003329820651656472,
+          "torque_saturation": 0.030866783405172418,
+          "energy_proxy": 199.14988957699484,
+          "undesired_contact_rate": 0.993310546875,
+          "mpjpe_g": 342.99929031843084
+        }
+      },
+      "anisotropy_at_2x": {
+        "drops": {
+          "fric": 0.0195,
+          "mass": 0.002,
+          "com": 0.0059,
+          "joint": 0.002,
+          "push": 0.082
+        },
+        "worst_channel": "push",
+        "spread": 0.08,
+        "worst_share_of_total": 0.7361
+      }
+    },
+    {
+      "arm": "lucid_ratchet_rg@s8600",
+      "cells": {
+        "ch_fric_125": {
+          "success_rate": 0.98828125,
+          "foot_slip_per_step_m": 0.0019808613108798375,
+          "torque_saturation": 0.012400996767241395,
+          "energy_proxy": 139.18194827640966,
+          "undesired_contact_rate": 0.9928515625,
+          "mpjpe_g": 293.7304037276225,
+          "drop_vs_phys_100": 0.002,
+          "channel_dr_scales": {
+            "physics_material": 1.25
+          }
+        },
+        "ch_fric_150": {
+          "success_rate": 0.95703125,
+          "foot_slip_per_step_m": 0.0025945030921521815,
+          "torque_saturation": 0.012172346443965518,
+          "energy_proxy": 141.91181327495164,
+          "undesired_contact_rate": 0.989033203125,
+          "mpjpe_g": 351.0784535842753,
+          "drop_vs_phys_100": 0.0332,
+          "channel_dr_scales": {
+            "physics_material": 1.5
+          }
+        },
+        "ch_fric_200": {
+          "success_rate": 0.970703125,
+          "foot_slip_per_step_m": 0.0024571293546209174,
+          "torque_saturation": 0.012350484913793107,
+          "energy_proxy": 141.95307645442597,
+          "undesired_contact_rate": 0.987060546875,
+          "mpjpe_g": 345.01622584357335,
+          "drop_vs_phys_100": 0.0195,
+          "channel_dr_scales": {
+            "physics_material": 2.0
+          }
+        },
+        "ch_mass_200": {
+          "success_rate": 0.990234375,
+          "foot_slip_per_step_m": 0.002044584510639134,
+          "torque_saturation": 0.012737742456896543,
+          "energy_proxy": 147.24853784099113,
+          "undesired_contact_rate": 0.992109375,
+          "mpjpe_g": 314.73261673400833,
+          "drop_vs_phys_100": 0.0,
+          "channel_dr_scales": {
+            "randomize_rigid_body_mass": 2.0
+          }
+        },
+        "ch_mass_300": {
+          "success_rate": 0.9375,
+          "foot_slip_per_step_m": 0.0025320080282641797,
+          "torque_saturation": 0.014111328124999984,
+          "energy_proxy": 161.92001968642612,
+          "undesired_contact_rate": 0.989580078125,
+          "mpjpe_g": 336.02192156723913,
+          "drop_vs_phys_100": 0.0527,
+          "channel_dr_scales": {
+            "randomize_rigid_body_mass": 3.0
+          }
+        },
+        "ch_com_200": {
+          "success_rate": 0.9921875,
+          "foot_slip_per_step_m": 0.0018749089081282159,
+          "torque_saturation": 0.012519194504310348,
+          "energy_proxy": 142.37710813658168,
+          "undesired_contact_rate": 0.9930859375,
+          "mpjpe_g": 308.9646506764781,
+          "drop_vs_phys_100": -0.002,
+          "channel_dr_scales": {
+            "base_com": 2.0
+          }
+        },
+        "ch_com_300": {
+          "success_rate": 0.982421875,
+          "foot_slip_per_step_m": 0.001947717395686161,
+          "torque_saturation": 0.012603380926724141,
+          "energy_proxy": 146.85902807356547,
+          "undesired_contact_rate": 0.992900390625,
+          "mpjpe_g": 342.670616648305,
+          "drop_vs_phys_100": 0.0078,
+          "channel_dr_scales": {
+            "base_com": 3.0
+          }
+        },
+        "ch_joint_200": {
+          "success_rate": 0.994140625,
+          "foot_slip_per_step_m": 0.0018476625484980691,
+          "torque_saturation": 0.012566002155172411,
+          "energy_proxy": 139.27865407515645,
+          "undesired_contact_rate": 0.9932421875,
+          "mpjpe_g": 299.531240010039,
+          "drop_vs_phys_100": -0.0039,
+          "channel_dr_scales": {
+            "add_joint_default_pos": 2.0
+          }
+        },
+        "ch_joint_300": {
+          "success_rate": 0.986328125,
+          "foot_slip_per_step_m": 0.0019453074089951963,
+          "torque_saturation": 0.012558930495689648,
+          "energy_proxy": 141.16358751141382,
+          "undesired_contact_rate": 0.99326171875,
+          "mpjpe_g": 312.6306485780605,
+          "drop_vs_phys_100": 0.0039,
+          "channel_dr_scales": {
+            "add_joint_default_pos": 3.0
+          }
+        },
+        "ch_push_200": {
+          "success_rate": 0.927734375,
+          "foot_slip_per_step_m": 0.0023390708764958403,
+          "torque_saturation": 0.012958984375000008,
+          "energy_proxy": 155.43598169080758,
+          "undesired_contact_rate": 0.99181640625,
+          "mpjpe_g": 349.957875237393,
+          "drop_vs_phys_100": 0.0625,
+          "channel_dr_scales": {
+            "push_robot": 2.0
+          }
+        },
+        "ch_push_300": {
+          "success_rate": 0.76953125,
+          "foot_slip_per_step_m": 0.002856350798647663,
+          "torque_saturation": 0.013793440193965514,
+          "energy_proxy": 175.6482416380452,
+          "undesired_contact_rate": 0.988193359375,
+          "mpjpe_g": 371.3996660242129,
+          "drop_vs_phys_100": 0.2207,
+          "channel_dr_scales": {
+            "push_robot": 3.0
+          }
+        }
+      },
+      "scalar": {
+        "phys_100": {
+          "success_rate": 0.990234375,
+          "foot_slip_per_step_m": 0.0018341352370448453,
+          "torque_saturation": 0.012535695043103454,
+          "energy_proxy": 140.0943262749901,
+          "undesired_contact_rate": 0.993193359375,
+          "mpjpe_g": 286.3630543508208
+        },
+        "phys_125": {
+          "success_rate": 0.982421875,
+          "foot_slip_per_step_m": 0.0020780390802009325,
+          "torque_saturation": 0.012643453663793087,
+          "energy_proxy": 147.02779171113445,
+          "undesired_contact_rate": 0.9916796875,
+          "mpjpe_g": 328.87523683437064
+        },
+        "phys_150": {
+          "success_rate": 0.908203125,
+          "foot_slip_per_step_m": 0.002804410387550346,
+          "torque_saturation": 0.012774784482758636,
+          "energy_proxy": 153.92337674949252,
+          "undesired_contact_rate": 0.98984375,
+          "mpjpe_g": 380.5856354898972
+        },
+        "phys_175": {
+          "success_rate": 0.888671875,
+          "foot_slip_per_step_m": 0.003108893482950485,
+          "torque_saturation": 0.01310445851293103,
+          "energy_proxy": 162.07336414685125,
+          "undesired_contact_rate": 0.987294921875,
+          "mpjpe_g": 399.47325961297145
+        },
+        "phys_200": {
+          "success_rate": 0.841796875,
+          "foot_slip_per_step_m": 0.003285188301482379,
+          "torque_saturation": 0.01372205010775862,
+          "energy_proxy": 173.586514036313,
+          "undesired_contact_rate": 0.98404296875,
+          "mpjpe_g": 418.52930302014045
+        }
+      },
+      "anisotropy_at_2x": {
+        "drops": {
+          "fric": 0.0195,
+          "mass": 0.0,
+          "com": -0.002,
+          "joint": -0.0039,
+          "push": 0.0625
+        },
+        "worst_channel": "push",
+        "spread": 0.0664,
+        "worst_share_of_total": 0.8213
+      }
+    },
+    {
+      "arm": "lucid_rg@s8600",
+      "cells": {
+        "ch_fric_125": {
+          "success_rate": 0.984375,
+          "foot_slip_per_step_m": 0.0017401347805654766,
+          "torque_saturation": 0.00505017510775862,
+          "energy_proxy": 145.63149422483374,
+          "undesired_contact_rate": 0.994326171875,
+          "mpjpe_g": 281.849298316972,
+          "drop_vs_phys_100": 0.0098,
+          "channel_dr_scales": {
+            "physics_material": 1.25
+          }
+        },
+        "ch_fric_150": {
+          "success_rate": 0.94921875,
+          "foot_slip_per_step_m": 0.002272669311550565,
+          "torque_saturation": 0.005029970366379314,
+          "energy_proxy": 148.74606910711597,
+          "undesired_contact_rate": 0.99328125,
+          "mpjpe_g": 319.77378549459416,
+          "drop_vs_phys_100": 0.0449,
+          "channel_dr_scales": {
+            "physics_material": 1.5
+          }
+        },
+        "ch_fric_200": {
+          "success_rate": 0.955078125,
+          "foot_slip_per_step_m": 0.002131864449855774,
+          "torque_saturation": 0.005322939116379305,
+          "energy_proxy": 150.38384687618,
+          "undesired_contact_rate": 0.992734375,
+          "mpjpe_g": 313.79216223591453,
+          "drop_vs_phys_100": 0.0391,
+          "channel_dr_scales": {
+            "physics_material": 2.0
+          }
+        },
+        "ch_mass_200": {
+          "success_rate": 0.98046875,
+          "foot_slip_per_step_m": 0.0017600212745575486,
+          "torque_saturation": 0.005680226293103449,
+          "energy_proxy": 154.5353044751164,
+          "undesired_contact_rate": 0.99408203125,
+          "mpjpe_g": 298.9590516757897,
+          "drop_vs_phys_100": 0.0137,
+          "channel_dr_scales": {
+            "randomize_rigid_body_mass": 2.0
+          }
+        },
+        "ch_mass_300": {
+          "success_rate": 0.951171875,
+          "foot_slip_per_step_m": 0.0021211972943227632,
+          "torque_saturation": 0.006944706357758622,
+          "energy_proxy": 165.71234184981589,
+          "undesired_contact_rate": 0.993046875,
+          "mpjpe_g": 323.2229735846153,
+          "drop_vs_phys_100": 0.043,
+          "channel_dr_scales": {
+            "randomize_rigid_body_mass": 3.0
+          }
+        },
+        "ch_com_200": {
+          "success_rate": 0.986328125,
+          "foot_slip_per_step_m": 0.0016823874702532934,
+          "torque_saturation": 0.005433728448275862,
+          "energy_proxy": 149.0547307916065,
+          "undesired_contact_rate": 0.99455078125,
+          "mpjpe_g": 297.86696391985384,
+          "drop_vs_phys_100": 0.0078,
+          "channel_dr_scales": {
+            "base_com": 2.0
+          }
+        },
+        "ch_com_300": {
+          "success_rate": 0.974609375,
+          "foot_slip_per_step_m": 0.0017561262322630525,
+          "torque_saturation": 0.0059408674568965526,
+          "energy_proxy": 155.11958434513718,
+          "undesired_contact_rate": 0.994384765625,
+          "mpjpe_g": 338.53200431873023,
+          "drop_vs_phys_100": 0.0195,
+          "channel_dr_scales": {
+            "base_com": 3.0
+          }
+        },
+        "ch_joint_200": {
+          "success_rate": 0.994140625,
+          "foot_slip_per_step_m": 0.0016657959687366648,
+          "torque_saturation": 0.005167699353448276,
+          "energy_proxy": 146.03434473009472,
+          "undesired_contact_rate": 0.994453125,
+          "mpjpe_g": 292.7295458397246,
+          "drop_vs_phys_100": 0.0,
+          "channel_dr_scales": {
+            "add_joint_default_pos": 2.0
+          }
+        },
+        "ch_joint_300": {
+          "success_rate": 0.98046875,
+          "foot_slip_per_step_m": 0.0017147363987224762,
+          "torque_saturation": 0.005300713900862073,
+          "energy_proxy": 147.7360275916475,
+          "undesired_contact_rate": 0.994384765625,
+          "mpjpe_g": 305.6949433534161,
+          "drop_vs_phys_100": 0.0137,
+          "channel_dr_scales": {
+            "add_joint_default_pos": 3.0
+          }
+        },
+        "ch_push_200": {
+          "success_rate": 0.91015625,
+          "foot_slip_per_step_m": 0.0021005115164636056,
+          "torque_saturation": 0.006046605603448273,
+          "energy_proxy": 162.78393085785044,
+          "undesired_contact_rate": 0.9940625,
+          "mpjpe_g": 338.6906745291748,
+          "drop_vs_phys_100": 0.084,
+          "channel_dr_scales": {
+            "push_robot": 2.0
+          }
+        },
+        "ch_push_300": {
+          "success_rate": 0.705078125,
+          "foot_slip_per_step_m": 0.00256455499459945,
+          "torque_saturation": 0.007022494612068962,
+          "energy_proxy": 180.00356013227739,
+          "undesired_contact_rate": 0.993017578125,
+          "mpjpe_g": 342.33441037234854,
+          "drop_vs_phys_100": 0.2891,
+          "channel_dr_scales": {
+            "push_robot": 3.0
+          }
+        }
+      },
+      "scalar": {
+        "phys_100": {
+          "success_rate": 0.994140625,
+          "foot_slip_per_step_m": 0.0016456833989845045,
+          "torque_saturation": 0.0050498383620689695,
+          "energy_proxy": 145.39967530659675,
+          "undesired_contact_rate": 0.99453125,
+          "mpjpe_g": 272.2832652117311
+        },
+        "phys_125": {
+          "success_rate": 0.974609375,
+          "foot_slip_per_step_m": 0.0018550942295389571,
+          "torque_saturation": 0.0055364358836206854,
+          "energy_proxy": 152.39830089450982,
+          "undesired_contact_rate": 0.994150390625,
+          "mpjpe_g": 312.84514851785787
+        },
+        "phys_150": {
+          "success_rate": 0.931640625,
+          "foot_slip_per_step_m": 0.0021451155093054775,
+          "torque_saturation": 0.00615369073275862,
+          "energy_proxy": 163.1772538828248,
+          "undesired_contact_rate": 0.99369140625,
+          "mpjpe_g": 352.0271786746582
+        },
+        "phys_175": {
+          "success_rate": 0.84375,
+          "foot_slip_per_step_m": 0.0027226466276147397,
+          "torque_saturation": 0.006612338362068966,
+          "energy_proxy": 171.0209715132573,
+          "undesired_contact_rate": 0.992548828125,
+          "mpjpe_g": 380.700447033227
+        },
+        "phys_200": {
+          "success_rate": 0.794921875,
+          "foot_slip_per_step_m": 0.0028899476713824756,
+          "torque_saturation": 0.007455886314655169,
+          "energy_proxy": 182.37587846662285,
+          "undesired_contact_rate": 0.991845703125,
+          "mpjpe_g": 406.0621608999763
+        }
+      },
+      "anisotropy_at_2x": {
+        "drops": {
+          "fric": 0.0391,
+          "mass": 0.0137,
+          "com": 0.0078,
+          "joint": 0.0,
+          "push": 0.084
+        },
+        "worst_channel": "push",
+        "spread": 0.084,
+        "worst_share_of_total": 0.5809
+      }
+    },
+    {
+      "arm": "lucid_s4_rg@s8600",
+      "cells": {
+        "ch_fric_125": {
+          "success_rate": 0.98046875,
+          "foot_slip_per_step_m": 0.002177935702551821,
+          "torque_saturation": 0.057715853987068966,
+          "energy_proxy": 162.62372660959932,
+          "undesired_contact_rate": 0.99548828125,
+          "mpjpe_g": 251.19078781445594,
+          "drop_vs_phys_100": -0.0117,
+          "channel_dr_scales": {
+            "physics_material": 1.25
+          }
+        },
+        "ch_fric_150": {
+          "success_rate": 0.85546875,
+          "foot_slip_per_step_m": 0.002957401128664129,
+          "torque_saturation": 0.05787648168103447,
+          "energy_proxy": 166.81020214723077,
+          "undesired_contact_rate": 0.99373046875,
+          "mpjpe_g": 251.64342309824443,
+          "drop_vs_phys_100": 0.1133,
+          "channel_dr_scales": {
+            "physics_material": 1.5
+          }
+        },
+        "ch_fric_200": {
+          "success_rate": 0.861328125,
+          "foot_slip_per_step_m": 0.002835448687782664,
+          "torque_saturation": 0.05783842941810346,
+          "energy_proxy": 166.84826926552844,
+          "undesired_contact_rate": 0.993857421875,
+          "mpjpe_g": 246.39000519521787,
+          "drop_vs_phys_100": 0.1074,
+          "channel_dr_scales": {
+            "physics_material": 2.0
+          }
+        },
+        "ch_mass_200": {
+          "success_rate": 0.873046875,
+          "foot_slip_per_step_m": 0.0027191578338941645,
+          "torque_saturation": 0.060310816271551736,
+          "energy_proxy": 182.29724925137305,
+          "undesired_contact_rate": 0.994794921875,
+          "mpjpe_g": 263.46930081709115,
+          "drop_vs_phys_100": 0.0957,
+          "channel_dr_scales": {
+            "randomize_rigid_body_mass": 2.0
+          }
+        },
+        "ch_mass_300": {
+          "success_rate": 0.681640625,
+          "foot_slip_per_step_m": 0.003512829184998869,
+          "torque_saturation": 0.06283068426724134,
+          "energy_proxy": 205.41795848015448,
+          "undesired_contact_rate": 0.993955078125,
+          "mpjpe_g": 254.8148477503659,
+          "drop_vs_phys_100": 0.2871,
+          "channel_dr_scales": {
+            "randomize_rigid_body_mass": 3.0
+          }
+        },
+        "ch_com_200": {
+          "success_rate": 0.927734375,
+          "foot_slip_per_step_m": 0.002355764814402477,
+          "torque_saturation": 0.05905037715517239,
+          "energy_proxy": 176.38641920641734,
+          "undesired_contact_rate": 0.995234375,
+          "mpjpe_g": 349.3656697269831,
+          "drop_vs_phys_100": 0.041,
+          "channel_dr_scales": {
+            "base_com": 2.0
+          }
+        },
+        "ch_com_300": {
+          "success_rate": 0.818359375,
+          "foot_slip_per_step_m": 0.0027234263676667214,
+          "torque_saturation": 0.06086105872844832,
+          "energy_proxy": 199.1842314842067,
+          "undesired_contact_rate": 0.994931640625,
+          "mpjpe_g": 452.65635625287433,
+          "drop_vs_phys_100": 0.1504,
+          "channel_dr_scales": {
+            "base_com": 3.0
+          }
+        },
+        "ch_joint_200": {
+          "success_rate": 0.966796875,
+          "foot_slip_per_step_m": 0.0021127283323869044,
+          "torque_saturation": 0.057804754849137926,
+          "energy_proxy": 163.75259944698357,
+          "undesired_contact_rate": 0.995517578125,
+          "mpjpe_g": 255.60286798634635,
+          "drop_vs_phys_100": 0.002,
+          "channel_dr_scales": {
+            "add_joint_default_pos": 2.0
+          }
+        },
+        "ch_joint_300": {
+          "success_rate": 0.955078125,
+          "foot_slip_per_step_m": 0.0021989604296881833,
+          "torque_saturation": 0.05814150053879307,
+          "energy_proxy": 166.1919384485635,
+          "undesired_contact_rate": 0.995380859375,
+          "mpjpe_g": 276.0655313945039,
+          "drop_vs_phys_100": 0.0137,
+          "channel_dr_scales": {
+            "add_joint_default_pos": 3.0
+          }
+        },
+        "ch_push_200": {
+          "success_rate": 0.810546875,
+          "foot_slip_per_step_m": 0.00251073689606179,
+          "torque_saturation": 0.059143655711206874,
+          "energy_proxy": 181.6268676723695,
+          "undesired_contact_rate": 0.99494140625,
+          "mpjpe_g": 298.6314761784123,
+          "drop_vs_phys_100": 0.1582,
+          "channel_dr_scales": {
+            "push_robot": 2.0
+          }
+        },
+        "ch_push_300": {
+          "success_rate": 0.5703125,
+          "foot_slip_per_step_m": 0.002992127076399258,
+          "torque_saturation": 0.0609533270474138,
+          "energy_proxy": 200.0935628504823,
+          "undesired_contact_rate": 0.994267578125,
+          "mpjpe_g": 307.2794392319438,
+          "drop_vs_phys_100": 0.3984,
+          "channel_dr_scales": {
+            "push_robot": 3.0
+          }
+        }
+      },
+      "scalar": {
+        "phys_100": {
+          "success_rate": 0.96875,
+          "foot_slip_per_step_m": 0.002067912572522672,
+          "torque_saturation": 0.05785459321120689,
+          "energy_proxy": 161.62423667570138,
+          "undesired_contact_rate": 0.995400390625,
+          "mpjpe_g": 240.78987066812508
+        },
+        "phys_125": {
+          "success_rate": 0.908203125,
+          "foot_slip_per_step_m": 0.002465482273570288,
+          "torque_saturation": 0.058818359375000025,
+          "energy_proxy": 174.9345466192187,
+          "undesired_contact_rate": 0.995205078125,
+          "mpjpe_g": 288.77010234276855
+        },
+        "phys_150": {
+          "success_rate": 0.732421875,
+          "foot_slip_per_step_m": 0.0035367653935801397,
+          "torque_saturation": 0.06035762392241382,
+          "energy_proxy": 192.56888480490375,
+          "undesired_contact_rate": 0.9937890625,
+          "mpjpe_g": 325.20864026904195
+        },
+        "phys_175": {
+          "success_rate": 0.646484375,
+          "foot_slip_per_step_m": 0.003777826783154633,
+          "torque_saturation": 0.061530509159482744,
+          "energy_proxy": 205.69556768574762,
+          "undesired_contact_rate": 0.9933984375,
+          "mpjpe_g": 354.3245599641273
+        },
+        "phys_200": {
+          "success_rate": 0.517578125,
+          "foot_slip_per_step_m": 0.0040115960827764975,
+          "torque_saturation": 0.0635472790948276,
+          "energy_proxy": 221.16831330129003,
+          "undesired_contact_rate": 0.992587890625,
+          "mpjpe_g": 347.4325361286062
+        }
+      },
+      "anisotropy_at_2x": {
+        "drops": {
+          "fric": 0.1074,
+          "mass": 0.0957,
+          "com": 0.041,
+          "joint": 0.002,
+          "push": 0.1582
+        },
+        "worst_channel": "push",
+        "spread": 0.1562,
+        "worst_share_of_total": 0.3913
+      }
+    },
+    {
+      "arm": "off@s8600",
+      "cells": {
+        "ch_fric_125": {
+          "success_rate": 0.876953125,
+          "foot_slip_per_step_m": 0.0026133728359915187,
+          "torque_saturation": 0.00455347521551724,
+          "energy_proxy": 135.69940232434968,
+          "undesired_contact_rate": 0.387099609375,
+          "mpjpe_g": 288.9811433571667,
+          "drop_vs_phys_100": 0.0332,
+          "channel_dr_scales": {
+            "physics_material": 1.25
+          }
+        },
+        "ch_fric_150": {
+          "success_rate": 0.775390625,
+          "foot_slip_per_step_m": 0.003566967526771357,
+          "torque_saturation": 0.00411974676724138,
+          "energy_proxy": 142.74402172165026,
+          "undesired_contact_rate": 0.377451171875,
+          "mpjpe_g": 292.86850205617935,
+          "drop_vs_phys_100": 0.1348,
+          "channel_dr_scales": {
+            "physics_material": 1.5
+          }
+        },
+        "ch_fric_200": {
+          "success_rate": 0.7890625,
+          "foot_slip_per_step_m": 0.003325781787093591,
+          "torque_saturation": 0.004144329202586205,
+          "energy_proxy": 141.06386602610317,
+          "undesired_contact_rate": 0.376025390625,
+          "mpjpe_g": 285.4341669021026,
+          "drop_vs_phys_100": 0.1211,
+          "channel_dr_scales": {
+            "physics_material": 2.0
+          }
+        },
+        "ch_mass_200": {
+          "success_rate": 0.794921875,
+          "foot_slip_per_step_m": 0.002934129445266556,
+          "torque_saturation": 0.0057485856681034455,
+          "energy_proxy": 158.07014858595107,
+          "undesired_contact_rate": 0.40458984375,
+          "mpjpe_g": 319.8986411440398,
+          "drop_vs_phys_100": 0.1152,
+          "channel_dr_scales": {
+            "randomize_rigid_body_mass": 2.0
+          }
+        },
+        "ch_mass_300": {
+          "success_rate": 0.642578125,
+          "foot_slip_per_step_m": 0.003342637577644382,
+          "torque_saturation": 0.007152141702586201,
+          "energy_proxy": 182.54934207950092,
+          "undesired_contact_rate": 0.424091796875,
+          "mpjpe_g": 312.74859565466494,
+          "drop_vs_phys_100": 0.2676,
+          "channel_dr_scales": {
+            "randomize_rigid_body_mass": 3.0
+          }
+        },
+        "ch_com_200": {
+          "success_rate": 0.654296875,
+          "foot_slip_per_step_m": 0.0028040968792168793,
+          "torque_saturation": 0.005369410021551727,
+          "energy_proxy": 168.24958256680088,
+          "undesired_contact_rate": 0.405322265625,
+          "mpjpe_g": 387.87126055605876,
+          "drop_vs_phys_100": 0.2559,
+          "channel_dr_scales": {
+            "base_com": 2.0
+          }
+        },
+        "ch_com_300": {
+          "success_rate": 0.392578125,
+          "foot_slip_per_step_m": 0.0031845173893471483,
+          "torque_saturation": 0.006272898706896551,
+          "energy_proxy": 195.9481597664111,
+          "undesired_contact_rate": 0.412294921875,
+          "mpjpe_g": 394.66028066444807,
+          "drop_vs_phys_100": 0.5176,
+          "channel_dr_scales": {
+            "base_com": 3.0
+          }
+        },
+        "ch_joint_200": {
+          "success_rate": 0.900390625,
+          "foot_slip_per_step_m": 0.002496277485039588,
+          "torque_saturation": 0.004665948275862071,
+          "energy_proxy": 134.8532811997824,
+          "undesired_contact_rate": 0.389375,
+          "mpjpe_g": 282.7465027907043,
+          "drop_vs_phys_100": 0.0098,
+          "channel_dr_scales": {
+            "add_joint_default_pos": 2.0
+          }
+        },
+        "ch_joint_300": {
+          "success_rate": 0.890625,
+          "foot_slip_per_step_m": 0.002573479311276785,
+          "torque_saturation": 0.004729593211206896,
+          "energy_proxy": 138.20739177150054,
+          "undesired_contact_rate": 0.391328125,
+          "mpjpe_g": 297.10539830543973,
+          "drop_vs_phys_100": 0.0195,
+          "channel_dr_scales": {
+            "add_joint_default_pos": 3.0
+          }
+        },
+        "ch_push_200": {
+          "success_rate": 0.736328125,
+          "foot_slip_per_step_m": 0.0029161907279069386,
+          "torque_saturation": 0.004855536099137933,
+          "energy_proxy": 152.7773808234297,
+          "undesired_contact_rate": 0.38728515625,
+          "mpjpe_g": 308.60001920438543,
+          "drop_vs_phys_100": 0.1738,
+          "channel_dr_scales": {
+            "push_robot": 2.0
+          }
+        },
+        "ch_push_300": {
+          "success_rate": 0.443359375,
+          "foot_slip_per_step_m": 0.0033096575575905307,
+          "torque_saturation": 0.005284550107758621,
+          "energy_proxy": 169.17233339120634,
+          "undesired_contact_rate": 0.372373046875,
+          "mpjpe_g": 276.45891232021575,
+          "drop_vs_phys_100": 0.4668,
+          "channel_dr_scales": {
+            "push_robot": 3.0
+          }
+        }
+      },
+      "scalar": {
+        "phys_100": {
+          "success_rate": 0.91015625,
+          "foot_slip_per_step_m": 0.002431377240116719,
+          "torque_saturation": 0.004581761853448279,
+          "energy_proxy": 134.710205415566,
+          "undesired_contact_rate": 0.386552734375,
+          "mpjpe_g": 280.9488676664047
+        },
+        "phys_125": {
+          "success_rate": 0.802734375,
+          "foot_slip_per_step_m": 0.0028503835136927764,
+          "torque_saturation": 0.00505994073275862,
+          "energy_proxy": 153.78298863199697,
+          "undesired_contact_rate": 0.39880859375,
+          "mpjpe_g": 352.19907833189734
+        },
+        "phys_150": {
+          "success_rate": 0.564453125,
+          "foot_slip_per_step_m": 0.003395065515395174,
+          "torque_saturation": 0.005638469827586208,
+          "energy_proxy": 176.04246467085898,
+          "undesired_contact_rate": 0.39994140625,
+          "mpjpe_g": 365.6755309861424
+        },
+        "phys_175": {
+          "success_rate": 0.3984375,
+          "foot_slip_per_step_m": 0.004282451861070439,
+          "torque_saturation": 0.00571154364224138,
+          "energy_proxy": 187.86571552663375,
+          "undesired_contact_rate": 0.39748046875,
+          "mpjpe_g": 328.86622349067466
+        },
+        "phys_200": {
+          "success_rate": 0.333984375,
+          "foot_slip_per_step_m": 0.004314916686314046,
+          "torque_saturation": 0.006215651939655173,
+          "energy_proxy": 201.05401337779912,
+          "undesired_contact_rate": 0.404619140625,
+          "mpjpe_g": 323.21289606909056
+        }
+      },
+      "anisotropy_at_2x": {
+        "drops": {
+          "fric": 0.1211,
+          "mass": 0.1152,
+          "com": 0.2559,
+          "joint": 0.0098,
+          "push": 0.1738
+        },
+        "worst_channel": "com",
+        "spread": 0.2461,
+        "worst_share_of_total": 0.3787
+      }
+    }
+  ],
+  "caveats": [
+    "single seed (8600); paired within-seed noise on a single 512-episode cell is ~2-3 points",
+    "channel cells widen one term from the lambda=1 envelope with the others at lambda=1; the friction floor clamps at 0.05 so ch_fric_150 and ch_fric_200 differ only in the high bound",
+    "the scalar phys_* references come from earlier receipts scored with the pinned evaluator; the channel cells use the current evaluator, whose scalar path is unchanged"
+  ]
+}

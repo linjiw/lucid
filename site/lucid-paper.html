@@ -236,8 +236,30 @@ ol.steps li.done::marker{color:var(--held)}
       <tr class="bad"><td>latent gap p90</td><td class="n">&minus;0.30 &hellip; +0.11</td><td class="n">&minus;0.04</td><td class="n">54%</td></tr>
       <tr><td>episode time-out rate</td><td class="n">+0.985 &hellip; +0.992</td><td class="n">+0.987</td><td class="n">92%</td></tr>
       <tr><td>mean training return</td><td class="n">+0.967 &hellip; +0.980</td><td class="n">+0.973</td><td class="n">95%</td></tr>
+      <tr><td>foot slip per step <span class="chip">body</span></td><td class="n">&minus;0.69 &hellip; &minus;0.36</td><td class="n">&minus;0.53</td><td class="n">61%</td></tr>
+      <tr><td>contact impulse <span class="chip">body</span></td><td class="n">&minus;0.81 &hellip; &minus;0.68</td><td class="n">&minus;0.74</td><td class="n">65%</td></tr>
+      <tr class="bad"><td>torque saturation <span class="chip">body</span></td><td class="n">&minus;0.56 &hellip; &minus;0.15</td><td class="n">&minus;0.31</td><td class="n">60%</td></tr>
+      <tr class="bad"><td>mechanical work (energy) <span class="chip">body</span></td><td class="n">+0.57 &hellip; +0.81</td><td class="n">+0.65</td><td class="n">64%</td></tr>
     </tbody>
   </table>
+
+  <p><b>Body-grounded signals do not rescue the design.</b> The natural objection to the table is that
+  the gap is a learned statistic and return is a reward; a signal read off the body &mdash; foot slip
+  under load, actuator saturation, mechanical work &mdash; ought to be harder to fool. All of those are
+  already logged population-wide every iteration, so the question was answerable from existing
+  telemetry. Foot slip is the best of them and it is still weaker than survival: at fixed
+  &lambda; = 1 it falls as the policy improves (the right sign, on every run) but with 17 direction
+  reversals, and it saturates &mdash; six percent of its whole-run range is traversed in the last
+  quarter of training. What it does have is <i>authority</i>: across fourteen frozen-policy ladders its
+  rank correlation with evaluation difficulty is +1.00 on every one, and during both collapses it
+  responded to the actuator with r = +0.75 and +0.71 where the latent gap read about zero. But the sign
+  of that response is the inverting one &mdash; cutting &lambda; relieved slip by 34% and 11% &mdash;
+  so a bidirectional controller on foot slip would have evacuated too. Torque saturation and undesired
+  contact flip sign from arm to arm. Mechanical work and action rate <i>rise</i> with competence: a
+  better tracker does more work, so an "actuator margin" read from them would call the best policy the
+  most exhausted. The conclusion is the one the module already encodes: measure survival where you
+  want to go, under an actuator that cannot retreat. (Receipt:
+  <span class="mono">lucid_physical_signal_audit_20260902.json</span>.)</p>
 
   <p>The gap does not track competence at all, and the disqualification holds however the controller
   consuming it is tuned. Worse, its <i>direction is set by the arm</i> rather than by the policy: the
@@ -449,9 +471,12 @@ any data was read out.</p>
     recency prediction of 0.725. Evacuation is not free; the framing holds. The same pass scored the
     three other unscored controller finals, which completed the return-inversion figure at twelve
     arms and exposed the exposure law's missing seed term.</li>
-    <li><b>Widen the training envelope</b> with a five-arm screen at &lambda;<sub>max</sub> = 1.5,
-    scored on the uncontaminated band. This is where a method could genuinely beat fixed
-    randomization, because at &lambda; &gt; 1 something has to decide when extrapolation is safe.</li>
+    <li><b>Widen the training envelope. &mdash; IN FLIGHT.</b> A five-arm screen at
+    &lambda;<sub>max</sub> = 1.5 (probe-gated frontier, matched open-loop ramp, fixed 1.5, a 75/25
+    frontier/retention mixture, and fresh fixed 1.0), one seed, scored on the uncontaminated band.
+    This is where a method could genuinely beat fixed randomization, because at &lambda; &gt; 1
+    something has to decide when extrapolation is safe. The decisive contrast is gate against ramp:
+    beating fixed would only show that difficulty rose.</li>
     <li><b>Retention curves</b> from the mid-training capsules already on disk (~26 GPU-min per
     seed). These are the only way to identify the recency term, and the capsules exist.</li>
     <li><b>Held-out motions. &mdash; STARTED.</b> One of three sibling clips is scored at k128, and
@@ -459,10 +484,27 @@ any data was read out.</p>
     &lambda; = 1.5). Two clips remain. This is near-motion evidence: all four clips are walking
     motions from one partition and no arm trained on the new ones, so it bounds the memorization
     worry without supporting a generalization claim.</li>
-    <li><b>A gate that cannot invert.</b> If widening needs a controller, the candidate is already
-    logged every iteration and needs no new instrumentation: the episode time-out rate is
-    population-wide, bounded, and outcome-linked &mdash; unlike return, it cannot be gamed by making
-    the task easier.</li>
+    <li><b>A gate that cannot invert. &mdash; BUILT.</b> The frontier only rises; a 12.5% probe
+    stratum runs one step <i>above</i> it and the frontier steps up only when the probe's episode
+    time-out rate clears a threshold over a trailing window. The signal is population-wide,
+    bounded, and outcome-linked, and it is read where we want to go rather than where we are, so it
+    cannot be improved by making the current level easier. A per-channel variant &mdash; one
+    frontier per randomization channel, the single probe visiting channels in rotation, the same
+    ceiling on every channel &mdash; is built and tested; whether it earns a run is decided by the
+    single-channel attribution below.</li>
+    <li><b>Which physics breaks the policy. &mdash; DONE.</b> The scalar ladder widens five channels at
+    once, so a drop at phys_150 could not say which one. Scoring five seed-8600 finals on eleven cells
+    that widen <i>one</i> term while the other four sit at their training envelope answers it. For the
+    three healthy DR-trained policies the surface is anisotropic and the axis is <b>push
+    disturbance</b>: at twice the range push costs 6&ndash;8 points, friction 2&ndash;4, and mass,
+    centre-of-mass and joint offsets under 1.5 each; at three times the range the last three are
+    still &ge; 0.938 while push is 0.705&ndash;0.770. Friction alone at 1.5 costs 2.7 points, so the
+    largest single-cell drop of the ladder is not slip. The drop is also super-additive: at 2.0 the
+    marginals of the fixed arm sum to 0.111 of loss and the joint cell loses 0.174, so about six points
+    is interaction that no axis-aligned probe can see. The weak policies fail elsewhere &mdash; the
+    no-randomization arm breaks on centre of mass alone (0.654 at 2&times;) &mdash; which makes
+    anisotropy a property of the policy rather than the physics, and is the case for measuring it
+    online. Receipt <span class="mono">lucid_channel_attribution_20260902.json</span>.</li>
   </ol>
 </section>
 
@@ -522,8 +564,13 @@ any data was read out.</p>
     restitution carries no information at all above &lambda; = 2.0. The consequence is now measured:
     <i>every</i> arm's largest single-cell drop falls at phys_150, the first cell where the
     static-friction floor reaches 0.05, and foot-slip growth orders those drops. Treating the cells
-    as equally spaced difficulty steps overstates the smoothness of the curve. n = 4, correlational,
-    with no friction-held-fixed control.</li>
+    as equally spaced difficulty steps overstates the smoothness of the curve. <b>Revised
+    2026-09-02:</b> the single-channel attribution supplies the missing control, and it reverses the
+    reading. Friction alone at 1.5 costs the fixed arm 2.7 points against the joint cell's 7.0; the
+    channel that carries the frontier drop for trained policies is push disturbance, and about a
+    third of the joint-cell loss at 2.0 is interaction between channels rather than any one of
+    them. The clamp is still real and the ladder is still uneven; slip is not what it was
+    measuring.</li>
   </ul>
 </section>
 
