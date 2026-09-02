@@ -18,7 +18,7 @@
 #
 # Decision rules D1-D4 and mechanism gates G1-G4 are frozen in
 #   receipts/manifests/lucid_support_expansion_screen_preregistration_20260901.json
-# with amendments A1-A6. This driver does NOT evaluate them; it only trains,
+# with amendments A1-A7. This driver does NOT evaluate them; it only trains,
 # and refuses to start if anything the preregistration pinned has moved.
 #
 # Cost: 5 cells x ~5.4 GPU-h = ~27 GPU-h, serial, on one RTX 5080.
@@ -27,7 +27,7 @@
 
 set -euo pipefail
 
-readonly PIN_COMMIT="dd0fd61b6bf6090d9f0f1c430b2ec895f9e9dc1e"
+readonly PIN_COMMIT="08a01bf588b42ea1e5b71727275ad77ec1f4e497"
 readonly WORKTREE="/home/linjiw/lucid-phase2"
 readonly DEV_REPO="/home/linjiw/lucid/GR00T-WholeBodyControl"
 readonly LUCID_ROOT="/home/linjiw/lucid-sonic"
