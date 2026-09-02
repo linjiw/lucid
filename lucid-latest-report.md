@@ -520,18 +520,45 @@ two of them reward evacuation outright.
 
 ### 3. Training return is inverted, not merely uninformative
 
+**Superseded 2026-09-01 by the completed figure below.** The original three
+scored pairs are retained inside it.
+
+All twelve arms, sorted by terminal return
+(`receipts/analysis/lucid_return_inversion_20260901.json`):
+
 | arm | final lambda | mean return, last 500 | frontier success AUC |
 |---|---:|---:|---:|
-| `lucid_ratchet_rg` s8601 | 1.000 | 10.981 | 0.9131 |
+| `lucid_rg` s8601 | 0.062 | **15.286** | 0.7399 |
+| `lucid_s4_rg` s8600 | 0.012 | **14.401** | 0.6973 |
+| `lucid_s4_rg` s8601 | 1.000 | 12.284 | 0.7790 |
+| `lucid_s4_rg` s8602 | 1.000 | 12.245 | 0.6120 |
+| `fixed` s8600 | 1.000 | 11.937 | 0.9046 |
+| `fixed` s8602 | 1.000 | 11.616 | 0.8320 |
+| `lucid_rg` s8602 | 1.000 | 11.523 | 0.8018 |
+| `lucid_ratchet_rg` s8600 | 1.000 | 11.466 | 0.9030 |
+| `lucid_ratchet_rg` s8602 | 1.000 | 11.385 | 0.8203 |
+| `fixed` s8601 | 1.000 | 11.313 | 0.8818 |
 | `lucid_rg` s8600 | 1.000 | 11.268 | 0.8828 |
-| `lucid_s4_rg` s8600 | 0.012 | 14.401 | 0.6973 |
-| `lucid_rg` s8601 | 0.062 | 15.286 | unscored |
+| `lucid_ratchet_rg` s8601 | 1.000 | 10.981 | **0.9131** |
 
-The two collapsed arms carry the two highest terminal returns; the ratchet
-carries the lowest return and the highest robustness. The mechanism is direct:
-the controller evacuates difficulty, environments get easier, and return rises
-exactly as robustness falls. Three scored pairs is suggestive, not established;
-the mechanism is the load-bearing part.
+The ordinal claim is the robust one and it holds exactly: **the two highest
+terminal returns in the entire campaign belong to the two arms that evacuated
+difficulty**, at 15.29 and 14.40, while every arm that held difficulty falls
+between 10.98 and 12.28. The arm with the lowest return carries the highest
+robustness. Grouped, evacuated arms average 14.84 return against 0.719
+frontier; arms that held average 11.60 against 0.833.
+
+The linear correlation is **weaker than an interim ten-pair figure suggested**:
+Pearson −0.61 over all twelve and −0.60 over controllers, against −0.84 and
+−0.87 at ten pairs. Spearman is −0.73. The weakening is one arm,
+`lucid_s4_rg` s8602, which pairs an ordinary return with a frontier score of
+0.612; its own audit found it brittle to the static-friction clamp rather than
+globally weak, and it never evacuated. It drags a linear fit without bearing on
+the claim. The weaker figure is the one reported.
+
+The mechanism remains the load-bearing part: the controller evacuates
+difficulty, environments get easier, and return rises exactly as robustness
+falls.
 
 ### 4. The exposure law is NOT established, and P3 is the test
 
