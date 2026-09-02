@@ -1,0 +1,87 @@
+{
+  "kind": "lucid_expansion_prototype_preregistration",
+  "schema_version": 1,
+  "created_at": "2026-09-02T00:28:18.775788-04:00",
+  "status": "frozen before any prototype arm has trained; written while the single-channel attribution sweep was 17/55 cells in (fixed/off/lucid_rg/s4_rg friction+mass marginals seen), which is disclosed here rather than hidden",
+  "question": "Given a policy that has already mastered the lambda=1 envelope, how should support be widened in a fixed 2,000-iteration budget, and does a per-channel (vector) frontier buy anything a scalar frontier does not?",
+  "design": {
+    "origin_checkpoint": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260829_000249/seed_8600/fixed/final_checkpoint.pt",
+    "origin_sha256": "e7fe72a0a48d6d4d534368ee9870b7a5e382bf2c51bb025d35eadee0818aaa8d",
+    "origin_description": "fixed DR, seed 8600, 8,000 from-scratch iterations; the arm every controller arm is compared with in the ne1024 campaign",
+    "warm_start": "non-resume: policy weights only; fresh optimizer, LR schedule and iteration counter for every arm alike",
+    "seed": 8600,
+    "num_envs": 1024,
+    "iterations": 2000,
+    "max_delay": 12,
+    "arms": {
+      "fixed": "lambda 1.0 throughout (more-training control)",
+      "fixed_150": "lambda 1.5 from iteration 0, single stratum (width control)",
+      "ramp_150": "8 strata; frontier linear 1.0->1.5 over iterations 0-1500; reads nothing",
+      "gate_150": "8 strata; scalar frontier stepped +0.125 when the 128-env probe one step above it averages >=0.80 time-out over a 100-iteration window (dwell 50, min 200 episodes); freeze-only guard",
+      "box_150": "identical to gate_150 except the frontier is a vector over the six runtime-scalable terms; the single probe visits channels round-robin; channel_budget 300"
+    },
+    "shared_ceiling": 1.5,
+    "why_the_ceiling_is_shared": "so the primary endpoint and every channel marginal at 2.0/3.0 lie outside every arm's training support; the box can differ only in which channels widen and when",
+    "driver": "tools/run_expansion_prototype.sh",
+    "scoring": "tools/run_expansion_prototype_scoring.sh",
+    "sonic_commit": "eac945540290cf4b8652dbd34ecc4d5d8f419588",
+    "code_state": {
+      "file_sha256": {
+        "gear_sonic/research/practice_utility/box_gate.py": "16f6ef8d1b1d22eb996a6f3612e2b5e2eaef98d7e1915e00b44f8d6700a100d1",
+        "gear_sonic/research/practice_utility/survival_gate.py": "e6b6f790250b059ff849449ef7ec2861b1a86f41aca8636b9a35ca9c8930faba",
+        "gear_sonic/research/practice_utility/dr_curriculum.py": "bcde39e9c84c417173e3f467024a83adf1eb9faca277900b2406f5bb9c81731f",
+        "gear_sonic/research/practice_utility/eval_callback.py": "1962dc566575d1bb7829bb38c9e5faa4f95fa25c50c99b58a1a3c5979bc9e3b1",
+        "scripts/practice_utility/run_curriculum_comparison.py": "6a6a6fa2c8ab120208c6c90fc1dae8eddde9504a894430cb598913d189a5351f",
+        "scripts/practice_utility/run_curriculum_robustness_eval.py": "d380920adb2c8091bb314185982419ceb1400489cc820e473b4c9f8ba2077f72"
+      }
+    }
+  },
+  "endpoints": {
+    "primary": {
+      "cells": [
+        "phys_175",
+        "phys_200"
+      ],
+      "weights": [
+        0.5,
+        0.5
+      ],
+      "metric": "success_rate",
+      "support": "outside every arm (all ceilings 1.5)"
+    },
+    "secondary_channel_panel": {
+      "cells": [
+        "ch_fric_150",
+        "ch_fric_200",
+        "ch_mass_200",
+        "ch_mass_300",
+        "ch_com_200",
+        "ch_com_300",
+        "ch_joint_200",
+        "ch_joint_300",
+        "ch_push_200",
+        "ch_push_300"
+      ],
+      "metric": "success_rate",
+      "reading": "per-channel signature: an arm that widened channel c more should gain on ch_c cells; reported per channel, never pooled into a single number for a decision"
+    },
+    "in_support_reported_not_gated": [
+      "phys_100",
+      "phys_125",
+      "phys_150"
+    ]
+  },
+  "noise": "paired within-seed SD on the two-cell band measured at 2.74 points (Phase 0); one seed screens, it does not decide",
+  "decision_rules": {
+    "R1_box_vs_gate": "delta = primary(box_150) - primary(gate_150). |delta| < 0.03: no scalar-vs-vector difference at this budget; the box is not pursued on this evidence. delta >= +0.03: the box advances to one from-scratch 8,000-iteration cell against gate_150. delta <= -0.03: the box is shelved and its frontier_vector trace is diagnosed offline; it is NOT re-run with a lower threshold.",
+    "R2_gate_vs_ramp": "informational only at this budget; the Phase 2 from-scratch screen owns that contrast",
+    "R3_monotonicity": "any applied decrease in lambda or in any channel of frontier_vector is an incident; the count must be zero for every arm",
+    "R4_box_mechanism": "the box must have visited >= 3 distinct channels and fired >= 1 expansion within 2,000 iterations; otherwise it is reported as STALLED, diagnosed offline from its curriculum jsonl, and not counted as a loss",
+    "R5_width": "if fixed_150 >= max(gate_150, box_150, ramp_150) + 0.03 on the primary endpoint, width without scheduling wins at this budget and that is reported as the headline"
+  },
+  "not_claimed": [
+    "superiority of any arm on one seed",
+    "motion generalization (single clip, fresh physics only)",
+    "hardware transfer"
+  ]
+}
