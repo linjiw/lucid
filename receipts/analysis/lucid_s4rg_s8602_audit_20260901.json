@@ -1,0 +1,134 @@
+{
+  "kind": "lucid_arm_anomaly_audit",
+  "schema_version": 1,
+  "created_at": "2026-09-01T21:00:00-04:00",
+  "arm": "lucid_s4_rg@s8602",
+  "question": "Its frontier success AUC of 0.611979 is 6.2 points below the frozen exposure law even after removing a measured seed offset, and it is the lowest of the four arms Phase 0 scored. Is that a broken measurement, a broken run, or a real property of the policy?",
+  "verdict": "Not a measurement fault and not a curriculum fault. The arm is indistinguishable from its siblings inside the training envelope and loses 42.0 points across the static-friction clamp, roughly twice the 17.9-26.6 points its siblings lose. Two contributors are identified, neither established.",
+
+  "measurement_is_sound": {
+    "instrument": "evaluator pinned at 308e2415 in a clean detached worktree at ca057e6, the build that produced every historically scored arm",
+    "per_cell_dr_ranges": "hash identically to the other three arms at all nine cells, so the physics boxes are the same instrument",
+    "panel": "motion_keys_sha256 4b0fae026d8763e5cb1a39957ab8131e5372e1d47d4ec7e526791b76fe7f1430, 512 aliases, the same tree every other arm was scored on",
+    "checkpoint": {
+      "path": "curriculum_comparison_ne1024_20260829_000249/seed_8602/lucid_s4_rg/final_checkpoint.pt",
+      "sha256": "68ffd3e75a0ce107",
+      "unmutated_across_ladder": true
+    },
+    "config_lineage": {
+      "resolved_from": "the arm's own Hydra run directory, read out of its training log",
+      "run_dir": "sonic_release_test-20260831_052946",
+      "config_sha256_prefix": "18ede8498f698dcc",
+      "distinct_from_siblings": true,
+      "note": "All four Phase-0 arms have DIFFERENT true configs, so each was scored in its own invocation with its own config pinned. Sharing one config across the four would have installed a foreign config beside three checkpoints."
+    },
+    "evaluation_seed": 8702,
+    "cells_complete": "9 of 9 at exit code 0"
+  },
+
+  "run_is_sound": {
+    "rows": 8000,
+    "final_lambda": 1.0,
+    "iterations_at_lambda_ge_0.95": 7939,
+    "trailing_1000_mean_lambda": 1.0,
+    "trailing_1000_min_lambda": 0.9994,
+    "guard_trips": 0,
+    "note": "This arm did NOT evacuate. It carries the HIGHEST high-lambda iteration count of the four Phase-0 arms, so its low score cannot be attributed to lost exposure. Its recency-weighted dose E = 0.6247 is within 0.0003 of lucid_s4_rg@s8601's 0.6244, and those two arms score 0.611979 and 0.778971."
+  },
+
+  "where_the_loss_is": {
+    "in_envelope_auc_phys_000_100": 0.996826,
+    "in_envelope_rank": "second of four, within 0.9 points of the best",
+    "pre_clamp_phys_125": 0.957031,
+    "post_clamp_mean_phys_150_175_200": 0.537109,
+    "drop_across_the_clamp_pts": 42.0,
+    "sibling_drops_pts": {
+      "lucid_rg@s8601": 26.6,
+      "lucid_s4_rg@s8601": 17.9,
+      "lucid_rg@s8602": 22.2
+    },
+    "reading": "The arm is not globally weaker. It is specifically brittle to the loss of friction that begins at phys_150."
+  },
+
+  "the_clamp": {
+    "statement": "phys_150 is the first evaluation cell where the static-friction floor reaches its physical clamp.",
+    "static_friction_low_bound": {
+      "phys_100": 0.3, "phys_125": 0.1375, "phys_150": 0.05, "phys_175": 0.05, "phys_200": 0.05
+    },
+    "dynamic_friction_low_bound": {
+      "phys_125": 0.1875, "phys_150": 0.075, "phys_175": 0.05
+    },
+    "consequence": "Worst-case grip falls 2.75x between phys_125 and phys_150, and near-frictionless ground becomes reachable for the first time. Every one of the four arms has its largest single-cell drop exactly there: 15.2, 12.1, 19.5 and 38.7 points.",
+    "supporting_morphology": {
+      "foot_slip_ratio_phys150_over_phys125": {
+        "lucid_s4_rg@s8601": 1.33, "lucid_rg@s8601": 1.44,
+        "lucid_rg@s8602": 2.09, "lucid_s4_rg@s8602": 2.33
+      },
+      "success_drop_pts": {
+        "lucid_s4_rg@s8601": 12.1, "lucid_rg@s8601": 15.2,
+        "lucid_rg@s8602": 19.5, "lucid_s4_rg@s8602": 38.7
+      },
+      "note": "Foot-slip growth across the clamp orders the success drop across all four arms."
+    },
+    "caveat": "n = 4, correlational, and no arm was run with friction held fixed while the other channels scaled. This is a consistent mechanism, not a demonstrated cause."
+  },
+
+  "candidate_contributors": [
+    {
+      "id": "C1",
+      "claim": "Seed 8602 is a hard seed, independent of the curriculum.",
+      "evidence": "On the two arms that PIN lambda, and therefore differ across seeds only by the seed, frontier success AUC falls from 0.904622 to 0.832031 (fixed) and 0.902995 to 0.820312 (ratchet). Mean offset -7.8 points.",
+      "support": "Strongest of the two. It is measured on arms whose training distribution is identical across seeds by construction.",
+      "limits": "n = 2 arms. Applying it to the stratified arms assumes the seed effect is additive and arm-independent, which is untested."
+    },
+    {
+      "id": "C2",
+      "claim": "The stratified arm learns a high-torque-saturation gait on some seeds, and that gait is friction-dependent.",
+      "evidence": "Torque saturation at phys_100 is 0.0579 (lucid_s4_rg@s8600), 0.0527 (lucid_s4_rg@s8602) and 0.0455 (its h6000 capsule) -- the three highest of twelve scored arms -- against 0.0038 for lucid_s4_rg@s8601, the lowest of all twelve. The two high-torque stratified arms score 0.697266 and 0.611979; the low-torque one scores 0.778971.",
+      "support": "Weak. n = 2 usable seeds, because lucid_s4_rg@s8600 also evacuated difficulty and its score is therefore confounded.",
+      "limits": "Correlational and post-hoc. Torque saturation was not preregistered as a predictor, no causal test exists, and 'high torque saturation' has not been shown to cause friction brittleness rather than to co-occur with it."
+    }
+  ],
+
+  "what_this_changes_for_the_exposure_law": {
+    "finding": "The frozen law has no seed term, and the seed effect measured here (7.8 points) exceeds the law's own residual SD (1.83 points) by about 4x.",
+    "why_it_was_invisible": "The 7-point fit contained only seeds 8600 and 8601, which differ by about 0.6 points on the lambda-pinned arms. Seed 8602 is the first substantially different seed to enter the picture.",
+    "raw_out_of_sample_residuals_pts": {
+      "lucid_rg@s8601": 1.5, "lucid_s4_rg@s8601": 2.7,
+      "lucid_rg@s8602": -9.8, "lucid_s4_rg@s8602": -14.0
+    },
+    "after_post_hoc_seed_offset_pts": {
+      "lucid_rg@s8601": 1.5, "lucid_s4_rg@s8601": 2.7,
+      "lucid_rg@s8602": -2.1, "lucid_s4_rg@s8602": -6.2
+    },
+    "honest_reading": "Three of four out-of-sample arms sit within 2.7 points of the law once a post-hoc seed offset is removed, which is near the instrument's replicate noise floor. The fourth does not. The law should not be quoted without a seed term, and its residual SD understates its predictive error on an unseen seed.",
+    "does_NOT_change": "P3 itself. lucid_rg@s8601 is a seed-8601 arm, needs no offset, and lands at +1.5 points raw, inside the recency band and outside the two-law overlap."
+  },
+
+  "claim_boundaries": [
+    "This audit authorizes no superiority or inferiority claim for the stratified curriculum as a method. Two seeds, one of which evacuated, cannot rank a training procedure.",
+    "The friction-clamp mechanism is a consistent reading of four arms, not a demonstrated cause.",
+    "Torque saturation is reported as an observed signature, not as an explanation.",
+    "Every cell is a fresh physics draw of the single clip every arm trained on. Nothing here is motion-generalization evidence.",
+    "Joint-error metrics are contaminated at high lambda and were not used for any ordering."
+  ],
+
+  "recommended_followups_zero_or_low_gpu": [
+    "Score the seed-8602 `off` arm if it is ever retrained, to place a floor under the hard-seed claim.",
+    "A friction-only evaluation cell -- five non-latency channels at lambda 1.0 with static friction alone scaled to 1.5 -- would separate the clamp mechanism from generic difficulty. It is one new preset and about 33 seconds per arm.",
+    "The Phase-2 screen already reports worst-cell success alongside AUC; keep phys_150 broken out separately in it, since a third of the frozen endpoint's weight sits on the first post-clamp cell."
+  ],
+
+  "verified": [
+    "9 of 9 cells at exit code 0",
+    "dr_ranges identical to the other three arms at every cell",
+    "checkpoint SHA-256 unchanged across the ladder",
+    "config resolved from the arm's own Hydra run directory and distinct from its siblings",
+    "training trajectory shows 7939 iterations at lambda >= 0.95 and zero guard trips"
+  ],
+  "not_yet_verified": [
+    "that friction specifically, rather than the other four scaled channels, causes the phys_150 cliff",
+    "that torque saturation is causally related to friction brittleness",
+    "that the seed effect is additive across arms"
+  ]
+}
