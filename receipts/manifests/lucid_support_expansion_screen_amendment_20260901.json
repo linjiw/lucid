@@ -92,6 +92,17 @@
       "related_finding": "The between-seed effect on absolute capability is large and is not the arm: pooling both arms, seed means of frontier success AUC are 0.904 (8600), 0.898 (8601), 0.826 (8602), so seed 8602 sits ~7.8 pts below the others for BOTH arms. Pooled six-arm SD 4.0 pts, range 9.3 pts.",
       "data_driven": true,
       "data_driven_note": "This correction IS data-driven, unlike A1-A4, but the data is from a DIFFERENT and already-decided experiment (H_R2), not from any Phase-2 cell. No Phase-2 policy has been trained. It changes no threshold and no decision rule; it corrects a power claim."
+    },
+    {
+      "id": "A6",
+      "severity": "required_by_parent_rule",
+      "target": "code_state.file_sha256['gear_sonic/research/practice_utility/survival_gate.py']",
+      "was": "4087bc8794b9585e631773fc5af37a550b6f4b6f30e6db3ed0f904a1b2c6414d",
+      "now": "255d80a3f210cfc75065b6005aa89ae667108df344e9adf8a10ac4aee1f1eeb2",
+      "commit": "dd0fd61b6bf6090d9f0f1c430b2ec895f9e9dc1e",
+      "reason": "Added a docstring section recording that the gate's signal has AUTHORITY, not merely anchoring: the actuator moves probe survival, and in the direction that withholds the next expansion. It also records the measured r(lambda, gap) = -0.201 that explains why the observed evacuations are total rather than partial.",
+      "behavioural_effect_on_phase_2": "NONE, and this was verified rather than asserted. Parsing both revisions and removing every module, class and function docstring yields byte-identical ASTs (257940cf45fdc9cf both sides). The change is documentation only.",
+      "data_driven": false
     }
   ],
   "unchanged": "Every arm definition, stratum layout, endpoint, weight, threshold, decision rule, mechanism gate, frozen prediction and limitation in the parent preregistration is unchanged by this amendment.",
@@ -101,7 +112,8 @@
     "black --check and ruff check pass on every changed file",
     "five-arm Phase-2 launch dry run builds at --max-delay 12; tests 1640 passed",
     "gate feasibility replay over the real fixed@s8600 survival series; tool at tools/simulate_gate.py",
-    "paired H_R2 deltas on the Phase-2 primary band recomputed from the frozen analysis receipt"
+    "paired H_R2 deltas on the Phase-2 primary band recomputed from the frozen analysis receipt",
+    "survival_gate.py drift at dd0fd61 proven docstring-only by AST comparison after docstring removal"
   ],
   "not_yet_verified": [
     "every Phase-2 outcome; no policy has been trained"
