@@ -70,7 +70,46 @@ not evacuate, second of four in-envelope, and loses 42.0 points across the
 friction clamp against 17.9–26.6 for its siblings. It is brittle to loss of
 friction, not globally weaker.
 
-## Phase 2 — gated and ready to launch
+## Phase 2 — LAUNCHED 2026-09-01 23:27 EDT, in flight
+
+**Experiment:** `curriculum_comparison_ne1024_20260901_232720`, driver
+`run_phase2_screen.sh` (survives session resumes; it is `nohup`'d). Artifacts
+under `$LUCID_ROOT/artifacts/curriculum_comparison/<experiment>/seed_8600/<arm>/`.
+
+**The first launch (`…232033`) is VOID** and retained as excluded evidence. Three
+minutes in, the gate's probe strata had never been handed to its observer: the
+curriculum's `on_train_begin` runs before the observer registers itself, so the
+lookup returned None and `set_strata` was never called. The gate would have held
+its frontier at 1.0 for the whole run with no evidence reaching it, which in the
+lambda trace is indistinguishable from an honest decision not to expand. Fixed
+in SONIC `8fa9732` (lazy binding in `_survival_observer`, regression test
+`TestLateObserverRegistration` fails on the parent commit). Amendment A8.
+Launcher repointed to `8fa9732`; worktree `/home/linjiw/lucid-phase2` rebuilt.
+
+**Verified live on the relaunch** before letting it run: the observer's own
+`survival_*.jsonl` shows `probe_index: 7` and eight per-stratum rows with
+episode counts proportional to stratum size (116 of 128 probe envs, 567 of 640
+frontier envs at iteration 24). At iteration 406 the gate had a full window of
+20,813 probe episodes, mean probe survival 0.007, and was withholding as
+`below_threshold` — correct at that stage of training.
+
+**Always check the observer's file, not the curriculum's flag.** The
+curriculum's `survival_observer_present: true` was true throughout the void run.
+
+### Reading progress
+
+```bash
+E=$LUCID_ROOT/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260901_232720
+tail -1 $E/seed_8600/gate_150/curriculum_*.jsonl | jq '{global_step,frontier_lambda,window_mean,withheld,fired,applied_decrease}'
+tail -1 $E/seed_8600/gate_150/survival_*.jsonl  | jq '{global_step,probe_index,per_stratum:[.per_stratum[6,7]]}'
+```
+
+Expected timeline from the feasibility replay: first expansion plausibly
+2,800–4,600 iterations depending on how much harder the probe is than the
+frontier; a stall below 1.5 is a preregistered outcome (A4), diagnosed offline
+with `tools/simulate_gate.py --survival-jsonl`.
+
+## Phase 2 — original launch notes (superseded above)
 
 Clean detached worktree at `/home/linjiw/lucid-phase2`, commit `dd0fd61`, zero
 untracked entries. All nine preregistration-pinned files verified against the
