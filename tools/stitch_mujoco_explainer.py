@@ -56,12 +56,15 @@ def survival(root: Path, arm: str, lam: str) -> tuple[int, int]:
 def label(lines: list[str], size: int = 28) -> str:
     parts = [f"drawbox=x=0:y=0:w=iw:h={size * (len(lines) + 1)}:color=black@0.5:t=fill"]
     for i, line in enumerate(lines):
-        parts.append(f"drawtext=fontfile={FONT}:text='{esc(line)}':x=22:y={14 + i * size}:fontsize={size - 6}:fontcolor=white")
+        parts.append(f"drawtext=fontfile={FONT}:text='{esc(line)}':x=22:y={14 + i * size}:fontsize={size - 6}:fontcolor=white:expansion=none")
     return ",".join(parts)
 
 
 def run(cmd: list[str]) -> None:
-    subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    proc = subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True)
+    bad = [ln for ln in proc.stderr.splitlines() if "Stray %" in ln or "Error" in ln or "error" in ln]
+    if proc.returncode != 0 or bad:
+        raise RuntimeError("ffmpeg failed: " + (bad[0] if bad else proc.stderr[-300:]))
 
 
 def main(argv: list[str] | None = None) -> int:

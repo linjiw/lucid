@@ -110,14 +110,17 @@ def label_filter(lines: list[str], size: int = 30) -> str:
     for i, line in enumerate(lines):
         parts.append(
             f"drawtext=fontfile={FONT}:text='{esc(line)}':x=24:y={16 + i * size}:"
-            f"fontsize={size - 6}:fontcolor=white"
+            f"fontsize={size - 6}:fontcolor=white:expansion=none"
         )
     return ",".join(parts)
 
 
 def run(cmd: list[str]) -> None:
     print("  $", " ".join(cmd[:6]), "...", file=sys.stderr)
-    subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    proc = subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True)
+    bad = [ln for ln in proc.stderr.splitlines() if "Stray %" in ln or "Error" in ln or "error" in ln]
+    if proc.returncode != 0 or bad:
+        raise RuntimeError("ffmpeg failed: " + (bad[0] if bad else proc.stderr[-300:]))
 
 
 def main(argv: list[str] | None = None) -> int:
