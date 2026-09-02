@@ -146,44 +146,66 @@ FRAME_SKIP = int(round(DT_FUTURE * REF_FPS))  # 5 frames = 0.1 s
 
 @dataclass
 class DRConfig:
-    """Approximate Isaac's six randomization channels at a scalar lambda.
+    """The six training channels at a scalar lambda, with Isaac's exact ranges.
 
-    Nominal ranges are Isaac's lambda = 1 ranges from dr_scaling.RANGE_NOMINALS;
-    each is widened affinely about its centre by ``lam`` and then physically
-    clamped the way dr_scaling.clamp_physical does.
+    Ranges are the lambda = 1 event configs under
+    gear_sonic/config/manager_env/events/terms/, widened affinely about their
+    nominal the way dr_scaling.scale_params does (mass about 1.0, additive
+    terms about 0, friction about the range midpoint), then physically clamped
+    like dr_scaling.clamp_physical. Sampling mirrors the Isaac terms: mass is
+    drawn PER BODY, the CoM shift applies to torso_link only, and a push SETS
+    the base velocity rather than adding to it.
     """
 
     lam: float = 0.0
     seed: int = 0
-    # lambda = 1 half-widths about the nominal value.
-    friction_range: tuple[float, float] = (0.3, 1.6)  # static, nominal 1.0 in the XML
-    mass_scale_range: tuple[float, float] = (0.8, 1.5)  # scale on every link mass
-    com_offset_m: float = 0.05  # pelvis CoM shift half-width
-    joint_bias_rad: float = 0.0125  # add_joint_default_pos half-width
-    push_vel_ms: float = 1.0  # push_robot velocity_range half-width
+    static_friction: tuple[float, float] = (0.3, 1.6)  # physics_material, midpoint nominal
+    mass_scale: tuple[float, float] = (0.8, 1.2)  # randomize_rigid_body_mass, per body
+    com_range: tuple[tuple[float, float], ...] = ((-0.025, 0.025), (-0.05, 0.05), (-0.05, 0.05))
+    joint_bias: tuple[float, float] = (-0.01, 0.01)  # add_joint_default_pos
+    push_lin: tuple[float, float, float] = (0.5, 0.5, 0.2)  # push_robot velocity_range xyz
+    push_ang: tuple[float, float, float] = (0.52, 0.52, 0.78)  # roll pitch yaw
     push_interval_s: tuple[float, float] = (1.0, 3.0)
-    delay_steps_max: int = 8  # randomize_action_delay: 0..8 physics steps at lambda 1
+    delay_range: tuple[float, float] = (0.0, 8.0)  # physics steps
+    #: Channels to enable; None = all six. For ablations.
+    channels: tuple[str, ...] | None = None
 
-    def sample(self) -> dict:
+    def _widen(self, lo: float, hi: float, centre: float) -> tuple[float, float]:
+        return centre + (lo - centre) * self.lam, centre + (hi - centre) * self.lam
+
+    def sample(self, num_bodies: int) -> dict:
         rng = np.random.default_rng(self.seed)
-
-        def widen(lo: float, hi: float, centre: float | None = None):
-            c = (lo + hi) / 2 if centre is None else centre
-            return c + (lo - c) * self.lam, c + (hi - c) * self.lam
-
-        f_lo, f_hi = widen(*self.friction_range, centre=1.0)
-        f_lo = max(f_lo, 0.05)  # clamp_physical: friction floor
-        m_lo, m_hi = widen(*self.mass_scale_range, centre=1.0)
+        if self.lam <= 0:
+            return {"friction": 1.0, "mass_scale": [1.0] * num_bodies, "com_offset": [0.0, 0.0, 0.0],
+                    "joint_bias": [0.0] * 29, "push_lin": [0.0, 0.0, 0.0], "push_ang": [0.0, 0.0, 0.0],
+                    "delay_steps": 0, "seed": int(self.seed)}
+        f_lo, f_hi = self._widen(*self.static_friction, centre=sum(self.static_friction) / 2)
+        f_lo = max(f_lo, 0.05)
+        m_lo, m_hi = self._widen(*self.mass_scale, centre=1.0)
         m_lo = max(m_lo, 0.1)
-        return {
-            "friction": float(rng.uniform(f_lo, f_hi)) if self.lam > 0 else 1.0,
-            "mass_scale": float(rng.uniform(m_lo, m_hi)) if self.lam > 0 else 1.0,
-            "com_offset": (rng.uniform(-1, 1, 3) * self.com_offset_m * self.lam).tolist(),
-            "joint_bias": (rng.uniform(-1, 1, 29) * self.joint_bias_rad * self.lam).tolist(),
-            "push_vel": self.push_vel_ms * self.lam,
-            "delay_steps": int(round(rng.uniform(0, self.delay_steps_max * self.lam))) if self.lam > 0 else 0,
-            "rng_state": int(self.seed),
+        com = [float(rng.uniform(*self._widen(lo, hi, 0.0))) for lo, hi in self.com_range]
+        jb_lo, jb_hi = self._widen(*self.joint_bias, 0.0)
+        d_lo, d_hi = self._widen(*self.delay_range, 0.0)
+        out = {
+            "friction": float(rng.uniform(f_lo, f_hi)),
+            "mass_scale": rng.uniform(m_lo, m_hi, num_bodies).tolist(),
+            "com_offset": com,
+            "joint_bias": rng.uniform(jb_lo, jb_hi, 29).tolist(),
+            "push_lin": [v * self.lam for v in self.push_lin],
+            "push_ang": [v * self.lam for v in self.push_ang],
+            "delay_steps": int(round(rng.uniform(max(0.0, d_lo), d_hi))),
+            "seed": int(self.seed),
         }
+        if self.channels is not None:
+            on = set(self.channels)
+            if "friction" not in on: out["friction"] = 1.0
+            if "mass" not in on: out["mass_scale"] = [1.0] * num_bodies
+            if "com" not in on: out["com_offset"] = [0.0, 0.0, 0.0]
+            if "joint" not in on: out["joint_bias"] = [0.0] * 29
+            if "push" not in on: out["push_lin"] = [0.0, 0.0, 0.0]; out["push_ang"] = [0.0, 0.0, 0.0]
+            if "delay" not in on: out["delay_steps"] = 0
+        out["channels"] = list(self.channels) if self.channels else "all"
+        return out
 
 
 @dataclass
@@ -330,7 +352,7 @@ class Player:
         self.data = mujoco.MjData(self.model)
         self.clip = clip
         self.dr = dr
-        self.dr_sample = dr.sample()
+        self.dr_sample = dr.sample(self.model.nbody)
         self._apply_dr()
         self.session = ort.InferenceSession(str(onnx_path), providers=["CPUExecutionProvider"])
         self.obs_name = self.session.get_inputs()[0].name
@@ -351,11 +373,19 @@ class Player:
             k: deque(maxlen=HISTORY) for k in ("gravity", "ang_vel", "joint_pos", "joint_vel", "action")
         }
         self.last_action_isaac = np.zeros(29)
+        # randomize_action_delay is in PHYSICS steps (0..8 at lambda 1 = 0..40 ms),
+        # so the buffer holds one target per 5 ms substep and the applied target
+        # is the one pushed delay_steps substeps ago.
         self.delay = deque(maxlen=max(1, self.dr_sample["delay_steps"] + 1))
         self.rng = np.random.default_rng(dr.seed + 1)
-        self.next_push_t = self.rng.uniform(*dr.push_interval_s) if dr.lam > 0 else np.inf
+        self.next_push_t = self.rng.uniform(*dr.push_interval_s) if max(self.dr_sample['push_lin']) > 0 else np.inf
         self.video = video
         self.frames: list[np.ndarray] = []
+        if video:
+            # MuJoCo's offscreen framebuffer defaults to 640x480; the renderer
+            # refuses anything larger unless the model's limits are raised.
+            self.model.vis.global_.offwidth = max(int(self.model.vis.global_.offwidth), width)
+            self.model.vis.global_.offheight = max(int(self.model.vis.global_.offheight), height)
         self.renderer = mujoco.Renderer(self.model, height, width) if video else None
         self.cam = mujoco.MjvCamera()
         self.cam.type = mujoco.mjtCamera.mjCAMERA_TRACKING
@@ -373,12 +403,17 @@ class Player:
 
     def _apply_dr(self):
         s = self.dr_sample
-        self.model.geom_friction[:, 0] = np.clip(self.model.geom_friction[:, 0] * s["friction"], 0.05, 4.0)
-        self.model.body_mass[:] = self.model.body_mass * s["mass_scale"]
-        self.model.body_inertia[:] = self.model.body_inertia * s["mass_scale"]
-        pelvis = self.mujoco.mj_name2id(self.model, self.mujoco.mjtObj.mjOBJ_BODY, "pelvis")
-        self.model.body_ipos[pelvis] = self.model.body_ipos[pelvis] + np.asarray(s["com_offset"])
-        self.mujoco.mj_setConst(self.model, self.data) if hasattr(self, "data") else None
+        m = self.model
+        # Friction: MuJoCo pairs take the max of the two geoms' coefficients, so
+        # every geom (floor included, all 1.0 in the XML) is set to the draw.
+        m.geom_friction[:, 0] = np.clip(s["friction"], 0.05, 4.0)
+        scale = np.asarray(s["mass_scale"])
+        scale[0] = 1.0  # world body
+        m.body_mass[:] = m.body_mass * scale
+        m.body_inertia[:] = m.body_inertia * scale[:, None]
+        torso = self.mujoco.mj_name2id(m, self.mujoco.mjtObj.mjOBJ_BODY, "torso_link")
+        m.body_ipos[torso] = m.body_ipos[torso] + np.asarray(s["com_offset"])
+        self.mujoco.mj_setConst(m, self.data)
 
     # ----------------------------------------------------------- state --
 
@@ -480,7 +515,6 @@ class Player:
         action = self.session.run(None, {self.obs_name: obs})[0][0].astype(np.float64)
         self.last_action_isaac = action
         target_mj = self.default_mj + self.scale_mj * action[self.mj_to_isaac]
-        self.delay.append(target_mj)
         return target_mj
 
     def _pd(self, target_mj: np.ndarray) -> np.ndarray:
@@ -491,12 +525,23 @@ class Player:
         return tau
 
     def _maybe_push(self):
+        """push_by_setting_velocity: ADD a world-frame draw to the root velocity.
+
+        IsaacLab (envs/mdp/events.py) does ``vel_w += sample_uniform(range)`` on
+        the world-frame root velocity, so the walking momentum is kept and the
+        push is an impulse on top of it. MuJoCo's free joint stores linear
+        velocity in the world frame and angular velocity in the body frame, so
+        the angular part of the draw is rotated into the body frame first.
+        """
         if self.t >= self.next_push_t:
-            v = self.rng.uniform(-1, 1, 2) * self.dr_sample["push_vel"]
-            self.data.qvel[0:2] += v
+            lin = self.rng.uniform(-1, 1, 3) * np.asarray(self.dr_sample["push_lin"])
+            ang_w = self.rng.uniform(-1, 1, 3) * np.asarray(self.dr_sample["push_ang"])
+            R = quat_to_mat(self._base_quat_xyzw())
+            self.data.qvel[0:3] += lin
+            self.data.qvel[3:6] += R.T @ ang_w
             self.next_push_t = self.t + self.rng.uniform(*self.dr.push_interval_s)
-            return v.tolist()
-        return None
+            return True
+        return False
 
     def run(self, max_time: float | None = None) -> dict:
         max_time = self.clip.duration if max_time is None else min(max_time, self.clip.duration)
@@ -505,9 +550,10 @@ class Player:
         n_ctrl = 0
         while self.t < max_time:
             target = self.step_policy()
-            delayed = self.delay[0] if len(self.delay) == self.delay.maxlen else self.delay[0]
             for _ in range(DECIMATION):
-                push = self._maybe_push()
+                self.delay.append(target)
+                delayed = self.delay[0]  # oldest = delay_steps substeps ago once the buffer is full
+                self._maybe_push()
                 self.data.ctrl[:] = self._pd(delayed)
                 self.mujoco.mj_step(self.model, self.data)
                 self.t += SIM_DT
@@ -546,12 +592,14 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--height", type=int, default=720)
     p.add_argument("--no-video", action="store_true")
     p.add_argument("--max-time", type=float, default=None)
+    p.add_argument("--channels", type=str, default=None, help="comma list of friction,mass,com,joint,push,delay")
     a = p.parse_args(argv)
     os.environ.setdefault("MUJOCO_GL", "egl")
     os.environ.setdefault("PYOPENGL_PLATFORM", "egl")
 
     clip = load_clip(a.clip)
-    player = Player(a.onnx, clip, DRConfig(lam=a.lam, seed=a.seed), width=a.width, height=a.height,
+    channels = tuple(c.strip() for c in a.channels.split(',')) if a.channels else None
+    player = Player(a.onnx, clip, DRConfig(lam=a.lam, seed=a.seed, channels=channels), width=a.width, height=a.height,
                     video=not a.no_video)
     result = player.run(a.max_time)
     if not a.no_video:
