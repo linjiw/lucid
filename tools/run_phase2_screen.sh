@@ -27,7 +27,7 @@
 
 set -euo pipefail
 
-readonly PIN_COMMIT="08a01bf588b42ea1e5b71727275ad77ec1f4e497"
+readonly PIN_COMMIT="8fa9732184f9f7c2f37d607152aa8410835feb92"
 readonly WORKTREE="/home/linjiw/lucid-phase2"
 readonly DEV_REPO="/home/linjiw/lucid/GR00T-WholeBodyControl"
 readonly LUCID_ROOT="/home/linjiw/lucid-sonic"

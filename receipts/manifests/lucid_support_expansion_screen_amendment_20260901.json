@@ -115,6 +115,22 @@
       "behavioural_effect_on_phase_2": "Adds an abort path that fires ONLY when the gate has received zero probe episodes for gate_evidence_grace=200 iterations past warm-up. A single probe episode satisfies it permanently, so sparse evidence is unaffected. It cannot fire on ramp_150, which reads nothing, nor on any fixed arm. It cannot change any expansion decision: it either raises or does nothing.",
       "interaction_with_A4": "A4 says a stalled gate is a result, not a failed screen. A7 narrows that: a stall is a result only when the gate was actually receiving evidence. A stall with zero probe episodes is now a fault that aborts, and can no longer be mistaken for a decision.",
       "data_driven": false
+    },
+    {
+      "id": "A8",
+      "severity": "blocking_defect_found_live",
+      "target": "code_state.file_sha256['gear_sonic/research/practice_utility/dr_curriculum.py'] and the pinned commit",
+      "defect": "The survival gate's probe strata were never bound to the observer. Callback order is dict order in the Hydra config and the curriculum's on_train_begin runs BEFORE the survival observer's, so at _bind time the observer had not registered itself, the lookup returned None, and set_strata was never called. The observer then recorded only population survival, current_probe returned no evidence for the whole run, and the gate held its frontier at 1.0 forever.",
+      "why_it_matters": "This is the most expensive possible false negative. In the applied-lambda trace a gate that never received evidence is indistinguishable from a gate that honestly decided not to expand, so it would have been read as evidence against feedback when nothing had been measured. It would also have satisfied amendment A4's 'a stalled gate is a result' reading, which is exactly wrong for a fault.",
+      "discovered": "Three minutes into the first Phase-2 launch (experiment lucid_support_expansion_ne1024_20260901_232033), by inspecting the observer's own jsonl rather than trusting the curriculum's survival_observer_present flag. The two files contradicted each other: the curriculum logged survival_observer_present true with correct 8-stratum TACE telemetry and sizes [43,43,43,43,42,42,640,128], while the observer's rows carried probe_index null and no per-stratum entry.",
+      "caught_by": "Manual inspection. The fail-fast guard added in 08a01bf WOULD have aborted the arm at iteration 210, about two minutes later, so the guard worked; the run was stopped early to fix the root cause rather than to let the arm die.",
+      "correction": "Strata are bound lazily, the first time the observer is reachable, in _survival_observer. Regression test TestLateObserverRegistration reproduces the ordering and fails on the parent commit.",
+      "code": {
+        "commit": "8fa9732184f9f7c2f37d607152aa8410835feb92",
+        "gear_sonic/research/practice_utility/dr_curriculum.py": "f807bbcf4744143345402ae73958a6d07d35b692ddb8652fd885b417d3f46059"
+      },
+      "run_status": "The aborted experiment lucid_support_expansion_ne1024_20260901_232033 is VOID and is retained as excluded evidence. Its gate_150 cell reached ~46 iterations. No Phase-2 cell has been scored and no endpoint, threshold, decision rule or prediction changes.",
+      "data_driven": false
     }
   ],
   "unchanged": "Every arm definition, stratum layout, endpoint, weight, threshold, decision rule, mechanism gate, frozen prediction and limitation in the parent preregistration is unchanged by this amendment.",
@@ -126,7 +142,8 @@
     "gate feasibility replay over the real fixed@s8600 survival series; tool at tools/simulate_gate.py",
     "paired H_R2 deltas on the Phase-2 primary band recomputed from the frozen analysis receipt",
     "survival_gate.py drift at dd0fd61 proven docstring-only by AST comparison after docstring removal",
-    "fail-fast guard covered by four tests; suite 1644 passed"
+    "fail-fast guard covered by four tests; suite 1644 passed",
+    "regression test fails on 08a01bf and passes on 8fa9732; suite 1647 passed"
   ],
   "not_yet_verified": [
     "every Phase-2 outcome; no policy has been trained"
