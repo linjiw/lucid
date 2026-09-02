@@ -276,3 +276,62 @@ matters," folded into Paper A's discussion rather than a separate method paper.
 2. Phase 0.2 (bridge worktree, prereg, 42 cells) then 0.3–0.5 in one serial eval queue.
 3. Phase 0.6 signal-audit extraction on CPU while the queue runs.
 4. C1–C7 on `research/practice-utility` with tests; C9 prereg frozen; launch Phase 2 with gate_150 first.
+
+## 8. Addendum 2026-09-02 — competence-grounded, per-channel expansion
+
+Direction set 2026-09-02 (see the proposal text in the session): move from a
+scalar λ toward asymmetric, competence-grounded active support expansion;
+single-seed quick train/compare/analyze loops at this stage.
+
+### 8.1 How the proposal maps onto what is built and measured
+
+| Proposal element | Status | Where |
+|---|---|---|
+| Un-invertible competence metric (NPT, foot slip under load, actuator work margin) | **Measured offline, zero GPU.** Foot slip is the only body signal that responds to difficulty on every frozen policy (ρ=+1.00 vs λ on 14/14 ladders, −0.96..−1.00 vs success per arm) *and* to the actuator in both collapses (r≈+0.7 vs ≈0 for the latent gap). It is weakly anchored at fixed λ (ρ −0.53, 17 reversals) and it improves when λ is cut, so it rewards evacuation exactly as return does: admissible only under a monotone actuator at the probe. Torque saturation and undesired contact flip sign across arms; energy and action rate *rise* with competence (activity, not competence). Nothing beats time-out on anchoring. NPT is not logged per episode in training; time-out is its coarse proxy. | `tools/physical_signal_audit.py`, `receipts/analysis/lucid_physical_signal_audit_20260902.json` |
+| Asymmetric box actuator (per-channel frontier) | **Built and tested, not yet trained.** `box_gate.py` + curriculum mode `box` + arm `box_150`. One 128-env probe visits channels in rotation; per-channel `SurvivalGateController`s on a shared clock; blocked channels retried next round; `channel_budget` timeout. Same 1.5 ceiling per channel as gate_150. | SONIC `eac9455` |
+| Dual buffer: zero-gradient probes | Not built. The probe stratum trains (12.5% of the batch at the candidate level); that *is* the expansion. A `probe_grad=off` ablation would need PPO sample masking. Parked. | — |
+| Exposure matrix (training support vs evaluation cells) | Already the M6 discipline; the channel cells make it per channel. | evaluator presets `ch_*` |
+| Paired within-seed deltas | Already the reporting convention. | — |
+| Failure-mode taxonomy | Blocked on instrument v2 (C8: per-episode termination step). | — |
+
+### 8.2 The measurement that decides whether the box is worth training
+
+Single-channel attribution sweep (`tools/run_channel_sweep.sh`): five seed-8600
+finals × eleven cells that widen one term with the other four at λ=1 and
+latency pinned to zero. Read out with `tools/analyze_channel_sweep.py`.
+
+Decision: if one channel carries the scalar drop (anisotropic), the box is the
+right actuator and box_150 runs in the prototype loop. If every single-channel
+marginal is nearly free and the scalar ladder still drops, the failure surface
+is an *interaction* (corner) effect — no axis-aligned probe sees it, and the
+right probe is the joint corner, which is what the scalar gate already tests.
+Either way the prototype loop runs both; the sweep decides the narrative and
+which one gets the from-scratch cell.
+
+### 8.3 The fast loop
+
+`tools/run_expansion_prototype.sh`: five widening policies (box_150, gate_150,
+ramp_150, fixed_150, fixed) warm-started from the fixed@s8600 final (λ=1
+solved, time-out ≈0.95), 2,000 iterations each (~1.3 GPU-h), gate window
+100 / dwell 50 / probe budget 300. Scored by
+`tools/run_expansion_prototype_scoring.sh` on {phys_175, phys_200} plus the
+ten channel marginals. Preregistered:
+`receipts/manifests/lucid_expansion_prototype_preregistration_20260902.json`
+(R1: box vs gate ±0.03; R3: zero decreases on every channel; R4: a stalled box
+is reported as stalled, not as a loss; R5: width-wins rule).
+
+Runs after Phase 2 releases the GPU (~2026-09-03 morning). The from-scratch
+Phase 2 cell stays the confirmatory one; the prototype loop ranks designs.
+
+### 8.4 Next design candidates, in order of information per GPU-hour
+
+1. Prototype loop as above (≈6.7 GPU-h, one seed).
+2. If the box earns it: `box_asym` — per-channel ceilings set from the sweep
+   (cheap channels to 2.0–3.0, friction held at the clamp), which is the first
+   arm that can *exceed* fixed_150's support where it is free and withhold it
+   where it is not. Its endpoint must then be per-channel (M6).
+3. Slip-augmented probe: per-stratum foot slip alongside per-stratum survival
+   in `survival_observer.py`, so the probe can be judged on a continuous body
+   signal where survival is saturated (in-envelope). Needs per-env telemetry.
+4. Zero-gradient probe ablation (`probe_grad=off`), only if the probe's own
+   training contribution is suspected of masking the gate's decision.
