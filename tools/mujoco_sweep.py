@@ -33,16 +33,18 @@ ARMS = {
     "lucid_collapsed_s8601": A / "curriculum_comparison_ne1024_20260829_000249/seed_8601/lucid_rg/exported/model_step_008000_g1.onnx",
     "fixed_s8600": A / "curriculum_comparison_ne1024_20260829_000249/seed_8600/fixed/exported/model_step_008000_g1.onnx",
     "ratchet_s8601": A / "curriculum_comparison_ne1024_20260831_144022/seed_8601/lucid_ratchet_rg/exported/model_step_008000_g1.onnx",
+    "fixed_s8601": A / "curriculum_comparison_ne1024_20260829_000249/seed_8601/fixed/exported/model_step_008000_g1.onnx",
 }
 LABEL = {
     "off_s8600": "no randomization",
     "lucid_collapsed_s8601": "feedback curriculum, unconstrained (collapsed to λ 0.06)",
     "fixed_s8600": "fixed full DR",
     "ratchet_s8601": "feedback curriculum + monotone ratchet (ours)",
+    "fixed_s8601": "fixed full DR (paired seed 8601)",
 }
 
 
-def one(arm: str, onnx: Path, lam: float, seed: int, out: Path) -> tuple[str, float, int, dict]:
+def one(arm: str, onnx: Path, lam: float, seed: int, out: Path, channels: str | None = None) -> tuple[str, float, int, dict]:
     d = out / "runs" / arm / f"lam{lam:g}"
     d.mkdir(parents=True, exist_ok=True)
     js = d / f"seed{seed}.json"
@@ -50,7 +52,7 @@ def one(arm: str, onnx: Path, lam: float, seed: int, out: Path) -> tuple[str, fl
         return arm, lam, seed, json.loads(js.read_text())["result"]
     env = dict(os.environ, MUJOCO_GL="egl", PYOPENGL_PLATFORM="egl")
     cmd = [PY, str(PLAYER), "--onnx", str(onnx), "--clip", CLIP, "--out", str(d / f"seed{seed}.mp4"),
-           "--lam", f"{lam:g}", "--seed", str(seed), "--no-video"]
+           "--lam", f"{lam:g}", "--seed", str(seed), "--no-video"] + (["--channels", channels] if channels else [])
     proc = subprocess.run(cmd, env=env, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True)
     if proc.returncode != 0 or not js.is_file():
         return arm, lam, seed, {"fell": None, "t_end": None, "error": True}
@@ -64,6 +66,7 @@ def main(argv=None) -> int:
     ap.add_argument("--seeds", type=int, default=32)
     ap.add_argument("--jobs", type=int, default=6)
     ap.add_argument("--arms", nargs="+", default=list(ARMS))
+    ap.add_argument("--channels", type=str, default=None, help="comma list; default all six")
     a = ap.parse_args(argv)
     a.out.mkdir(parents=True, exist_ok=True)
     arms = {k: ARMS[k] for k in a.arms}
@@ -76,14 +79,14 @@ def main(argv=None) -> int:
     table: dict = {arm: {f"{lam:g}": {} for lam in a.lams} for arm in arms}
     done = 0
     with ThreadPoolExecutor(max_workers=a.jobs) as ex:
-        futs = [ex.submit(one, arm, onnx, lam, seed, a.out) for arm, onnx, lam, seed in jobs]
+        futs = [ex.submit(one, arm, onnx, lam, seed, a.out, a.channels) for arm, onnx, lam, seed in jobs]
         for f in as_completed(futs):
             arm, lam, seed, res = f.result()
             table[arm][f"{lam:g}"][str(seed)] = res
             done += 1
             if done % 50 == 0:
                 print(f"  {done}/{len(jobs)}", file=sys.stderr, flush=True)
-    (a.out / "sweep.json").write_text(json.dumps({"arms": {k: str(v) for k, v in arms.items()}, "labels": LABEL,
+    (a.out / "sweep.json").write_text(json.dumps({"arms": {k: str(v) for k, v in arms.items()}, "labels": LABEL, "channels": a.channels or "all",
                                                    "lams": a.lams, "seeds": a.seeds, "table": table}, indent=1))
     lines = ["| arm | " + " | ".join(f"λ {lam:g}" for lam in a.lams) + " |", "|---|" + "---|" * len(a.lams)]
     for arm in arms:

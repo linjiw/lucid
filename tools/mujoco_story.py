@@ -111,7 +111,7 @@ def main(argv=None) -> int:
     ap.add_argument("--lams", nargs="+", default=["0", "1", "1.5"])
     ap.add_argument("--seeds", type=int, default=8)
     ap.add_argument("--cols", type=int, default=4)
-    ap.add_argument("--arms", nargs="+", default=list(ARMS))
+    ap.add_argument("--arms", nargs="+", default=["off_s8600", "lucid_collapsed_s8601", "fixed_s8600", "ratchet_s8601"])
     ap.add_argument("--jobs", type=int, default=4)
     a = ap.parse_args(argv)
     a.out.mkdir(parents=True, exist_ok=True)
