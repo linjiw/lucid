@@ -50,7 +50,11 @@ readonly MOTION="${LUCID_ROOT}/pools/subsets/m1_hob002/robot_filtered"
 readonly ENCODER="${LUCID_ROOT}/artifacts/lucid_encoder_debug512.pt"
 # The feedback arm runs FIRST so its mechanism telemetry is inspected earliest.
 # If it stalls or misbehaves the remaining four still answer the width question.
-readonly MODES=(gate_150 ramp_150 fixed_150 fixed_u150 fixed)
+# PHASE2_MODES overrides the arm list for a relaunch of part of the queue
+# (e.g. after the queue was split to make room for the prototype loop). The
+# arms, their config and the pinned code are unchanged; only which of them
+# this invocation trains. Recorded in the amendment log whenever it is used.
+readonly MODES=(${PHASE2_MODES:-gate_150 ramp_150 fixed_150 fixed_u150 fixed})
 
 EXECUTE=0
 [[ "${1:-}" == "--execute" ]] && EXECUTE=1

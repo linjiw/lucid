@@ -131,6 +131,16 @@
       },
       "run_status": "The aborted experiment lucid_support_expansion_ne1024_20260901_232033 is VOID and is retained as excluded evidence. Its gate_150 cell reached ~46 iterations. No Phase-2 cell has been scored and no endpoint, threshold, decision rule or prediction changes.",
       "data_driven": false
+    },
+    {
+      "id": "A9",
+      "severity": "operational_change_no_decision_rule_touched",
+      "target": "execution of the five-arm queue (wall-clock only)",
+      "change": "At 2026-09-02 ~07:30 EDT, with gate_150 complete (final checkpoint exported 05:56, 4 expansions, frontier at the 1.5 ceiling) and ramp_150 ~1.4 h into training, the ramp_150 trainer process and its descendants were SIGSTOPped so the GPU's compute could run the warm-start expansion prototype loop (tools/run_queue_20260902.sh). They are SIGCONTed by the same script when the loop finishes (EXIT trap; cannot be left frozen by a failure). The Phase 2 driver process was never touched and writes its receipt when the queue completes.",
+      "why": "the single-channel attribution (receipts/analysis/lucid_channel_attribution_20260902.json) reordered the programme's priorities toward per-channel expansion, and the user asked for the prototype loop to run first; killing the driver would have cost the completed gate_150 arm its receipt.",
+      "effect_on_measurements": "none on any training metric: the paused process resumes with its own RNG stream and state. ramp_150's recorded wall-clock includes the pause; no decision rule (D1-D4) or mechanism gate (G1-G4) reads wall-clock. The paused trainer holds ~6.7 GiB of GPU memory throughout, so the prototype arms train under memory contention, which affects their wall-clock only.",
+      "recorded_by": "tools/run_queue_20260902.sh log at $LUCID_ROOT/outputs/queue_20260902.log; paused pids in queue_20260902.paused_pids while paused",
+      "created_at": "2026-09-02T07:22:35.630800-04:00"
     }
   ],
   "unchanged": "Every arm definition, stratum layout, endpoint, weight, threshold, decision rule, mechanism gate, frozen prediction and limitation in the parent preregistration is unchanged by this amendment.",

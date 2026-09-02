@@ -69,6 +69,13 @@
       "id": "A4",
       "target": "design.cost",
       "now": "8 arms x ~1.3 GPU-h; the driver's default order runs the five uniform arms' decisive pairs first (box_150, gate_150, ramp_150) then the asym pair, then the fixed controls; trim with --modes"
+    },
+    {
+      "id": "A5",
+      "target": "design.cost / execution order",
+      "now": "two batches, each scored before the next trains: batch 1 = box_150, gate_150, box_asym, ramp_asym, fixed_150 (the two decisive pairs and the width anchor); batch 2 = ramp_150, fixed, fixed_asym. Rules R1-R7 unchanged; R2 and R5/R7 are evaluated when batch 2 lands.",
+      "why": "a first readout ~5 h earlier; the prototype trains beside a PAUSED Phase 2 trainer that holds ~6.7 GiB of GPU memory (Phase 2 amendment A9), which affects wall-clock only",
+      "created_at": "2026-09-02T07:22:35.630800-04:00"
     }
   ],
   "not_claimed_added": [

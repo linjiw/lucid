@@ -94,9 +94,22 @@ export LUCID_GPU_WAIT_SECONDS=43200
 cd "${DEV_REPO}"
 log "SONIC $(git rev-parse --short HEAD) on $(git branch --show-current)"
 
+MIN_FREE_MIB=10000
 if (( EXECUTE )); then
     live="$(nvidia-smi --query-compute-apps=pid --format=csv,noheader,nounits | sed '/^[[:space:]]*$/d' || true)"
-    [[ -z "${live}" ]] || die "GPU is busy (pids: ${live//$'\n'/,}); the Phase 2 screen must finish first"
+    if [[ -n "${live}" ]]; then
+        # A trainer that is SIGSTOPped keeps its memory but issues no kernels.
+        # The queue orchestrator pauses the Phase 2 arm this way to make room;
+        # any RUNNING compute process still refuses the launch.
+        running=""
+        for pid in ${live}; do
+            state="$(awk '{print $3}' /proc/"${pid}"/stat 2>/dev/null || echo "?")"
+            [[ "${state}" == "T" ]] || running+="${pid} "
+        done
+        [[ -z "${running}" ]] || die "GPU is busy (running pids: ${running}); the Phase 2 screen must finish or be paused first"
+        log "paused compute process(es) present (${live//$'\n'/,}); their memory stays allocated"
+        MIN_FREE_MIB=8000
+    fi
     [[ ! -d "${RECEIPT_DIR}" ]] || die "receipt directory already exists: ${RECEIPT_DIR}"
     mkdir -p "${RECEIPT_DIR}" "${LUCID_ROOT}/outputs/${EXPERIMENT}"
 fi
@@ -126,7 +139,7 @@ args=(
     --ramp-end-iteration 1500
     --receipt-dir "${RECEIPT_DIR}"
     --log-dir "${LUCID_ROOT}/outputs/${EXPERIMENT}"
-    --min-free-mib 10000
+    --min-free-mib "${MIN_FREE_MIB}"
 )
 if (( EXECUTE )); then
     args+=(--execute)
