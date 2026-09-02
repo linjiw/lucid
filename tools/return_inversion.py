@@ -226,6 +226,43 @@ def main(argv: list[str] | None = None) -> int:
         num = sum((a - mx) * (b - my) for a, b in zip(xs, ys))
         dx = sum((a - mx) ** 2 for a in xs) ** 0.5
         dy = sum((b - my) ** 2 for b in ys) ** 0.5
+        def spearman(xs, ys):
+            def rank(vals):
+                order = sorted(range(len(vals)), key=lambda i: vals[i])
+                out = [0.0] * len(vals)
+                i = 0
+                while i < len(order):
+                    j = i
+                    while j + 1 < len(order) and vals[order[j + 1]] == vals[order[i]]:
+                        j += 1
+                    shared = (i + j) / 2.0 + 1.0
+                    for k in range(i, j + 1):
+                        out[order[k]] = shared
+                    i = j + 1
+                return out
+            rx, ry = rank(xs), rank(ys)
+            mx, my = statistics.fmean(rx), statistics.fmean(ry)
+            num = sum((a - mx) * (b - my) for a, b in zip(rx, ry))
+            dx = sum((a - mx) ** 2 for a in rx) ** 0.5
+            dy = sum((b - my) ** 2 for b in ry) ** 0.5
+            return None if dx == 0 or dy == 0 else round(num / (dx * dy), 4)
+
+        # Rank correlation is the better summary here: one arm (lucid_s4_rg@s8602)
+        # is brittle to the friction clamp rather than to evacuation, and its low
+        # frontier score at ordinary return drags a linear fit without changing
+        # the ordering the claim is actually about.
+        report["spearman_return_vs_frontier"] = spearman(
+            [p["terminal_return"] for p in scored],
+            [p["frontier_success_auc"] for p in scored],
+        )
+        report["highest_return_arms"] = [
+            p["arm"]
+            for p in sorted(scored, key=lambda x: -x["terminal_return"])[:2]
+        ]
+        report["highest_return_arms_all_evacuated"] = all(
+            p["evacuated"]
+            for p in sorted(scored, key=lambda x: -x["terminal_return"])[:2]
+        )
         report["pearson_return_vs_frontier"] = (
             None if dx == 0 or dy == 0 else round(num / (dx * dy), 4)
         )

@@ -63,9 +63,11 @@
       "final_lambda": 1.0,
       "evacuated": false,
       "terminal_return": 11.5229,
-      "frontier_success_auc": null,
+      "frontier_success_auc": 0.801758,
       "contested_cells": null,
-      "sources": []
+      "sources": [
+        "curriculum_robustness_ne512_20260901_162235.json"
+      ]
     },
     {
       "arm": "lucid_s4_rg@s8602",
@@ -74,9 +76,11 @@
       "final_lambda": 1.0,
       "evacuated": false,
       "terminal_return": 12.2446,
-      "frontier_success_auc": null,
+      "frontier_success_auc": 0.611979,
       "contested_cells": null,
-      "sources": []
+      "sources": [
+        "curriculum_robustness_ne512_20260901_162749.json"
+      ]
     },
     {
       "arm": "lucid_ratchet_rg@s8601",
@@ -158,13 +162,19 @@
       ]
     }
   ],
-  "n_scored_pairs": 10,
-  "pearson_return_vs_frontier": -0.844,
-  "pearson_controllers_only": -0.8705,
+  "n_scored_pairs": 12,
+  "spearman_return_vs_frontier": -0.7343,
+  "highest_return_arms": [
+    "lucid_rg@s8601",
+    "lucid_s4_rg@s8600"
+  ],
+  "highest_return_arms_all_evacuated": true,
+  "pearson_return_vs_frontier": -0.6095,
+  "pearson_controllers_only": -0.5977,
   "evacuated_vs_held": {
     "evacuated_mean_return": 14.8435,
-    "held_mean_return": 11.5312,
+    "held_mean_return": 11.6017,
     "evacuated_mean_frontier": 0.718588,
-    "held_mean_frontier": 0.864583
+    "held_mean_frontier": 0.83304
   }
 }
