@@ -474,37 +474,117 @@ draw marked pass or fall accompany the paper.</p>
 adaptive run, 0.40 for the collapsed run, and 0.18 without randomization. Rank correlation
 of the arm ordering with the trained clip is 0.8 and 1.0 across the two cells. This is one
 nearby clip, not motion generalization.</p>
-<h2>9. Proposed: The Range-Expansion Curriculum</h2>
-<p>Sections 4–7 fix what a curriculum may do and what it may listen to. The curriculum we
-propose follows in four sentences.</p>
-<ul>
-<li>Test proposed conditions before expanding a training range.</li>
-<li>Allow different physical parameters to expand at different times.</li>
-<li>Check whether combined changes cause failures.</li>
-<li>Continue practicing earlier conditions while keeping the admitted ranges from shrinking.</li>
-</ul>
-<p>Concretely, the 1,024 environments are split into a retained set that rehearses earlier
-ranges (25%), the active range (62.5%), and a probe set placed one step beyond the active
-range on one channel (12.5%). Survival on the probe set decides whether that channel
-expands. A periodic probe at the joint corner of all proposed ranges can hold an expansion
-that passes channel by channel but fails in combination. No decision can shrink a range.</p>
-<p><strong>What is measured so far.</strong> A scalar version of the probe gate, trained from scratch,
-expanded λ from 1.0 to 1.5 in four evidence-triggered steps at iterations 3,362, 4,103,
-4,790, and 5,891, recorded probe telemetry on 7,990 of 8,000 iterations, and applied no
-decrease. A stale global return guard froze expansion 914 times after the ceiling was
-reached; the final design uses probe-relative evidence instead. The per-channel and
-joint-corner components are implemented as a prototype and not yet evaluated.</p>
-<p><strong>The test it must pass.</strong> Feedback earns credit only against a preset expansion schedule
-that reaches the same final ranges with the same compute and the same training mixture. If
-the adaptive curriculum ties the schedule, range width and monotone exposure explain the
-result and adaptive timing does not. The comparison is paired by seed, five seeds, with the
-held-out endpoints and margins of Section 5 frozen in advance. A tie or loss narrows the
-paper to Sections 4–7; it does not reopen the shrinkage pathway those sections close.</p>
+<h2>9. Where Should the Extra Training Go?</h2>
+<p>Sections 4 to 7 fix what a curriculum may do and what it may listen to. They do
+not show that any curriculum improves the policy. The question that decides that
+comes first, and we have not answered it:</p>
+<blockquote>
+<p>Can we improve humanoid control by spending more training on difficult but
+learnable physical conditions, while preserving performance on conditions
+already learned?</p>
+</blockquote>
+<h3>9.1 Difficult is not the same as learnable</h3>
+<p>Section 7 says pushes bind and mass, center of mass, and joint offsets are
+nearly free. It does not say that practising pushes would help. A condition can
+be hard because the policy lacks practice at it, because the observation cannot
+support the required response, or because the reference motion is incompatible
+with that disturbance. Only the first is repaired by any curriculum, and every
+component of an expansion curriculum silently assumes the first. Nothing we have
+measured separates them.</p>
+<h3>9.2 The screen that separates them</h3>
+<p>Five branches leave the same competent policy with the same architecture,
+reward, motion, environment count, iteration budget, and seed. The only
+difference is what a fixed quarter of the same 1,024 environments practises, and
+that share is taken out of the standard mixture rather than added to it, so no
+branch trains on more episodes than another.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Branch</th>
+<th>What the 256-environment share practises</th>
+<th style="text-align: right;">Origin success there</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Plain continuation</td>
+<td>nothing; every environment at the envelope</td>
+<td style="text-align: right;">—</td>
+</tr>
+<tr>
+<td>Matched control</td>
+<td>the envelope, like every other environment</td>
+<td style="text-align: right;">—</td>
+</tr>
+<tr>
+<td>Manageable channels</td>
+<td>mass, center of mass, joint offset at 3×</td>
+<td style="text-align: right;">0.949 / 0.988 / 0.990</td>
+</tr>
+<tr>
+<td>The bottleneck</td>
+<td>pushes at 3×</td>
+<td style="text-align: right;">0.746</td>
+</tr>
+<tr>
+<td>The combination</td>
+<td>pushes at 2× with friction at 1.5×</td>
+<td style="text-align: right;">0.912 and 0.973 alone</td>
+</tr>
+</tbody>
+</table></div>
+<p>The practised levels are read off Section 7 rather than chosen, so "difficult"
+means a measured success level. Every branch is scored on one frozen thirteen
+cell suite that includes ordinary conditions the policy already handles, the
+practised cells, and two cells above every level any branch practises. The
+starting policy is scored on the same suite, so improvement is measured against
+the starting point as well as against the matched control. Each cell is labelled
+in support or held out for each branch from that branch's own realized training
+vectors, and a cell inside a branch's support may not carry a generalization
+claim for it.</p>
+<p>The margins and rules were frozen before any branch trained. A gain of five
+points or more is meaningful; a difference under two points is a tie; a branch
+that gains on its target while losing more than two points on an
+already-learned cell is reported as a trade-off, not an improvement.</p>
+<p><strong>Every outcome ends something.</strong> If dedicated practice at the failing push
+level does not move push, then push failure is not a practice deficit, no
+allocation scheduler can repair it by exposure, and the expansion direction
+loses its justification. If practising the manageable channels helps as much as
+practising the bottleneck, then extra exposure helps wherever it is aimed and
+choosing channels buys nothing. If practising the combination does not beat
+practising the channel alone above the practised corner, the combination test is
+dropped.</p>
+<h3>9.3 What a curriculum would have to ask</h3>
+<p>Our gate asks whether the policy can already handle a harder condition, and
+expands when success is high. A curriculum that improves the policy has to ask a
+different question: would practising this help? That is a question about
+improvement, and it has to be estimated by repeatedly evaluating conditions that
+do not change. A score that rose because the test got easier is the failure this
+paper is about. Three groups follow: conditions already learned keep a floor of
+practice, conditions that are difficult and improving get more, and conditions
+that fail repeatedly without improving are stepped back from and investigated
+rather than ground against.</p>
+<h3>9.4 The hurdle any such curriculum must clear</h3>
+<p>Beating the narrow fixed baseline of Section 5 would establish nothing. The
+comparators are fixed randomization over the wider target range, a preset
+expansion schedule reaching the same final ranges, and a preset per-parameter
+schedule with the same practice mixture. Preset schedules are built from
+development runs and frozen before the confirmation seeds are trained; a
+schedule may never be derived from the run it is compared against. Resources are
+matched including any probe cost, and realized exposure is reported per branch.
+The primary claim is chosen in advance: better robustness at equal cost, or a
+fixed robustness target reached at lower cost.</p>
+<p>If such a curriculum works, the components then have to be separated: choosing
+which parameter to emphasize, choosing when to change the emphasis, checking
+combinations, and maintaining earlier practice. Each is kept only if an
+experiment could show it is unnecessary.</p>
 <h2>10. Limitations</h2>
 <p>All capability results come from one training motion and one primary simulator, with one
 nearby untrained clip and one sim-to-sim replay. The channel sweep uses one seed; the
 ordering is informative, exact gaps are not. Three seeds bound the never-shrink comparison
-to a noninferiority statement. The MuJoCo replay uses our own randomization and the ONNX
+to a noninferiority statement, and the number of seeds a claim needs depends on
+the variability and the size of the effect claimed rather than on a convention
+[19]. The MuJoCo replay uses our own randomization and the ONNX
 policy, not the deployment binary. The proposed curriculum has a scalar prototype only.
 Nothing here has been run on hardware.</p>
 <h2>11. Conclusion</h2>
@@ -601,8 +681,12 @@ combinations checked. Whether doing so beats a preset schedule is the next exper
 <td><code>receipts/analysis/mujoco_sim2sim_20260902/</code>, <code>lucid_heldout_motion_20260901.json</code></td>
 </tr>
 <tr>
+<td>all</td>
+<td><code>receipts/analysis/lucid_draft_number_verification_20260902.json</code> — every number above re-checked against its receipt or the raw training trace</td>
+</tr>
+<tr>
 <td>9</td>
-<td><code>receipts/analysis/lucid_gate_feasibility_20260901.json</code>, preregistration <code>lucid_support_expansion_screen_preregistration_20260901.json</code></td>
+<td>preregistration <code>lucid_practice_allocation_screen_preregistration_20260902.json</code>; training trace <code>artifacts/.../curriculum_comparison_ne1024_20260901_232720/seed_8600/gate_150/curriculum_*.jsonl</code> (the gate run itself; <code>lucid_gate_feasibility_20260901.json</code> is a replay proxy, not this run), preregistration <code>lucid_support_expansion_screen_preregistration_20260901.json</code></td>
 </tr>
 </tbody>
 </table></div>
@@ -622,5 +706,7 @@ combinations checked. Whether doing so beats a preset schedule is the next exper
 [13] Q. Liao et al., "BeyondMimic," 2025.
 [14] M. Dennis et al., "Emergent Complexity and Zero-Shot Transfer via Unsupervised Environment Design," NeurIPS, 2020.
 [15] M. Jiang et al., "Prioritized Level Replay," ICML, 2021.
-[17] G. Christmann et al., "Benchmarking Smoothness and Reducing High-Frequency Oscillations in Continuous Control Policies," IROS, 2024.</p></main>
+[17] G. Christmann et al., "Benchmarking Smoothness and Reducing High-Frequency Oscillations in Continuous Control Policies," IROS, 2024.
+[18] TransCurriculum: history-informed curriculum scheduling across task dimensions, arXiv:2603.14156.
+[19] R. Agarwal et al., "Deep Reinforcement Learning at the Edge of the Statistical Precipice," NeurIPS, 2021.</p></main>
 </body></html>
