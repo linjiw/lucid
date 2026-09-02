@@ -70,7 +70,31 @@ not evacuate, second of four in-envelope, and loses 42.0 points across the
 friction clamp against 17.9–26.6 for its siblings. It is brittle to loss of
 friction, not globally weaker.
 
-## Phase 2 — LAUNCHED 2026-09-01 23:27 EDT, in flight
+## Phase 2 — INTERRUPTED 2026-09-02 07:27 EDT after arm 1 of 5
+
+The driver received SIGTERM during the second arm; its log ends `Terminated`.
+The session that launched it did not send the signal. At the same minute a
+different run was started from an interactive terminal using the
+development-branch box-mode code as a `--checkpoint` continuation, and an
+unrelated project's job queued behind it. **Do not kill those processes; they
+are not this programme's.**
+
+| arm | state |
+|---|---|
+| `gate_150` | **complete and valid**, all four mechanism gates pass (G1 0 · G2 0.0000 · G3 7,990 · G4 5,891) |
+| `ramp_150` | **void** — interrupted at 1,787/8,000. Fail-closed: never resume. Directory preserved as evidence. |
+| `fixed_150`, `fixed_u150`, `fixed` | not started |
+
+No Phase-2 cell is scored; no rule changes. Amendment A9.
+
+**To resume** once `nvidia-smi` shows no compute process: rerun
+`tools/run_phase2_screen.sh --execute` through the env wrapper. It will refuse
+while the GPU is busy. It must either reuse `gate_150` after hash revalidation
+or the analysis must combine the preserved `gate_150` with a fresh four-arm
+experiment id; the interrupted `ramp_150` is excluded either way. The decisive
+D2 contrast cannot be read until `ramp_150` exists from scratch.
+
+## Phase 2 — original launch record (superseded above)
 
 **Experiment:** `curriculum_comparison_ne1024_20260901_232720`, driver
 `run_phase2_screen.sh` (survives session resumes; it is `nohup`'d). Artifacts

@@ -149,6 +149,44 @@
       "change": "At 2026-09-02 07:35 EDT the user closed the Phase 2 queue to free GPU memory and time for the prototype loop: the Phase 2 driver was terminated and the SIGSTOPped ramp_150 trainer killed at the iteration recorded in $LUCID_ROOT/manifests/lucid_phase2_gate150_index_20260902.json. fixed_150, fixed_u150 and fixed were never launched. gate_150 is complete and untouched (final checkpoint 05:56; expansions at global steps 3362/4103/4790/5891; frontier 1.5; 0 applied decreases; return guard froze 914 iterations).",
       "consequence": "Decision rules D1-D4 cannot be evaluated: the decisive gate-vs-ramp contrast has no matched control and the width arms are absent. gate_150 stands as a MECHANISM result (a probe-gated frontier expands from scratch on its own evidence and never contracts) and may be scored on the held-out band against the historical fixed@s8600 arm, labelled as an unmatched single-seed comparison. Superseded, not deleted: the screen can be re-run with PHASE2_MODES='ramp_150 fixed_150 fixed_u150 fixed' from the same pinned worktree if the prototype loop makes it worth 21 GPU-hours.",
       "created_at": "2026-09-02T07:35:46.532446-04:00"
+    },
+    {
+      "id": "A11",
+      "severity": "chain_interrupted_externally",
+      "created_at": "2026-09-02T07:40:00-04:00",
+      "event": "The Phase-2 driver (experiment curriculum_comparison_ne1024_20260901_232720) received SIGTERM at ~07:27 EDT 2026-09-02, during the second arm. The log ends with 'Terminated'. The signal was not sent by the session that launched the chain. At the same minute a different training run was started from an interactive terminal (pts/4) using the development-branch code with --checkpoint continuation and box-mode arguments, and an unrelated project's job was queued behind it by a launch-when-host-free script.",
+      "state_per_arm": {
+        "gate_150": {
+          "status": "COMPLETE and VALID",
+          "iterations": 8000,
+          "final_checkpoint_sha256": "abd6d597ed473176623154663f9fcb6298496ebf22971a0def598e86aa3f6068",
+          "mechanism_gates": {
+            "G1_applied_decreases": 0,
+            "G2_max_frontier_drop": 0.0,
+            "G3_probe_rows": 7990,
+            "G4_ceiling_iteration": 5891
+          },
+          "note": "All four gates pass. This arm's artifacts are untouched and may be reused after the driver's hash revalidation."
+        },
+        "ramp_150": {
+          "status": "VOID, interrupted at 1787/8000",
+          "last_write": "07:27:52",
+          "rule": "Evaluation is fail-closed: an interrupted cell is evidence of interruption and must NEVER be resumed. Retrain from scratch under a new experiment id."
+        },
+        "fixed_150": {
+          "status": "not started"
+        },
+        "fixed_u150": {
+          "status": "not started"
+        },
+        "fixed": {
+          "status": "not started"
+        }
+      },
+      "consequence": "No Phase-2 cell has been scored, so no decision rule, threshold, endpoint or prediction is affected. The D2 contrast (gate vs ramp) cannot be read until ramp_150 is retrained from scratch. The 5.4 GPU-h gate_150 arm is preserved; the ~1.2 GPU-h spent on the interrupted ramp cell is lost.",
+      "resume_path": "Relaunch run_phase2_screen.sh for the four remaining arms once the GPU is idle (its gate 4 refuses while any compute process holds the GPU). The driver must either reuse gate_150 after revalidating its checkpoint hash, config source, seed mapping and complete run set, or the analysis must combine the preserved gate_150 with a fresh four-arm experiment id. Either way the interrupted ramp_150 directory is preserved as evidence and excluded.",
+      "guard_defect_carried": "gate_150 also surfaced a design defect that changed nothing here: the relative return guard tripped 914 times after the final expansion because its reference return was set at easier support. Freeze at the ceiling is a no-op, so G1/G2 pass; before the ceiling it would have stalled expansion for 500 iterations. Fix before Phase 3 (reset reference on expansion, or gate on probe survival). Not patched in the live worktree.",
+      "data_driven": false
     }
   ],
   "unchanged": "Every arm definition, stratum layout, endpoint, weight, threshold, decision rule, mechanism gate, frozen prediction and limitation in the parent preregistration is unchanged by this amendment.",
@@ -161,7 +199,8 @@
     "paired H_R2 deltas on the Phase-2 primary band recomputed from the frozen analysis receipt",
     "survival_gate.py drift at dd0fd61 proven docstring-only by AST comparison after docstring removal",
     "fail-fast guard covered by four tests; suite 1644 passed",
-    "regression test fails on 08a01bf and passes on 8fa9732; suite 1647 passed"
+    "regression test fails on 08a01bf and passes on 8fa9732; suite 1647 passed",
+    "A11: gate_150 final_checkpoint.pt sha256 abd6d597ed473176623154663f9fcb6298496ebf22971a0def598e86aa3f6068"
   ],
   "not_yet_verified": [
     "every Phase-2 outcome; no policy has been trained"
