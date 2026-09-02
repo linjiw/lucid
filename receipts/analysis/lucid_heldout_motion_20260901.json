@@ -1,0 +1,79 @@
+{
+  "kind": "lucid_heldout_motion_readout",
+  "schema_version": 1,
+  "created_at": "2026-09-01T21:20:00-04:00",
+  "question": "Does the ordering of arms by robustness survive a change of motion?",
+  "trained_clip": "walk_hands_on_back_loop_002__A066_M",
+  "clips": {
+    "walk_hands_on_back_loop_003__A093": {
+      "episodes_per_cell": 128,
+      "cells": {
+        "phys_100": {
+          "success_by_arm": {
+            "fixed": 0.976562,
+            "lucid_rg": 0.953125,
+            "lucid_s4_rg": 0.828125,
+            "off": 0.585938
+          },
+          "arms_ranked_best_first": [
+            "fixed",
+            "lucid_rg",
+            "lucid_s4_rg",
+            "off"
+          ],
+          "spearman_vs_trained_clip": 0.8,
+          "arms_in_both": [
+            "fixed",
+            "lucid_rg",
+            "lucid_s4_rg",
+            "off"
+          ]
+        },
+        "phys_150": {
+          "success_by_arm": {
+            "fixed": 0.804688,
+            "lucid_rg": 0.726562,
+            "lucid_s4_rg": 0.398438,
+            "off": 0.179688
+          },
+          "arms_ranked_best_first": [
+            "fixed",
+            "lucid_rg",
+            "lucid_s4_rg",
+            "off"
+          ],
+          "spearman_vs_trained_clip": 1.0,
+          "arms_in_both": [
+            "fixed",
+            "lucid_rg",
+            "lucid_s4_rg",
+            "off"
+          ]
+        },
+        "phys_200": {
+          "success_by_arm": {},
+          "arms_ranked_best_first": [],
+          "spearman_vs_trained_clip": null,
+          "arms_in_both": []
+        }
+      }
+    }
+  },
+  "ordering_stability": {
+    "spearman_values": [
+      0.8,
+      1.0
+    ],
+    "n": 2,
+    "mean": 0.9,
+    "min": 0.8,
+    "interpretation": "Rank correlation of the arm ordering on an untrained clip against the ordering on the trained clip, at the same cell. High values mean the differences between arms are not purely an artifact of how well each memorized one clip."
+  },
+  "claim_boundaries": [
+    "NOT motion generalization in the general sense. All three clips are walking motions from the same adaptation partition as the training clip.",
+    "No arm trained on these clips and no baseline was trained on them, so absolute success here cannot separate 'the policy generalizes' from 'these clips are easy' or 'these clips resemble the training clip'.",
+    "k128 panels; the main ladder is k512. Per-cell standard error is about twice as large and the two are never pooled.",
+    "Authorizes no superiority claim for any training procedure. H_R2 remains a stability and noninferiority result for the monotone ratchet.",
+    "An ordering that survives is evidence about ORDERINGS, not about absolute robustness on unseen motions."
+  ]
+}

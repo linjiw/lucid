@@ -1,0 +1,70 @@
+{
+  "0": {
+    "off_s8600": {
+      "mujoco_survived": 8,
+      "mujoco_seeds": 8,
+      "isaac_ledger_success": 1.0
+    },
+    "fixed_s8600": {
+      "mujoco_survived": 8,
+      "mujoco_seeds": 8,
+      "isaac_ledger_success": 1.0
+    },
+    "ratchet_s8601": {
+      "mujoco_survived": 8,
+      "mujoco_seeds": 8,
+      "isaac_ledger_success": 1.0
+    }
+  },
+  "1.0": {
+    "off_s8600": {
+      "mujoco_survived": 2,
+      "mujoco_seeds": 8,
+      "isaac_ledger_success": 0.910156
+    },
+    "fixed_s8600": {
+      "mujoco_survived": 6,
+      "mujoco_seeds": 8,
+      "isaac_ledger_success": 0.994141
+    },
+    "ratchet_s8601": {
+      "mujoco_survived": 4,
+      "mujoco_seeds": 8,
+      "isaac_ledger_success": 0.996094
+    }
+  },
+  "1.5": {
+    "off_s8600": {
+      "mujoco_survived": 0,
+      "mujoco_seeds": 8,
+      "isaac_ledger_success": 0.511719
+    },
+    "fixed_s8600": {
+      "mujoco_survived": 3,
+      "mujoco_seeds": 8,
+      "isaac_ledger_success": 0.923828
+    },
+    "ratchet_s8601": {
+      "mujoco_survived": 2,
+      "mujoco_seeds": 8,
+      "isaac_ledger_success": 0.941406
+    }
+  },
+  "2.0": {
+    "off_s8600": {
+      "mujoco_survived": 0,
+      "mujoco_seeds": 8,
+      "isaac_ledger_success": 0.333984
+    },
+    "fixed_s8600": {
+      "mujoco_survived": 2,
+      "mujoco_seeds": 8,
+      "isaac_ledger_success": 0.820312
+    },
+    "ratchet_s8601": {
+      "mujoco_survived": 1,
+      "mujoco_seeds": 8,
+      "isaac_ledger_success": 0.832031
+    }
+  }
+}
