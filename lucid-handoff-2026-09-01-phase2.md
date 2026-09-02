@@ -96,6 +96,23 @@ frontier envs at iteration 24). At iteration 406 the gate had a full window of
 **Always check the observer's file, not the curriculum's flag.** The
 curriculum's `survival_observer_present: true` was true throughout the void run.
 
+### gate_150 is complete — all four mechanism gates pass
+
+G1 applied decreases 0 · G2 max frontier drop 0.0000 · G3 probe rows 7,990/8,000
+· G4 ceiling reached at iteration 5,891. Four expansions at 3,362 / 4,103 /
+4,790 / 5,891, each firing at window mean ≈0.800. 2,110 iterations at 1.5.
+
+**Phase 3 design correction (do not patch the live worktree):** the relative
+return guard tripped 914 times from iteration 5,950 to 8,000, all `freeze`.
+The reference return (9.39) was set at easier support; after the frontier
+reached 1.5, return settled at 6.85–7.33, below 0.75 × 9.39, so the guard was
+comparing a harder present against an easier past. It changed nothing here
+because the gate was already at its ceiling. It would have frozen expansion for
+500 iterations in any run where the 25% return drop arrived earlier. Before
+Phase 3, reset the guard's best-return reference on every expansion, or replace
+the return guard with a probe-survival floor, which is support-relative by
+construction.
+
 ### Reading progress
 
 ```bash
