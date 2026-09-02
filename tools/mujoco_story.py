@@ -50,14 +50,15 @@ def ff(cmd: list[str]) -> None:
         raise RuntimeError("ffmpeg: " + (bad[0] if bad else p.stderr[-400:]) + "\n  cmd: " + " ".join(cmd[:8]))
 
 
-def render(arm: str, lam: str, seed: int, out: Path) -> dict:
+def render(arm: str, lam: str, seed: int, out: Path, channels: str | None = None) -> dict:
     d = out / "tiles" / arm / f"lam{lam}"
     d.mkdir(parents=True, exist_ok=True)
     mp4, js = d / f"seed{seed}.mp4", d / f"seed{seed}.json"
     if not (mp4.is_file() and js.is_file()):
         env = dict(os.environ, MUJOCO_GL="egl", PYOPENGL_PLATFORM="egl")
         subprocess.run([PY, str(PLAYER), "--onnx", str(ARMS[arm]), "--clip", CLIP, "--out", str(mp4), "--lam", lam,
-                        "--seed", str(seed), "--width", str(TILE_W), "--height", str(TILE_H)],
+                        "--seed", str(seed), "--width", str(TILE_W), "--height", str(TILE_H)]
+                       + (["--channels", channels] if channels else []),
                        env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
     return json.loads(js.read_text())["result"]
 
@@ -65,22 +66,27 @@ def render(arm: str, lam: str, seed: int, out: Path) -> dict:
 def tile(arm: str, lam: str, seed: int, res: dict, out: Path, total: float) -> Path:
     src = out / "tiles" / arm / f"lam{lam}" / f"seed{seed}.mp4"
     dst = out / "tiles" / arm / f"lam{lam}" / f"seed{seed}_marked.mp4"
+    dst.unlink(missing_ok=True)
     fell = bool(res["fell"])
     text = f"seed {seed}  ·  FELL at {res['t_end']:.1f} s" if fell else f"seed {seed}  ·  PASS"
     color = "0xE0483A" if fell else "0x3FB950"
-    # Freeze the last frame on a fall (tpad clones it), then pad every tile to
-    # the same length with black so the grid stays aligned.
+    # A failed run stops at its fall and HOLDS that frame for the rest of the
+    # grid (tpad clones the last frame to the common length), so an early fall
+    # stays on screen with its label instead of going black. Passing runs end
+    # at the clip's end and hold their last frame likewise.
+    length = total + HOLD
     vf = (f"scale={TILE_W}:{TILE_H},"
-          f"tpad=stop_mode=clone:stop_duration={HOLD if fell else 0},"
+          f"tpad=stop_mode=clone:stop_duration={length},trim=duration={length},"
           f"drawbox=x=0:y=0:w=iw:h=34:color=black@0.55:t=fill,"
           f"drawtext=fontfile={FONT}:text='{esc(text)}':x=10:y=8:fontsize=20:fontcolor={color}:expansion=none,"
           + (f"drawbox=x=0:y=0:w=iw:h=ih:color={color}@0.9:t=6," if fell else "")
-          + f"tpad=stop_mode=add:stop_duration={total + HOLD + 0.5},trim=duration={total + HOLD + 0.5},fps={FPS}")
+          + f"fps={FPS}")
     ff(["-i", str(src), "-vf", vf, "-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "22", str(dst)])
     return dst
 
 
-def grid(arm: str, lam: str, tiles: list[Path], results: list[dict], out: Path, cols: int, isaac: float | None) -> Path:
+def grid(arm: str, lam: str, tiles: list[Path], results: list[dict], out: Path, cols: int, isaac: float | None,
+         channels: str | None = None) -> Path:
     n = len(tiles)
     rows = (n + cols - 1) // cols
     passed = sum(1 for r in results if not r["fell"])
@@ -94,7 +100,8 @@ def grid(arm: str, lam: str, tiles: list[Path], results: list[dict], out: Path, 
         layout.append(f"{'+'.join(['w0'] * c) or '0'}_{'+'.join(['h0'] * r) or '0'}")
     header = 74
     hdr1 = LABEL[arm]
-    hdr2 = f"{LAM_LABEL.get(lam, 'λ ' + lam)}   ·   MuJoCo pass rate {passed}/{n}"
+    chan = "" if not channels else f"  [{channels.replace(',', ' + ')} only, no pushes]"
+    hdr2 = f"{LAM_LABEL.get(lam, 'λ ' + lam)}{chan}   ·   MuJoCo pass rate {passed}/{n}"
     if isaac is not None:
         hdr2 += f"   ·   Isaac 512-episode score {100 * isaac:.1f}%"
     fc = f"{''.join(f'[{i}:v]' for i in range(n))}xstack=inputs={n}:layout={'|'.join(layout)}:fill=black[g];" \
@@ -113,6 +120,7 @@ def main(argv=None) -> int:
     ap.add_argument("--cols", type=int, default=4)
     ap.add_argument("--arms", nargs="+", default=["off_s8600", "lucid_collapsed_s8601", "fixed_s8600", "ratchet_s8601"])
     ap.add_argument("--jobs", type=int, default=4)
+    ap.add_argument("--channels", type=str, default=None, help="comma list of enabled DR channels; shown in headers")
     a = ap.parse_args(argv)
     a.out.mkdir(parents=True, exist_ok=True)
     sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -127,13 +135,13 @@ def main(argv=None) -> int:
         per_arm = []
         for arm in a.arms:
             with ThreadPoolExecutor(max_workers=a.jobs) as ex:
-                results = list(ex.map(lambda s: render(arm, lam, s, a.out), seeds))
+                results = list(ex.map(lambda s: render(arm, lam, s, a.out, a.channels), seeds))
             tiles = [tile(arm, lam, s, r, a.out, total) for s, r in zip(seeds, results)]
             arm_seed, mode = {"off_s8600": (8600, "off"), "fixed_s8600": (8600, "fixed"),
-                              "ratchet_s8601": (8601, "lucid_ratchet_rg"),
+                              "ratchet_s8601": (8601, "lucid_ratchet_rg"), "fixed_s8601": (8601, "fixed"),
                               "lucid_collapsed_s8601": (8601, "lucid_rg")}[arm]
             isaac = ledger_success(arm_seed, mode, ISAAC_PRESET.get(lam, ""))
-            g = grid(arm, lam, tiles, results, a.out, a.cols, isaac)
+            g = grid(arm, lam, tiles, results, a.out, a.cols, isaac, a.channels)
             per_arm.append(g)
             manifest[lam][arm] = {"pass": sum(1 for r in results if not r["fell"]), "n": len(results),
                                   "fall_times": [r["t_end"] for r in results if r["fell"]], "isaac": isaac}
