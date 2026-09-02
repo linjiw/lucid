@@ -1,0 +1,408 @@
+{
+  "kind": "lucid_phase0_analysis",
+  "schema_version": 1,
+  "created_at": "2026-09-01T20:45:00-04:00",
+  "scope": "Descriptive readout of four previously unscored controller arms. Authorizes NO superiority claim for any training procedure and provides NO motion-generalization evidence: every cell is a fresh physics draw of the single clip every arm trained on.",
+  "instrument": {
+    "evaluator_pin": "308e24150e4d4f03d0abf0dc6a427063ac662904bb3a7765488a9bff63cd94ca",
+    "worktree_commit": "ca057e658acc59773e798057980b827d65988441",
+    "episodes_per_cell": 512,
+    "note": "the build that produced every historically scored arm"
+  },
+  "arms": {
+    "lucid_rg@s8601": {
+      "seed": 8601,
+      "mode": "lucid_rg",
+      "dose_scalar": 1.0,
+      "missing_cells": null,
+      "contested_cells": null,
+      "receipt": [
+        "curriculum_robustness_ne512_20260901_161202.json"
+      ],
+      "checkpoint_sha256": [
+        "e8ece9de91b5d73ea7ef920cc27047068ee1a25ea804d8c7001cf603fb31d70e"
+      ],
+      "success_rate": {
+        "phys_000": 1.0,
+        "phys_025": 1.0,
+        "phys_050": 1.0,
+        "phys_075": 0.998047,
+        "phys_100": 0.988281,
+        "phys_125": 0.945312,
+        "phys_150": 0.792969,
+        "phys_175": 0.662109,
+        "phys_200": 0.583984
+      },
+      "progress_rate": {
+        "phys_000": 1.0,
+        "phys_025": 1.0,
+        "phys_050": 1.0,
+        "phys_075": 0.999746,
+        "phys_100": 0.997695,
+        "phys_125": 0.984932,
+        "phys_150": 0.932529,
+        "phys_175": 0.889199,
+        "phys_200": 0.852734
+      },
+      "frontier_success_auc": 0.739909,
+      "held_out_band_success": 0.623047,
+      "exposure_E_H2000": 0.556184,
+      "exposure_law_prediction": 0.724726,
+      "residual_raw_pts": 1.52,
+      "residual_after_seed_offset_pts": 1.52,
+      "largest_single_cell_drop": [
+        "phys_150",
+        15.23
+      ],
+      "consecutive_cell_drops_pts": {
+        "phys_025": 0.0,
+        "phys_050": 0.0,
+        "phys_075": 0.2,
+        "phys_100": 0.98,
+        "phys_125": 4.3,
+        "phys_150": 15.23,
+        "phys_175": 13.09,
+        "phys_200": 7.81
+      },
+      "quality_at_frontier": {
+        "phys_125": {
+          "foot_slip_per_step_m": 0.0021355610266223604,
+          "undesired_contact_rate": 0.99462890625,
+          "torque_saturation": 0.028141163793103455
+        },
+        "phys_150": {
+          "foot_slip_per_step_m": 0.0030840947704531474,
+          "undesired_contact_rate": 0.99337890625,
+          "torque_saturation": 0.02739762931034483
+        }
+      }
+    },
+    "lucid_s4_rg@s8601": {
+      "seed": 8601,
+      "mode": "lucid_s4_rg",
+      "dose_scalar": 0.625,
+      "missing_cells": null,
+      "contested_cells": null,
+      "receipt": [
+        "curriculum_robustness_ne512_20260901_161720.json"
+      ],
+      "checkpoint_sha256": [
+        "631e49375b1b0b8b15a491117a825a5c878ea91813f93424514d4e764b9b77ce"
+      ],
+      "success_rate": {
+        "phys_000": 1.0,
+        "phys_025": 1.0,
+        "phys_050": 0.998047,
+        "phys_075": 0.980469,
+        "phys_100": 0.962891,
+        "phys_125": 0.917969,
+        "phys_150": 0.796875,
+        "phys_175": 0.742188,
+        "phys_200": 0.677734
+      },
+      "progress_rate": {
+        "phys_000": 1.0,
+        "phys_025": 1.0,
+        "phys_050": 0.999619,
+        "phys_075": 0.995996,
+        "phys_100": 0.991602,
+        "phys_125": 0.982227,
+        "phys_150": 0.927285,
+        "phys_175": 0.911943,
+        "phys_200": 0.898838
+      },
+      "frontier_success_auc": 0.778971,
+      "held_out_band_success": 0.709961,
+      "exposure_E_H2000": 0.624379,
+      "exposure_law_prediction": 0.751693,
+      "residual_raw_pts": 2.73,
+      "residual_after_seed_offset_pts": 2.73,
+      "largest_single_cell_drop": [
+        "phys_150",
+        12.11
+      ],
+      "consecutive_cell_drops_pts": {
+        "phys_025": 0.0,
+        "phys_050": 0.2,
+        "phys_075": 1.76,
+        "phys_100": 1.76,
+        "phys_125": 4.49,
+        "phys_150": 12.11,
+        "phys_175": 5.47,
+        "phys_200": 6.45
+      },
+      "quality_at_frontier": {
+        "phys_125": {
+          "foot_slip_per_step_m": 0.0020218850809015244,
+          "undesired_contact_rate": 0.6171484375,
+          "torque_saturation": 0.0039682112068965495
+        },
+        "phys_150": {
+          "foot_slip_per_step_m": 0.0026859517118766156,
+          "undesired_contact_rate": 0.62169921875,
+          "torque_saturation": 0.004045325969827583
+        }
+      }
+    },
+    "lucid_rg@s8602": {
+      "seed": 8602,
+      "mode": "lucid_rg",
+      "dose_scalar": 1.0,
+      "missing_cells": null,
+      "contested_cells": null,
+      "receipt": [
+        "curriculum_robustness_ne512_20260901_162235.json"
+      ],
+      "checkpoint_sha256": [
+        "aced3185ca7804d39e67d6223dd47f033808ea449500c1690b8f5d8f41613bf3"
+      ],
+      "success_rate": {
+        "phys_000": 1.0,
+        "phys_025": 1.0,
+        "phys_050": 1.0,
+        "phys_075": 0.998047,
+        "phys_100": 0.998047,
+        "phys_125": 0.982422,
+        "phys_150": 0.787109,
+        "phys_175": 0.759766,
+        "phys_200": 0.734375
+      },
+      "progress_rate": {
+        "phys_000": 1.0,
+        "phys_025": 1.0,
+        "phys_050": 1.0,
+        "phys_075": 0.999346,
+        "phys_100": 0.999346,
+        "phys_125": 0.994551,
+        "phys_150": 0.886914,
+        "phys_175": 0.88499,
+        "phys_200": 0.879502
+      },
+      "frontier_success_auc": 0.801758,
+      "held_out_band_success": 0.74707,
+      "exposure_E_H2000": 0.999578,
+      "exposure_law_prediction": 0.90006,
+      "residual_raw_pts": -9.83,
+      "residual_after_seed_offset_pts": -2.07,
+      "largest_single_cell_drop": [
+        "phys_150",
+        19.53
+      ],
+      "consecutive_cell_drops_pts": {
+        "phys_025": 0.0,
+        "phys_050": 0.0,
+        "phys_075": 0.2,
+        "phys_100": 0.0,
+        "phys_125": 1.56,
+        "phys_150": 19.53,
+        "phys_175": 2.73,
+        "phys_200": 2.54
+      },
+      "quality_at_frontier": {
+        "phys_125": {
+          "foot_slip_per_step_m": 0.0020493001445192867,
+          "undesired_contact_rate": 0.78494140625,
+          "torque_saturation": 0.008368803879310353
+        },
+        "phys_150": {
+          "foot_slip_per_step_m": 0.004285083843687641,
+          "undesired_contact_rate": 0.8057421875,
+          "torque_saturation": 0.005341796874999998
+        }
+      }
+    },
+    "lucid_s4_rg@s8602": {
+      "seed": 8602,
+      "mode": "lucid_s4_rg",
+      "dose_scalar": 0.625,
+      "missing_cells": null,
+      "contested_cells": null,
+      "receipt": [
+        "curriculum_robustness_ne512_20260901_162749.json"
+      ],
+      "checkpoint_sha256": [
+        "68ffd3e75a0ce107ba9fd1ce5f5c8fafec5f66c0926266e7a829619caabbaca9"
+      ],
+      "success_rate": {
+        "phys_000": 1.0,
+        "phys_025": 1.0,
+        "phys_050": 1.0,
+        "phys_075": 0.998047,
+        "phys_100": 0.978516,
+        "phys_125": 0.957031,
+        "phys_150": 0.570312,
+        "phys_175": 0.533203,
+        "phys_200": 0.507812
+      },
+      "progress_rate": {
+        "phys_000": 1.0,
+        "phys_025": 1.0,
+        "phys_050": 1.0,
+        "phys_075": 0.999395,
+        "phys_100": 0.994854,
+        "phys_125": 0.98834,
+        "phys_150": 0.789551,
+        "phys_175": 0.770566,
+        "phys_200": 0.768359
+      },
+      "frontier_success_auc": 0.611979,
+      "held_out_band_success": 0.520508,
+      "exposure_E_H2000": 0.624706,
+      "exposure_law_prediction": 0.751822,
+      "residual_raw_pts": -13.98,
+      "residual_after_seed_offset_pts": -6.22,
+      "largest_single_cell_drop": [
+        "phys_150",
+        38.67
+      ],
+      "consecutive_cell_drops_pts": {
+        "phys_025": 0.0,
+        "phys_050": 0.0,
+        "phys_075": 0.2,
+        "phys_100": 1.95,
+        "phys_125": 2.15,
+        "phys_150": 38.67,
+        "phys_175": 3.71,
+        "phys_200": 2.54
+      },
+      "quality_at_frontier": {
+        "phys_125": {
+          "foot_slip_per_step_m": 0.0016695481552933239,
+          "undesired_contact_rate": 0.988408203125,
+          "torque_saturation": 0.05245251885775864
+        },
+        "phys_150": {
+          "foot_slip_per_step_m": 0.003888475079967475,
+          "undesired_contact_rate": 0.98703125,
+          "torque_saturation": 0.04957536368534482
+        }
+      }
+    }
+  },
+  "incomplete_arms": null,
+  "excluded_receipts": [
+    {
+      "receipt": "curriculum_robustness_ne512_20260901_161052.json",
+      "rows": 9,
+      "usable_cells": 0,
+      "arms": [
+        "lucid_rg@s8601"
+      ],
+      "exit_codes": [
+        1
+      ],
+      "disposition": "excluded; retained as evidence of an interrupted attempt"
+    }
+  ],
+  "instrument_audit": {
+    "per_cell_dr_ranges_identical_across_arms": true,
+    "mismatched_cells": null,
+    "cells_audited": [
+      "phys_000",
+      "phys_025",
+      "phys_050",
+      "phys_075",
+      "phys_100",
+      "phys_125",
+      "phys_150",
+      "phys_175",
+      "phys_200"
+    ],
+    "panel_identity": [
+      {
+        "motion_keys_sha256": "4b0fae026d8763e5cb1a39957ab8131e5372e1d47d4ec7e526791b76fe7f1430",
+        "motion_count": 512
+      }
+    ],
+    "single_panel": true,
+    "checkpoints_unmutated": true,
+    "evaluation_seed_follows_checkpoint_seed": true
+  },
+  "P3": {
+    "observed": 0.739909,
+    "bands_read_from": "/home/linjiw/lucid/receipts/manifests/lucid_frontier_exposure_law_preregistration_20260901.json",
+    "recency_band": [
+      0.67376,
+      0.77569
+    ],
+    "inside_recency": true,
+    "uniform_band": [
+      0.76087,
+      0.89047
+    ],
+    "inside_uniform": false,
+    "exposure_hypothesis_rejected_upward": false,
+    "exposure_hypothesis_rejected_downward": false,
+    "recency_rejected": false,
+    "indeterminate_overlap": false
+  },
+  "seed_offset": {
+    "value": -0.077637,
+    "estimated_from": [
+      "fixed",
+      "lucid_ratchet_rg"
+    ],
+    "n_arms": 2,
+    "definition": "mean (seed 8602 - seed 8600) frontier success AUC on arms that pin lambda",
+    "status": "POST-HOC. Estimated from two arms and applied to two others. It is a one-parameter adjustment, not an independent validation, and the raw residuals are reported alongside."
+  },
+  "ladder_shape_finding": {
+    "statement": "Every one of the four arms has its largest single-cell success drop at phys_150.",
+    "largest_drop_per_arm": {
+      "lucid_rg@s8601": [
+        "phys_150",
+        15.23
+      ],
+      "lucid_s4_rg@s8601": [
+        "phys_150",
+        12.11
+      ],
+      "lucid_rg@s8602": [
+        "phys_150",
+        19.53
+      ],
+      "lucid_s4_rg@s8602": [
+        "phys_150",
+        38.67
+      ]
+    },
+    "mechanism": "phys_150 is the first cell where the static-friction floor reaches its physical clamp: the low bound falls 0.1375 -> 0.05 between phys_125 and phys_150, a 2.75x reduction in worst-case grip, and the dynamic-friction floor falls to 0.075. Near-frictionless ground becomes reachable there for the first time.",
+    "supporting_morphology": {
+      "lucid_rg@s8601": {
+        "foot_slip_ratio_150_over_125": 1.444,
+        "success_drop_pts": 15.23
+      },
+      "lucid_s4_rg@s8601": {
+        "foot_slip_ratio_150_over_125": 1.328,
+        "success_drop_pts": 12.11
+      },
+      "lucid_rg@s8602": {
+        "foot_slip_ratio_150_over_125": 2.091,
+        "success_drop_pts": 19.53
+      },
+      "lucid_s4_rg@s8602": {
+        "foot_slip_ratio_150_over_125": 2.329,
+        "success_drop_pts": 38.67
+      }
+    },
+    "morphology_caveat": "Four arms. Foot-slip growth across the clamp orders the success drop, which is consistent with a slip mechanism, but n=4 and this is correlational. It is not a causal claim and no arm was run with friction held fixed as a control.",
+    "consequence": "The physics ladder is not uniformly spaced in realized difficulty. Any AUC over cells that straddle phys_150 mixes two regimes, and the frozen trapezoid weights (1/6, 1/3, 1/3, 1/6) put a third of the endpoint's weight on the first post-clamp cell."
+  },
+  "claim_boundaries": [
+    "No superiority claim for any training procedure is authorized by this receipt.",
+    "H_R2 remains a stability/noninferiority result for the monotone ratchet, never a superiority result.",
+    "Every number here is memorized-motion-under-new-physics on one clip.",
+    "The seed offset is post-hoc; raw residuals are reported alongside adjusted ones.",
+    "Joint-error metrics are contaminated at high lambda -- failed episodes stop accumulating error -- and are not used for any ranking here."
+  ],
+  "verified": [
+    "36 of 36 cells complete with exit code 0",
+    "per-cell dr_ranges hash identically across all four arms",
+    "one panel, 512 aliases, shared by every cell",
+    "checkpoint SHA-256 unchanged between the start and end of every ladder"
+  ],
+  "not_yet_verified": [
+    "any causal attribution of the phys_150 cliff to friction specifically",
+    "any behaviour of these policies on a motion they did not train on"
+  ]
+}
