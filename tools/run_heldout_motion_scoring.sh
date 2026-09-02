@@ -52,7 +52,18 @@ readonly PANELS=(
     "${LUCID_ROOT}/manifests/replicate_panel_panel_m1_fwd003_k128.json"
 )
 readonly PRESETS="phys_100 phys_150 phys_200"
-readonly MODES=(off fixed lucid_rg lucid_s4_rg lucid_ratchet_rg)
+
+# Config groups. ensure_checkpoint_configs installs ONE config beside every
+# checkpoint in an invocation and refuses if a checkpoint already carries a
+# different one, so arms are grouped by the config they already hold. The four
+# campaign arms share the config that produced their historically scored
+# numbers; the ratchet arm, trained later in the confirmation worktree, has its
+# own. Grouping this way keeps every cell byte-comparable with the existing
+# ledger instead of installing a foreign config beside a frozen checkpoint.
+readonly CAMPAIGN_CONFIG="/home/linjiw/lucid/GR00T-WholeBodyControl/logs_rl/lucid-campaign/manager/universal_token/all_modes/sonic_release_test-20260829_000251/config.yaml"
+readonly RATCHET_CONFIG="/home/linjiw/lucid-ratchet-confirm/logs_rl/lucid-campaign/manager/universal_token/all_modes/sonic_release_test-20260831_231903/config.yaml"
+readonly CAMPAIGN_MODES=(off fixed lucid_rg lucid_s4_rg)
+readonly RATCHET_MODES=(lucid_ratchet_rg)
 
 EXECUTE=0
 [[ "${1:-}" == "--execute" ]] && EXECUTE=1
@@ -84,16 +95,19 @@ observed="$(sha256sum "${evaluator}" | cut -d' ' -f1)"
     echo "evaluator SHA ${observed} != pinned" >&2; exit 1; }
 log "instrument verified at ${PIN_COMMIT:0:7}"
 
-for panel in "${PANELS[@]}"; do
-    clip="$(basename "${panel}" .json | sed 's/^replicate_panel_panel_//')"
-    experiment="heldout_motion_${clip}_${STAMP}"
-    log "clip ${clip}: ${#MODES[@]} arms x 3 cells"
-    args=(
+score_group() {
+    local panel="$1" experiment="$2" config="$3"
+    shift 3
+    local modes=("$@")
+    [[ -f "${config}" ]] || { echo "config missing: ${config}" >&2; exit 1; }
+    log "  ${#modes[@]} arms with config $(sha256sum "${config}" | cut -c1-12)"
+    local args=(
         "${PY}" "${evaluator}"
         --training-receipt "${RECEIPT}"
+        --training-config "${config}"
         --num-envs 128
         --seeds 8600
-        --modes "${MODES[@]}"
+        --modes "${modes[@]}"
         --presets ${PRESETS}
         --eval-seed-base 8700
         --max-delay 12
@@ -104,8 +118,16 @@ for panel in "${PANELS[@]}"; do
         --receipt-dir "${LUCID_ROOT}/manifests"
     )
     [[ "${EXECUTE}" -eq 1 ]] && args+=(--execute)
-    mkdir -p "${LUCID_ROOT}/outputs/${experiment}"
     ( cd "${WORKTREE}" && "${args[@]}" )
+}
+
+for panel in "${PANELS[@]}"; do
+    clip="$(basename "${panel}" .json | sed 's/^replicate_panel_panel_//')"
+    experiment="heldout_motion_${clip}_${STAMP}"
+    mkdir -p "${LUCID_ROOT}/outputs/${experiment}"
+    log "clip ${clip}"
+    score_group "${panel}" "${experiment}" "${CAMPAIGN_CONFIG}" "${CAMPAIGN_MODES[@]}"
+    score_group "${panel}" "${experiment}" "${RATCHET_CONFIG}" "${RATCHET_MODES[@]}"
 done
 
 log "held-out motion scoring complete"
