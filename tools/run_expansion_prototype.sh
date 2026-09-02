@@ -30,6 +30,11 @@
 #   ramp_asym   open-loop scalar ramp 1.0 -> 2.0 with the binding channels capped (M5)
 #   fixed_asym  the asymmetric box from iteration 0 (width control)
 #
+# Batch 4 (beyond the safe width): gate_300 / fixed_300 / box_fast_300 with a
+# 3.0 ceiling and latency held at 1.5; the box arm runs with a faster probe
+# cadence (GATE_WINDOW=50 GATE_DWELL=25 GATE_MIN_EPISODES=100 in the
+# environment) so it can reach its ceilings within the budget.
+#
 # For these three the scalar phys_175/phys_200 cells are IN SUPPORT on three
 # channels and are labelled, not gated on; their held-out endpoint is the
 # per-channel 3x panel plus push at 2.0/3.0.
@@ -130,9 +135,9 @@ args=(
     --encoder "${ENCODER}"
     --wandb-project lucid-campaign
     --gate-threshold 0.80
-    --gate-window 100
-    --gate-dwell 50
-    --gate-min-episodes 200
+    --gate-window "${GATE_WINDOW:-100}"
+    --gate-dwell "${GATE_DWELL:-50}"
+    --gate-min-episodes "${GATE_MIN_EPISODES:-200}"
     --gate-guard-action freeze
     --box-channel-budget 300
     --ramp-begin-iteration 0

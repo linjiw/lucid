@@ -21,7 +21,7 @@ readonly DEV_REPO="/home/linjiw/lucid/GR00T-WholeBodyControl"
 readonly LUCID_ROOT="/home/linjiw/lucid-sonic"
 readonly PANEL="${LUCID_ROOT}/manifests/replicate_panel_panel_hob002_k512.json"
 readonly PY="/home/linjiw/isaaclab-install/env_isaaclab/bin/python"
-readonly PRESETS="phys_100 phys_125 phys_150 phys_175 phys_200 ch_fric_150 ch_fric_200 ch_mass_200 ch_mass_300 ch_com_200 ch_com_300 ch_joint_200 ch_joint_300 ch_push_200 ch_push_300"
+readonly PRESETS="phys_100 phys_125 phys_150 phys_175 phys_200 phys_250 phys_300 ch_fric_150 ch_fric_200 ch_mass_200 ch_mass_300 ch_com_200 ch_com_300 ch_joint_200 ch_joint_300 ch_push_200 ch_push_300"
 
 RECEIPT="${1:-}"
 [[ -n "${RECEIPT}" && -f "${RECEIPT}" ]] || { echo "usage: $0 <training-receipt.json> [--execute]" >&2; exit 2; }

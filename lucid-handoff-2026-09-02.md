@@ -4,6 +4,43 @@ Companion to `lucid-research-plan-2026-09-01.md` (section 8 is today's
 addendum), `lucid-handoff-2026-09-01-phase2.md` (Phase 2 operations) and the
 paper draft `site/lucid-paper.html`.
 
+## 0b. Update 14:20 EDT — batch-1 readout; batches 2–4 queued
+
+Batch 1 (warm start from fixed@s8600, 2,000 iterations, receipt
+`receipts/analysis/lucid_expansion_prototype_batch1_20260902.json`):
+
+| arm | final λ | mean applied λ | {phys_175, phys_200} | {mass,CoM,joint}@3× | push 2×/3× | phys_100 |
+|---|---|---|---|---|---|---|
+| origin (fixed@s8600, no extra training) | 1.0 | — | 0.856 | 0.976 | 0.829 | 0.994 |
+| fixed_150 | 1.5 | 1.5 | **0.935** | 0.989 | 0.878 | 0.990 |
+| gate_150 | 1.5 (by iter 410) | 1.437 | **0.932** | 0.990 | 0.899 | 0.996 |
+| box_150 (= box_asym, bit-identical) | 1.375 all channels | 1.196 | 0.893 | 0.983 | 0.853 | 0.992 |
+
+- **R5: width is the lever.** 2,000 iterations at 1.5 buys +8 points on the
+  held-out band; the gate matches it (+0.003) and found the ceiling in 410
+  iterations on its own evidence.
+- **R1: the sequential box is shelved** (−0.039 vs gate). Cause is exposure,
+  not the vector idea: one probe visiting six channels at window 100 lifts each
+  channel once per 600 iterations, so it ended at 1.375 everywhere.
+- **The 3× channel panel is saturated** (0.983–0.990) for every 1.5-trained
+  arm, so "widen the cheap channels" cannot be shown to help on those cells.
+- R3 holds everywhere (zero decreases). ramp_asym failed at construction (cap
+  validation ignored the extrapolation flag; fixed, A6) and re-runs as batch 3.
+- Two plumbing defects fixed with tests today: caps > 1 under extrapolation;
+  the evaluator's arm list lacked every expansion arm (even Phase 2's gate_150).
+
+Queued (self-chaining, no hand needed): batch 2 = ramp_150 / fixed / fixed_asym
+(training, scored by the main queue); batch 3 = ramp_asym
+(`tools/run_queue_batch3_20260902.sh`); **batch 4 = beyond the safe width**
+(`tools/run_queue_batch4_20260902.sh`, prereg
+`lucid_expansion_prototype_batch4_preregistration_20260902.json`): gate_300,
+fixed_300 (blind width at the push breaking point), box_fast_300 (ceilings 3.0,
+latency 1.5, window 50 / dwell 25). Endpoint {phys_250, phys_300} labelled by
+each arm's realized frontier; R8 gate vs fixed, R9 box vs gate, R10 damage
+check at phys_100. Readout: `tools/analyze_expansion_prototype.py` (extend
+for phys_250/300 when batch 4 lands). Expected: batch 2 scored ~18:10, batch 3
+~19:50, batch 4 ~00:30 on 09-03.
+
 ## 0a. Update 07:40 EDT — queue running; Phase 2 CLOSED at the user's request
 
 - The user launched the queue at 07:27 (pause worked; box_150 training) and
