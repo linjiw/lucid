@@ -5,6 +5,82 @@ It supersedes the older live-process state in `lucid-handoff-2026-08-31.md`
 and the pre-result ending of `fable.md`; the current operational companion is
 `lucid-handoff-2026-09-01.md`.
 
+## PHASE 0 COMPLETE — 2026-09-01 20:45 EDT — four arms scored, two new limits found
+
+All 36 cells completed at exit code 0. The aggregate analysis is frozen 0444 at
+`receipts/analysis/lucid_phase0_analysis_20260901.json`, SHA-256
+`fa513677dc419c3ae73d9dd75afa0490484e6b977286fe213485c172ab9f20fd`.
+
+| arm | frontier AUC | exposure E | residual raw | residual after seed offset |
+|---|---|---|---|---|
+| `lucid_rg@s8601` (P3) | 0.739909 | 0.556 | +1.5 pts | +1.5 pts |
+| `lucid_s4_rg@s8601` | 0.778971 | 0.624 | +2.7 pts | +2.7 pts |
+| `lucid_rg@s8602` | 0.801758 | 1.000 | −9.8 pts | −2.1 pts |
+| `lucid_s4_rg@s8602` | 0.611979 | 0.625 | −14.0 pts | −6.2 pts |
+
+Instrument audit passes on every check that could have invalidated the
+comparison: per-cell `dr_ranges` hash identically across all four arms, one
+512-alias panel served every cell, every checkpoint SHA-256 is unchanged across
+its ladder, and each evaluation seed follows its checkpoint seed. The first
+scoring attempt died on the Isaac EULA prompt and produced nine rows with zero
+usable cells; it is recorded in `excluded_receipts` and retained as evidence
+rather than deleted.
+
+### Limit 1: the exposure law has no seed term, and needs one
+
+Both large raw residuals are seed-8602 arms. Removing a seed offset of −7.8
+points, measured on the two arms that pin lambda and therefore differ across
+seeds only by the seed, brings three of four arms within 2.7 points — near the
+instrument's replicate noise floor. That adjustment is **post-hoc**, estimated
+from two arms and applied to two others, and the raw residuals are reported
+alongside it.
+
+The seed effect (7.8 pts) exceeds the law's own residual SD (1.83 pts) by about
+four times. This was invisible in the original seven-point fit because that fit
+contained only seeds 8600 and 8601, which differ by about 0.6 points on the
+lambda-pinned arms. **The law must not be quoted without a seed term, and its
+residual SD understates its error on an unseen seed.** P3 itself is unaffected:
+it is a seed-8601 arm at +1.5 points raw.
+
+### Limit 2: the physics ladder is not uniformly spaced
+
+Every one of the four arms has its largest single-cell drop at **phys_150** —
+15.2, 12.1, 19.5 and 38.7 points. That cell is the first where the
+static-friction floor reaches its physical clamp: the low bound falls from
+0.1375 to 0.05 between phys_125 and phys_150, a 2.75× reduction in worst-case
+grip, and near-frictionless ground becomes reachable for the first time. Foot
+slip across that step grows 1.33×, 1.44×, 2.09× and 2.33× respectively, in the
+same order as the success drops.
+
+This is n = 4 and correlational; no arm was run with friction held fixed while
+the other channels scaled, so it is a consistent mechanism rather than a
+demonstrated cause. The consequence for the endpoint is concrete: the frozen
+trapezoid puts a third of its weight on the first post-clamp cell, so any
+frontier AUC mixes two regimes. Phase 2 already reports worst-cell success
+alongside AUC, and phys_150 should stay broken out there.
+
+### The anomalous arm, audited
+
+`lucid_s4_rg@s8602` scores lowest of the four and remains 6.2 points below the
+law after the seed offset. Full audit at
+`receipts/analysis/lucid_s4rg_s8602_audit_20260901.json`. It is neither a
+broken measurement nor a broken run:
+
+- Instrument, panel, checkpoint and config lineage all check out; its config was
+  resolved from its own Hydra run directory and is distinct from its siblings.
+- **It did not evacuate.** It carries the highest high-lambda iteration count of
+  the four (7,939 at λ ≥ 0.95), terminal λ = 1.0, zero guard trips, and its dose
+  is within 0.0003 of `lucid_s4_rg@s8601`, which scores 0.779 against its 0.612.
+- The loss is localized. In-envelope it ranks second of four, within 0.9 points
+  of the best. It loses **42.0 points across the friction clamp** against 17.9
+  to 26.6 for its siblings. It is not globally weaker; it is brittle to loss of
+  friction.
+
+Two contributors are named, neither established: the seed effect (better
+supported, n = 2 lambda-pinned arms), and a high-torque-saturation gait
+signature that appears in two of three stratified seeds (weak, correlational,
+and confounded because the third stratified seed also evacuated).
+
 ## P3 READ OUT — 2026-09-01 16:19 EDT — the framing survives out of sample
 
 `lucid_rg` seed 8601, the predeclared collapse, is scored. It held lambda = 1.0
