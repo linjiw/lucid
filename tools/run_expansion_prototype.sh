@@ -21,6 +21,19 @@
 # every channel, so the held-out band {phys_175, phys_200} and every
 # single-channel cell at 2.0/3.0 stay outside every arm's training support.
 #
+# Three ASYMMETRIC arms added after the single-channel attribution sweep
+# (2026-09-02: mass/CoM/joint nearly free to 3x, push binding, friction
+# clamped): mass, CoM and joint offsets may reach 2.0 while push, friction and
+# latency hold at 1.5.
+#
+#   box_asym    box gate with those per-channel ceilings (discovers the order online)
+#   ramp_asym   open-loop scalar ramp 1.0 -> 2.0 with the binding channels capped (M5)
+#   fixed_asym  the asymmetric box from iteration 0 (width control)
+#
+# For these three the scalar phys_175/phys_200 cells are IN SUPPORT on three
+# channels and are labelled, not gated on; their held-out endpoint is the
+# per-channel 3x panel plus push at 2.0/3.0.
+#
 # Prototype knobs (not the Phase 2 values): gate window 100 / dwell 50 /
 # min-episodes 200 so a 128-env probe (~6 episodes per iteration) can make a
 # decision every ~150 iterations; the box's per-channel probe budget is 300
@@ -31,7 +44,7 @@
 # optimizer, fresh LR schedule, iteration counter from 1), identically for
 # every arm.
 #
-# Cost: 5 x ~1.3 GPU-h serial. Refuses to start while the GPU has a trainer on
+# Cost: 8 x ~1.3 GPU-h serial (trim with --modes). Refuses to start while the GPU has a trainer on
 # it (the Phase 2 screen must finish first).
 #
 # usage: run_expansion_prototype.sh [--execute] [--modes m1 m2 ...]
@@ -54,7 +67,7 @@ readonly MOTION="${LUCID_ROOT}/pools/subsets/m1_hob002/robot_filtered"
 readonly ENCODER="${LUCID_ROOT}/artifacts/lucid_encoder_debug512.pt"
 
 EXECUTE=0
-MODES=(box_150 gate_150 ramp_150 fixed_150 fixed)
+MODES=(box_150 gate_150 ramp_150 box_asym ramp_asym fixed_150 fixed fixed_asym)
 while [[ $# -gt 0 ]]; do
     case "$1" in
         --execute) EXECUTE=1; shift ;;

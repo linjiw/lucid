@@ -31,6 +31,7 @@ SONIC `research/practice-utility`:
 |---|---|
 | `58812d7` | Evaluator: `channel_dr_scales` on the eval callback and eleven `ch_<term>_<level>` presets (one term widened, the other four at λ=1, latency pinned to zero). Scalar path byte-identical. |
 | `eac9455` | `box_gate.py` (vector frontier, one probe in rotation), curriculum mode `box`, driver arm `box_150`, `SurvivalGateController.clear_window`. 20 new tests; suite 1,671 passed. |
+| `c4d922a` | `box_lambda_max` per-channel ceilings; asymmetric arms `box_asym` / `ramp_asym` / `fixed_asym` (mass/CoM/joint 2.0; push, friction, latency 1.5) from the sweep; delay-buffer check sized from the latency ceiling. Suite 1,677 passed. |
 
 lucid repo: `tools/physical_signal_audit.py` (+ receipt
 `receipts/analysis/lucid_physical_signal_audit_20260902.json`),
@@ -122,8 +123,13 @@ are not.
 
 1. When Phase 2 releases the GPU:
    `nohup bash tools/run_expansion_prototype.sh --execute > $LUCID_ROOT/outputs/expansion_prototype_driver.log 2>&1 &`
-   (five arms × 2,000 iterations from the fixed@s8600 final, ~6.7 GPU-h; the
-   driver refuses while a trainer holds the card).
+   (eight arms × 2,000 iterations from the fixed@s8600 final, ~10.7 GPU-h;
+   `--modes` trims; the driver refuses while a trainer holds the card). The
+   preregistration plus amendment
+   (`receipts/manifests/lucid_expansion_prototype_amendment_20260902.json`)
+   fix the endpoints: the five 1.5 arms on {phys_175, phys_200}; the three
+   asymmetric arms on the per-channel 3× panel {mass, CoM, joint} with push
+   at 2×/3× reported, and the scalar band labelled in-support for them.
 2. Then `bash tools/run_expansion_prototype_scoring.sh <training receipt> --execute`
    (15 cells × 5 arms, ~45 min).
 3. Decide with the preregistered rules R1–R5; the box's mechanism is read from
