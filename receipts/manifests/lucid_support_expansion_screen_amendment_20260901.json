@@ -103,6 +103,18 @@
       "reason": "Added a docstring section recording that the gate's signal has AUTHORITY, not merely anchoring: the actuator moves probe survival, and in the direction that withholds the next expansion. It also records the measured r(lambda, gap) = -0.201 that explains why the observed evacuations are total rather than partial.",
       "behavioural_effect_on_phase_2": "NONE, and this was verified rather than asserted. Parsing both revisions and removing every module, class and function docstring yields byte-identical ASTs (257940cf45fdc9cf both sides). The change is documentation only.",
       "data_driven": false
+    },
+    {
+      "id": "A7",
+      "severity": "fail_closed_hardening_before_any_cell",
+      "target": "code_state.file_sha256['gear_sonic/research/practice_utility/dr_curriculum.py']",
+      "was": "4dce428ae753ffec9d3ebb325f53421b3b64203e8fae4136dd112ffaddc7cfb2",
+      "now": "4441f75166762c2a9995ce5ef7315efb16b376da295c0b727cbd1a631bb060e4",
+      "commit": "08a01bf588b42ea1e5b71727275ad77ec1f4e497",
+      "reason": "The gate arm now aborts if no probe episode arrives within a grace period past warm-up. Phase 2 is the first live run of survival_observer, and a dead signal path produces an applied-lambda trace identical to an honest decision not to expand. Because amendment A4 preregisters a stall as a legitimate result, a broken wire would have been read as evidence about feedback. Mechanism gate G3 catches it only after a full 8,000-iteration cell.",
+      "behavioural_effect_on_phase_2": "Adds an abort path that fires ONLY when the gate has received zero probe episodes for gate_evidence_grace=200 iterations past warm-up. A single probe episode satisfies it permanently, so sparse evidence is unaffected. It cannot fire on ramp_150, which reads nothing, nor on any fixed arm. It cannot change any expansion decision: it either raises or does nothing.",
+      "interaction_with_A4": "A4 says a stalled gate is a result, not a failed screen. A7 narrows that: a stall is a result only when the gate was actually receiving evidence. A stall with zero probe episodes is now a fault that aborts, and can no longer be mistaken for a decision.",
+      "data_driven": false
     }
   ],
   "unchanged": "Every arm definition, stratum layout, endpoint, weight, threshold, decision rule, mechanism gate, frozen prediction and limitation in the parent preregistration is unchanged by this amendment.",
@@ -113,7 +125,8 @@
     "five-arm Phase-2 launch dry run builds at --max-delay 12; tests 1640 passed",
     "gate feasibility replay over the real fixed@s8600 survival series; tool at tools/simulate_gate.py",
     "paired H_R2 deltas on the Phase-2 primary band recomputed from the frozen analysis receipt",
-    "survival_gate.py drift at dd0fd61 proven docstring-only by AST comparison after docstring removal"
+    "survival_gate.py drift at dd0fd61 proven docstring-only by AST comparison after docstring removal",
+    "fail-fast guard covered by four tests; suite 1644 passed"
   ],
   "not_yet_verified": [
     "every Phase-2 outcome; no policy has been trained"
