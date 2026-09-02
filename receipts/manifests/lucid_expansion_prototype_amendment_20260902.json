@@ -76,6 +76,22 @@
       "now": "two batches, each scored before the next trains: batch 1 = box_150, gate_150, box_asym, ramp_asym, fixed_150 (the two decisive pairs and the width anchor); batch 2 = ramp_150, fixed, fixed_asym. Rules R1-R7 unchanged; R2 and R5/R7 are evaluated when batch 2 lands.",
       "why": "a first readout ~5 h earlier; the prototype trains beside a PAUSED Phase 2 trainer that holds ~6.7 GiB of GPU memory (Phase 2 amendment A9), which affects wall-clock only",
       "created_at": "2026-09-02T07:22:35.630800-04:00"
+    },
+    {
+      "id": "A6",
+      "severity": "construction_defect_found_live",
+      "target": "design.arms.ramp_asym / fixed_asym; code_state",
+      "defect": "ramp_asym failed at callback construction in batch 1: \"term_lambda_caps['physics_material'] must be in [0, 1], got 1.5\". The per-channel cap validation in dr_curriculum.py was envelope-bound and ignored allow_extrapolation; the driver test checked the command line only, not construction. The comparison driver recorded the arm as failed and moved on to fixed_150.",
+      "fix": {
+        "commit": "ad92b681e853d6894080766c2744b12c3cd57277",
+        "file_sha256": {
+          "gear_sonic/research/practice_utility/dr_curriculum.py": "3abd0969e981d2302d79da25b6a02e0db2c1891c811f764887c01a12ed549ff3"
+        },
+        "what": "caps/overrides may reach MAX_EXTRAPOLATION when allow_extrapolation is set; envelope bound otherwise; test added"
+      },
+      "consequence": "box_150, gate_150, box_asym and fixed_150 trained under the pre-fix commit c4d922a, which is unaffected (no caps). fixed_asym (batch 2) launches with the fixed code. ramp_asym is re-run as batch 3 (tools/run_queue_batch3_20260902.sh) after the main queue, then scored, so R6 has its control. Rules unchanged.",
+      "observed_also": "box_asym's trajectory is bit-identical to box_150's (same seed, same decisions, identical window survivals) because in 2,000 iterations the one-channel-per-100-iteration cadence never lifts any channel past 1.375, so the asymmetric ceilings were never reached. The asymmetric arms therefore need either a longer budget or a faster probe cadence to be a test of asymmetry at all; this is reported as a design finding, not hidden.",
+      "created_at": "2026-09-02T12:03:04.022414-04:00"
     }
   ],
   "not_claimed_added": [
