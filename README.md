@@ -1,5 +1,7 @@
 # LUCID — practice utility & target-anchored curricula on SONIC (ICRA 2027 push)
 
+**Project site:** https://linjiw.github.io/lucid/ — the research story, findings, evidence, videos, and plan. **Paper draft:** [`paper/when-training-gets-easier.md`](paper/when-training-gets-easier.md) (rendered at [site/paper.html](https://linjiw.github.io/lucid/paper.html)).
+
 Workspace repo for the LUCID research program. Code lives in two submodules; the
 claim-bearing work is in `GR00T-WholeBodyControl` on branch `research/practice-utility`.
 Everything needed to *reason about* the results (plans, guidance, receipts) is here;

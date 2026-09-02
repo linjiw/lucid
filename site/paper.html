@@ -1,0 +1,626 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>When Training Gets Easier</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--bg:#F6F7F5;--ink:#1C2128;--muted:#5F6B7A;--accent:#2E5A87;--bad:#A8432B;--rule:#D4D9DE;--tint:#E9EEF3;--code:#EEF1F4;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15191E;--ink:#E4E8EC;--muted:#9AA6B4;--accent:#86B0DB;--bad:#E0836A;--rule:#2C343D;--tint:#1E252D;--code:#1B2129;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#15191E;--ink:#E4E8EC;--muted:#9AA6B4;--accent:#86B0DB;--bad:#E0836A;--rule:#2C343D;--tint:#1E252D;--code:#1B2129;color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:"Source Sans 3",system-ui,sans-serif;font-size:17px;line-height:1.55;margin:0}
+main{max-width:70ch;margin:0 auto;padding:48px 24px 96px}
+header{border-bottom:1px solid var(--rule);padding-bottom:20px;margin-bottom:32px}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+h1{font-family:Newsreader,Georgia,serif;font-weight:600;font-size:38px;line-height:1.12;margin:0 0 10px;text-wrap:balance}
+h1 span{display:block;font-weight:400;font-style:italic;font-size:26px;color:var(--muted);margin-top:6px}
+h2{font-family:Newsreader,Georgia,serif;font-weight:600;font-size:26px;margin:44px 0 12px;text-wrap:balance;color:var(--accent)}
+h3{font-family:Newsreader,Georgia,serif;font-weight:600;font-size:20px;margin:28px 0 8px;text-wrap:balance}
+p{margin:0 0 14px}
+#abstract+p, h2:first-of-type+p{font-family:Newsreader,Georgia,serif;font-size:18px;line-height:1.55}
+blockquote{margin:18px 0;padding:14px 20px;border-left:3px solid var(--accent);background:var(--tint);font-family:Newsreader,Georgia,serif;font-size:21px;font-style:italic}
+blockquote p{margin:0}
+ul,ol{padding-left:22px;margin:0 0 14px}li{margin-bottom:6px}
+.tbl{overflow-x:auto;margin:16px 0 22px}
+table{border-collapse:collapse;font-size:14.5px;min-width:100%;font-variant-numeric:tabular-nums}
+th{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);text-align:left;font-weight:600;border-bottom:1px solid var(--ink);padding:8px 10px;white-space:nowrap}
+td{padding:7px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+td[align=right],th[align=right]{text-align:right;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:13.5px}
+tr.bad td, td.bad{color:var(--bad)}
+code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.88em;background:var(--code);padding:1px 5px;border-radius:3px}
+strong{font-weight:600}
+.status{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:14px}
+.status b{color:var(--ink);font-weight:600}
+a{color:var(--accent)}
+</style></head><body>
+<main>
+<header>
+<p class="eyebrow">Working paper draft · reframed 2026-09-02 · measured results only</p>
+<h1>When Training Gets Easier<span>Training-range collapse in humanoid control</span></h1>
+<div class="status"><span><b>Testbed</b> SONIC · Unitree G1 · Isaac Lab</span><span><b>Runs</b> 12 arm–seed pairs · 8,000 iterations</span><span><b>Proposal</b> confined to Section 9</span></div>
+</header>
+<p><strong>Working draft, reframed 2026-09-02.</strong> Every number in this draft is measured and traceable
+to a receipt listed in Appendix B. Proposed work is confined to Section 9 and is labelled as
+such. Project title for the ongoing work: <em>Expanding Training Ranges for Humanoid Control</em>.</p>
+<h2>Abstract</h2>
+<p>Domain randomization exposes a robot to varied physical conditions during training. When an
+adaptive curriculum is allowed to narrow those conditions, a higher training reward can
+reflect easier training rather than a better policy. We study this problem in simulated
+humanoid motion tracking on a Unitree G1, training on a single motion for 8,000 iterations.
+Two of six runs of a curriculum that could expand or shrink its ranges ended with nearly
+collapsed ranges. These runs earned the highest training returns of the twelve runs we
+scored, and the lowest robustness on a physics ladder that the curriculum did not control;
+across all twelve runs, terminal return and robustness are inversely ranked (Spearman
+−0.73). One collapsed run scores 14.2 success-AUC points below fixed domain randomization
+on the same seed. To prevent shrinkage we test a rule that allows training ranges to expand
+or stay fixed but never shrink. Across three seeds it blocked all 2,033 requested reductions,
+and its robustness was within a preregistered margin of fixed domain randomization (mean
+difference +0.60 points, sample standard deviation 2.25), which establishes noninferiority
+and not an advantage. An audit of five candidate readiness signals shows that time-out
+survival tracks competence while the learned mismatch signal used by the collapsing
+curriculum does not. Replaying the exported policies in MuJoCo with independently
+implemented randomization preserves the ordering: beyond the training envelope, both
+never-shrink and fixed policies survive 38% of physics draws where the collapsed policy
+survives 16% and an unrandomized policy 3%. A prototype that tests proposed conditions
+before expanding raised the training-range scale from 1.0 to 1.5 in four steps. Whether
+adaptive expansion improves robustness over a preset schedule remains open; the present
+results show why better policies must be distinguished from easier training.</p>
+<h2>1. Introduction</h2>
+<p>A humanoid policy trained in simulation must work on a robot whose mass, friction, actuator
+delay, and disturbances differ from the simulator's nominal values. Domain randomization
+handles this by training on ranges of those parameters instead of single values. The width
+of the ranges matters: ranges that are too wide can stall learning, and ranges that are too
+narrow leave the policy brittle. Adaptive curricula try to resolve this by widening or
+narrowing the ranges as the policy improves.</p>
+<p>This paper asks one question about such curricula:</p>
+<blockquote>
+<p><strong>Is the robot getting better, or is its training getting easier?</strong></p>
+</blockquote>
+<p>The two are hard to tell apart from inside training. A curriculum that measures the policy
+on its own training distribution and is allowed to narrow that distribution can raise its
+score by narrowing. Training return goes up, the dashboard looks healthy, and the policy has
+seen less of the physics it will face at deployment. We call the end state
+<strong>training-range collapse</strong>.</p>
+<p>We measured this directly. In a 29-DoF humanoid motion-tracking task, an adaptive
+curriculum driven by a learned mismatch signal shrank its ranges in every one of six runs and
+collapsed them in two. The collapsed runs had the highest terminal training returns and the
+lowest robustness on an evaluation ladder the curriculum did not control. The cost is not
+cosmetic: one collapse loses 14.2 success-AUC points against fixed randomization trained on
+the same seed.</p>
+<p>The fix we test is deliberately small. A range may expand or stay where it is, but it may
+not shrink. This rule blocks the mechanism of collapse without adding a new signal, a new
+network, or a new hyperparameter. Across three seeds it refused every one of 2,033
+requested reductions and ended within a preregistered margin of fixed domain randomization.
+It does not train a better policy than fixed randomization; on our evidence it trains an
+equivalent one, which is the point. Whatever an adaptive curriculum adds must be shown
+against that baseline with the collapse pathway closed.</p>
+<p><strong>Contributions.</strong> All four are measured on the same testbed.</p>
+<ol>
+<li><strong>A measured failure mode.</strong> We show that an adaptive curriculum that can narrow its own
+   training ranges collapses them in two of six long runs, and that terminal training
+   return and held-out robustness are inversely ranked across twelve runs (Section 4).</li>
+<li><strong>A rule that prevents it.</strong> Training ranges that never shrink block all 2,033 requested
+   reductions over three seeds and are noninferior to fixed randomization under a rule fixed
+   before the data existed (Section 5).</li>
+<li><strong>Which signals can be trusted.</strong> An audit at fixed difficulty shows that time-out
+   survival tracks competence (rank correlation +0.99 with training progress) and the
+   learned mismatch signal does not (−0.04), which explains why the collapsing curriculum
+   collapsed (Section 6).</li>
+<li><strong>Robustness is per-parameter and interactive.</strong> A 55-cell sweep shows that pushes limit
+   healthy policies while mass, center-of-mass, and joint offsets can be widened to three
+   times their range at little cost, and that widening all channels together costs about six
+   success points more than the sum of the individual costs (Section 7).</li>
+</ol>
+<p>We also replay the exported policies in a second simulator with independently implemented
+randomization (Section 8). The ordering survives. Finally we describe the range-expansion
+curriculum this evidence motivates, report a scalar prototype that expanded ranges in four
+evidence-triggered steps, and state the test it must pass before we credit it (Section 9).</p>
+<h2>2. Background and Related Work</h2>
+<p><strong>Domain randomization</strong> trains on a distribution of physical parameters so that the
+deployed system falls inside or near the training distribution [1–4]. <strong>Adaptive
+randomization</strong> changes that distribution during training. Automatic Domain Randomization
+expands boundaries after performance at the boundary passes a threshold [5]; active and
+entropy-based methods choose which domains to sample [6,7]; self-paced and teacher-based
+curricula trade difficulty against learning progress [8,9]; level-replay methods emphasize
+informative levels [14,15]. Several of these methods are allowed to make training easier
+when the policy struggles. That freedom is the subject of this paper.</p>
+<p>The never-shrink rule we test is close to the boundary rule in Automatic Domain
+Randomization. We do not claim it as new. Our contribution is the measurement of what goes
+wrong without it in long humanoid runs, the demonstration that the rule alone recovers fixed
+randomization's robustness, and the audit of which signals could safely drive expansion.</p>
+<p><strong>Humanoid motion tracking.</strong> DeepMimic, adversarial motion priors, BeyondMimic, and SONIC
+learn reference-conditioned whole-body control [10–13]. We use SONIC as the sole testbed. It
+provides a 29-DoF Unitree G1 model, a 50 Hz policy, Isaac Lab training, and a MuJoCo model.</p>
+<p><strong>Evaluation beyond reward.</strong> Training return depends on the distribution it is measured
+on. We therefore score every policy on a frozen physics ladder that the curriculum never
+sees, and report success and restricted-mean progress rather than reward [17].</p>
+<h2>3. Setup</h2>
+<p><strong>Task.</strong> A policy tracks one reference clip (<code>walk_hands_on_back_loop_002</code>, 4 s) on a
+29-DoF G1 in Isaac Lab, 1,024 parallel environments, 8,000 PPO iterations, trained from
+scratch. The actor sees a ten-step history of gravity direction, base angular velocity,
+joint positions, joint velocities, and previous actions, plus ten future reference frames.</p>
+<p><strong>Randomized parameters.</strong> Six channels: rigid-body mass, torso center of mass, joint
+default offset, ground friction, action delay, and external pushes. A scale λ multiplies
+every channel's configured deviation; λ = 1 is the training envelope and λ = 0 is nominal
+physics. Friction is clipped at a physical floor, which binds at λ ≥ 1.5.</p>
+<p><strong>Compared training arms.</strong></p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Arm</th>
+<th>Training ranges</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>No randomization</td>
+<td>λ = 0 throughout</td>
+</tr>
+<tr>
+<td>Fixed randomization</td>
+<td>λ = 1 throughout</td>
+</tr>
+<tr>
+<td>Adaptive, may shrink</td>
+<td>λ set by a PI controller on a learned mismatch signal, λ ∈ [0, 1]</td>
+</tr>
+<tr>
+<td>Adaptive, never shrinks</td>
+<td>same controller, but a requested decrease is refused</td>
+</tr>
+</tbody>
+</table></div>
+<p>Two variants of the adaptive controller and three seeds give the six adaptive runs.</p>
+<p><strong>Evaluation.</strong> Each final policy is scored on a frozen ladder of physics scales
+{0, 0.5, 1, 1.25, 1.5, 2} with 512 episodes per cell. The primary outcome is the area under
+the success-versus-scale curve over the beyond-envelope cells (<strong>frontier AUC</strong>, reported in
+points, 0–100) and over the in-envelope cells. Restricted-mean progress is a secondary
+outcome. The ladder is never visible to any curriculum.</p>
+<h2>4. The Problem: Training-Range Collapse</h2>
+<h3>4.1 Why a curriculum that can shrink will shrink</h3>
+<p>Let the curriculum observe a score $\bar Y(\theta,\lambda)$ on its own training
+distribution and move λ toward a set point $Y^<em>$ with an integral rule
+$\dot\lambda = K(\bar Y - Y^</em>)$. Wider ranges lower the score,
+$\partial \bar Y/\partial\lambda &lt; 0$. When learning stalls and the score sits below the set
+point, the controller lowers λ, which raises the score without any change in the policy.
+If the policy adapts to hard physics more slowly than the controller moves λ, shrinking is
+the fast response of the coupled system, and the gain $K$ sets the speed of collapse rather
+than its direction. This is a conditional statement about one common controller form, not a
+theorem about every adaptive curriculum; a deadband, saturation, or policy recovery can
+interrupt it. It says where to look.</p>
+<h3>4.2 What we observed</h3>
+<p>Every one of the six adaptive runs applied at least one reduction. Two ended near λ = 0
+after having reached the full envelope earlier in training.</p>
+<p><strong>Table 1. Collapsed runs against the runs that held their ranges.</strong></p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Outcome</th>
+<th style="text-align: right;">Collapsed run A</th>
+<th style="text-align: right;">Collapsed run B</th>
+<th style="text-align: right;">Range-holding runs (min–max)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Final scale λ</td>
+<td style="text-align: right;">0.062</td>
+<td style="text-align: right;">0.012</td>
+<td style="text-align: right;">1.000</td>
+</tr>
+<tr>
+<td>Mean return, last 500 iterations</td>
+<td style="text-align: right;"><strong>15.29</strong></td>
+<td style="text-align: right;"><strong>14.40</strong></td>
+<td style="text-align: right;">10.98–12.28</td>
+</tr>
+<tr>
+<td>Frontier success AUC (points)</td>
+<td style="text-align: right;">73.99</td>
+<td style="text-align: right;">69.73</td>
+<td style="text-align: right;">61.20–91.31</td>
+</tr>
+</tbody>
+</table></div>
+<p>The collapsed runs have the two highest terminal returns among the twelve arm–seed pairs we
+scored. Across the twelve, terminal return and frontier AUC have Spearman rank correlation
+−0.73: the runs that look best from inside training are the ones that retreated furthest
+from the deployment physics. Grouped, the collapsed runs average return 14.84 and AUC 71.9;
+the range-holding runs average return 11.60 and AUC 83.3.</p>
+<p><strong>Cost.</strong> Collapsed run A was chosen for scoring before its evaluation existed. It scores
+14.19 points below fixed randomization on the same seed and 17.32 points below the
+never-shrink version of the same controller on the same seed.</p>
+<p>This differs from ordinary forgetting. Forgetting means later training damages an earlier
+skill. Collapse means the curriculum removes the conditions that would reveal the damage and
+then grades itself on the easier replacement.</p>
+<h2>5. A Rule That Prevents Shrinkage</h2>
+<p>We keep the same controller and refuse every requested decrease. The range may expand or
+hold; it may not shrink.</p>
+<p><strong>Mechanism.</strong> Across three seeds the rule refused 453, 951, and 629 requested reductions,
+2,033 in total, and applied none. All three runs ended at the full envelope. These requests
+are correlated controller events, not independent samples; their role is to show sustained
+pressure toward easier training across the long runs. The sample size for any policy
+comparison is three seeds.</p>
+<p><strong>Robustness.</strong> The comparison follows a rule fixed before the data: for each of four AUC
+components the never-shrink arm must be within 2 points (frontier) or 1 point (in-envelope)
+of fixed randomization on at least two of three paired seeds.</p>
+<p><strong>Table 2. Never-shrink versus fixed randomization, frontier success AUC (points).</strong></p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th style="text-align: right;">Seed</th>
+<th style="text-align: right;">Never-shrink</th>
+<th style="text-align: right;">Fixed</th>
+<th style="text-align: right;">Difference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">8600</td>
+<td style="text-align: right;">90.30</td>
+<td style="text-align: right;">90.46</td>
+<td style="text-align: right;">−0.16</td>
+</tr>
+<tr>
+<td style="text-align: right;">8601</td>
+<td style="text-align: right;">91.31</td>
+<td style="text-align: right;">88.18</td>
+<td style="text-align: right;">+3.13</td>
+</tr>
+<tr>
+<td style="text-align: right;">8602</td>
+<td style="text-align: right;">82.03</td>
+<td style="text-align: right;">83.20</td>
+<td style="text-align: right;">−1.17</td>
+</tr>
+<tr>
+<td style="text-align: right;"><strong>Mean</strong></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"><strong>+0.60</strong> (SD 2.25)</td>
+</tr>
+</tbody>
+</table></div>
+<p>All four components pass on all three seeds (frontier success +0.60, in-envelope success
++0.07, frontier progress +0.50, in-envelope progress +0.01). Two seeds favour fixed
+randomization slightly. The supported claim is exact: with shrinkage removed, the adaptive
+controller trains a policy equivalent to fixed randomization within the declared margins.
+It does not train a better one. Retaining the ranges also does not by itself guarantee that
+the policy retains its skills; that is what Table 2 measures.</p>
+<p><strong>Seed effect.</strong> Between-seed offsets in frontier AUC reach 7.8 points on the same arm.
+Any claimed advantage of a curriculum over fixed randomization must be paired by seed and
+must clear this before it is believed.</p>
+<h2>6. Which Signals Can Guide Expansion</h2>
+<p>A signal that drives an expanding curriculum must move with competence when difficulty is
+fixed, and must respond to difficulty in the right direction. We audited five signals on
+five runs at pinned difficulty and on the two collapses.</p>
+<p><strong>Table 3. Readiness-signal audit.</strong></p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Signal</th>
+<th style="text-align: right;">Rank correlation with training iteration at fixed λ</th>
+<th style="text-align: right;">Direction reversals</th>
+<th>Behaviour during the two collapses</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Time-out survival</td>
+<td style="text-align: right;">+0.987</td>
+<td style="text-align: right;">4.6</td>
+<td>rises when ranges shrink</td>
+<td>readiness signal, but only if measured on proposed conditions</td>
+</tr>
+<tr>
+<td>Mean return</td>
+<td style="text-align: right;">+0.973</td>
+<td style="text-align: right;">3.2</td>
+<td>rewards shrinking strongly</td>
+<td>diagnostic only</td>
+</tr>
+<tr>
+<td>Learned mismatch</td>
+<td style="text-align: right;">−0.037</td>
+<td style="text-align: right;">19.2</td>
+<td>−0.03 / +0.03 against λ</td>
+<td>rejected</td>
+</tr>
+<tr>
+<td>Foot slip per step</td>
+<td style="text-align: right;">−0.531</td>
+<td style="text-align: right;">17.0</td>
+<td>+0.75 / +0.71 against λ</td>
+<td>corroborating measurement</td>
+</tr>
+<tr>
+<td>Torque saturation</td>
+<td style="text-align: right;">−0.312</td>
+<td style="text-align: right;">7.2</td>
+<td>sign flips across arms</td>
+<td>cost, not a gate</td>
+</tr>
+</tbody>
+</table></div>
+<p>The learned mismatch signal that drove the collapsing curriculum is neither anchored to
+competence nor consistently controlled by difficulty; its direction is set by the arm rather
+than the policy. That is why the controller in Section 4 had nothing to hold it at the
+envelope. Survival is well anchored but is exactly the signal a shrinking controller can
+inflate. It becomes usable only when measured on the proposed harder conditions rather than
+the current ones, and when a failed test can hold but never shrink the ranges.</p>
+<h2>7. Robustness Is Per-Parameter and Interactive</h2>
+<p>We widened one channel at a time on frozen policies, holding the others at the envelope,
+512 episodes per cell, one seed.</p>
+<p><strong>Table 4. Success when one channel is widened beyond its training range.</strong></p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Policy</th>
+<th style="text-align: right;">All channels 2×</th>
+<th style="text-align: right;">Mass 2× / 3×</th>
+<th style="text-align: right;">Center of mass 2× / 3×</th>
+<th style="text-align: right;">Joint offset 2× / 3×</th>
+<th style="text-align: right;">Push 2× / 3×</th>
+<th>First to fail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fixed</td>
+<td style="text-align: right;">0.820</td>
+<td style="text-align: right;">0.992 / 0.949</td>
+<td style="text-align: right;">0.988 / 0.988</td>
+<td style="text-align: right;">0.992 / 0.990</td>
+<td style="text-align: right;"><strong>0.912 / 0.746</strong></td>
+<td>push</td>
+</tr>
+<tr>
+<td>Never-shrink</td>
+<td style="text-align: right;">0.842</td>
+<td style="text-align: right;">0.990 / 0.938</td>
+<td style="text-align: right;">0.992 / 0.982</td>
+<td style="text-align: right;">0.994 / 0.986</td>
+<td style="text-align: right;"><strong>0.928 / 0.770</strong></td>
+<td>push</td>
+</tr>
+<tr>
+<td>Adaptive, held ranges</td>
+<td style="text-align: right;">0.795</td>
+<td style="text-align: right;">0.980 / 0.951</td>
+<td style="text-align: right;">0.986 / 0.975</td>
+<td style="text-align: right;">0.994 / 0.980</td>
+<td style="text-align: right;"><strong>0.910 / 0.705</strong></td>
+<td>push</td>
+</tr>
+<tr class="bad">
+<td>Adaptive, collapsed</td>
+<td style="text-align: right;">0.518</td>
+<td style="text-align: right;">0.873 / 0.682</td>
+<td style="text-align: right;">0.928 / 0.818</td>
+<td style="text-align: right;">0.967 / 0.955</td>
+<td style="text-align: right;"><strong>0.811 / 0.570</strong></td>
+<td>push</td>
+</tr>
+<tr>
+<td>No randomization</td>
+<td style="text-align: right;">0.334</td>
+<td style="text-align: right;">0.795 / 0.643</td>
+<td style="text-align: right;"><strong>0.654 / 0.393</strong></td>
+<td style="text-align: right;">0.900 / 0.891</td>
+<td style="text-align: right;">0.736 / 0.443</td>
+<td>center of mass</td>
+</tr>
+</tbody>
+</table></div>
+<p>For the three healthy policies, pushes at twice the range cost 6–8 points while mass, center
+of mass, and joint offsets cost at most 1.4 points and stay above 0.938 at three times the
+range. The unrandomized policy fails first under center-of-mass shift instead. Which
+parameter binds depends on the policy, so it must be measured for the policy being trained
+rather than assumed from the simulator.</p>
+<p>Widening everything together costs more than the parts. For the fixed policy the individual
+2× losses sum to 0.111 while the joint 2× cell loses 0.174, about six points that no sum of
+single-channel losses predicts. The joint cell widens five channels at once, so we do not
+attribute the residual to any pair; a pairwise sweep is the test.</p>
+<h2>8. Does the Ordering Survive a Change of Simulator and Motion?</h2>
+<p><strong>Second simulator.</strong> We exported the final policies to ONNX and replayed them in MuJoCo
+with our own implementation of the six channels, scaled by the same λ. This is a sim-to-sim
+check of the exported policy, not the hardware deployment path, and MuJoCo's randomization is
+a labelled approximation of Isaac's. A run passes if the pelvis stays within 0.5 m of the
+reference to the end of the clip. Seeds are shared across arms, 32 per cell.</p>
+<p><strong>Table 5. MuJoCo survival of exported policies (pass rate over 32 physics draws).</strong></p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Policy</th>
+<th style="text-align: right;">All channels, λ 1 / 1.5 / 2</th>
+<th style="text-align: right;">Physics only (no pushes), λ 1 / 1.5 / 2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>No randomization</td>
+<td style="text-align: right;">31 / 12 / 0 %</td>
+<td style="text-align: right;">59 / 16 / 3 %</td>
+</tr>
+<tr class="bad">
+<td>Adaptive, collapsed (seed 8601)</td>
+<td style="text-align: right;">56 / 19 / 9 %</td>
+<td style="text-align: right;">84 / 31 / 16 %</td>
+</tr>
+<tr>
+<td>Never-shrink (seed 8601)</td>
+<td style="text-align: right;">47 / 22 / 16 %</td>
+<td style="text-align: right;">66 / 50 / 38 %</td>
+</tr>
+<tr>
+<td>Fixed (seed 8601, paired)</td>
+<td style="text-align: right;">47 / 25 / 12 %</td>
+<td style="text-align: right;">75 / 47 / 38 %</td>
+</tr>
+<tr>
+<td>Fixed (seed 8600)</td>
+<td style="text-align: right;">78 / 34 / 16 %</td>
+<td style="text-align: right;">94 / 56 / 31 %</td>
+</tr>
+</tbody>
+</table></div>
+<p>Pushes are the binding channel in MuJoCo as in Isaac, and absolute survival is far below the
+Isaac scores because the randomization differs; the gap is reported, not tuned. The
+ordering is what transfers. Beyond the training envelope without pushes, the never-shrink
+and paired fixed policies tie at 38%, the collapsed policy reaches 16%, and the
+unrandomized policy 3%. Between the two seeds of fixed randomization the difference is as
+large as between methods, which repeats the seed effect of Section 5. Videos with every
+draw marked pass or fall accompany the paper.</p>
+<p><strong>Second motion.</strong> On an untrained clip of the same family (<code>walk_hands_on_back_loop_003</code>,
+128 episodes per cell), success at λ 1.5 is 0.80 for fixed, 0.73 for the range-holding
+adaptive run, 0.40 for the collapsed run, and 0.18 without randomization. Rank correlation
+of the arm ordering with the trained clip is 0.8 and 1.0 across the two cells. This is one
+nearby clip, not motion generalization.</p>
+<h2>9. Proposed: The Range-Expansion Curriculum</h2>
+<p>Sections 4–7 fix what a curriculum may do and what it may listen to. The curriculum we
+propose follows in four sentences.</p>
+<ul>
+<li>Test proposed conditions before expanding a training range.</li>
+<li>Allow different physical parameters to expand at different times.</li>
+<li>Check whether combined changes cause failures.</li>
+<li>Continue practicing earlier conditions while keeping the admitted ranges from shrinking.</li>
+</ul>
+<p>Concretely, the 1,024 environments are split into a retained set that rehearses earlier
+ranges (25%), the active range (62.5%), and a probe set placed one step beyond the active
+range on one channel (12.5%). Survival on the probe set decides whether that channel
+expands. A periodic probe at the joint corner of all proposed ranges can hold an expansion
+that passes channel by channel but fails in combination. No decision can shrink a range.</p>
+<p><strong>What is measured so far.</strong> A scalar version of the probe gate, trained from scratch,
+expanded λ from 1.0 to 1.5 in four evidence-triggered steps at iterations 3,362, 4,103,
+4,790, and 5,891, recorded probe telemetry on 7,990 of 8,000 iterations, and applied no
+decrease. A stale global return guard froze expansion 914 times after the ceiling was
+reached; the final design uses probe-relative evidence instead. The per-channel and
+joint-corner components are implemented as a prototype and not yet evaluated.</p>
+<p><strong>The test it must pass.</strong> Feedback earns credit only against a preset expansion schedule
+that reaches the same final ranges with the same compute and the same training mixture. If
+the adaptive curriculum ties the schedule, range width and monotone exposure explain the
+result and adaptive timing does not. The comparison is paired by seed, five seeds, with the
+held-out endpoints and margins of Section 5 frozen in advance. A tie or loss narrows the
+paper to Sections 4–7; it does not reopen the shrinkage pathway those sections close.</p>
+<h2>10. Limitations</h2>
+<p>All capability results come from one training motion and one primary simulator, with one
+nearby untrained clip and one sim-to-sim replay. The channel sweep uses one seed; the
+ordering is informative, exact gaps are not. Three seeds bound the never-shrink comparison
+to a noninferiority statement. The MuJoCo replay uses our own randomization and the ONNX
+policy, not the deployment binary. The proposed curriculum has a scalar prototype only.
+Nothing here has been run on hardware.</p>
+<h2>11. Conclusion</h2>
+<p>An adaptive curriculum should not be allowed to pass its own test by making the test
+easier. In long humanoid training runs, the curriculum that could do so did: it earned the
+highest training returns while losing the physics its policy would need. Refusing to shrink
+training ranges removes that path and recovers the robustness of fixed randomization, no
+more and no less. Survival measured on proposed conditions is the one signal in our audit
+that can drive expansion safely, and robustness must be widened parameter by parameter with
+combinations checked. Whether doing so beats a preset schedule is the next experiment.</p>
+<h2>Appendix A. Vocabulary</h2>
+<p>Terms used in earlier drafts and their replacements in this one.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Earlier</th>
+<th>Here</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Difficulty evacuation</td>
+<td>Training-range collapse</td>
+</tr>
+<tr>
+<td>Endogenous exam trap</td>
+<td>Scores can improve because training gets easier</td>
+</tr>
+<tr>
+<td>Monotone support / ratchet</td>
+<td>Training ranges that never shrink</td>
+</tr>
+<tr>
+<td>Mechanism inoculation</td>
+<td>Preventing range shrinkage</td>
+</tr>
+<tr>
+<td>Anisotropic frontiers</td>
+<td>A separate range for each physical parameter</td>
+</tr>
+<tr>
+<td>Candidate-level population probes</td>
+<td>Testing the proposed expansion</td>
+</tr>
+<tr>
+<td>Joint-corner sentinel</td>
+<td>A test of combined parameter changes</td>
+</tr>
+<tr>
+<td>Retained rehearsal tail</td>
+<td>Continued practice on earlier conditions</td>
+</tr>
+<tr>
+<td>Open-loop ramp</td>
+<td>A preset expansion schedule</td>
+</tr>
+<tr>
+<td>Safety receipt</td>
+<td>A record of blocked range reductions</td>
+</tr>
+<tr>
+<td>MAnD-Ex</td>
+<td>The range-expansion curriculum</td>
+</tr>
+</tbody>
+</table></div>
+<h2>Appendix B. Evidence ledger (remove before submission)</h2>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Section</th>
+<th>Receipt</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4</td>
+<td><code>receipts/analysis/lucid_return_inversion_20260901.json</code>, <code>lucid_p3_readout_20260901.json</code></td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>receipts/analysis/lucid_phase0_analysis_20260901.json</code> (H_R2 decision), ratchet guard logs</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>receipts/analysis/lucid_signal_audit_20260901.json</code>, <code>lucid_physical_signal_audit_20260902.json</code></td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>receipts/analysis/lucid_channel_attribution_20260902.json</code></td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>receipts/analysis/mujoco_sim2sim_20260902/</code>, <code>lucid_heldout_motion_20260901.json</code></td>
+</tr>
+<tr>
+<td>9</td>
+<td><code>receipts/analysis/lucid_gate_feasibility_20260901.json</code>, preregistration <code>lucid_support_expansion_screen_preregistration_20260901.json</code></td>
+</tr>
+</tbody>
+</table></div>
+<h2>References</h2>
+<p>[1] J. Tobin et al., "Domain Randomization for Transferring Deep Neural Networks from Simulation to the Real World," IROS, 2017.
+[2] X. B. Peng et al., "Sim-to-Real Transfer of Robotic Control with Dynamics Randomization," ICRA, 2018.
+[3] J. Tan et al., "Sim-to-Real: Learning Agile Locomotion for Quadruped Robots," RSS, 2018.
+[4] A. Rajeswaran et al., "EPOpt: Learning Robust Neural Network Policies Using Model Ensembles," 2016.
+[5] OpenAI et al., "Solving Rubik's Cube with a Robot Hand," 2019.
+[6] B. Mehta et al., "Active Domain Randomization," CoRL, 2019.
+[7] G. Tiboni et al., "Domain Randomization via Entropy Maximization," ICLR, 2024.
+[8] P. Klink et al., "Self-Paced Contextual Reinforcement Learning," CoRL, 2020.
+[9] R. Portelas et al., "Teacher Algorithms for Curriculum Learning of Deep RL in Continuously Parameterized Environments," CoRL, 2020.
+[10] X. B. Peng et al., "DeepMimic," 2018.
+[11] X. B. Peng et al., "AMP: Adversarial Motion Priors," 2021.
+[12] Z. Luo et al., "SONIC: Supersizing Motion Tracking for Natural Humanoid Whole-Body Control," 2025.
+[13] Q. Liao et al., "BeyondMimic," 2025.
+[14] M. Dennis et al., "Emergent Complexity and Zero-Shot Transfer via Unsupervised Environment Design," NeurIPS, 2020.
+[15] M. Jiang et al., "Prioritized Level Replay," ICML, 2021.
+[17] G. Christmann et al., "Benchmarking Smoothness and Reducing High-Frequency Oscillations in Continuous Control Policies," IROS, 2024.</p></main>
+</body></html>

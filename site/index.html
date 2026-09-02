@@ -1,0 +1,208 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LUCID · Is the robot getting better, or is its training getting easier?</title>
+<meta name="description" content="Feedback-driven domain-randomization curricula for humanoid motion tracking: the training-range collapse we measured, the rule that prevents it, the evidence, the videos, and the plan.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400;1,6..72,600&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--bg:#F6F7F5;--ink:#1C2128;--muted:#5F6B7A;--accent:#2E5A87;--bad:#A8432B;--good:#2E7D5B;--rule:#D4D9DE;--tint:#E9EEF3;--card:#FFFFFF;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--bg:#15191E;--ink:#E4E8EC;--muted:#9AA6B4;--accent:#86B0DB;--bad:#E0836A;--good:#6FC29A;--rule:#2C343D;--tint:#1E252D;--card:#1B2129;color-scheme:dark}}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:"Source Sans 3",system-ui,sans-serif;font-size:17px;line-height:1.55;margin:0}
+.wrap{max-width:1040px;margin:0 auto;padding:0 24px}
+.measure{max-width:70ch}
+header.hero{padding:56px 0 36px;border-bottom:1px solid var(--rule)}
+.eyebrow{font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:0 0 14px}
+h1{font-family:Newsreader,Georgia,serif;font-weight:600;font-size:clamp(34px,5vw,54px);line-height:1.08;margin:0 0 18px;text-wrap:balance;max-width:20ch}
+.lede{font-family:Newsreader,Georgia,serif;font-size:21px;line-height:1.45;max-width:62ch;margin:0 0 22px}
+nav.toc{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:14px;margin-top:10px}
+nav.toc a{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent}nav.toc a:hover{border-color:var(--accent)}
+section{padding:44px 0;border-bottom:1px solid var(--rule)}
+h2{font-family:Newsreader,Georgia,serif;font-weight:600;font-size:32px;line-height:1.15;margin:0 0 6px;text-wrap:balance}
+.kicker{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0 0 8px;font-weight:600}
+h3{font-family:Newsreader,Georgia,serif;font-weight:600;font-size:22px;margin:30px 0 8px;text-wrap:balance}
+p{margin:0 0 14px}
+.grid{display:grid;gap:18px}
+.g3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.g2{grid-template-columns:repeat(auto-fit,minmax(340px,1fr))}
+.stat{background:var(--card);border:1px solid var(--rule);padding:18px 20px}
+.stat .n{font-family:Newsreader,Georgia,serif;font-size:40px;line-height:1;font-weight:600;font-variant-numeric:tabular-nums}
+.stat .n.bad{color:var(--bad)}.stat .n.good{color:var(--good)}
+.stat .l{font-size:14px;color:var(--muted);margin-top:8px}
+.tbl{overflow-x:auto;margin:14px 0 20px}
+table{border-collapse:collapse;font-size:14.5px;min-width:100%;font-variant-numeric:tabular-nums}
+th{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);text-align:left;font-weight:600;border-bottom:1px solid var(--ink);padding:8px 10px;white-space:nowrap}
+td{padding:7px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+td.num,th.num{text-align:right;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:13.5px}
+tr.bad td{color:var(--bad)}tr.ours td:first-child{font-weight:600}
+blockquote{margin:18px 0;padding:14px 20px;border-left:3px solid var(--accent);background:var(--tint);font-family:Newsreader,Georgia,serif;font-size:21px;font-style:italic}blockquote p{margin:0}
+figure{margin:20px 0}
+figure video{width:100%;height:auto;display:block;background:#000;border:1px solid var(--rule)}
+figcaption{font-size:14px;color:var(--muted);margin-top:8px;line-height:1.45}
+figcaption b{color:var(--ink)}
+.callout{background:var(--tint);border:1px solid var(--rule);padding:16px 20px;margin:16px 0}
+.callout.warn{border-left:4px solid var(--bad)}
+ul,ol{padding-left:22px;margin:0 0 14px}li{margin-bottom:7px}
+code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.86em;background:var(--tint);padding:1px 5px;border-radius:3px}
+a{color:var(--accent)}
+.tag{display:inline-block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border:1px solid var(--rule);border-radius:3px;color:var(--muted);margin-left:6px;vertical-align:middle}
+.tag.done{color:var(--good);border-color:var(--good)}.tag.live{color:var(--accent);border-color:var(--accent)}.tag.next{color:var(--bad);border-color:var(--bad)}
+footer{padding:36px 0 60px;font-size:14px;color:var(--muted)}
+.timeline td:first-child{white-space:nowrap}
+</style></head><body>
+<header class="hero"><div class="wrap">
+<p class="eyebrow">LUCID · feedback-driven domain randomization for humanoid motion tracking · Unitree G1 · SONIC / Isaac Lab · updated 2026-09-02</p>
+<h1>Is the robot getting better, or is its training getting easier?</h1>
+<p class="lede">An adaptive curriculum that may narrow its own training ranges will narrow them when learning stalls. Training reward goes up, the dashboard looks healthy, and the policy has quietly stopped seeing the physics it will face at deployment. We measured that failure in long humanoid training runs, priced it, removed it with a one-line rule, audited which signals can be trusted, and replayed the policies in a second simulator so you can watch the difference.</p>
+<nav class="toc"><a href="#problem">The problem</a><a href="#findings">What we found</a><a href="#videos">Watch it happen</a><a href="#method">How the curriculum works</a><a href="#status">Where we are</a><a href="#plan">Next steps</a><a href="#evidence">Evidence</a><a href="paper.html">Paper draft →</a></nav>
+</div></header>
+
+<section id="problem"><div class="wrap">
+<p class="kicker">The problem</p>
+<h2>A curriculum that grades its own exam</h2>
+<div class="measure">
+<p>Domain randomization trains a policy on ranges of mass, friction, center of mass, joint offsets, actuator delay, and pushes, so that the real robot lands inside the training distribution. The width of the ranges is a genuine tension: too wide and learning stalls, too narrow and the policy is brittle. Adaptive curricula resolve it by moving the ranges during training, usually driven by some score measured on the current training batch.</p>
+<p>The catch is that the score is measured on a distribution the curriculum controls. If the score falls and the curriculum is allowed to make training easier, the score recovers with no change to the policy. Repeat, and the training ranges drift away from deployment while every monitor improves. We call the end state <b>training-range collapse</b>.</p>
+<blockquote><p>Return went up in exactly the runs that had stopped training on the physics that mattered.</p></blockquote>
+<p>Our testbed is SONIC whole-body motion tracking on a 29-DoF Unitree G1 in Isaac Lab: 1,024 environments, 8,000 PPO iterations from scratch, one training clip, six randomized channels scaled by one number λ where λ = 1 is the training envelope. Every policy is scored afterwards on a frozen physics ladder (λ from 0 to 2, 512 episodes per cell) that no curriculum ever sees.</p>
+</div></div></section>
+
+<section id="findings"><div class="wrap">
+<p class="kicker">What we found</p>
+<h2>Four measured results, in the order they happened</h2>
+<div class="grid g3" style="margin:18px 0 28px">
+<div class="stat"><div class="n bad">2 of 6</div><div class="l">long adaptive runs collapsed their ranges to λ ≈ 0.06 and 0.01 after reaching the full envelope</div></div>
+<div class="stat"><div class="n bad">−0.73</div><div class="l">Spearman correlation between terminal training return and held-out robustness across twelve scored runs</div></div>
+<div class="stat"><div class="n bad">−14.2 pts</div><div class="l">held-out success AUC lost by one collapsed run against fixed randomization on the same seed</div></div>
+<div class="stat"><div class="n good">0 / 2,033</div><div class="l">requested range reductions applied once the never-shrink rule was in place, three seeds</div></div>
+</div>
+
+<h3>1 · The collapse is real, and the training curve hides it</h3>
+<div class="measure"><p>Six 8,000-iteration runs of a feedback curriculum driven by a learned mismatch signal all applied at least one range reduction. Two ended near λ = 0. Those two had the highest terminal returns of all twelve runs we scored and among the lowest robustness on the frozen ladder.</p></div>
+<div class="tbl"><table><tr><th>Outcome</th><th class="num">Collapsed run A</th><th class="num">Collapsed run B</th><th class="num">Runs that held their ranges</th></tr>
+<tr class="bad"><td>Final range scale λ</td><td class="num">0.062</td><td class="num">0.012</td><td class="num">1.000</td></tr>
+<tr><td>Mean return, last 500 iterations</td><td class="num">15.29</td><td class="num">14.40</td><td class="num">10.98 – 12.28</td></tr>
+<tr><td>Frontier success AUC (points)</td><td class="num">73.99</td><td class="num">69.73</td><td class="num">61.20 – 91.31</td></tr></table></div>
+
+<h3>2 · A one-line rule removes the failure</h3>
+<div class="measure"><p>Keep the same controller, refuse every requested decrease. Across three seeds the rule blocked 453, 951, and 629 reductions and applied none. Under a comparison rule frozen before the data existed, the resulting policies are within margin of fixed domain randomization on all four outcome components and all three seeds. They are not better. That is the honest claim: the failure mode is gone and nothing was lost.</p></div>
+<div class="tbl"><table><tr><th>Seed</th><th class="num">Never-shrink AUC</th><th class="num">Fixed DR AUC</th><th class="num">Difference</th></tr>
+<tr><td>8600</td><td class="num">90.30</td><td class="num">90.46</td><td class="num">−0.16</td></tr>
+<tr><td>8601</td><td class="num">91.31</td><td class="num">88.18</td><td class="num">+3.13</td></tr>
+<tr><td>8602</td><td class="num">82.03</td><td class="num">83.20</td><td class="num">−1.17</td></tr>
+<tr><td><b>Mean</b></td><td class="num"></td><td class="num"></td><td class="num"><b>+0.60</b> (SD 2.25)</td></tr></table></div>
+
+<h3>3 · The signal was the culprit, not the gain</h3>
+<div class="measure"><p>At fixed difficulty, a usable readiness signal must move with competence. Time-out survival does (rank correlation +0.99 with training progress). The learned mismatch signal that drove the collapsing curriculum does not (−0.04, nineteen direction reversals), and its direction was set by the arm rather than the policy. No tuning of the controller could have saved it. Survival is usable, but only if measured on the <i>proposed harder</i> conditions rather than the current ones, and only if a failed test can hold but never shrink the ranges.</p></div>
+
+<h3>4 · Robustness is per-parameter, and combinations bite</h3>
+<div class="measure"><p>Widening one channel at a time on frozen policies (512 episodes per cell) shows that pushes are the binding channel for every randomized policy, while mass, center of mass, and joint offsets can be tripled at under 1.4 points of cost. The unrandomized policy fails first under center-of-mass shift instead. Widening everything together costs about six points more than the sum of the parts. Both facts argue for expanding channels separately and testing corners.</p></div>
+<div class="tbl"><table><tr><th>Policy</th><th class="num">All 2×</th><th class="num">Mass 3×</th><th class="num">CoM 3×</th><th class="num">Joint 3×</th><th class="num">Push 2× / 3×</th><th>First to fail</th></tr>
+<tr><td>Fixed DR</td><td class="num">0.820</td><td class="num">0.949</td><td class="num">0.988</td><td class="num">0.990</td><td class="num">0.912 / 0.746</td><td>push</td></tr>
+<tr class="ours"><td>Never-shrink</td><td class="num">0.842</td><td class="num">0.938</td><td class="num">0.982</td><td class="num">0.986</td><td class="num">0.928 / 0.770</td><td>push</td></tr>
+<tr class="bad"><td>Adaptive, collapsed</td><td class="num">0.518</td><td class="num">0.682</td><td class="num">0.818</td><td class="num">0.955</td><td class="num">0.811 / 0.570</td><td>push</td></tr>
+<tr><td>No randomization</td><td class="num">0.334</td><td class="num">0.643</td><td class="num">0.393</td><td class="num">0.891</td><td class="num">0.736 / 0.443</td><td>center of mass</td></tr></table></div>
+</div></section>
+
+<section id="videos"><div class="wrap">
+<p class="kicker">Watch it happen</p>
+<h2>The same policies, replayed in MuJoCo</h2>
+<div class="measure"><p>We exported the final Isaac Lab policies to ONNX and replayed them in MuJoCo with an independent implementation of the six randomized channels, scaled by the same λ. Every grid below shows <b>all eight physics draws</b> for a policy; a tile is marked green <b>PASS</b> if the robot tracks the clip to the end, or red <b>FELL at t s</b> the moment the pelvis leaves 0.5 m of the reference, and then freezes on the fall so it stays on screen. Headers carry the MuJoCo pass rate over those eight draws and the Isaac Lab 512-episode score for the same checkpoint. The two simulators randomize differently and are never pooled.</p></div>
+
+<figure><video controls preload="metadata" poster="img/explainer_story.jpg" src="videos/explainer_story.mp4"></video>
+<figcaption><b>Why randomization matters.</b> No randomization, fixed DR, and the never-shrink curriculum side by side at nominal physics, the training envelope, heavy, and extreme randomization. Without randomization the policy tracks nominal physics perfectly and falls as soon as physics moves.</figcaption></figure>
+
+<figure><video controls preload="metadata" poster="img/ladder_story.jpg" src="videos/ladder_story.mp4"></video>
+<figcaption><b>The full ladder, all channels including pushes, every draw marked.</b> Nominal physics (λ 0), the training envelope (λ 1), heavy randomization (λ 1.5). At λ 1: no randomization 2/8, collapsed curriculum 4/8, fixed DR 6/8, never-shrink 4/8. Pushes dominate this ladder and, as the 32-seed table shows, the never-shrink policy and fixed DR on the same seed are indistinguishable.</figcaption></figure>
+
+<figure><video controls preload="metadata" poster="img/frontier_lam2.jpg" src="videos/frontier_story.mp4"></video>
+<figcaption><b>Beyond the training envelope, physics only.</b> Friction, mass, center of mass, joint offset, and delay widened to 1.5× and 2× with no pushes, so the physics channels are visible on their own. At λ 2: no randomization 0/8, collapsed curriculum 1/8, fixed DR on the paired seed 2/8, never-shrink 4/8. On 32 draws the never-shrink and paired fixed policies tie at 38%; the ordering against the collapsed run (16%) and no randomization (3%) is the result.</figcaption></figure>
+
+<div class="tbl"><table><tr><th>Policy</th><th class="num">All channels · λ 1 / 1.5 / 2</th><th class="num">Physics only · λ 1 / 1.5 / 2</th></tr>
+<tr><td>No randomization</td><td class="num">31 / 12 / 0 %</td><td class="num">59 / 16 / 3 %</td></tr>
+<tr class="bad"><td>Adaptive, collapsed (seed 8601)</td><td class="num">56 / 19 / 9 %</td><td class="num">84 / 31 / 16 %</td></tr>
+<tr class="ours"><td>Never-shrink (seed 8601)</td><td class="num">47 / 22 / 16 %</td><td class="num">66 / 50 / 38 %</td></tr>
+<tr><td>Fixed DR (seed 8601, paired)</td><td class="num">47 / 25 / 12 %</td><td class="num">75 / 47 / 38 %</td></tr>
+<tr><td>Fixed DR (seed 8600)</td><td class="num">78 / 34 / 16 %</td><td class="num">94 / 56 / 31 %</td></tr></table></div>
+<p style="font-size:14px;color:var(--muted)">MuJoCo survival over 32 shared physics draws per cell. Per-difficulty cuts: <a href="videos/ladder_lam0.mp4">λ 0</a> · <a href="videos/ladder_lam1.mp4">λ 1</a> · <a href="videos/ladder_lam1.5.mp4">λ 1.5</a> · physics-only <a href="videos/frontier_lam1.5.mp4">λ 1.5</a> · <a href="videos/frontier_lam2.mp4">λ 2</a> · <a href="videos/explainer_grid.mp4">3 × 4 explainer grid</a>.</p>
+</div></section>
+
+<section id="method"><div class="wrap">
+<p class="kicker">How the curriculum works</p>
+<h2>Expand on evidence, never shrink</h2>
+<div class="grid g2">
+<div class="measure">
+<h3 style="margin-top:0">What the collapsing version did</h3>
+<p>A PI controller read a learned mismatch statistic on the current training batch and moved the single scale λ up or down toward a set point. When learning stalled, lowering λ restored the statistic faster than learning could, so the controller lowered it, and lowered it again.</p>
+<h3>What the never-shrink version does</h3>
+<p>Same controller, same signal, one projection: a requested decrease is refused and logged. The range may expand or hold. Across three seeds this alone recovered the robustness of fixed randomization.</p>
+</div>
+<div class="measure">
+<h3 style="margin-top:0">What the range-expansion curriculum adds</h3>
+<ul>
+<li><b>Test proposed conditions before expanding.</b> A probe set of 128 environments trains one step beyond the active range; the range steps up only when probe survival clears a threshold over a window.</li>
+<li><b>Let each physical parameter expand on its own clock.</b> Pushes may stall at 1× while mass and center of mass go to 3×.</li>
+<li><b>Check combined changes.</b> A periodic probe at the corner of all proposed ranges can hold an expansion that passes channel by channel but fails together.</li>
+<li><b>Keep practicing earlier conditions.</b> A quarter of environments rehearse earlier ranges; admitted ranges never shrink.</li>
+</ul>
+<p>A scalar version of the probe gate, trained from scratch, expanded λ from 1.0 to 1.5 in four evidence-triggered steps at iterations 3,362, 4,103, 4,790, and 5,891 with no decrease. It also exposed a defect: a stale global return guard froze expansion 914 times after the ceiling. The final design uses probe-relative evidence.</p>
+</div></div>
+</div></section>
+
+<section id="status"><div class="wrap">
+<p class="kicker">Where we are</p>
+<h2>Current standing of every track</h2>
+<div class="tbl"><table>
+<tr><th>Track</th><th>State</th><th>What it established</th></tr>
+<tr><td>Collapse and return inversion <span class="tag done">measured</span></td><td>12 arm–seed pairs scored on the frozen ladder</td><td>Two collapses; Spearman −0.73; cost 14.2 / 17.3 points on the same seed</td></tr>
+<tr><td>Never-shrink rule, three seeds <span class="tag done">measured</span></td><td>Preregistered noninferiority passed</td><td>0 of 2,033 reductions applied; +0.60 ± 2.25 points vs fixed DR; superiority not claimed</td></tr>
+<tr><td>Readiness-signal audit <span class="tag done">measured</span></td><td>Five pinned-difficulty runs, two collapses</td><td>Survival anchored (+0.99); learned mismatch not (−0.04); foot slip the only body signal with a consistent difficulty response</td></tr>
+<tr><td>Per-channel attribution <span class="tag done">measured</span></td><td>55 cells, one seed</td><td>Push binds; mass / CoM / joint free to 3×; joint corner costs 6 points beyond the marginals</td></tr>
+<tr><td>From-scratch probe gate <span class="tag done">measured</span></td><td>One seed, 8,000 iterations</td><td>Four expansions to 1.5, zero decreases; return-guard defect found</td></tr>
+<tr><td>Warm-start expansion screen <span class="tag live">running</span></td><td>2,000-iteration arms from a solved λ 1 policy, one seed</td><td>Batch 1 on the held-out band: fixed 1.5 0.935, gate 0.932, per-channel box 0.893. Width did not beat scheduling by the 0.03 margin; the box shelved itself by its own rule. Batch 2 (ramp, fixed, asymmetric fixed) in flight</td></tr>
+<tr><td>MuJoCo sim-to-sim replay <span class="tag done">measured</span></td><td>5 policies × 6 λ × 32 draws, two channel sets</td><td>Ordering transfers; push binds in both simulators; ratchet ≡ paired fixed</td></tr>
+<tr><td>Held-out motion <span class="tag live">1 of 3 clips</span></td><td>Nearby untrained clip, 128 episodes per cell</td><td>Ordering preserved (Spearman 0.8, 1.0); collapsed run 0.40 vs fixed 0.80 at λ 1.5</td></tr>
+<tr><td>Matched preset schedule vs adaptive gate <span class="tag next">not run</span></td><td>Decisive test for the curriculum</td><td>Nothing yet; a tie narrows the paper to the measured results</td></tr>
+<tr><td>Hardware <span class="tag next">not run</span></td><td>—</td><td>Nothing has run on the robot</td></tr>
+</table></div>
+<div class="callout warn"><b>What we do not claim.</b> No feedback method has beaten fixed randomization on our evidence. The never-shrink rule is essentially the boundary rule of Automatic Domain Randomization; our contribution is the measurement of what goes wrong without it, the audit of which signals can drive it, and the per-channel structure of humanoid robustness. All capability results come from one training clip. Between-seed offsets reach 7.8 points, so single-seed screens rank designs and do not decide.</div>
+</div></section>
+
+<section id="plan"><div class="wrap">
+<p class="kicker">Next steps</p>
+<h2>How we plan to improve performance, in order of information per GPU-hour</h2>
+<div class="measure"><p>Measured rates on the single RTX 5080: a from-scratch 8,000-iteration arm takes about 5.4 GPU-hours, a 2,000-iteration warm-start arm about 1.5, an evaluation cell about 33 seconds. Everything below is serial on that card unless a second host joins.</p></div>
+<div class="tbl"><table class="timeline">
+<tr><th>Step</th><th>What runs</th><th>Decides</th><th class="num">GPU-h</th></tr>
+<tr><td>1 · Finish the warm-start screen</td><td>Batch 2 (ramp 1.5, fixed, asymmetric fixed) scored on λ 1.75 / 2 and the ten channel marginals</td><td>Whether widening the cheap channels to 2–3× buys robustness for free, and whether adaptive timing beats a preset ramp at all</td><td class="num">≈ 5</td></tr>
+<tr><td>2 · Asymmetric box from the sweep</td><td>Per-channel ceilings set by the attribution sweep: mass / CoM / joint to 2–3×, friction held at its clamp, push gated</td><td>The first arm that can exceed fixed DR's support where it is free and withhold it where it is not</td><td class="num">≈ 2</td></tr>
+<tr><td>3 · Matched schedule, from scratch</td><td>Adaptive gate vs a preset expansion schedule reaching the same final ranges with the same compute and mixture; paired by seed</td><td>Whether feedback earns credit. This is the paper's Section 9 test; a tie is reported as a tie</td><td class="num">≈ 22</td></tr>
+<tr><td>4 · Multi-seed confirmation</td><td>Winner and its control on seeds 8601 and 8602</td><td>Clears the 7.8-point seed effect; four of five seeds positive for superiority language</td><td class="num">≈ 22–43</td></tr>
+<tr><td>5 · Slip-augmented probe</td><td>Per-stratum foot slip logged next to survival so a probe can be judged where survival saturates</td><td>Whether a continuous body signal makes in-envelope expansion decisions possible</td><td class="num">CPU + telemetry</td></tr>
+<tr><td>6 · Motion generalization</td><td>Family-stratified motion panel, 20–30 held-out clips</td><td>Whether the ordering survives beyond one clip family</td><td class="num">≈ 33</td></tr>
+<tr><td>7 · Deployment path</td><td>ONNX → TensorRT parity, MuJoCo through the C++ deploy binary, then a safety-gated G1 protocol</td><td>Whether Isaac gains survive the real control path; hardware never tunes the method</td><td class="num">—</td></tr>
+</table></div>
+<div class="measure"><p>Every step has a preregistered decision rule and a receipt before it runs. A step that loses narrows the claim; it does not reopen the shrinkage pathway the first four results closed.</p></div>
+</div></section>
+
+<section id="evidence"><div class="wrap">
+<p class="kicker">Evidence</p>
+<h2>Every number on this page has a receipt</h2>
+<div class="grid g2">
+<div class="measure"><ul>
+<li><a href="https://github.com/linjiw/lucid/blob/main/receipts/analysis/lucid_return_inversion_20260901.json">Return–robustness inversion</a>, twelve arm–seed pairs</li>
+<li><a href="https://github.com/linjiw/lucid/blob/main/receipts/analysis/lucid_p3_readout_20260901.json">Predeclared collapse readout</a>, 0.7399 against frozen bands</li>
+<li><a href="https://github.com/linjiw/lucid/blob/main/receipts/analysis/lucid_phase0_analysis_20260901.json">Three-seed never-shrink decision</a></li>
+<li><a href="https://github.com/linjiw/lucid/blob/main/receipts/analysis/lucid_signal_audit_20260901.json">Readiness-signal audit</a> and <a href="https://github.com/linjiw/lucid/blob/main/receipts/analysis/lucid_physical_signal_audit_20260902.json">physical-signal audit</a></li>
+<li><a href="https://github.com/linjiw/lucid/blob/main/receipts/analysis/lucid_channel_attribution_20260902.json">Per-channel attribution sweep</a></li>
+</ul></div>
+<div class="measure"><ul>
+<li><a href="https://github.com/linjiw/lucid/blob/main/receipts/analysis/lucid_gate_feasibility_20260901.json">From-scratch probe gate</a> and <a href="https://github.com/linjiw/lucid/blob/main/receipts/analysis/lucid_expansion_prototype_batch1_20260902.json">warm-start screen, batch 1</a></li>
+<li><a href="https://github.com/linjiw/lucid/tree/main/receipts/analysis/mujoco_sim2sim_20260902">MuJoCo sim-to-sim sweeps and video manifests</a></li>
+<li><a href="https://github.com/linjiw/lucid/blob/main/receipts/analysis/lucid_heldout_motion_20260901.json">Held-out motion readout</a></li>
+<li><a href="https://github.com/linjiw/lucid/tree/main/receipts/manifests">Every training and evaluation manifest</a> (git SHA, seeds, checkpoint hashes, verified / not-verified split)</li>
+<li>Tools: <a href="https://github.com/linjiw/lucid/blob/main/tools/mujoco_player.py">MuJoCo player</a>, <a href="https://github.com/linjiw/lucid/blob/main/tools/mujoco_sweep.py">sweep</a>, <a href="https://github.com/linjiw/lucid/blob/main/tools/mujoco_story.py">story builder</a>; curriculum code in the <code>GR00T-WholeBodyControl</code> submodule under <code>gear_sonic/research/practice_utility/</code></li>
+</ul></div></div>
+<p style="margin-top:10px"><a href="paper.html"><b>Read the paper draft →</b></a> &nbsp;·&nbsp; <a href="lucid-paper.html">earlier draft (difficulty-evacuation framing)</a> &nbsp;·&nbsp; <a href="https://github.com/linjiw/lucid">repository</a></p>
+</div></section>
+
+<footer><div class="wrap">LUCID research workspace. SONIC and Isaac Lab are used as the testbed; the SONIC fork keeps upstream files untouched with all research code under a separate package. MuJoCo survival and Isaac Lab ledger scores are shown side by side and never pooled. Videos and numbers on this page are generated by the tools in the repository from the receipts linked above.</div></footer>
+</body></html>
