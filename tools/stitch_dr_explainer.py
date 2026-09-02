@@ -92,7 +92,16 @@ def rendered_success(cell_dir: Path) -> float | None:
 
 
 def esc(text: str) -> str:
-    return text.replace("\\", "\\\\").replace(":", "\\:").replace("'", "\\'")
+    """Escape for an ffmpeg drawtext option inside a -vf chain.
+
+    Inside a filter graph ',' separates filters and ':' separates options, so
+    both must be backslash-escaped in the text; a comma left unescaped drops
+    the rest of the caption silently.
+    """
+    out = text.replace("\\", "\\\\")
+    for ch in (":", ",", "'", "[", "]", ";"):
+        out = out.replace(ch, "\\" + ch)
+    return out
 
 
 def label_filter(lines: list[str], size: int = 30) -> str:
