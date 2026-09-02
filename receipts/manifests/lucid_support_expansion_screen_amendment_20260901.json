@@ -141,6 +141,14 @@
       "effect_on_measurements": "none on any training metric: the paused process resumes with its own RNG stream and state. ramp_150's recorded wall-clock includes the pause; no decision rule (D1-D4) or mechanism gate (G1-G4) reads wall-clock. The paused trainer holds ~6.7 GiB of GPU memory throughout, so the prototype arms train under memory contention, which affects their wall-clock only.",
       "recorded_by": "tools/run_queue_20260902.sh log at $LUCID_ROOT/outputs/queue_20260902.log; paused pids in queue_20260902.paused_pids while paused",
       "created_at": "2026-09-02T07:22:35.630800-04:00"
+    },
+    {
+      "id": "A10",
+      "severity": "queue_closed_by_decision",
+      "target": "execution of the five-arm queue",
+      "change": "At 2026-09-02 07:35 EDT the user closed the Phase 2 queue to free GPU memory and time for the prototype loop: the Phase 2 driver was terminated and the SIGSTOPped ramp_150 trainer killed at the iteration recorded in $LUCID_ROOT/manifests/lucid_phase2_gate150_index_20260902.json. fixed_150, fixed_u150 and fixed were never launched. gate_150 is complete and untouched (final checkpoint 05:56; expansions at global steps 3362/4103/4790/5891; frontier 1.5; 0 applied decreases; return guard froze 914 iterations).",
+      "consequence": "Decision rules D1-D4 cannot be evaluated: the decisive gate-vs-ramp contrast has no matched control and the width arms are absent. gate_150 stands as a MECHANISM result (a probe-gated frontier expands from scratch on its own evidence and never contracts) and may be scored on the held-out band against the historical fixed@s8600 arm, labelled as an unmatched single-seed comparison. Superseded, not deleted: the screen can be re-run with PHASE2_MODES='ramp_150 fixed_150 fixed_u150 fixed' from the same pinned worktree if the prototype loop makes it worth 21 GPU-hours.",
+      "created_at": "2026-09-02T07:35:46.532446-04:00"
     }
   ],
   "unchanged": "Every arm definition, stratum layout, endpoint, weight, threshold, decision rule, mechanism gate, frozen prediction and limitation in the parent preregistration is unchanged by this amendment.",

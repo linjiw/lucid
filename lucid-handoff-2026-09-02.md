@@ -4,7 +4,23 @@ Companion to `lucid-research-plan-2026-09-01.md` (section 8 is today's
 addendum), `lucid-handoff-2026-09-01-phase2.md` (Phase 2 operations) and the
 paper draft `site/lucid-paper.html`.
 
-## 0. Update 07:45 EDT — gate arm complete, queue script ready but NOT launched
+## 0a. Update 07:40 EDT — queue running; Phase 2 CLOSED at the user's request
+
+- The user launched the queue at 07:27 (pause worked; box_150 training) and
+  then asked to close the paused Phase 2 ramp arm to free GPU memory and time.
+  Done at 07:35: driver terminated first (so it could not launch fixed_150),
+  then the paused trainer killed. ramp_150 died at iteration 1,787 (frontier
+  1.098); fixed_150 / fixed_u150 / fixed never ran. Amendment A10.
+- gate_150 is intact and complete; hand-built checkpoint index
+  `$LUCID_ROOT/manifests/lucid_phase2_gate150_index_20260902.json` lets it be
+  scored later. It is a mechanism result (expands from scratch on its own
+  evidence, never contracts), not a decision under D1–D4.
+- GPU now: prototype trainer ~6.8 GiB plus the user's unrelated `~/ardy`
+  experiment (~1.4 GiB, pid 2098748) — not part of this programme.
+- Box arm at iteration 151: joint-offset channel already fired to 1.125, probe
+  moved to CoM, window mean 0.97, population survival 0.975.
+
+## 0. Earlier note (superseded by 0a) — gate arm complete, queue script ready
 
 - **gate_150 finished** (final checkpoint exported 05:56): four expansions
   from scratch, frontier at the 1.5 ceiling, zero guard trips, zero applied
