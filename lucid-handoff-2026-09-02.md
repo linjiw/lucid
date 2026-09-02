@@ -4,7 +4,29 @@ Companion to `lucid-research-plan-2026-09-01.md` (section 8 is today's
 addendum), `lucid-handoff-2026-09-01-phase2.md` (Phase 2 operations) and the
 paper draft `site/lucid-paper.html`.
 
-## 1. Live state at hand-off
+## 0. Update 07:45 EDT — gate arm complete, queue script ready but NOT launched
+
+- **gate_150 finished** (final checkpoint exported 05:56): four expansions
+  from scratch, frontier at the 1.5 ceiling, zero guard trips, zero applied
+  decreases. The from-scratch probe-gated mechanism works.
+- **ramp_150 is training** (started ~06:00, the Phase 2 driver untouched).
+- The user asked whether to stop Phase 2 for the prototype loop. The
+  answer implemented: **pause, don't kill.** `tools/run_queue_20260902.sh`
+  SIGSTOPs the ramp trainer (+ wandb children), runs the prototype loop in two
+  scored batches (box_150/gate_150/box_asym/ramp_asym/fixed_150, then
+  ramp_150/fixed/fixed_asym), and SIGCONTs the trainer under an EXIT trap.
+  Phase 2 amendment A9 and prototype amendment A5 record it. The agent's
+  launch was blocked by the permission classifier (it signals another
+  process), so it must be started by hand:
+
+      nohup bash tools/run_queue_20260902.sh --execute > $LUCID_ROOT/outputs/queue_20260902.nohup 2>&1 &
+
+  Progress: `tail -f $LUCID_ROOT/outputs/queue_20260902.log`. If it is ever
+  killed, `kill -CONT $(cat $LUCID_ROOT/outputs/queue_20260902.paused_pids)`
+  resumes Phase 2 by hand. Expected: batch 1 scored ~15:30, batch 2 ~21:00,
+  Phase 2 resumes after and finishes ~2026-09-03 afternoon.
+
+## 1. Live state at hand-off (written 01:30 EDT)
 
 - **Phase 2 screen is training**, experiment
   `curriculum_comparison_ne1024_20260901_232720`, worktree `~/lucid-phase2`
