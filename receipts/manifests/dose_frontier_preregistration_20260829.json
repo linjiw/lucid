@@ -1,0 +1,15 @@
+{
+  "kind": "lucid_dose_frontier_preregistration",
+  "created_at": "2026-08-29T18:05:00-04:00",
+  "author": "Fable (autonomous)",
+  "motivation": "Latency dose is the only knob that moves both robustness (up) and clean retention (down). Points so far at the operating point: dose 0 (off) and dose 1 (fixed, 0-40 ms). Add dose 0.5 (0-20 ms) to map the frontier.",
+  "design": {"arm": "fixed_lat50 = fixed with term_lambda_overrides{randomize_action_delay: 0.5}", "regime": "512 envs + small updates", "iterations": 512, "seeds": [8600, 8601, 8602], "pool": "debug512"},
+  "evaluation": {"seen102": ["id_clean", "dr_full", "lat_u60_common"], "unseen200": ["id_clean", "dr_full"]},
+  "references": {"fixed@512 seen": [91.5, 81.4, 73.5], "fixed@512 unseen": [87.8, 79.8], "off@128 seen": [93.1, 60.1, 51.3], "release seen": [97.4, 69.6, 53.3]},
+  "hypotheses": {
+    "H_F1_retention": "fixed_lat50 unseen id_clean >= 92 (recovers at least half the clean cost)",
+    "H_F2_robustness": "fixed_lat50 seen dr_full >= 75 and lat_u60_common >= 65 (keeps most of the gain)",
+    "H_F3_frontier": "fixed_lat50 lies strictly between off and fixed on both axes (monotone dose-retention frontier)"
+  },
+  "verified": [], "not_yet_verified": ["all; written before launch"]
+}

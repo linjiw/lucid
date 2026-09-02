@@ -1,0 +1,2665 @@
+{
+  "kind": "lucid_frozen_checkpoint_robustness_evaluation",
+  "schema_version": 1,
+  "created_at": "2026-08-29T08:14:51.127967-04:00",
+  "experiment_id": "curriculum_robustness_ne128_20260829_072508",
+  "git_sha": "b91563c7188e907cb3c31729421b3e4984cea0ed",
+  "git_status_short": [],
+  "launcher_sha256": "d67c9f7e0e93b6c780fd75fc8b8ffeeb6b15198bead2590c2ff14c57ee5a34ab",
+  "training_receipt": "/data/robotixx/lucid-sonic/manifests/curriculum_comparison_ne512_20260829_065927_fixed_256.json",
+  "training_experiment_id": "curriculum_comparison_ne512_20260829_065927_fixed_256",
+  "protocol": {
+    "estimand": "frozen-policy robustness; training reward is excluded",
+    "num_envs": 128,
+    "checkpoint_seeds": [
+      8600,
+      8601,
+      8602
+    ],
+    "evaluation_seed_by_checkpoint_seed": {
+      "8600": 8700,
+      "8601": 8701,
+      "8602": 8702
+    },
+    "modes": [
+      "fixed"
+    ],
+    "presets": {
+      "id_clean": "six channels collapsed to LUCID lambda=0 nominal",
+      "dr_full": "fresh draws from the complete six-channel training envelope",
+      "latency_60ms": "full five non-latency DR channels plus fixed 60 ms latency, beyond the 0-40 ms train range"
+    },
+    "max_delay_capacity_steps": 12,
+    "physics_step_ms": 5,
+    "suite": {
+      "motion_file": "/data/robotixx/groot-wbc-sonic-research/datasets/bones_seed_official_zpd_scale512/content_dev/robot_filtered",
+      "motion_count": 102,
+      "motion_keys_sha256": "f0c182556bd3513aa7fa919be57a0f033c58a6ee617de4d226f288eff1026cc4",
+      "pool_sha256": "b065a49854a497aaa82c891e89c32505c46f5122c86ef04f94f340d83cba0434",
+      "split_sha256": "33784622dd8c798edc6fc67bd7921edc8ebb716187f0c2d9b686758d527c4cdd",
+      "split_linkage": "content",
+      "partition": "dev"
+    },
+    "resolved_training_config": {
+      "source": "/home/robotixx/lucid/GR00T-WholeBodyControl/logs_rl/TRL_G1_Track/manager/universal_token/all_modes/sonic_release_test-20260818_141446/config.yaml",
+      "sha256": "1bca9f995056c9854b4111b2f8cc45603cbb2141e3d0ccacb651eeb981b1c0ac",
+      "installed": [
+        "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260829_065927_fixed_256/seed_8600/fixed/config.yaml",
+        "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260829_065927_fixed_256/seed_8601/fixed/config.yaml",
+        "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260829_065927_fixed_256/seed_8602/fixed/config.yaml"
+      ]
+    },
+    "motion_generalization_claim": "none: the frozen dev panel was included in the 512-motion training pool; this is a fresh-physics and latency robustness evaluation",
+    "primary_outcomes": [
+      "success_rate",
+      "progress_rate",
+      "mpjpe_g",
+      "mpjpe_l"
+    ],
+    "secondary_batch_diagnostics": [
+      "foot_slip_per_step_m",
+      "undesired_contact_rate",
+      "torque_saturation",
+      "energy_proxy"
+    ],
+    "no_learning": true
+  },
+  "commands": {
+    "curriculum_robustness_ne128_20260829_072508_s8600_fixed_id_clean": [
+      "/home/robotixx/miniconda3/envs/sonic/bin/python",
+      "/home/robotixx/lucid/GR00T-WholeBodyControl/scripts/practice_utility/eval_with_delay.py",
+      "--max-delay",
+      "12",
+      "--",
+      "checkpoint=/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260829_065927_fixed_256/seed_8600/fixed/final_checkpoint.pt",
+      "+num_envs=128",
+      "+headless=true",
+      "+use_wandb=false",
+      "+seed=8700",
+      "+manager_env/events=tracking/lucid_eval_clean",
+      "+use_encoder=g1",
+      "+eval_callbacks=[practice_eval]",
+      "+run_eval_loop=false",
+      "++manager_env.config.train_only_events=[]",
+      "++manager_env.commands.motion.motion_lib_cfg.motion_file=/data/robotixx/groot-wbc-sonic-research/datasets/bones_seed_official_zpd_scale512/content_dev/robot_filtered",
+      "++manager_env.commands.motion.motion_lib_cfg.smpl_motion_file=data/motion_lib_bones_seed/smpl_filtered",
+      "++callbacks.practice_eval._target_=gear_sonic.research.practice_utility.eval_callback.PracticeRobustnessEvalCallback",
+      "++callbacks.practice_eval.eval_frequency=1",
+      "++callbacks.practice_eval.eval_only=true",
+      "++callbacks.practice_eval.output_dir=/data/robotixx/lucid-sonic/artifacts/curriculum_robustness_eval/curriculum_robustness_ne128_20260829_072508/seed_8600/fixed/id_clean",
+      "++callbacks.practice_eval.preset_id=id_clean",
+      "++callbacks.practice_eval.branch_id=curriculum_robustness_ne128_20260829_072508_s8600_fixed_id_clean"
+    ],
+    "curriculum_robustness_ne128_20260829_072508_s8600_fixed_dr_050": [
+      "/home/robotixx/miniconda3/envs/sonic/bin/python",
+      "/home/robotixx/lucid/GR00T-WholeBodyControl/scripts/practice_utility/eval_with_delay.py",
+      "--max-delay",
+      "12",
+      "--",
+      "checkpoint=/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260829_065927_fixed_256/seed_8600/fixed/final_checkpoint.pt",
+      "+num_envs=128",
+      "+headless=true",
+      "+use_wandb=false",
+      "+seed=8700",
+      "+manager_env/events=tracking/lucid_curriculum",
+      "+use_encoder=g1",
+      "+eval_callbacks=[practice_eval]",
+      "+run_eval_loop=false",
+      "++manager_env.config.train_only_events=[]",
+      "++manager_env.commands.motion.motion_lib_cfg.motion_file=/data/robotixx/groot-wbc-sonic-research/datasets/bones_seed_official_zpd_scale512/content_dev/robot_filtered",
+      "++manager_env.commands.motion.motion_lib_cfg.smpl_motion_file=data/motion_lib_bones_seed/smpl_filtered",
+      "++callbacks.practice_eval._target_=gear_sonic.research.practice_utility.eval_callback.PracticeRobustnessEvalCallback",
+      "++callbacks.practice_eval.eval_frequency=1",
+      "++callbacks.practice_eval.eval_only=true",
+      "++callbacks.practice_eval.output_dir=/data/robotixx/lucid-sonic/artifacts/curriculum_robustness_eval/curriculum_robustness_ne128_20260829_072508/seed_8600/fixed/dr_050",
+      "++callbacks.practice_eval.preset_id=dr_050",
+      "++callbacks.practice_eval.branch_id=curriculum_robustness_ne128_20260829_072508_s8600_fixed_dr_050",
+      "++callbacks.practice_eval.non_latency_dr_scale=0.5"
+    ],
+    "curriculum_robustness_ne128_20260829_072508_s8600_fixed_dr_full": [
+      "/home/robotixx/miniconda3/envs/sonic/bin/python",
+      "/home/robotixx/lucid/GR00T-WholeBodyControl/scripts/practice_utility/eval_with_delay.py",
+      "--max-delay",
+      "12",
+      "--",
+      "checkpoint=/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260829_065927_fixed_256/seed_8600/fixed/final_checkpoint.pt",
+      "+num_envs=128",
+      "+headless=true",
+      "+use_wandb=false",
+      "+seed=8700",
+      "+manager_env/events=tracking/lucid_curriculum",
+      "+use_encoder=g1",
+      "+eval_callbacks=[practice_eval]",
+      "+run_eval_loop=false",
+      "++manager_env.config.train_only_events=[]",
+      "++manager_env.commands.motion.motion_lib_cfg.motion_file=/data/robotixx/groot-wbc-sonic-research/datasets/bones_seed_official_zpd_scale512/content_dev/robot_filtered",
+      "++manager_env.commands.motion.motion_lib_cfg.smpl_motion_file=data/motion_lib_bones_seed/smpl_filtered",
+      "++callbacks.practice_eval._target_=gear_sonic.research.practice_utility.eval_callback.PracticeRobustnessEvalCallback",
+      "++callbacks.practice_eval.eval_frequency=1",
+      "++callbacks.practice_eval.eval_only=true",
+      "++callbacks.practice_eval.output_dir=/data/robotixx/lucid-sonic/artifacts/curriculum_robustness_eval/curriculum_robustness_ne128_20260829_072508/seed_8600/fixed/dr_full",
+      "++callbacks.practice_eval.preset_id=dr_full",
+      "++callbacks.practice_eval.branch_id=curriculum_robustness_ne128_20260829_072508_s8600_fixed_dr_full"
+    ],
+    "curriculum_robustness_ne128_20260829_072508_s8600_fixed_latency_60ms": [
+      "/home/robotixx/miniconda3/envs/sonic/bin/python",
+      "/home/robotixx/lucid/GR00T-WholeBodyControl/scripts/practice_utility/eval_with_delay.py",
+      "--max-delay",
+      "12",
+      "--",
+      "checkpoint=/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260829_065927_fixed_256/seed_8600/fixed/final_checkpoint.pt",
+      "+num_envs=128",
+      "+headless=true",
+      "+use_wandb=false",
+      "+seed=8700",
+      "+manager_env/events=tracking/lucid_eval_latency_60ms",
+      "+use_encoder=g1",
+      "+eval_callbacks=[practice_eval]",
+      "+run_eval_loop=false",
+      "++manager_env.config.train_only_events=[]",
+      "++manager_env.commands.motion.motion_lib_cfg.motion_file=/data/robotixx/groot-wbc-sonic-research/datasets/bones_seed_official_zpd_scale512/content_dev/robot_filtered",
+      "++manager_env.commands.motion.motion_lib_cfg.smpl_motion_file=data/motion_lib_bones_seed/smpl_filtered",
+      "++callbacks.practice_eval._target_=gear_sonic.research.practice_utility.eval_callback.PracticeRobustnessEvalCallback",
+      "++callbacks.practice_eval.eval_frequency=1",
+      "++callbacks.practice_eval.eval_only=true",
+      "++callbacks.practice_eval.output_dir=/data/robotixx/lucid-sonic/artifacts/curriculum_robustness_eval/curriculum_robustness_ne128_20260829_072508/seed_8600/fixed/latency_60ms",
+      "++callbacks.practice_eval.preset_id=latency_60ms",
+      "++callbacks.practice_eval.branch_id=curriculum_robustness_ne128_20260829_072508_s8600_fixed_latency_60ms"
+    ],
+    "curriculum_robustness_ne128_20260829_072508_s8601_fixed_dr_050": [
+      "/home/robotixx/miniconda3/envs/sonic/bin/python",
+      "/home/robotixx/lucid/GR00T-WholeBodyControl/scripts/practice_utility/eval_with_delay.py",
+      "--max-delay",
+      "12",
+      "--",
+      "checkpoint=/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260829_065927_fixed_256/seed_8601/fixed/final_checkpoint.pt",
+      "+num_envs=128",
+      "+headless=true",
+      "+use_wandb=false",
+      "+seed=8701",
+      "+manager_env/events=tracking/lucid_curriculum",
+      "+use_encoder=g1",
+      "+eval_callbacks=[practice_eval]",
+      "+run_eval_loop=false",
+      "++manager_env.config.train_only_events=[]",
+      "++manager_env.commands.motion.motion_lib_cfg.motion_file=/data/robotixx/groot-wbc-sonic-research/datasets/bones_seed_official_zpd_scale512/content_dev/robot_filtered",
+      "++manager_env.commands.motion.motion_lib_cfg.smpl_motion_file=data/motion_lib_bones_seed/smpl_filtered",
+      "++callbacks.practice_eval._target_=gear_sonic.research.practice_utility.eval_callback.PracticeRobustnessEvalCallback",
+      "++callbacks.practice_eval.eval_frequency=1",
+      "++callbacks.practice_eval.eval_only=true",
+      "++callbacks.practice_eval.output_dir=/data/robotixx/lucid-sonic/artifacts/curriculum_robustness_eval/curriculum_robustness_ne128_20260829_072508/seed_8601/fixed/dr_050",
+      "++callbacks.practice_eval.preset_id=dr_050",
+      "++callbacks.practice_eval.branch_id=curriculum_robustness_ne128_20260829_072508_s8601_fixed_dr_050",
+      "++callbacks.practice_eval.non_latency_dr_scale=0.5"
+    ],
+    "curriculum_robustness_ne128_20260829_072508_s8601_fixed_dr_full": [
+      "/home/robotixx/miniconda3/envs/sonic/bin/python",
+      "/home/robotixx/lucid/GR00T-WholeBodyControl/scripts/practice_utility/eval_with_delay.py",
+      "--max-delay",
+      "12",
+      "--",
+      "checkpoint=/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260829_065927_fixed_256/seed_8601/fixed/final_checkpoint.pt",
+      "+num_envs=128",
+      "+headless=true",
+      "+use_wandb=false",
+      "+seed=8701",
+      "+manager_env/events=tracking/lucid_curriculum",
+      "+use_encoder=g1",
+      "+eval_callbacks=[practice_eval]",
+      "+run_eval_loop=false",
+      "++manager_env.config.train_only_events=[]",
+      "++manager_env.commands.motion.motion_lib_cfg.motion_file=/data/robotixx/groot-wbc-sonic-research/datasets/bones_seed_official_zpd_scale512/content_dev/robot_filtered",
+      "++manager_env.commands.motion.motion_lib_cfg.smpl_motion_file=data/motion_lib_bones_seed/smpl_filtered",
+      "++callbacks.practice_eval._target_=gear_sonic.research.practice_utility.eval_callback.PracticeRobustnessEvalCallback",
+      "++callbacks.practice_eval.eval_frequency=1",
+      "++callbacks.practice_eval.eval_only=true",
+      "++callbacks.practice_eval.output_dir=/data/robotixx/lucid-sonic/artifacts/curriculum_robustness_eval/curriculum_robustness_ne128_20260829_072508/seed_8601/fixed/dr_full",
+      "++callbacks.practice_eval.preset_id=dr_full",
+      "++callbacks.practice_eval.branch_id=curriculum_robustness_ne128_20260829_072508_s8601_fixed_dr_full"
+    ],
+    "curriculum_robustness_ne128_20260829_072508_s8601_fixed_latency_60ms": [
+      "/home/robotixx/miniconda3/envs/sonic/bin/python",
+      "/home/robotixx/lucid/GR00T-WholeBodyControl/scripts/practice_utility/eval_with_delay.py",
+      "--max-delay",
+      "12",
+      "--",
+      "checkpoint=/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260829_065927_fixed_256/seed_8601/fixed/final_checkpoint.pt",
+      "+num_envs=128",
+      "+headless=true",
+      "+use_wandb=false",
+      "+seed=8701",
+      "+manager_env/events=tracking/lucid_eval_latency_60ms",
+      "+use_encoder=g1",
+      "+eval_callbacks=[practice_eval]",
+      "+run_eval_loop=false",
+      "++manager_env.config.train_only_events=[]",
+      "++manager_env.commands.motion.motion_lib_cfg.motion_file=/data/robotixx/groot-wbc-sonic-research/datasets/bones_seed_official_zpd_scale512/content_dev/robot_filtered",
+      "++manager_env.commands.motion.motion_lib_cfg.smpl_motion_file=data/motion_lib_bones_seed/smpl_filtered",
+      "++callbacks.practice_eval._target_=gear_sonic.research.practice_utility.eval_callback.PracticeRobustnessEvalCallback",
+      "++callbacks.practice_eval.eval_frequency=1",
+      "++callbacks.practice_eval.eval_only=true",
+      "++callbacks.practice_eval.output_dir=/data/robotixx/lucid-sonic/artifacts/curriculum_robustness_eval/curriculum_robustness_ne128_20260829_072508/seed_8601/fixed/latency_60ms",
+      "++callbacks.practice_eval.preset_id=latency_60ms",
+      "++callbacks.practice_eval.branch_id=curriculum_robustness_ne128_20260829_072508_s8601_fixed_latency_60ms"
+    ],
+    "curriculum_robustness_ne128_20260829_072508_s8601_fixed_id_clean": [
+      "/home/robotixx/miniconda3/envs/sonic/bin/python",
+      "/home/robotixx/lucid/GR00T-WholeBodyControl/scripts/practice_utility/eval_with_delay.py",
+      "--max-delay",
+      "12",
+      "--",
+      "checkpoint=/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260829_065927_fixed_256/seed_8601/fixed/final_checkpoint.pt",
+      "+num_envs=128",
+      "+headless=true",
+      "+use_wandb=false",
+      "+seed=8701",
+      "+manager_env/events=tracking/lucid_eval_clean",
+      "+use_encoder=g1",
+      "+eval_callbacks=[practice_eval]",
+      "+run_eval_loop=false",
+      "++manager_env.config.train_only_events=[]",
+      "++manager_env.commands.motion.motion_lib_cfg.motion_file=/data/robotixx/groot-wbc-sonic-research/datasets/bones_seed_official_zpd_scale512/content_dev/robot_filtered",
+      "++manager_env.commands.motion.motion_lib_cfg.smpl_motion_file=data/motion_lib_bones_seed/smpl_filtered",
+      "++callbacks.practice_eval._target_=gear_sonic.research.practice_utility.eval_callback.PracticeRobustnessEvalCallback",
+      "++callbacks.practice_eval.eval_frequency=1",
+      "++callbacks.practice_eval.eval_only=true",
+      "++callbacks.practice_eval.output_dir=/data/robotixx/lucid-sonic/artifacts/curriculum_robustness_eval/curriculum_robustness_ne128_20260829_072508/seed_8601/fixed/id_clean",
+      "++callbacks.practice_eval.preset_id=id_clean",
+      "++callbacks.practice_eval.branch_id=curriculum_robustness_ne128_20260829_072508_s8601_fixed_id_clean"
+    ],
+    "curriculum_robustness_ne128_20260829_072508_s8602_fixed_dr_full": [
+      "/home/robotixx/miniconda3/envs/sonic/bin/python",
+      "/home/robotixx/lucid/GR00T-WholeBodyControl/scripts/practice_utility/eval_with_delay.py",
+      "--max-delay",
+      "12",
+      "--",
+      "checkpoint=/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260829_065927_fixed_256/seed_8602/fixed/final_checkpoint.pt",
+      "+num_envs=128",
+      "+headless=true",
+      "+use_wandb=false",
+      "+seed=8702",
+      "+manager_env/events=tracking/lucid_curriculum",
+      "+use_encoder=g1",
+      "+eval_callbacks=[practice_eval]",
+      "+run_eval_loop=false",
+      "++manager_env.config.train_only_events=[]",
+      "++manager_env.commands.motion.motion_lib_cfg.motion_file=/data/robotixx/groot-wbc-sonic-research/datasets/bones_seed_official_zpd_scale512/content_dev/robot_filtered",
+      "++manager_env.commands.motion.motion_lib_cfg.smpl_motion_file=data/motion_lib_bones_seed/smpl_filtered",
+      "++callbacks.practice_eval._target_=gear_sonic.research.practice_utility.eval_callback.PracticeRobustnessEvalCallback",
+      "++callbacks.practice_eval.eval_frequency=1",
+      "++callbacks.practice_eval.eval_only=true",
+      "++callbacks.practice_eval.output_dir=/data/robotixx/lucid-sonic/artifacts/curriculum_robustness_eval/curriculum_robustness_ne128_20260829_072508/seed_8602/fixed/dr_full",
+      "++callbacks.practice_eval.preset_id=dr_full",
+      "++callbacks.practice_eval.branch_id=curriculum_robustness_ne128_20260829_072508_s8602_fixed_dr_full"
+    ],
+    "curriculum_robustness_ne128_20260829_072508_s8602_fixed_latency_60ms": [
+      "/home/robotixx/miniconda3/envs/sonic/bin/python",
+      "/home/robotixx/lucid/GR00T-WholeBodyControl/scripts/practice_utility/eval_with_delay.py",
+      "--max-delay",
+      "12",
+      "--",
+      "checkpoint=/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260829_065927_fixed_256/seed_8602/fixed/final_checkpoint.pt",
+      "+num_envs=128",
+      "+headless=true",
+      "+use_wandb=false",
+      "+seed=8702",
+      "+manager_env/events=tracking/lucid_eval_latency_60ms",
+      "+use_encoder=g1",
+      "+eval_callbacks=[practice_eval]",
+      "+run_eval_loop=false",
+      "++manager_env.config.train_only_events=[]",
+      "++manager_env.commands.motion.motion_lib_cfg.motion_file=/data/robotixx/groot-wbc-sonic-research/datasets/bones_seed_official_zpd_scale512/content_dev/robot_filtered",
+      "++manager_env.commands.motion.motion_lib_cfg.smpl_motion_file=data/motion_lib_bones_seed/smpl_filtered",
+      "++callbacks.practice_eval._target_=gear_sonic.research.practice_utility.eval_callback.PracticeRobustnessEvalCallback",
+      "++callbacks.practice_eval.eval_frequency=1",
+      "++callbacks.practice_eval.eval_only=true",
+      "++callbacks.practice_eval.output_dir=/data/robotixx/lucid-sonic/artifacts/curriculum_robustness_eval/curriculum_robustness_ne128_20260829_072508/seed_8602/fixed/latency_60ms",
+      "++callbacks.practice_eval.preset_id=latency_60ms",
+      "++callbacks.practice_eval.branch_id=curriculum_robustness_ne128_20260829_072508_s8602_fixed_latency_60ms"
+    ],
+    "curriculum_robustness_ne128_20260829_072508_s8602_fixed_id_clean": [
+      "/home/robotixx/miniconda3/envs/sonic/bin/python",
+      "/home/robotixx/lucid/GR00T-WholeBodyControl/scripts/practice_utility/eval_with_delay.py",
+      "--max-delay",
+      "12",
+      "--",
+      "checkpoint=/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260829_065927_fixed_256/seed_8602/fixed/final_checkpoint.pt",
+      "+num_envs=128",
+      "+headless=true",
+      "+use_wandb=false",
+      "+seed=8702",
+      "+manager_env/events=tracking/lucid_eval_clean",
+      "+use_encoder=g1",
+      "+eval_callbacks=[practice_eval]",
+      "+run_eval_loop=false",
+      "++manager_env.config.train_only_events=[]",
+      "++manager_env.commands.motion.motion_lib_cfg.motion_file=/data/robotixx/groot-wbc-sonic-research/datasets/bones_seed_official_zpd_scale512/content_dev/robot_filtered",
+      "++manager_env.commands.motion.motion_lib_cfg.smpl_motion_file=data/motion_lib_bones_seed/smpl_filtered",
+      "++callbacks.practice_eval._target_=gear_sonic.research.practice_utility.eval_callback.PracticeRobustnessEvalCallback",
+      "++callbacks.practice_eval.eval_frequency=1",
+      "++callbacks.practice_eval.eval_only=true",
+      "++callbacks.practice_eval.output_dir=/data/robotixx/lucid-sonic/artifacts/curriculum_robustness_eval/curriculum_robustness_ne128_20260829_072508/seed_8602/fixed/id_clean",
+      "++callbacks.practice_eval.preset_id=id_clean",
+      "++callbacks.practice_eval.branch_id=curriculum_robustness_ne128_20260829_072508_s8602_fixed_id_clean"
+    ],
+    "curriculum_robustness_ne128_20260829_072508_s8602_fixed_dr_050": [
+      "/home/robotixx/miniconda3/envs/sonic/bin/python",
+      "/home/robotixx/lucid/GR00T-WholeBodyControl/scripts/practice_utility/eval_with_delay.py",
+      "--max-delay",
+      "12",
+      "--",
+      "checkpoint=/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260829_065927_fixed_256/seed_8602/fixed/final_checkpoint.pt",
+      "+num_envs=128",
+      "+headless=true",
+      "+use_wandb=false",
+      "+seed=8702",
+      "+manager_env/events=tracking/lucid_curriculum",
+      "+use_encoder=g1",
+      "+eval_callbacks=[practice_eval]",
+      "+run_eval_loop=false",
+      "++manager_env.config.train_only_events=[]",
+      "++manager_env.commands.motion.motion_lib_cfg.motion_file=/data/robotixx/groot-wbc-sonic-research/datasets/bones_seed_official_zpd_scale512/content_dev/robot_filtered",
+      "++manager_env.commands.motion.motion_lib_cfg.smpl_motion_file=data/motion_lib_bones_seed/smpl_filtered",
+      "++callbacks.practice_eval._target_=gear_sonic.research.practice_utility.eval_callback.PracticeRobustnessEvalCallback",
+      "++callbacks.practice_eval.eval_frequency=1",
+      "++callbacks.practice_eval.eval_only=true",
+      "++callbacks.practice_eval.output_dir=/data/robotixx/lucid-sonic/artifacts/curriculum_robustness_eval/curriculum_robustness_ne128_20260829_072508/seed_8602/fixed/dr_050",
+      "++callbacks.practice_eval.preset_id=dr_050",
+      "++callbacks.practice_eval.branch_id=curriculum_robustness_ne128_20260829_072508_s8602_fixed_dr_050",
+      "++callbacks.practice_eval.non_latency_dr_scale=0.5"
+    ]
+  },
+  "runs": {
+    "curriculum_robustness_ne128_20260829_072508_s8600_fixed_id_clean": {
+      "checkpoint_seed": 8600,
+      "evaluation_seed": 8700,
+      "mode": "fixed",
+      "preset": "id_clean",
+      "checkpoint": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260829_065927_fixed_256/seed_8600/fixed/final_checkpoint.pt",
+      "checkpoint_sha256": "1523bae02189f99bdfceeaca800c31ab5b17f2b27ddd91d23ad93e4ba562b27e",
+      "metrics_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_robustness_eval/curriculum_robustness_ne128_20260829_072508/seed_8600/fixed/id_clean/metrics_eval.json",
+      "log_path": "/data/robotixx/lucid-sonic/outputs/curriculum_robustness_ne128_20260829_072508_s8600_fixed_id_clean.log",
+      "runtime": {
+        "exit_code": 0,
+        "wall_seconds": 328.97402904275805,
+        "gpu": {
+          "samples": 163,
+          "start_free_mib": 30771.0,
+          "min_free_mib": 26488.0,
+          "max_used_mib": 5616.0,
+          "max_gpu_util_pct": 66.0
+        }
+      },
+      "summary": {
+        "success_rate": 0.9215686274509804,
+        "progress_rate": 0.9560886203658348,
+        "mpjpe_g": 586.1653014249272,
+        "mpjpe_l": 30.950997252405735,
+        "foot_slip_per_step_m": 0.002149755579583092,
+        "undesired_contact_rate": 0.12304515569982394,
+        "torque_saturation": 0.002117051378855111,
+        "energy_proxy": 93.24901947542497,
+        "quality_missing_signals": [],
+        "active_dr_terms": [
+          "add_joint_default_pos",
+          "base_com",
+          "physics_material",
+          "push_robot",
+          "randomize_action_delay",
+          "randomize_rigid_body_mass"
+        ],
+        "dr_ranges": {
+          "add_joint_default_pos": {
+            "pos_distribution_params": [
+              0.0,
+              0.0
+            ]
+          },
+          "base_com": {
+            "com_range": {
+              "x": [
+                0.0,
+                0.0
+              ],
+              "y": [
+                0.0,
+                0.0
+              ],
+              "z": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "physics_material": {
+            "static_friction_range": [
+              0.95,
+              0.95
+            ],
+            "dynamic_friction_range": [
+              0.75,
+              0.75
+            ],
+            "restitution_range": [
+              0.0,
+              0.0
+            ]
+          },
+          "push_robot": {
+            "velocity_range": {
+              "x": [
+                0.0,
+                0.0
+              ],
+              "y": [
+                0.0,
+                0.0
+              ],
+              "z": [
+                0.0,
+                0.0
+              ],
+              "roll": [
+                0.0,
+                0.0
+              ],
+              "pitch": [
+                0.0,
+                0.0
+              ],
+              "yaw": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "randomize_action_delay": {
+            "delay_range": [
+              0.0,
+              0.0
+            ]
+          },
+          "randomize_rigid_body_mass": {
+            "mass_distribution_params": [
+              1.0,
+              1.0
+            ]
+          }
+        },
+        "delay": {
+          "action_delay_actuator_groups": 5,
+          "action_delay_num_lags": 640,
+          "action_delay_min_steps": 0,
+          "action_delay_max_steps": 0,
+          "action_delay_mean_steps": 0.0,
+          "action_delay_nonzero_fraction": 0.0,
+          "action_delay_histogram": [
+            640
+          ],
+          "action_delay_cross_group_equal_fraction": 1.0,
+          "action_delay_cross_group_range_mean_steps": 0.0,
+          "action_delay_process_invocations": 1541,
+          "action_delay_process_resampled_envs": 2828,
+          "action_delay_process_assignments": 14140,
+          "action_delay_process_mean_steps": 0.0,
+          "action_delay_process_histogram": [
+            14140
+          ],
+          "action_delay_process_cross_group_equal_fraction": 1.0,
+          "action_delay_process_distribution_counts": {
+            "uniform": 1541
+          },
+          "action_delay_process_coupling_counts": {
+            "independent": 1541
+          }
+        },
+        "motion_count": 102,
+        "failed_count": 8
+      },
+      "complete": true
+    },
+    "curriculum_robustness_ne128_20260829_072508_s8600_fixed_dr_050": {
+      "checkpoint_seed": 8600,
+      "evaluation_seed": 8700,
+      "mode": "fixed",
+      "preset": "dr_050",
+      "checkpoint": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260829_065927_fixed_256/seed_8600/fixed/final_checkpoint.pt",
+      "checkpoint_sha256": "1523bae02189f99bdfceeaca800c31ab5b17f2b27ddd91d23ad93e4ba562b27e",
+      "metrics_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_robustness_eval/curriculum_robustness_ne128_20260829_072508/seed_8600/fixed/dr_050/metrics_eval.json",
+      "log_path": "/data/robotixx/lucid-sonic/outputs/curriculum_robustness_ne128_20260829_072508_s8600_fixed_dr_050.log",
+      "runtime": {
+        "exit_code": 0,
+        "wall_seconds": 332.7024332806468,
+        "gpu": {
+          "samples": 165,
+          "start_free_mib": 30771.0,
+          "min_free_mib": 26488.0,
+          "max_used_mib": 5616.0,
+          "max_gpu_util_pct": 66.0
+        }
+      },
+      "summary": {
+        "success_rate": 0.8333333333333334,
+        "progress_rate": 0.8943732559735722,
+        "mpjpe_g": 634.0334522537162,
+        "mpjpe_l": 33.06251414660729,
+        "foot_slip_per_step_m": 0.0022203552206352143,
+        "undesired_contact_rate": 0.12725916043133803,
+        "torque_saturation": 0.003181001756769191,
+        "energy_proxy": 128.10750347492532,
+        "quality_missing_signals": [],
+        "active_dr_terms": [
+          "add_joint_default_pos",
+          "base_com",
+          "physics_material",
+          "push_robot",
+          "randomize_action_delay",
+          "randomize_rigid_body_mass"
+        ],
+        "dr_ranges": {
+          "add_joint_default_pos": {
+            "pos_distribution_params": [
+              -0.005,
+              0.005
+            ]
+          },
+          "base_com": {
+            "com_range": {
+              "x": [
+                -0.0125,
+                0.0125
+              ],
+              "y": [
+                -0.025,
+                0.025
+              ],
+              "z": [
+                -0.025,
+                0.025
+              ]
+            }
+          },
+          "physics_material": {
+            "static_friction_range": [
+              0.625,
+              1.2750000000000001
+            ],
+            "dynamic_friction_range": [
+              0.525,
+              0.975
+            ],
+            "restitution_range": [
+              0.0,
+              0.25
+            ]
+          },
+          "push_robot": {
+            "velocity_range": {
+              "x": [
+                -0.25,
+                0.25
+              ],
+              "y": [
+                -0.25,
+                0.25
+              ],
+              "z": [
+                -0.1,
+                0.1
+              ],
+              "roll": [
+                -0.26,
+                0.26
+              ],
+              "pitch": [
+                -0.26,
+                0.26
+              ],
+              "yaw": [
+                -0.39,
+                0.39
+              ]
+            }
+          },
+          "randomize_action_delay": {
+            "delay_range": [
+              0.0,
+              8.0
+            ]
+          },
+          "randomize_rigid_body_mass": {
+            "mass_distribution_params": [
+              0.9,
+              1.25
+            ]
+          }
+        },
+        "delay": {
+          "action_delay_actuator_groups": 5,
+          "action_delay_num_lags": 640,
+          "action_delay_min_steps": 0,
+          "action_delay_max_steps": 8,
+          "action_delay_mean_steps": 3.932812452316284,
+          "action_delay_nonzero_fraction": 0.8843749761581421,
+          "action_delay_histogram": [
+            74,
+            62,
+            82,
+            65,
+            90,
+            63,
+            71,
+            69,
+            64
+          ],
+          "action_delay_cross_group_equal_fraction": 0.0,
+          "action_delay_cross_group_range_mean_steps": 5.828125,
+          "action_delay_process_invocations": 1795,
+          "action_delay_process_resampled_envs": 2967,
+          "action_delay_process_assignments": 14835,
+          "action_delay_process_mean_steps": 4.025075834175936,
+          "action_delay_process_histogram": [
+            1604,
+            1663,
+            1662,
+            1594,
+            1640,
+            1696,
+            1596,
+            1713,
+            1667
+          ],
+          "action_delay_process_cross_group_equal_fraction": 0.0,
+          "action_delay_process_distribution_counts": {
+            "uniform": 1795
+          },
+          "action_delay_process_coupling_counts": {
+            "independent": 1795
+          }
+        },
+        "motion_count": 102,
+        "failed_count": 17
+      },
+      "complete": true
+    },
+    "curriculum_robustness_ne128_20260829_072508_s8600_fixed_dr_full": {
+      "checkpoint_seed": 8600,
+      "evaluation_seed": 8700,
+      "mode": "fixed",
+      "preset": "dr_full",
+      "checkpoint": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260829_065927_fixed_256/seed_8600/fixed/final_checkpoint.pt",
+      "checkpoint_sha256": "1523bae02189f99bdfceeaca800c31ab5b17f2b27ddd91d23ad93e4ba562b27e",
+      "metrics_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_robustness_eval/curriculum_robustness_ne128_20260829_072508/seed_8600/fixed/dr_full/metrics_eval.json",
+      "log_path": "/data/robotixx/lucid-sonic/outputs/curriculum_robustness_ne128_20260829_072508_s8600_fixed_dr_full.log",
+      "runtime": {
+        "exit_code": 0,
+        "wall_seconds": 295.7936269901693,
+        "gpu": {
+          "samples": 147,
+          "start_free_mib": 30771.0,
+          "min_free_mib": 26488.0,
+          "max_used_mib": 5616.0,
+          "max_gpu_util_pct": 68.0
+        }
+      },
+      "summary": {
+        "success_rate": 0.803921568627451,
+        "progress_rate": 0.8663988784959942,
+        "mpjpe_g": 554.8195364154697,
+        "mpjpe_l": 34.491540918130426,
+        "foot_slip_per_step_m": 0.0026401650416660884,
+        "undesired_contact_rate": 0.1357639323242432,
+        "torque_saturation": 0.003821629692096712,
+        "energy_proxy": 141.70355003259107,
+        "quality_missing_signals": [],
+        "active_dr_terms": [
+          "add_joint_default_pos",
+          "base_com",
+          "physics_material",
+          "push_robot",
+          "randomize_action_delay",
+          "randomize_rigid_body_mass"
+        ],
+        "dr_ranges": {
+          "add_joint_default_pos": {
+            "pos_distribution_params": [
+              -0.01,
+              0.01
+            ]
+          },
+          "base_com": {
+            "com_range": {
+              "x": [
+                -0.025,
+                0.025
+              ],
+              "y": [
+                -0.05,
+                0.05
+              ],
+              "z": [
+                -0.05,
+                0.05
+              ]
+            }
+          },
+          "physics_material": {
+            "static_friction_range": [
+              0.3,
+              1.6
+            ],
+            "dynamic_friction_range": [
+              0.3,
+              1.2
+            ],
+            "restitution_range": [
+              0.0,
+              0.5
+            ]
+          },
+          "push_robot": {
+            "velocity_range": {
+              "x": [
+                -0.5,
+                0.5
+              ],
+              "y": [
+                -0.5,
+                0.5
+              ],
+              "z": [
+                -0.2,
+                0.2
+              ],
+              "roll": [
+                -0.52,
+                0.52
+              ],
+              "pitch": [
+                -0.52,
+                0.52
+              ],
+              "yaw": [
+                -0.78,
+                0.78
+              ]
+            }
+          },
+          "randomize_action_delay": {
+            "delay_range": [
+              0.0,
+              8.0
+            ]
+          },
+          "randomize_rigid_body_mass": {
+            "mass_distribution_params": [
+              0.8,
+              1.5
+            ]
+          }
+        },
+        "delay": {
+          "action_delay_actuator_groups": 5,
+          "action_delay_num_lags": 640,
+          "action_delay_min_steps": 0,
+          "action_delay_max_steps": 8,
+          "action_delay_mean_steps": 3.887500047683716,
+          "action_delay_nonzero_fraction": 0.890625,
+          "action_delay_histogram": [
+            70,
+            84,
+            58,
+            92,
+            59,
+            72,
+            83,
+            58,
+            64
+          ],
+          "action_delay_cross_group_equal_fraction": 0.0,
+          "action_delay_cross_group_range_mean_steps": 5.9375,
+          "action_delay_process_invocations": 1704,
+          "action_delay_process_resampled_envs": 2733,
+          "action_delay_process_assignments": 13665,
+          "action_delay_process_mean_steps": 4.021002561287962,
+          "action_delay_process_histogram": [
+            1458,
+            1540,
+            1512,
+            1509,
+            1551,
+            1497,
+            1544,
+            1529,
+            1525
+          ],
+          "action_delay_process_cross_group_equal_fraction": 0.0,
+          "action_delay_process_distribution_counts": {
+            "uniform": 1704
+          },
+          "action_delay_process_coupling_counts": {
+            "independent": 1704
+          }
+        },
+        "motion_count": 102,
+        "failed_count": 20
+      },
+      "complete": true
+    },
+    "curriculum_robustness_ne128_20260829_072508_s8600_fixed_latency_60ms": {
+      "checkpoint_seed": 8600,
+      "evaluation_seed": 8700,
+      "mode": "fixed",
+      "preset": "latency_60ms",
+      "checkpoint": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260829_065927_fixed_256/seed_8600/fixed/final_checkpoint.pt",
+      "checkpoint_sha256": "1523bae02189f99bdfceeaca800c31ab5b17f2b27ddd91d23ad93e4ba562b27e",
+      "metrics_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_robustness_eval/curriculum_robustness_ne128_20260829_072508/seed_8600/fixed/latency_60ms/metrics_eval.json",
+      "log_path": "/data/robotixx/lucid-sonic/outputs/curriculum_robustness_ne128_20260829_072508_s8600_fixed_latency_60ms.log",
+      "runtime": {
+        "exit_code": 0,
+        "wall_seconds": 34.57473136950284,
+        "gpu": {
+          "samples": 18,
+          "start_free_mib": 30771.0,
+          "min_free_mib": 26488.0,
+          "max_used_mib": 5616.0,
+          "max_gpu_util_pct": 61.0
+        }
+      },
+      "summary": {
+        "success_rate": 0.0,
+        "progress_rate": 0.18239378080675928,
+        "mpjpe_g": 70.16880629195188,
+        "mpjpe_l": 36.55653408175196,
+        "foot_slip_per_step_m": 0.005327392773427461,
+        "undesired_contact_rate": 0.2394469895287958,
+        "torque_saturation": 0.007297684600108318,
+        "energy_proxy": 282.6632340062407,
+        "quality_missing_signals": [],
+        "active_dr_terms": [
+          "add_joint_default_pos",
+          "base_com",
+          "physics_material",
+          "push_robot",
+          "randomize_action_delay",
+          "randomize_rigid_body_mass"
+        ],
+        "dr_ranges": {
+          "add_joint_default_pos": {
+            "pos_distribution_params": [
+              -0.01,
+              0.01
+            ]
+          },
+          "base_com": {
+            "com_range": {
+              "x": [
+                -0.025,
+                0.025
+              ],
+              "y": [
+                -0.05,
+                0.05
+              ],
+              "z": [
+                -0.05,
+                0.05
+              ]
+            }
+          },
+          "physics_material": {
+            "static_friction_range": [
+              0.3,
+              1.6
+            ],
+            "dynamic_friction_range": [
+              0.3,
+              1.2
+            ],
+            "restitution_range": [
+              0.0,
+              0.5
+            ]
+          },
+          "push_robot": {
+            "velocity_range": {
+              "x": [
+                -0.5,
+                0.5
+              ],
+              "y": [
+                -0.5,
+                0.5
+              ],
+              "z": [
+                -0.2,
+                0.2
+              ],
+              "roll": [
+                -0.52,
+                0.52
+              ],
+              "pitch": [
+                -0.52,
+                0.52
+              ],
+              "yaw": [
+                -0.78,
+                0.78
+              ]
+            }
+          },
+          "randomize_action_delay": {
+            "delay_range": [
+              12.0,
+              12.0
+            ]
+          },
+          "randomize_rigid_body_mass": {
+            "mass_distribution_params": [
+              0.8,
+              1.5
+            ]
+          }
+        },
+        "delay": {
+          "action_delay_actuator_groups": 5,
+          "action_delay_num_lags": 640,
+          "action_delay_min_steps": 12,
+          "action_delay_max_steps": 12,
+          "action_delay_mean_steps": 12.0,
+          "action_delay_nonzero_fraction": 1.0,
+          "action_delay_histogram": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            640
+          ],
+          "action_delay_cross_group_equal_fraction": 1.0,
+          "action_delay_cross_group_range_mean_steps": 0.0,
+          "action_delay_process_invocations": 180,
+          "action_delay_process_resampled_envs": 778,
+          "action_delay_process_assignments": 3890,
+          "action_delay_process_mean_steps": 12.0,
+          "action_delay_process_histogram": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3890
+          ],
+          "action_delay_process_cross_group_equal_fraction": 1.0,
+          "action_delay_process_distribution_counts": {
+            "uniform": 180
+          },
+          "action_delay_process_coupling_counts": {
+            "independent": 180
+          }
+        },
+        "motion_count": 102,
+        "failed_count": 102
+      },
+      "complete": true
+    },
+    "curriculum_robustness_ne128_20260829_072508_s8601_fixed_dr_050": {
+      "checkpoint_seed": 8601,
+      "evaluation_seed": 8701,
+      "mode": "fixed",
+      "preset": "dr_050",
+      "checkpoint": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260829_065927_fixed_256/seed_8601/fixed/final_checkpoint.pt",
+      "checkpoint_sha256": "f6bfb88af6445373c324f59c32343e30996b19ee5fd9a5d378325a454fa7d842",
+      "metrics_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_robustness_eval/curriculum_robustness_ne128_20260829_072508/seed_8601/fixed/dr_050/metrics_eval.json",
+      "log_path": "/data/robotixx/lucid-sonic/outputs/curriculum_robustness_ne128_20260829_072508_s8601_fixed_dr_050.log",
+      "runtime": {
+        "exit_code": 0,
+        "wall_seconds": 328.71935329120606,
+        "gpu": {
+          "samples": 163,
+          "start_free_mib": 30771.0,
+          "min_free_mib": 26498.0,
+          "max_used_mib": 5606.0,
+          "max_gpu_util_pct": 66.0
+        }
+      },
+      "summary": {
+        "success_rate": 0.8725490196078431,
+        "progress_rate": 0.9192567092969137,
+        "mpjpe_g": 502.643786477756,
+        "mpjpe_l": 32.48634458996959,
+        "foot_slip_per_step_m": 0.002160086898878786,
+        "undesired_contact_rate": 0.09839726837588028,
+        "torque_saturation": 0.0029032458490166587,
+        "energy_proxy": 129.47359653450897,
+        "quality_missing_signals": [],
+        "active_dr_terms": [
+          "add_joint_default_pos",
+          "base_com",
+          "physics_material",
+          "push_robot",
+          "randomize_action_delay",
+          "randomize_rigid_body_mass"
+        ],
+        "dr_ranges": {
+          "add_joint_default_pos": {
+            "pos_distribution_params": [
+              -0.005,
+              0.005
+            ]
+          },
+          "base_com": {
+            "com_range": {
+              "x": [
+                -0.0125,
+                0.0125
+              ],
+              "y": [
+                -0.025,
+                0.025
+              ],
+              "z": [
+                -0.025,
+                0.025
+              ]
+            }
+          },
+          "physics_material": {
+            "static_friction_range": [
+              0.625,
+              1.2750000000000001
+            ],
+            "dynamic_friction_range": [
+              0.525,
+              0.975
+            ],
+            "restitution_range": [
+              0.0,
+              0.25
+            ]
+          },
+          "push_robot": {
+            "velocity_range": {
+              "x": [
+                -0.25,
+                0.25
+              ],
+              "y": [
+                -0.25,
+                0.25
+              ],
+              "z": [
+                -0.1,
+                0.1
+              ],
+              "roll": [
+                -0.26,
+                0.26
+              ],
+              "pitch": [
+                -0.26,
+                0.26
+              ],
+              "yaw": [
+                -0.39,
+                0.39
+              ]
+            }
+          },
+          "randomize_action_delay": {
+            "delay_range": [
+              0.0,
+              8.0
+            ]
+          },
+          "randomize_rigid_body_mass": {
+            "mass_distribution_params": [
+              0.9,
+              1.25
+            ]
+          }
+        },
+        "delay": {
+          "action_delay_actuator_groups": 5,
+          "action_delay_num_lags": 640,
+          "action_delay_min_steps": 0,
+          "action_delay_max_steps": 8,
+          "action_delay_mean_steps": 3.815624952316284,
+          "action_delay_nonzero_fraction": 0.8843749761581421,
+          "action_delay_histogram": [
+            74,
+            77,
+            62,
+            88,
+            82,
+            66,
+            77,
+            55,
+            59
+          ],
+          "action_delay_cross_group_equal_fraction": 0.0,
+          "action_delay_cross_group_range_mean_steps": 5.859375,
+          "action_delay_process_invocations": 1861,
+          "action_delay_process_resampled_envs": 2993,
+          "action_delay_process_assignments": 14965,
+          "action_delay_process_mean_steps": 3.9743401269629133,
+          "action_delay_process_histogram": [
+            1700,
+            1680,
+            1623,
+            1724,
+            1636,
+            1659,
+            1703,
+            1599,
+            1641
+          ],
+          "action_delay_process_cross_group_equal_fraction": 0.0,
+          "action_delay_process_distribution_counts": {
+            "uniform": 1861
+          },
+          "action_delay_process_coupling_counts": {
+            "independent": 1861
+          }
+        },
+        "motion_count": 102,
+        "failed_count": 13
+      },
+      "complete": true
+    },
+    "curriculum_robustness_ne128_20260829_072508_s8601_fixed_dr_full": {
+      "checkpoint_seed": 8601,
+      "evaluation_seed": 8701,
+      "mode": "fixed",
+      "preset": "dr_full",
+      "checkpoint": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260829_065927_fixed_256/seed_8601/fixed/final_checkpoint.pt",
+      "checkpoint_sha256": "f6bfb88af6445373c324f59c32343e30996b19ee5fd9a5d378325a454fa7d842",
+      "metrics_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_robustness_eval/curriculum_robustness_ne128_20260829_072508/seed_8601/fixed/dr_full/metrics_eval.json",
+      "log_path": "/data/robotixx/lucid-sonic/outputs/curriculum_robustness_ne128_20260829_072508_s8601_fixed_dr_full.log",
+      "runtime": {
+        "exit_code": 0,
+        "wall_seconds": 304.78648425545543,
+        "gpu": {
+          "samples": 151,
+          "start_free_mib": 30771.0,
+          "min_free_mib": 26498.0,
+          "max_used_mib": 5606.0,
+          "max_gpu_util_pct": 66.0
+        }
+      },
+      "summary": {
+        "success_rate": 0.7745098039215687,
+        "progress_rate": 0.8725739200325573,
+        "mpjpe_g": 487.9407499698666,
+        "mpjpe_l": 33.98757386171782,
+        "foot_slip_per_step_m": 0.0024910419314809733,
+        "undesired_contact_rate": 0.10856367336026616,
+        "torque_saturation": 0.003688261583027487,
+        "energy_proxy": 142.19942756425934,
+        "quality_missing_signals": [],
+        "active_dr_terms": [
+          "add_joint_default_pos",
+          "base_com",
+          "physics_material",
+          "push_robot",
+          "randomize_action_delay",
+          "randomize_rigid_body_mass"
+        ],
+        "dr_ranges": {
+          "add_joint_default_pos": {
+            "pos_distribution_params": [
+              -0.01,
+              0.01
+            ]
+          },
+          "base_com": {
+            "com_range": {
+              "x": [
+                -0.025,
+                0.025
+              ],
+              "y": [
+                -0.05,
+                0.05
+              ],
+              "z": [
+                -0.05,
+                0.05
+              ]
+            }
+          },
+          "physics_material": {
+            "static_friction_range": [
+              0.3,
+              1.6
+            ],
+            "dynamic_friction_range": [
+              0.3,
+              1.2
+            ],
+            "restitution_range": [
+              0.0,
+              0.5
+            ]
+          },
+          "push_robot": {
+            "velocity_range": {
+              "x": [
+                -0.5,
+                0.5
+              ],
+              "y": [
+                -0.5,
+                0.5
+              ],
+              "z": [
+                -0.2,
+                0.2
+              ],
+              "roll": [
+                -0.52,
+                0.52
+              ],
+              "pitch": [
+                -0.52,
+                0.52
+              ],
+              "yaw": [
+                -0.78,
+                0.78
+              ]
+            }
+          },
+          "randomize_action_delay": {
+            "delay_range": [
+              0.0,
+              8.0
+            ]
+          },
+          "randomize_rigid_body_mass": {
+            "mass_distribution_params": [
+              0.8,
+              1.5
+            ]
+          }
+        },
+        "delay": {
+          "action_delay_actuator_groups": 5,
+          "action_delay_num_lags": 640,
+          "action_delay_min_steps": 0,
+          "action_delay_max_steps": 8,
+          "action_delay_mean_steps": 4.068749904632568,
+          "action_delay_nonzero_fraction": 0.8999999761581421,
+          "action_delay_histogram": [
+            64,
+            65,
+            63,
+            79,
+            79,
+            77,
+            74,
+            81,
+            58
+          ],
+          "action_delay_cross_group_equal_fraction": 0.0,
+          "action_delay_cross_group_range_mean_steps": 5.8828125,
+          "action_delay_process_invocations": 1781,
+          "action_delay_process_resampled_envs": 2812,
+          "action_delay_process_assignments": 14060,
+          "action_delay_process_mean_steps": 3.988193456614509,
+          "action_delay_process_histogram": [
+            1596,
+            1585,
+            1520,
+            1578,
+            1555,
+            1498,
+            1623,
+            1573,
+            1532
+          ],
+          "action_delay_process_cross_group_equal_fraction": 0.00035561877667140827,
+          "action_delay_process_distribution_counts": {
+            "uniform": 1781
+          },
+          "action_delay_process_coupling_counts": {
+            "independent": 1781
+          }
+        },
+        "motion_count": 102,
+        "failed_count": 23
+      },
+      "complete": true
+    },
+    "curriculum_robustness_ne128_20260829_072508_s8601_fixed_latency_60ms": {
+      "checkpoint_seed": 8601,
+      "evaluation_seed": 8701,
+      "mode": "fixed",
+      "preset": "latency_60ms",
+      "checkpoint": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260829_065927_fixed_256/seed_8601/fixed/final_checkpoint.pt",
+      "checkpoint_sha256": "f6bfb88af6445373c324f59c32343e30996b19ee5fd9a5d378325a454fa7d842",
+      "metrics_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_robustness_eval/curriculum_robustness_ne128_20260829_072508/seed_8601/fixed/latency_60ms/metrics_eval.json",
+      "log_path": "/data/robotixx/lucid-sonic/outputs/curriculum_robustness_ne128_20260829_072508_s8601_fixed_latency_60ms.log",
+      "runtime": {
+        "exit_code": 0,
+        "wall_seconds": 30.355062171816826,
+        "gpu": {
+          "samples": 16,
+          "start_free_mib": 30771.0,
+          "min_free_mib": 26500.0,
+          "max_used_mib": 5604.0,
+          "max_gpu_util_pct": 60.0
+        }
+      },
+      "summary": {
+        "success_rate": 0.009803921568627416,
+        "progress_rate": 0.17558256155747337,
+        "mpjpe_g": 57.021486544043405,
+        "mpjpe_l": 34.21163479816065,
+        "foot_slip_per_step_m": 0.00472200950127475,
+        "undesired_contact_rate": 0.20395026408450703,
+        "torque_saturation": 0.007135214303059737,
+        "energy_proxy": 278.8180417043161,
+        "quality_missing_signals": [],
+        "active_dr_terms": [
+          "add_joint_default_pos",
+          "base_com",
+          "physics_material",
+          "push_robot",
+          "randomize_action_delay",
+          "randomize_rigid_body_mass"
+        ],
+        "dr_ranges": {
+          "add_joint_default_pos": {
+            "pos_distribution_params": [
+              -0.01,
+              0.01
+            ]
+          },
+          "base_com": {
+            "com_range": {
+              "x": [
+                -0.025,
+                0.025
+              ],
+              "y": [
+                -0.05,
+                0.05
+              ],
+              "z": [
+                -0.05,
+                0.05
+              ]
+            }
+          },
+          "physics_material": {
+            "static_friction_range": [
+              0.3,
+              1.6
+            ],
+            "dynamic_friction_range": [
+              0.3,
+              1.2
+            ],
+            "restitution_range": [
+              0.0,
+              0.5
+            ]
+          },
+          "push_robot": {
+            "velocity_range": {
+              "x": [
+                -0.5,
+                0.5
+              ],
+              "y": [
+                -0.5,
+                0.5
+              ],
+              "z": [
+                -0.2,
+                0.2
+              ],
+              "roll": [
+                -0.52,
+                0.52
+              ],
+              "pitch": [
+                -0.52,
+                0.52
+              ],
+              "yaw": [
+                -0.78,
+                0.78
+              ]
+            }
+          },
+          "randomize_action_delay": {
+            "delay_range": [
+              12.0,
+              12.0
+            ]
+          },
+          "randomize_rigid_body_mass": {
+            "mass_distribution_params": [
+              0.8,
+              1.5
+            ]
+          }
+        },
+        "delay": {
+          "action_delay_actuator_groups": 5,
+          "action_delay_num_lags": 640,
+          "action_delay_min_steps": 12,
+          "action_delay_max_steps": 12,
+          "action_delay_mean_steps": 12.0,
+          "action_delay_nonzero_fraction": 1.0,
+          "action_delay_histogram": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            640
+          ],
+          "action_delay_cross_group_equal_fraction": 1.0,
+          "action_delay_cross_group_range_mean_steps": 0.0,
+          "action_delay_process_invocations": 129,
+          "action_delay_process_resampled_envs": 649,
+          "action_delay_process_assignments": 3245,
+          "action_delay_process_mean_steps": 12.0,
+          "action_delay_process_histogram": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3245
+          ],
+          "action_delay_process_cross_group_equal_fraction": 1.0,
+          "action_delay_process_distribution_counts": {
+            "uniform": 129
+          },
+          "action_delay_process_coupling_counts": {
+            "independent": 129
+          }
+        },
+        "motion_count": 102,
+        "failed_count": 101
+      },
+      "complete": true
+    },
+    "curriculum_robustness_ne128_20260829_072508_s8601_fixed_id_clean": {
+      "checkpoint_seed": 8601,
+      "evaluation_seed": 8701,
+      "mode": "fixed",
+      "preset": "id_clean",
+      "checkpoint": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260829_065927_fixed_256/seed_8601/fixed/final_checkpoint.pt",
+      "checkpoint_sha256": "f6bfb88af6445373c324f59c32343e30996b19ee5fd9a5d378325a454fa7d842",
+      "metrics_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_robustness_eval/curriculum_robustness_ne128_20260829_072508/seed_8601/fixed/id_clean/metrics_eval.json",
+      "log_path": "/data/robotixx/lucid-sonic/outputs/curriculum_robustness_ne128_20260829_072508_s8601_fixed_id_clean.log",
+      "runtime": {
+        "exit_code": 0,
+        "wall_seconds": 324.7582580987364,
+        "gpu": {
+          "samples": 161,
+          "start_free_mib": 30771.0,
+          "min_free_mib": 26498.0,
+          "max_used_mib": 5606.0,
+          "max_gpu_util_pct": 66.0
+        }
+      },
+      "summary": {
+        "success_rate": 0.9411764705882353,
+        "progress_rate": 0.965228872118043,
+        "mpjpe_g": 529.3829569477626,
+        "mpjpe_l": 30.818196147189237,
+        "foot_slip_per_step_m": 0.001987841995764678,
+        "undesired_contact_rate": 0.09103866362235916,
+        "torque_saturation": 0.0018644328254007363,
+        "energy_proxy": 92.21865399548935,
+        "quality_missing_signals": [],
+        "active_dr_terms": [
+          "add_joint_default_pos",
+          "base_com",
+          "physics_material",
+          "push_robot",
+          "randomize_action_delay",
+          "randomize_rigid_body_mass"
+        ],
+        "dr_ranges": {
+          "add_joint_default_pos": {
+            "pos_distribution_params": [
+              0.0,
+              0.0
+            ]
+          },
+          "base_com": {
+            "com_range": {
+              "x": [
+                0.0,
+                0.0
+              ],
+              "y": [
+                0.0,
+                0.0
+              ],
+              "z": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "physics_material": {
+            "static_friction_range": [
+              0.95,
+              0.95
+            ],
+            "dynamic_friction_range": [
+              0.75,
+              0.75
+            ],
+            "restitution_range": [
+              0.0,
+              0.0
+            ]
+          },
+          "push_robot": {
+            "velocity_range": {
+              "x": [
+                0.0,
+                0.0
+              ],
+              "y": [
+                0.0,
+                0.0
+              ],
+              "z": [
+                0.0,
+                0.0
+              ],
+              "roll": [
+                0.0,
+                0.0
+              ],
+              "pitch": [
+                0.0,
+                0.0
+              ],
+              "yaw": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "randomize_action_delay": {
+            "delay_range": [
+              0.0,
+              0.0
+            ]
+          },
+          "randomize_rigid_body_mass": {
+            "mass_distribution_params": [
+              1.0,
+              1.0
+            ]
+          }
+        },
+        "delay": {
+          "action_delay_actuator_groups": 5,
+          "action_delay_num_lags": 640,
+          "action_delay_min_steps": 0,
+          "action_delay_max_steps": 0,
+          "action_delay_mean_steps": 0.0,
+          "action_delay_nonzero_fraction": 0.0,
+          "action_delay_histogram": [
+            640
+          ],
+          "action_delay_cross_group_equal_fraction": 1.0,
+          "action_delay_cross_group_range_mean_steps": 0.0,
+          "action_delay_process_invocations": 1531,
+          "action_delay_process_resampled_envs": 2832,
+          "action_delay_process_assignments": 14160,
+          "action_delay_process_mean_steps": 0.0,
+          "action_delay_process_histogram": [
+            14160
+          ],
+          "action_delay_process_cross_group_equal_fraction": 1.0,
+          "action_delay_process_distribution_counts": {
+            "uniform": 1531
+          },
+          "action_delay_process_coupling_counts": {
+            "independent": 1531
+          }
+        },
+        "motion_count": 102,
+        "failed_count": 6
+      },
+      "complete": true
+    },
+    "curriculum_robustness_ne128_20260829_072508_s8602_fixed_dr_full": {
+      "checkpoint_seed": 8602,
+      "evaluation_seed": 8702,
+      "mode": "fixed",
+      "preset": "dr_full",
+      "checkpoint": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260829_065927_fixed_256/seed_8602/fixed/final_checkpoint.pt",
+      "checkpoint_sha256": "9a1e999712d04a29ae94a98e6531a6f6771e009f9041eab33b7fa8de50dc55a9",
+      "metrics_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_robustness_eval/curriculum_robustness_ne128_20260829_072508/seed_8602/fixed/dr_full/metrics_eval.json",
+      "log_path": "/data/robotixx/lucid-sonic/outputs/curriculum_robustness_ne128_20260829_072508_s8602_fixed_dr_full.log",
+      "runtime": {
+        "exit_code": 0,
+        "wall_seconds": 295.458249412477,
+        "gpu": {
+          "samples": 147,
+          "start_free_mib": 30771.0,
+          "min_free_mib": 26496.0,
+          "max_used_mib": 5608.0,
+          "max_gpu_util_pct": 67.0
+        }
+      },
+      "summary": {
+        "success_rate": 0.7941176470588236,
+        "progress_rate": 0.8701665695007964,
+        "mpjpe_g": 432.3924580098682,
+        "mpjpe_l": 34.884792882765296,
+        "foot_slip_per_step_m": 0.002595981190238769,
+        "undesired_contact_rate": 0.1447687327995997,
+        "torque_saturation": 0.0031818718564786586,
+        "energy_proxy": 134.49965249027727,
+        "quality_missing_signals": [],
+        "active_dr_terms": [
+          "add_joint_default_pos",
+          "base_com",
+          "physics_material",
+          "push_robot",
+          "randomize_action_delay",
+          "randomize_rigid_body_mass"
+        ],
+        "dr_ranges": {
+          "add_joint_default_pos": {
+            "pos_distribution_params": [
+              -0.01,
+              0.01
+            ]
+          },
+          "base_com": {
+            "com_range": {
+              "x": [
+                -0.025,
+                0.025
+              ],
+              "y": [
+                -0.05,
+                0.05
+              ],
+              "z": [
+                -0.05,
+                0.05
+              ]
+            }
+          },
+          "physics_material": {
+            "static_friction_range": [
+              0.3,
+              1.6
+            ],
+            "dynamic_friction_range": [
+              0.3,
+              1.2
+            ],
+            "restitution_range": [
+              0.0,
+              0.5
+            ]
+          },
+          "push_robot": {
+            "velocity_range": {
+              "x": [
+                -0.5,
+                0.5
+              ],
+              "y": [
+                -0.5,
+                0.5
+              ],
+              "z": [
+                -0.2,
+                0.2
+              ],
+              "roll": [
+                -0.52,
+                0.52
+              ],
+              "pitch": [
+                -0.52,
+                0.52
+              ],
+              "yaw": [
+                -0.78,
+                0.78
+              ]
+            }
+          },
+          "randomize_action_delay": {
+            "delay_range": [
+              0.0,
+              8.0
+            ]
+          },
+          "randomize_rigid_body_mass": {
+            "mass_distribution_params": [
+              0.8,
+              1.5
+            ]
+          }
+        },
+        "delay": {
+          "action_delay_actuator_groups": 5,
+          "action_delay_num_lags": 640,
+          "action_delay_min_steps": 0,
+          "action_delay_max_steps": 8,
+          "action_delay_mean_steps": 3.918750047683716,
+          "action_delay_nonzero_fraction": 0.893750011920929,
+          "action_delay_histogram": [
+            68,
+            74,
+            79,
+            73,
+            78,
+            58,
+            78,
+            69,
+            63
+          ],
+          "action_delay_cross_group_equal_fraction": 0.0,
+          "action_delay_cross_group_range_mean_steps": 5.7578125,
+          "action_delay_process_invocations": 1669,
+          "action_delay_process_resampled_envs": 2692,
+          "action_delay_process_assignments": 13460,
+          "action_delay_process_mean_steps": 3.9933135215453195,
+          "action_delay_process_histogram": [
+            1527,
+            1521,
+            1458,
+            1467,
+            1532,
+            1485,
+            1438,
+            1525,
+            1507
+          ],
+          "action_delay_process_cross_group_equal_fraction": 0.0003714710252600297,
+          "action_delay_process_distribution_counts": {
+            "uniform": 1669
+          },
+          "action_delay_process_coupling_counts": {
+            "independent": 1669
+          }
+        },
+        "motion_count": 102,
+        "failed_count": 21
+      },
+      "complete": true
+    },
+    "curriculum_robustness_ne128_20260829_072508_s8602_fixed_latency_60ms": {
+      "checkpoint_seed": 8602,
+      "evaluation_seed": 8702,
+      "mode": "fixed",
+      "preset": "latency_60ms",
+      "checkpoint": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260829_065927_fixed_256/seed_8602/fixed/final_checkpoint.pt",
+      "checkpoint_sha256": "9a1e999712d04a29ae94a98e6531a6f6771e009f9041eab33b7fa8de50dc55a9",
+      "metrics_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_robustness_eval/curriculum_robustness_ne128_20260829_072508/seed_8602/fixed/latency_60ms/metrics_eval.json",
+      "log_path": "/data/robotixx/lucid-sonic/outputs/curriculum_robustness_ne128_20260829_072508_s8602_fixed_latency_60ms.log",
+      "runtime": {
+        "exit_code": 0,
+        "wall_seconds": 41.52200737781823,
+        "gpu": {
+          "samples": 21,
+          "start_free_mib": 30771.0,
+          "min_free_mib": 26498.0,
+          "max_used_mib": 5606.0,
+          "max_gpu_util_pct": 65.0
+        }
+      },
+      "summary": {
+        "success_rate": 0.009803921568627416,
+        "progress_rate": 0.17230143174118198,
+        "mpjpe_g": 68.43225722159492,
+        "mpjpe_l": 36.550870728981444,
+        "foot_slip_per_step_m": 0.0053254003521528695,
+        "undesired_contact_rate": 0.2225462147887324,
+        "torque_saturation": 0.006378247935891203,
+        "energy_proxy": 273.2265712572093,
+        "quality_missing_signals": [],
+        "active_dr_terms": [
+          "add_joint_default_pos",
+          "base_com",
+          "physics_material",
+          "push_robot",
+          "randomize_action_delay",
+          "randomize_rigid_body_mass"
+        ],
+        "dr_ranges": {
+          "add_joint_default_pos": {
+            "pos_distribution_params": [
+              -0.01,
+              0.01
+            ]
+          },
+          "base_com": {
+            "com_range": {
+              "x": [
+                -0.025,
+                0.025
+              ],
+              "y": [
+                -0.05,
+                0.05
+              ],
+              "z": [
+                -0.05,
+                0.05
+              ]
+            }
+          },
+          "physics_material": {
+            "static_friction_range": [
+              0.3,
+              1.6
+            ],
+            "dynamic_friction_range": [
+              0.3,
+              1.2
+            ],
+            "restitution_range": [
+              0.0,
+              0.5
+            ]
+          },
+          "push_robot": {
+            "velocity_range": {
+              "x": [
+                -0.5,
+                0.5
+              ],
+              "y": [
+                -0.5,
+                0.5
+              ],
+              "z": [
+                -0.2,
+                0.2
+              ],
+              "roll": [
+                -0.52,
+                0.52
+              ],
+              "pitch": [
+                -0.52,
+                0.52
+              ],
+              "yaw": [
+                -0.78,
+                0.78
+              ]
+            }
+          },
+          "randomize_action_delay": {
+            "delay_range": [
+              12.0,
+              12.0
+            ]
+          },
+          "randomize_rigid_body_mass": {
+            "mass_distribution_params": [
+              0.8,
+              1.5
+            ]
+          }
+        },
+        "delay": {
+          "action_delay_actuator_groups": 5,
+          "action_delay_num_lags": 640,
+          "action_delay_min_steps": 12,
+          "action_delay_max_steps": 12,
+          "action_delay_mean_steps": 12.0,
+          "action_delay_nonzero_fraction": 1.0,
+          "action_delay_histogram": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            640
+          ],
+          "action_delay_cross_group_equal_fraction": 1.0,
+          "action_delay_cross_group_range_mean_steps": 0.0,
+          "action_delay_process_invocations": 262,
+          "action_delay_process_resampled_envs": 988,
+          "action_delay_process_assignments": 4940,
+          "action_delay_process_mean_steps": 12.0,
+          "action_delay_process_histogram": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            4940
+          ],
+          "action_delay_process_cross_group_equal_fraction": 1.0,
+          "action_delay_process_distribution_counts": {
+            "uniform": 262
+          },
+          "action_delay_process_coupling_counts": {
+            "independent": 262
+          }
+        },
+        "motion_count": 102,
+        "failed_count": 101
+      },
+      "complete": true
+    },
+    "curriculum_robustness_ne128_20260829_072508_s8602_fixed_id_clean": {
+      "checkpoint_seed": 8602,
+      "evaluation_seed": 8702,
+      "mode": "fixed",
+      "preset": "id_clean",
+      "checkpoint": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260829_065927_fixed_256/seed_8602/fixed/final_checkpoint.pt",
+      "checkpoint_sha256": "9a1e999712d04a29ae94a98e6531a6f6771e009f9041eab33b7fa8de50dc55a9",
+      "metrics_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_robustness_eval/curriculum_robustness_ne128_20260829_072508/seed_8602/fixed/id_clean/metrics_eval.json",
+      "log_path": "/data/robotixx/lucid-sonic/outputs/curriculum_robustness_ne128_20260829_072508_s8602_fixed_id_clean.log",
+      "runtime": {
+        "exit_code": 0,
+        "wall_seconds": 327.20276825875044,
+        "gpu": {
+          "samples": 162,
+          "start_free_mib": 30771.0,
+          "min_free_mib": 26496.0,
+          "max_used_mib": 5608.0,
+          "max_gpu_util_pct": 66.0
+        }
+      },
+      "summary": {
+        "success_rate": 0.9607843137254902,
+        "progress_rate": 0.9751955197722304,
+        "mpjpe_g": 400.2202715221256,
+        "mpjpe_l": 31.81691248049686,
+        "foot_slip_per_step_m": 0.001913369063799026,
+        "undesired_contact_rate": 0.14456907460387325,
+        "torque_saturation": 0.0015500380380342913,
+        "energy_proxy": 88.83282564003156,
+        "quality_missing_signals": [],
+        "active_dr_terms": [
+          "add_joint_default_pos",
+          "base_com",
+          "physics_material",
+          "push_robot",
+          "randomize_action_delay",
+          "randomize_rigid_body_mass"
+        ],
+        "dr_ranges": {
+          "add_joint_default_pos": {
+            "pos_distribution_params": [
+              0.0,
+              0.0
+            ]
+          },
+          "base_com": {
+            "com_range": {
+              "x": [
+                0.0,
+                0.0
+              ],
+              "y": [
+                0.0,
+                0.0
+              ],
+              "z": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "physics_material": {
+            "static_friction_range": [
+              0.95,
+              0.95
+            ],
+            "dynamic_friction_range": [
+              0.75,
+              0.75
+            ],
+            "restitution_range": [
+              0.0,
+              0.0
+            ]
+          },
+          "push_robot": {
+            "velocity_range": {
+              "x": [
+                0.0,
+                0.0
+              ],
+              "y": [
+                0.0,
+                0.0
+              ],
+              "z": [
+                0.0,
+                0.0
+              ],
+              "roll": [
+                0.0,
+                0.0
+              ],
+              "pitch": [
+                0.0,
+                0.0
+              ],
+              "yaw": [
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "randomize_action_delay": {
+            "delay_range": [
+              0.0,
+              0.0
+            ]
+          },
+          "randomize_rigid_body_mass": {
+            "mass_distribution_params": [
+              1.0,
+              1.0
+            ]
+          }
+        },
+        "delay": {
+          "action_delay_actuator_groups": 5,
+          "action_delay_num_lags": 640,
+          "action_delay_min_steps": 0,
+          "action_delay_max_steps": 0,
+          "action_delay_mean_steps": 0.0,
+          "action_delay_nonzero_fraction": 0.0,
+          "action_delay_histogram": [
+            640
+          ],
+          "action_delay_cross_group_equal_fraction": 1.0,
+          "action_delay_cross_group_range_mean_steps": 0.0,
+          "action_delay_process_invocations": 1526,
+          "action_delay_process_resampled_envs": 2869,
+          "action_delay_process_assignments": 14345,
+          "action_delay_process_mean_steps": 0.0,
+          "action_delay_process_histogram": [
+            14345
+          ],
+          "action_delay_process_cross_group_equal_fraction": 1.0,
+          "action_delay_process_distribution_counts": {
+            "uniform": 1526
+          },
+          "action_delay_process_coupling_counts": {
+            "independent": 1526
+          }
+        },
+        "motion_count": 102,
+        "failed_count": 4
+      },
+      "complete": true
+    },
+    "curriculum_robustness_ne128_20260829_072508_s8602_fixed_dr_050": {
+      "checkpoint_seed": 8602,
+      "evaluation_seed": 8702,
+      "mode": "fixed",
+      "preset": "dr_050",
+      "checkpoint": "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260829_065927_fixed_256/seed_8602/fixed/final_checkpoint.pt",
+      "checkpoint_sha256": "9a1e999712d04a29ae94a98e6531a6f6771e009f9041eab33b7fa8de50dc55a9",
+      "metrics_path": "/data/robotixx/lucid-sonic/artifacts/curriculum_robustness_eval/curriculum_robustness_ne128_20260829_072508/seed_8602/fixed/dr_050/metrics_eval.json",
+      "log_path": "/data/robotixx/lucid-sonic/outputs/curriculum_robustness_ne128_20260829_072508_s8602_fixed_dr_050.log",
+      "runtime": {
+        "exit_code": 0,
+        "wall_seconds": 331.3888921746984,
+        "gpu": {
+          "samples": 164,
+          "start_free_mib": 30771.0,
+          "min_free_mib": 26496.0,
+          "max_used_mib": 5608.0,
+          "max_gpu_util_pct": 66.0
+        }
+      },
+      "summary": {
+        "success_rate": 0.8725490196078431,
+        "progress_rate": 0.9118927251091045,
+        "mpjpe_g": 433.00523103314316,
+        "mpjpe_l": 33.92862327319445,
+        "foot_slip_per_step_m": 0.0021508239043959575,
+        "undesired_contact_rate": 0.14265033560739437,
+        "torque_saturation": 0.002500040314624945,
+        "energy_proxy": 121.6558565130961,
+        "quality_missing_signals": [],
+        "active_dr_terms": [
+          "add_joint_default_pos",
+          "base_com",
+          "physics_material",
+          "push_robot",
+          "randomize_action_delay",
+          "randomize_rigid_body_mass"
+        ],
+        "dr_ranges": {
+          "add_joint_default_pos": {
+            "pos_distribution_params": [
+              -0.005,
+              0.005
+            ]
+          },
+          "base_com": {
+            "com_range": {
+              "x": [
+                -0.0125,
+                0.0125
+              ],
+              "y": [
+                -0.025,
+                0.025
+              ],
+              "z": [
+                -0.025,
+                0.025
+              ]
+            }
+          },
+          "physics_material": {
+            "static_friction_range": [
+              0.625,
+              1.2750000000000001
+            ],
+            "dynamic_friction_range": [
+              0.525,
+              0.975
+            ],
+            "restitution_range": [
+              0.0,
+              0.25
+            ]
+          },
+          "push_robot": {
+            "velocity_range": {
+              "x": [
+                -0.25,
+                0.25
+              ],
+              "y": [
+                -0.25,
+                0.25
+              ],
+              "z": [
+                -0.1,
+                0.1
+              ],
+              "roll": [
+                -0.26,
+                0.26
+              ],
+              "pitch": [
+                -0.26,
+                0.26
+              ],
+              "yaw": [
+                -0.39,
+                0.39
+              ]
+            }
+          },
+          "randomize_action_delay": {
+            "delay_range": [
+              0.0,
+              8.0
+            ]
+          },
+          "randomize_rigid_body_mass": {
+            "mass_distribution_params": [
+              0.9,
+              1.25
+            ]
+          }
+        },
+        "delay": {
+          "action_delay_actuator_groups": 5,
+          "action_delay_num_lags": 640,
+          "action_delay_min_steps": 0,
+          "action_delay_max_steps": 8,
+          "action_delay_mean_steps": 4.026562690734863,
+          "action_delay_nonzero_fraction": 0.917187511920929,
+          "action_delay_histogram": [
+            53,
+            66,
+            70,
+            99,
+            77,
+            78,
+            66,
+            68,
+            63
+          ],
+          "action_delay_cross_group_equal_fraction": 0.0,
+          "action_delay_cross_group_range_mean_steps": 5.7578125,
+          "action_delay_process_invocations": 1771,
+          "action_delay_process_resampled_envs": 2981,
+          "action_delay_process_assignments": 14905,
+          "action_delay_process_mean_steps": 4.00040254948004,
+          "action_delay_process_histogram": [
+            1605,
+            1643,
+            1661,
+            1705,
+            1679,
+            1688,
+            1676,
+            1650,
+            1598
+          ],
+          "action_delay_process_cross_group_equal_fraction": 0.0,
+          "action_delay_process_distribution_counts": {
+            "uniform": 1771
+          },
+          "action_delay_process_coupling_counts": {
+            "independent": 1771
+          }
+        },
+        "motion_count": 102,
+        "failed_count": 13
+      },
+      "complete": true
+    }
+  },
+  "mode_summary": {
+    "id_clean": {
+      "fixed": {
+        "num_runs": 3,
+        "metrics": {
+          "success_rate": {
+            "per_checkpoint_seed": {
+              "8600": 0.9215686274509804,
+              "8601": 0.9411764705882353,
+              "8602": 0.9607843137254902
+            },
+            "mean": 0.9411764705882354,
+            "sample_std": 0.019607843137254888
+          },
+          "progress_rate": {
+            "per_checkpoint_seed": {
+              "8600": 0.9560886203658348,
+              "8601": 0.965228872118043,
+              "8602": 0.9751955197722304
+            },
+            "mean": 0.9655043374187028,
+            "sample_std": 0.009556427788689207
+          },
+          "mpjpe_g": {
+            "per_checkpoint_seed": {
+              "8600": 586.1653014249272,
+              "8601": 529.3829569477626,
+              "8602": 400.2202715221256
+            },
+            "mean": 505.2561766316051,
+            "sample_std": 95.29147224545615
+          },
+          "mpjpe_l": {
+            "per_checkpoint_seed": {
+              "8600": 30.950997252405735,
+              "8601": 30.818196147189237,
+              "8602": 31.81691248049686
+            },
+            "mean": 31.195368626697277,
+            "sample_std": 0.5423528418232072
+          },
+          "foot_slip_per_step_m": {
+            "per_checkpoint_seed": {
+              "8600": 0.002149755579583092,
+              "8601": 0.001987841995764678,
+              "8602": 0.001913369063799026
+            },
+            "mean": 0.0020169888797155985,
+            "sample_std": 0.00012085860268995738
+          },
+          "undesired_contact_rate": {
+            "per_checkpoint_seed": {
+              "8600": 0.12304515569982394,
+              "8601": 0.09103866362235916,
+              "8602": 0.14456907460387325
+            },
+            "mean": 0.1195509646420188,
+            "sample_std": 0.026935724481138155
+          },
+          "torque_saturation": {
+            "per_checkpoint_seed": {
+              "8600": 0.002117051378855111,
+              "8601": 0.0018644328254007363,
+              "8602": 0.0015500380380342913
+            },
+            "mean": 0.001843840747430046,
+            "sample_std": 0.0002840669946043714
+          },
+          "energy_proxy": {
+            "per_checkpoint_seed": {
+              "8600": 93.24901947542497,
+              "8601": 92.21865399548935,
+              "8602": 88.83282564003156
+            },
+            "mean": 91.43349970364864,
+            "sample_std": 2.3104204042638274
+          }
+        }
+      }
+    },
+    "dr_full": {
+      "fixed": {
+        "num_runs": 3,
+        "metrics": {
+          "success_rate": {
+            "per_checkpoint_seed": {
+              "8600": 0.803921568627451,
+              "8601": 0.7745098039215687,
+              "8602": 0.7941176470588236
+            },
+            "mean": 0.7908496732026143,
+            "sample_std": 0.014975737565215171
+          },
+          "progress_rate": {
+            "per_checkpoint_seed": {
+              "8600": 0.8663988784959942,
+              "8601": 0.8725739200325573,
+              "8602": 0.8701665695007964
+            },
+            "mean": 0.8697131226764493,
+            "sample_std": 0.0031123937751275648
+          },
+          "mpjpe_g": {
+            "per_checkpoint_seed": {
+              "8600": 554.8195364154697,
+              "8601": 487.9407499698666,
+              "8602": 432.3924580098682
+            },
+            "mean": 491.7175814650682,
+            "sample_std": 61.30086234173366
+          },
+          "mpjpe_l": {
+            "per_checkpoint_seed": {
+              "8600": 34.491540918130426,
+              "8601": 33.98757386171782,
+              "8602": 34.884792882765296
+            },
+            "mean": 34.45463588753785,
+            "sample_std": 0.44974657185422473
+          },
+          "foot_slip_per_step_m": {
+            "per_checkpoint_seed": {
+              "8600": 0.0026401650416660884,
+              "8601": 0.0024910419314809733,
+              "8602": 0.002595981190238769
+            },
+            "mean": 0.002575729387795277,
+            "sample_std": 7.659652162127316e-05
+          },
+          "undesired_contact_rate": {
+            "per_checkpoint_seed": {
+              "8600": 0.1357639323242432,
+              "8601": 0.10856367336026616,
+              "8602": 0.1447687327995997
+            },
+            "mean": 0.12969877949470301,
+            "sample_std": 0.018849168188163585
+          },
+          "torque_saturation": {
+            "per_checkpoint_seed": {
+              "8600": 0.003821629692096712,
+              "8601": 0.003688261583027487,
+              "8602": 0.0031818718564786586
+            },
+            "mean": 0.003563921043867619,
+            "sample_std": 0.0003375173318773408
+          },
+          "energy_proxy": {
+            "per_checkpoint_seed": {
+              "8600": 141.70355003259107,
+              "8601": 142.19942756425934,
+              "8602": 134.49965249027727
+            },
+            "mean": 139.4675433623759,
+            "sample_std": 4.309458019219349
+          }
+        }
+      }
+    },
+    "latency_60ms": {
+      "fixed": {
+        "num_runs": 3,
+        "metrics": {
+          "success_rate": {
+            "per_checkpoint_seed": {
+              "8600": 0.0,
+              "8601": 0.009803921568627416,
+              "8602": 0.009803921568627416
+            },
+            "mean": 0.006535947712418277,
+            "sample_std": 0.005660296756761017
+          },
+          "progress_rate": {
+            "per_checkpoint_seed": {
+              "8600": 0.18239378080675928,
+              "8601": 0.17558256155747337,
+              "8602": 0.17230143174118198
+            },
+            "mean": 0.17675925803513823,
+            "sample_std": 0.005148042187645353
+          },
+          "mpjpe_g": {
+            "per_checkpoint_seed": {
+              "8600": 70.16880629195188,
+              "8601": 57.021486544043405,
+              "8602": 68.43225722159492
+            },
+            "mean": 65.20751668586341,
+            "sample_std": 7.142283793054471
+          },
+          "mpjpe_l": {
+            "per_checkpoint_seed": {
+              "8600": 36.55653408175196,
+              "8601": 34.21163479816065,
+              "8602": 36.550870728981444
+            },
+            "mean": 35.773013202964684,
+            "sample_std": 1.3521963284347591
+          },
+          "foot_slip_per_step_m": {
+            "per_checkpoint_seed": {
+              "8600": 0.005327392773427461,
+              "8601": 0.00472200950127475,
+              "8602": 0.0053254003521528695
+            },
+            "mean": 0.005124934208951694,
+            "sample_std": 0.000348944454717433
+          },
+          "undesired_contact_rate": {
+            "per_checkpoint_seed": {
+              "8600": 0.2394469895287958,
+              "8601": 0.20395026408450703,
+              "8602": 0.2225462147887324
+            },
+            "mean": 0.22198115613401173,
+            "sample_std": 0.017755107653271512
+          },
+          "torque_saturation": {
+            "per_checkpoint_seed": {
+              "8600": 0.007297684600108318,
+              "8601": 0.007135214303059737,
+              "8602": 0.006378247935891203
+            },
+            "mean": 0.0069370489463530865,
+            "sample_std": 0.0004907067111072351
+          },
+          "energy_proxy": {
+            "per_checkpoint_seed": {
+              "8600": 282.6632340062407,
+              "8601": 278.8180417043161,
+              "8602": 273.2265712572093
+            },
+            "mean": 278.23594898925535,
+            "sample_std": 4.745184391194343
+          }
+        }
+      }
+    },
+    "dr_050": {
+      "fixed": {
+        "num_runs": 3,
+        "metrics": {
+          "success_rate": {
+            "per_checkpoint_seed": {
+              "8600": 0.8333333333333334,
+              "8601": 0.8725490196078431,
+              "8602": 0.8725490196078431
+            },
+            "mean": 0.8594771241830066,
+            "sample_std": 0.02264118702704413
+          },
+          "progress_rate": {
+            "per_checkpoint_seed": {
+              "8600": 0.8943732559735722,
+              "8601": 0.9192567092969137,
+              "8602": 0.9118927251091045
+            },
+            "mean": 0.9085075634598635,
+            "sample_std": 0.01278245093350051
+          },
+          "mpjpe_g": {
+            "per_checkpoint_seed": {
+              "8600": 634.0334522537162,
+              "8601": 502.643786477756,
+              "8602": 433.00523103314316
+            },
+            "mean": 523.2274899215384,
+            "sample_std": 102.08257964693631
+          },
+          "mpjpe_l": {
+            "per_checkpoint_seed": {
+              "8600": 33.06251414660729,
+              "8601": 32.48634458996959,
+              "8602": 33.92862327319445
+            },
+            "mean": 33.15916066992378,
+            "sample_std": 0.7259802771928995
+          },
+          "foot_slip_per_step_m": {
+            "per_checkpoint_seed": {
+              "8600": 0.0022203552206352143,
+              "8601": 0.002160086898878786,
+              "8602": 0.0021508239043959575
+            },
+            "mean": 0.0021770886746366527,
+            "sample_std": 3.775508268672541e-05
+          },
+          "undesired_contact_rate": {
+            "per_checkpoint_seed": {
+              "8600": 0.12725916043133803,
+              "8601": 0.09839726837588028,
+              "8602": 0.14265033560739437
+            },
+            "mean": 0.12276892147153756,
+            "sample_std": 0.022465644310509084
+          },
+          "torque_saturation": {
+            "per_checkpoint_seed": {
+              "8600": 0.003181001756769191,
+              "8601": 0.0029032458490166587,
+              "8602": 0.002500040314624945
+            },
+            "mean": 0.002861429306803598,
+            "sample_std": 0.000342401210312968
+          },
+          "energy_proxy": {
+            "per_checkpoint_seed": {
+              "8600": 128.10750347492532,
+              "8601": 129.47359653450897,
+              "8602": 121.6558565130961
+            },
+            "mean": 126.41231884084345,
+            "sample_std": 4.175464401515186
+          }
+        }
+      }
+    }
+  },
+  "paired_comparisons": {
+    "id_clean": {},
+    "dr_full": {},
+    "latency_60ms": {},
+    "dr_050": {}
+  },
+  "checkpoint_sha256_before": {
+    "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260829_065927_fixed_256/seed_8600/fixed/final_checkpoint.pt": "1523bae02189f99bdfceeaca800c31ab5b17f2b27ddd91d23ad93e4ba562b27e",
+    "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260829_065927_fixed_256/seed_8601/fixed/final_checkpoint.pt": "f6bfb88af6445373c324f59c32343e30996b19ee5fd9a5d378325a454fa7d842",
+    "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260829_065927_fixed_256/seed_8602/fixed/final_checkpoint.pt": "9a1e999712d04a29ae94a98e6531a6f6771e009f9041eab33b7fa8de50dc55a9"
+  },
+  "checkpoint_sha256_after": {
+    "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260829_065927_fixed_256/seed_8600/fixed/final_checkpoint.pt": "1523bae02189f99bdfceeaca800c31ab5b17f2b27ddd91d23ad93e4ba562b27e",
+    "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260829_065927_fixed_256/seed_8601/fixed/final_checkpoint.pt": "f6bfb88af6445373c324f59c32343e30996b19ee5fd9a5d378325a454fa7d842",
+    "/data/robotixx/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne512_20260829_065927_fixed_256/seed_8602/fixed/final_checkpoint.pt": "9a1e999712d04a29ae94a98e6531a6f6771e009f9041eab33b7fa8de50dc55a9"
+  },
+  "verified": [
+    "all frozen checkpoints completed the matched motion panel",
+    "all six DR terms remained active in evaluation",
+    "all runs used five delayed-actuator groups with the prescribed live lag",
+    "checkpoint hashes were unchanged by evaluation",
+    "mode comparisons use matched checkpoint and evaluation seeds"
+  ],
+  "not_yet_verified": [
+    "unseen-motion generalization",
+    "episode-masked physical-quality comparison; current batch diagnostics include auto-reset environments after their scored motion terminates",
+    "hardware transfer or real-world safety",
+    "statistical significance beyond three checkpoint seeds"
+  ]
+}

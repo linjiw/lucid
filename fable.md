@@ -677,6 +677,379 @@ have receipts for everything; keep the paper reproducible from them.
   If confirmed, the paper's mechanism story is: *the full envelope is unsustainable
   because of one channel, and a scalar λ cannot express "everything except latency"*
   — which is the evidence LUCID-MC (per-channel gating) needs.
+> **Merge note (2026-09-02):** the block below was written on the first host on
+> 2026-08-28/29 and reached `origin/main` through receipt syncs; the entries after it
+> were written on the second host from 2026-08-28 onward. Both are kept in full.
+
+- **05:07 — Stage 6 eval (`off` × 128 it):** clean 66.67 (all three seeds 67), dr_050
+  44.12, dr_full 38.89 — versus off@32: 83.01 / — / 50.65. **Deployment success decays
+  with continued fine-tuning even without DR, while training reward stays flat** —
+  the training curve is blind to it (stochastic actions on the 512-pool vs
+  deterministic frozen eval on the 102-motion panel). Receipt
+  `curriculum_robustness_ne128_20260828_021915.json`. Standing at 128 it:
+
+  | success % @128 | off | lucid | fixed | ta_lucid_25 | **ta_lucid_50** |
+  |---|---:|---:|---:|---:|---:|
+  | id_clean | **66.67** | 56.86 | 57.19 | 57.84 | **66.01** |
+  | dr_050 | 44.12 | 48.37 | 46.73 | 45.42 | **54.58** |
+  | dr_full | 38.89 | 39.22 | 41.50 | 42.48 | **46.41** |
+
+  The 50% anchor retains clean competence at the no-DR level *and* is the most robust
+  arm at every intensity — the only arm that is not dominated. Two caveats before this
+  becomes a claim: (1) all 128-it numbers sit below the 32-it numbers, so the untrained
+  origin/release evaluations (running) decide whether "training" here is net-positive
+  at all, and the honest framing may be *retention under DR fine-tuning*; (2) three
+  seeds, screening grade. Stage 7 (channel attribution) is now running.
+- **05:40 — THE RELEASE CHECKPOINT, UNTRAINED, BEATS EVERYTHING.** Evaluating SONIC's
+  released `model_step_041550.pt` under the identical evaluator:
+  **id_clean 97.39 / dr_050 71.24 / dr_full 69.61** (progress 98.1 / 82.1 / 81.7).
+  Receipt `curriculum_robustness_ne128_20260828_011506.json`. Every fine-tuned arm at
+  every budget is below it on every preset (best-ever: 84.0 clean, 66.0 dr_050, 56.5
+  dr_full). **Fine-tuning in this testbed has been net-destructive from iteration 1**;
+  the "settled origin" is itself a degraded policy, and the whole
+  lucid/fixed/TACE comparison has measured *rate of degradation*, not capability.
+  This is the most important measurement of the program so far, and it was one
+  evaluation away the entire time. Consequences:
+  1. No curriculum claim can be made until fine-tuning is non-destructive: a
+     no-DR fine-tune must hold ≥ 95% clean. Suspects: 128-env batches (32× smaller
+     than the release's 4096), the adaptive-KL LR schedule on noisy small-batch KL,
+     Adam restarting from fresh moments, entropy drift (13.3→13.8).
+  2. The capability bar for the paper is **beat 69.6% dr_full while holding ≥ 97%
+     clean** — the released policy already has more DR robustness than any curriculum
+     arm produced.
+  3. Everything measured so far is still valid *as a retention study* (the 50% anchor
+     retains best), but it is not the paper.
+- **06:15 — Origin (step-24 "settled") checkpoint, untrained by us:** clean 94.12 /
+  dr_050 67.65 / dr_full 62.42 (receipt `curriculum_robustness_ne128_20260828_011345.json`).
+  So the degradation ladder is: release 97.4 → settled origin (24 it @256 envs) 94.1 →
+  off@32 83.0 → off@128 66.7 clean; dr_full 69.6 → 62.4 → 50.7 → 38.9. **Every
+  fine-tuning iteration in this program has cost capability, monotonically.**
+  Trainer facts established: `checkpoint=` restores policy+value weights only (fresh
+  Adam); the adaptive-KL LR ended pinned at its floor 1e-5 because per-update KL stayed
+  > 0.02 — updates are too large for a converged policy at 3,072-sample batches
+  (release: ~98k). **Stage 8 queued (`run_finetune_sustainability.sh`, preregistered in
+  `finetune_sustainability_preregistration_20260828.json`):** no-DR × 32 it × 3 seeds
+  under C2 (LR floor 1e-6, cap 2e-5, 1 PPO epoch), C3 (entropy_coef 0), C1 (512 envs).
+  Bar: id_clean ≥ 95. The winning regime becomes the base for re-running
+  off/fixed/lucid/ta_lucid_50 — that rerun is where a real capability result (beat
+  69.6 dr_full at ≥ 97 clean) can exist. Stage 7 (channel attribution) still running.
+- **06:08 — Stage 7 training (channel attribution, 128 it):** `fixed_latonly` (0–40 ms
+  latency at λ=1, five other channels nominal) last-4 reward **8.20** ≈ full fixed 7.35;
+  `fixed_nolat` (five channels at λ=1, latency 0) **15.99** ≈ off 19.09. Receipt
+  `curriculum_comparison_ne128_20260828_050752.json`. H_L3 confirmed: **actuation
+  latency is the channel that makes the full envelope unsustainable**; the other five
+  at full strength cost ~3 reward points. A scalar λ cannot say "everything except
+  latency" — this is the causal evidence for per-channel gating (LUCID-MC). Deployment
+  eval pending for H_L1/H_L2.
+- **07:34 — Stage 7 eval (channel attribution @128 it).** Receipt
+  `curriculum_robustness_ne128_20260828_060831.json`.
+
+  | success % @128 | fixed_nolat | fixed_latonly | fixed (all six) | off |
+  |---|---:|---:|---:|---:|
+  | id_clean | **70.92** | 53.59 | 57.19 | 66.67 |
+  | dr_050 | **48.04** | 42.81 | 46.73 | 44.12 |
+  | dr_full | 38.56 | 31.05 | **41.50** | 38.89 |
+
+  **H_L1 ✓** (latency alone reproduces the collapse, within 5 pts of full fixed),
+  **H_L2 ✓** (removing latency recovers +13.7 clean over fixed — above no-DR: the five
+  non-latency channels are mildly protective), **H_L3 ✓** (training reward 16.0 vs
+  8.2). Causal conclusion: *0–40 ms independent per-group actuation latency, sampled
+  at full strength, is what makes SONIC fine-tuning collapse; everything else in the
+  envelope is benign.* Cost of removing it: latency robustness (dr_full 38.6 vs 41.5)
+  — which is exactly the trade a per-channel controller should manage, not a scalar λ.
+- **08:29 — Stage 8 cell C2 (no-DR, 32 it, LR cap 2e-5 / floor 1e-6 / 1 PPO epoch):**
+  clean **93.14** [92, 93, 94], dr_full 57.52 — vs the default regime's 83.01 / 50.65 and
+  the origin's 94.12 / 62.42; training reward identical (20.0 vs 20.2). **Update
+  magnitude was the driver: with small updates, 32 iterations cost ≈1 pt clean instead
+  of 11.** Receipts `curriculum_comparison_ne128_20260828_073416_C2_update.json`,
+  `curriculum_robustness_ne128_20260828_074017.json`. C3 (entropy) and C1 (512 envs)
+  running; regime decision after all three per the preregistration.
+- **09:29 — Stage 8 cell C3 (entropy_coef=0):** clean 83.01 / dr_full 48.37 — identical to
+  the default regime. H_S3 ✓: entropy drift is a symptom of oversized updates, not a
+  cause. Receipt `curriculum_robustness_ne128_20260828_083607.json`. C1 (512 envs) running.
+- **10:08 — Stage 8 complete; regime chosen.** C1 (512 envs, default optimizer): clean
+  **91.83** / dr_full **60.78**; C2 (small updates): 93.14 / 57.52; C3 (no entropy): 83.01 /
+  48.37 = default. Both C1 and C2 make 32 iterations of fine-tuning ≈ lossless against
+  the origin (94.12 / 62.42); the damage was oversized PPO updates on 3k-sample
+  batches, fixable either by 4× more samples or 4× smaller steps. Preregistered tie
+  rule → **regime = 512 envs, default optimizer** (one knob). Receipts
+  `curriculum_comparison_ne512_20260828_092929_C1_batch.json`,
+  `curriculum_robustness_ne128_20260828_093719.json`. **Stage 9 launched**
+  (`regime_curricula_preregistration_20260828.json`): off / fixed / lucid / ta_lucid_50
+  × 3 seeds at 512 envs, 32 it now and 128 it queued. This is the first curriculum
+  comparison in the program on a non-destructive base; H_R2 (a DR arm beats off on
+  dr_full by > 3 while holding clean) is the first possible *capability gain*.
+- **13:17 — Stage 9, 32 it @ 512 envs (lossless base).** Receipt
+  `curriculum_robustness_ne128_20260828_102734.json`.
+
+  | success % | off | fixed | lucid | ta_lucid_50 | origin | release |
+  |---|---:|---:|---:|---:|---:|---:|
+  | id_clean | **91.83** | 87.58 | 91.18 | 89.22 | 94.12 | 97.39 |
+  | dr_050 | 67.65 | **74.51** | 68.30 | 72.88 | 67.65 | 71.24 |
+  | dr_full | 60.78 | **68.30** | 61.11 | 65.69 | 62.42 | 69.61 |
+
+  H_R1 ✓ (off holds 91.8 clean). **H_R2 ✓ for `ta_lucid_50`: +4.9 dr_full over off with
+  clean −2.6 — the first genuine robustness gain of the program**; `fixed` gains +7.5 but
+  costs −4.3 clean (fails the retention clause); plain `lucid` gains +0.3 (λ≈0.75 is
+  not enough exposure). H_R3 tie (ta50 vs fixed: clean +1.6, dr_full −2.6). Both fixed
+  and ta50 beat the *release* on dr_050. Picture: a dose–retention Pareto line
+  (robustness ∝ target-envelope dose, clean ∝ inverse); the anchor is a controllable
+  point on it. Stage 9 @128 it is running (H_R4). **Stage 10 (launched concurrently):**
+  since latency is the only destabilizer (stage 7), gate *only* latency with the gap
+  and keep the five benign channels at full strength — `lucid_latgate` and
+  `ta_latgate_50` — the minimal two-group LUCID-MC, preregistered in
+  `latgate_preregistration_20260828.json`.
+- **16:58 — Stage 10 (latency-gated arms, 512 envs, 32 it) — negative.** Receipt
+  `curriculum_robustness_ne128_20260828_133913.json`.
+
+  | success % @512/32 | off | lucid | **lucid_latgate** | ta_lucid_50 | **ta_latgate_50** | fixed |
+  |---|---:|---:|---:|---:|---:|---:|
+  | id_clean | 91.83 | 91.18 | 91.18 | 89.22 | 86.93 | 87.58 |
+  | dr_050 | 67.65 | 68.30 | 66.67 | 72.88 | 72.55 | 74.51 |
+  | dr_full | 60.78 | 61.11 | 59.48 | 65.69 | 64.05 | 68.30 |
+
+  H_G1 ✗, H_G2 ✗ (latgate ≈ lucid ≈ off), H_G3: the anchor adds +4.6 dr_full for −4.3
+  clean. **Synthesis on the lossless base:** the five non-latency channels are inert for
+  deployment robustness (stage 7 already showed they are harmless for retention);
+  *latency dose alone* orders every arm on both axes — off (0) < lucid ≈ latgate (λ≈0.75
+  on one tracked env) < ta50 ≈ ta_latgate50 < fixed (full) on dr_full, and the reverse
+  on clean. The gap-gated scalar controller is, at 32 iterations, a dose knob that lands
+  at ≈0.75; its online feedback beats a yoked schedule (stage 4) but there is no free
+  lunch here. What remains decisive is **stage 9 @128 it (eval running)**: if fixed's
+  clean collapses with budget while the gated/anchored arms hold, the curriculum's
+  value is *retention over budget* — a legitimate claim. If everything holds at 128 on
+  the lossless base, the honest paper is the sustainability + latency-tradeoff
+  study with TACE as a dose control.
+- **21:57 — Stage 9 @128 it, 512 envs.** Receipt `curriculum_robustness_ne128_20260828_152820.json`.
+
+  | success % (32 → 128 it) | off | fixed | lucid | ta_lucid_50 |
+  |---|---|---|---|---|
+  | id_clean | 91.8 → **85.9** | 87.6 → 78.1 | 91.2 → 77.8 | 89.2 → 79.1 |
+  | dr_050 | 67.6 → 67.0 | 74.5 → 65.0 | 68.3 → 68.6 | 72.9 → **72.5** |
+  | dr_full | 60.8 → 56.5 | 68.3 → **61.1** | 61.1 → 58.2 | 65.7 → 58.5 |
+
+  H_R4 ✗ (ta50 loses 10.1 clean, as much as fixed's 9.5; lucid loses 13.4 once λ=1 with
+  zero guard trips), H_R5 ✗. Even 512 envs is not lossless at 128 it (off −6 clean).
+  **Day-2 conclusion:** at this fine-tuning scale DR robustness (≤ +7.5 dr_full) trades
+  roughly 1:1 against clean success via latency dose; the scalar gap controller finds
+  no better point on that line than a fixed dose; the anchor is a usable mid-point; more
+  budget hurts every arm. Retention under training is the binding constraint. **Stage
+  11 launched:** the combined regime (512 envs + LR cap 2e-5 / floor 1e-6 / 1 epoch),
+  `off` × 3 seeds × 128 it, preregistered in `combined_regime_preregistration_20260828.json`
+  — bar: clean ≥ 90 at 128 it. If it passes, fixed / ta50 get re-run under it; if not,
+  the paper is the sustainability + latency-tradeoff + audit study.
+- **2026-08-29 00:23 — Stage 11 (combined regime: 512 envs + LR cap 2e-5 / floor 1e-6 /
+  1 epoch), `off` × 128 it:** clean **93.14** [96, 91, 92], dr_full 60.13, training
+  reward 24.5 (best ever). H_X1 ✓ H_X2 ✓. **Fine-tuning is lossless at 128 iterations
+  for the first time.** Receipts `curriculum_comparison_ne512_20260828_215844_combined_128.json`,
+  `curriculum_robustness_ne128_20260828_225216.json`. **Stage 12 launched** per the
+  decision rule (`regime2_curricula_preregistration_20260829.json`): fixed / lucid /
+  ta_lucid_50 × 3 seeds × 128 it under the combined regime. H_Y1 fixed gains > 5
+  dr_full over off (60.1) at clean ≥ 88; H_Y2 ta50 dominates fixed (clean +3, dr_full
+  ≥ −2); H_Y3 any arm beats the release (dr_full > 69.6 at clean ≥ 95).
+- **2026-08-29 05:36 — Stage 12: DR arms at 128 it under the lossless regime. THE RESULT.**
+  Receipt `curriculum_robustness_ne128_20260829_030550.json`.
+
+  | success % @128, lossless regime | off | **fixed** | lucid | ta_lucid_50 | origin | **release** |
+  |---|---:|---:|---:|---:|---:|---:|
+  | id_clean | 93.1 | 91.5 [87,96,91] | 92.5 | 91.5 | 94.1 | 97.4 |
+  | dr_050 | — | **85.0** [84,91,79] | 80.4 | 81.4 | 67.7 | 71.2 |
+  | dr_full | 60.1 | **76.5** [74,80,75] | 72.5 | 71.9 | 62.4 | 69.6 |
+
+  **Full-envelope DR fine-tuning, with the update magnitude fixed, exceeds the released
+  policy's robustness in every seed** (+6.9 dr_full, +13.8 dr_050) at a −2.6 clean cost
+  vs no-DR (−5.9 vs the release). H_Y1 ✓, H_Y3 ✓ on robustness (clean 91.5 < 95 bar),
+  **H_Y2 ✗ — the anchor is dominated by fixed once the base is stable**, H_Y4 tie
+  (lucid +1.0 clean). Gap-gated λ reached 1 in every seed (gap never exceeded its
+  set-point), so the curricula are just slower ramps to the same dose, and the ramp
+  costs robustness at fixed budget.
+
+  **Paper direction (recommended):** *"Robustifying a released humanoid whole-body
+  tracker: the bottleneck was the fine-tuning regime, not the curriculum."* Claims:
+  (1) release-baseline discipline exposes that naive fine-tuning is net-destructive
+  (monotone ladder 97→94→83→57); (2) the cause is PPO update magnitude at small batch
+  (3k samples) — 512 envs + LR cap 2e-5 / 1 epoch makes 128 it lossless (93.1 clean);
+  (3) under that regime plain full-envelope DR beats the release by +7 / +14 pts on
+  the DR presets; (4) actuation latency is the sole destabilizer and sole robustness
+  source (channel attribution); (5) gap-gated and target-anchored curricula are
+  dominated — a preregistered negative with the yoked attribution as the one thing
+  online feedback buys. Remaining gap to close: clean 91.5 → 97.4.
+  **Stage 13 launched:** fixed + off at seeds 8603–8604 (paper-grade 5 seeds) and
+  fixed @256 it × 3 seeds (does robustness keep rising, does clean hold),
+  `regime2_confirmation_preregistration_20260829.json`.
+- **07:00 — Stage 13a: five-seed confirmation @128, lossless regime** (seeds 8600–8604;
+  receipt `curriculum_robustness_ne128_20260829_055519.json` + `..._030550`):
+  fixed — clean **91.57 ± 3.30**, dr_050 **84.31 ± 4.33**, dr_full **76.47 ± 3.25**
+  [74, 80, 75, 74, 79]; off — clean 93.92, dr_full 60.39. **H_Z1 ✓: every one of five
+  seeds exceeds the release's 69.6 dr_full.** This is the headline table. fixed@256
+  (H_Z2/H_Z3) running.
+- **08:15 — Stage 13b: fixed @256 it, lossless regime** (receipt
+  `curriculum_robustness_ne128_20260829_072508.json`): clean **94.1** [92, 94, 96],
+  dr_050 **85.9**, dr_full **79.1** [80, 77, 79] — vs @128: 91.5 / 85.0 / 76.5. H_Z2 ✓ (no
+  collapse), H_Z3 ✓ (still rising). **With enough budget under the right regime, DR
+  fine-tuning recovers the origin's clean success while pushing dr_full +9.5 over the
+  release.** The clean gap to the release is now 3.3 pts. Stage 14 launched
+  (`operating_point_preregistration_20260829.json`): fixed @512 × 3 seeds (H_W1: still
+  rising / clean ≥ 94), and lucid + ta_lucid_50 @256 × 3 seeds (H_W2: curricula remain
+  dominated at the operating point).
+
+## Paper plan v2 (2026-08-29) — what the data now supports
+
+**Title (working):** *Robustifying a Released Humanoid Whole-Body Tracker: The
+Bottleneck Was the Fine-Tuning Regime, Not the Curriculum.*
+
+**Claims, each with its receipt:**
+1. **Release-baseline discipline.** The released SONIC policy, untrained, scores 97.4 /
+   71.2 / 69.6 (clean / dr_050 / dr_full); naive fine-tuning is monotonically destructive
+   (97.4 → 94.1 → 83.0 → 66.7 clean over 0 → 24 → 56 → 152 iterations) while training
+   reward stays flat — the training curve is blind to deployment decay.
+2. **Cause and fix.** PPO update magnitude at 3k-sample batches (per-update KL > 0.02,
+   LR pinned at its floor). 512 envs *or* small updates (LR cap 2e-5, 1 epoch) make 32
+   iterations lossless; both together make 128–256 iterations lossless (93.1 / 94.1
+   clean with no DR / with DR). Entropy drift is a symptom.
+3. **Headline.** Under that regime, plain full-envelope DR fine-tuning beats the
+   release: five seeds @128 — dr_full 76.5 ± 3.3 (every seed > 69.6), dr_050 84.3,
+   clean 91.6; @256 — 79.1 / 85.9 / 94.1.
+4. **Mechanism.** Actuation latency (0–40 ms, per-group) is the sole destabilizing
+   channel and the sole source of DR robustness; the other five channels are inert for
+   robustness and benign for retention (channel attribution, both directions).
+5. **Curricula are dominated — preregistered negative.** Gap-gated scalar λ, the
+   target-anchored variant (TACE), latency-only gating, and post-hoc consolidation all
+   sit on or below fixed DR's dose–retention line; the one thing online gap feedback
+   demonstrably buys is a better schedule than a yoked replay (3/3 seeds). Reviewers
+   get 12 preregistered cells, ~40 receipts, and every negative.
+6. **Audit methodology** (parity, yoked attribution, receipts, gates) as the vehicle.
+
+**Figures:** (1) degradation ladder + training-reward blindness; (2) regime study
+(C1/C2/C3, combined) — clean vs iterations; (3) headline bars with per-seed dots vs
+release; (4) channel attribution; (5) dose–retention line with every arm plotted;
+(6) budget curve fixed @32/128/256/512.
+
+**Open before writing:** operating point (stage 14), held-out-motion panel (content
+split unseen in fine-tuning), a 0–60 ms deployment-latency preset at the operating
+point. Writing starts Sept 1 as planned; the story is now positive and simple.
+- **09:53 — Stage 14a: fixed @512 it** (receipt `curriculum_robustness_ne128_20260829_090622.json`):
+  clean 91.5 [92, 88, 94], dr_050 **87.3**, dr_full **81.4** [84, 79, 80], latency_60ms
+  3.6 (first nonzero ever). Budget curve for fixed under the lossless regime —
+  dr_full 76.5 → 79.1 → 81.4 (@128/256/512), clean 91.5 → 94.1 → 91.5 (plateau
+  91–94, seed-noisy). H_W1 ✓, H_W1b ✓ → **operating point = 512 it** (largest budget with
+  no collapse). Curricula @256 running (H_W2).
+- **10:45 — Queued behind stage 14:** stage 15 = unseen-motion panel (adapt4950
+  content-dev minus debug512, 200 motions hash-bound; `heldout_panel_preregistration_20260829.json`)
+  and stage 16 = shared per-episode U(0, 60 ms) deployment-latency presets
+  (`deployment_latency_preregistration_20260829.json`), both scoring release / off@128
+  / fixed@512. These close the two evaluation gaps in Paper plan v2.
+- **13:00 — Stage 14b: curricula @256, lossless regime** (receipt
+  `curriculum_robustness_ne128_20260829_105536.json`): lucid 91.8 / 82.0 / 76.5, ta_lucid_50
+  91.5 / 83.0 / 77.1 vs fixed 94.1 / 85.9 / 79.1 (clean / dr_050 / dr_full). **H_W2 ✓ — both
+  curricula dominated on both axes at the operating budget.** The preregistered
+  negative is complete across 32 / 128 / 256 iterations and two regimes. Stage 15
+  (unseen motions) running, stage 16 (deployment latency) queued.
+- **14:30 — Stage 15: unseen-motion panel** (adapt4950 content-dev minus debug512, 200
+  motions; receipts `curriculum_robustness_ne128_20260829_{130115,133016,135752}.json`):
+
+  | success %, UNSEEN motions | release | off@128 | **fixed@512** |
+  |---|---:|---:|---:|
+  | id_clean | 97.33 | 95.00 | 87.83 [88, 85, 90] |
+  | dr_full | 63.83 | 60.33 | **79.83** [82, 76, 80] |
+
+  **H_H1 ✓ (+16.0 dr_full over the release on unseen motions — larger than the +11.8 on
+  seen motions, because the release is weaker under DR on unseen content), H_H3 ✓
+  (79.8 unseen vs 81.4 seen: the robustness gain is not memorized), H_H2 ✗ (clean
+  −9.5 vs the release on unseen motions, vs −5.9 on seen: roughly a third of the seen-
+  panel clean retention was specific to the 512 fine-tuning motions).** Paper framing:
+  the robustness gain generalizes across motions; the clean cost is 7–10 pts and
+  partly content-specific — the honest limitation, and the next thing to fix
+  (candidates: fine-tune on the 2,972-motion adaptation split instead of 512; lower
+  latency dose). Stage 16 (shared U(0, 60 ms)) running.
+- **16:08 — Stage 16: deployment latency, shared per-episode U(0, 60 ms)** (receipts
+  `curriculum_robustness_ne128_20260829_{143034,150357,153734}.json`; live audit: all
+  five groups equal-lag, 0–12 steps, cross-group-equal fraction 1.0):
+
+  | success %, 102-motion panel | release | off@128 | **fixed@512** |
+  |---|---:|---:|---:|
+  | nominal physics + U(0,60 ms) shared lag | 53.27 | 51.31 | **73.53** [71, 76, 74] |
+  | full physics DR + U(0,60 ms) shared lag | 52.29 | 47.06 | **66.01** [61, 70, 68] |
+
+  **H_D1 ✓ (+20.3), H_D2 ✓ (+13.7), H_D3 ✓.** Training used independent per-group 0–40 ms
+  lags; the gain transfers to a shared transport lag with 50% more range. The
+  2026-08-21 finding (LUCID had no deployment-latency advantage) is now inverted for
+  the correctly fine-tuned fixed-DR policy. **All evaluations in Paper plan v2 are
+  complete**: seen panel (five seeds), unseen panel, deployment latency, budget curve,
+  channel attribution, curriculum negatives. Stage 17 (adaptation-split fine-tuning to
+  cut the clean cost) is the one open improvement.
+- **17:56 — Stage 17: fixed @512 fine-tuned on the 2,972-motion adaptation split**
+  (receipts `curriculum_robustness_ne128_20260829_{165839,172450}.json`): unseen200
+  clean **88.5** [87, 89, 90] / dr_full **80.0** [80, 82, 78]; seen102 91.5 / 76.5. Versus the
+  512-pool policy: unseen 87.8 / 79.8. H_P1 ✗, H_P2 ✓, H_P3 ✗ (narrow). **The ~9-pt
+  clean cost on unseen motions is not memorization of the small pool — it is the
+  latency-dose retention cost, and it is pool-independent.** Headline policy stays the
+  512-pool fixed@512 (equivalent, cheaper). The remaining knob is dose: stage 18 maps a
+  third point on the dose–retention frontier — `fixed_lat50` (five channels at full
+  strength, latency envelope halved to 0–20 ms) at 512 it, scored on seen, unseen and
+  shared U(0,60 ms) panels (`dose_frontier_preregistration_20260829.json`).
+- **20:07 — Stage 18: dose frontier, `fixed_lat50` (latency 0–20 ms, rest full) @512**
+  (receipts `curriculum_robustness_ne128_20260829_{184734,193631}.json`):
+
+  | latency dose | seen clean | seen dr_full | seen U(0,60) | unseen clean | unseen dr_full |
+  |---|---:|---:|---:|---:|---:|
+  | 0 (off@128) | 93.1 | 60.1 | 51.3 | 95.0 | 60.3 |
+  | 0.5 (0–20 ms) | 93.1 | 79.4 | 59.5 | 88.8 | 77.2 |
+  | 1.0 (0–40 ms) | 91.5 | 81.4 | **73.5** | 87.8 | 79.8 |
+  | release | 97.4 | 69.6 | 53.3 | 97.3 | 63.8 |
+
+  H_F1–F3 ✗, informatively: half dose keeps seen clean and most in-envelope
+  robustness, but **only the full 40 ms dose buys extrapolation to 60 ms deployment
+  latency** (73.5 vs 59.5), and the unseen-motion clean cost (−6 to −9) appears at any
+  nonzero latency dose. Recommended operating point stays **fixed, full envelope, 512 it,
+  lossless regime**.
+
+## Consolidated results (2026-08-29 20:10) — everything receipted, on GitHub
+
+**Policies:** release = SONIC `model_step_041550` untrained; all fine-tuned policies start
+from the settled step-24 origin; "lossless regime" = 512 envs + adaptive LR floor 1e-6 /
+cap 2e-5 / 1 PPO epoch; fixed = all six DR channels at full range (latency 0–40 ms).
+
+| policy | seen clean | seen dr_050 | seen dr_full | seen U(0,60 ms) | unseen clean | unseen dr_full |
+|---|---:|---:|---:|---:|---:|---:|
+| release (untrained) | 97.4 | 71.2 | 69.6 | 53.3 | 97.3 | 63.8 |
+| off, default regime @32 | 83.0 | — | 50.7 | — | — | — |
+| off, lossless @128 | 93.1 | — | 60.1 | 51.3 | 95.0 | 60.3 |
+| fixed, default regime @32 | 80.4 | 66.0 | 56.5 | — | — | — |
+| fixed, lossless @128 (5 seeds) | 91.6 ± 3.3 | 84.3 ± 4.3 | 76.5 ± 3.3 | — | — | — |
+| fixed, lossless @256 | 94.1 | 85.9 | 79.1 | — | — | — |
+| **fixed, lossless @512** | 91.5 | 87.3 | **81.4** | **73.5** | 87.8 | **79.8** |
+| fixed_lat50, lossless @512 | 93.1 | — | 79.4 | 59.5 | 88.8 | 77.2 |
+| fixed on 2,972-motion pool @512 | 91.5 | — | 76.5 | — | 88.5 | 80.0 |
+| lucid (gap-gated λ), lossless @256 | 91.8 | 82.0 | 76.5 | — | — | — |
+| ta_lucid_50 (TACE), lossless @256 | 91.5 | 83.0 | 77.1 | — | — | — |
+
+**Mechanism table:** latency-only fine-tuning (default regime, 128 it) reproduces the
+collapse (clean 53.6 vs 57.2 all-channels); no-latency recovers it (70.9 > off 66.7).
+Online gap feedback beats cross-seed yoked replay 3/3 seeds (+3.6 dr_full, +6.2 clean).
+Same-seed yoking is bit-identical to its source. Post-hoc λ=1 consolidation, latency-only
+gating, and the anchor at every ratio are dominated by fixed once the base is stable.
+
+## Paper plan v3 — final
+
+**Title:** *Robustifying a Released Humanoid Whole-Body Tracker: The Bottleneck Was the
+Fine-Tuning Regime, Not the Curriculum.*
+**Abstract claims:** (i) evaluating the released policy first exposes that standard PPO
+fine-tuning is net-destructive (97 → 57 clean over 152 iterations) while training reward
+is flat; (ii) the cause is update magnitude at small batches, fixed by batch size and a
+learning-rate cap with one PPO epoch; (iii) under that regime, plain full-envelope DR
+raises out-of-distribution success from 69.6 to 81.4 on seen motions, 63.8 to 79.8 on
+unseen motions, and 53.3 to 73.5 under a shared 0–60 ms deployment lag never seen in
+training, at a 6–10 pt cost in nominal success; (iv) actuation latency is the sole
+destabilizing channel and the sole source of robustness, and only its full dose buys
+extrapolation; (v) gap-gated and target-anchored curricula are preregistered negatives
+across 32/128/256 iterations and two regimes, with online feedback's one demonstrable
+benefit isolated by a yoked control. **Figures:** degradation ladder; regime study;
+headline bars (seen / unseen / deployment latency, per-seed dots vs release); budget
+curve; channel attribution; dose frontier; curriculum comparison. **Limitations:**
+single robot/simulator, no hardware, 3–5 seeds, clean cost, 60 ms fixed lag still
+catastrophic (3.6%). Writing starts Sept 1; internal deadline Sept 14.
+
 - **2026-08-28 03:30–04:45 — Second host brought up (`linjiw-ubuntu`, RTX 5080 16 GB).**
   Infrastructure only; **no research evidence was produced and no claim moved.** The
   workspace had never been checked out here: both submodules were empty and the Isaac

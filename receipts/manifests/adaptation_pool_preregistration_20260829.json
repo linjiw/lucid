@@ -1,0 +1,14 @@
+{
+  "kind": "lucid_adaptation_pool_preregistration",
+  "created_at": "2026-08-29T14:45:00-04:00",
+  "author": "Fable (autonomous)",
+  "motivation": "fixed@512 (512-motion pool) loses 9.5 clean vs the release on unseen motions but only 5.9 on seen ones: part of the clean cost is content-specific. Fine-tuning on the 2,972-motion adaptation split (content-linked; dev and test untouched) tests whether breadth removes it.",
+  "design": {"arm": "fixed", "regime": "512 envs + small updates (lossless)", "iterations": 512, "seeds": [8600, 8601, 8602], "training_pool": "adapt4950 content split, partition adaptation (2,972 motions), materialized at pools/adapt4950/content_adaptation", "reference": "fixed@512 on debug512 (stage 14)"},
+  "evaluation": {"panels": {"seen102": "debug512 content-dev (note: 305 of the 512 debug motions are inside the adaptation split; this panel is 'partly seen' for this arm)", "unseen200": "adapt4950 content-dev minus debug512 (disjoint from the adaptation split by construction)"}, "presets": ["id_clean", "dr_full"]},
+  "hypotheses": {
+    "H_P1": "unseen200 id_clean >= 92 (clean cost vs release <= 5.5, halving the 9.5)",
+    "H_P2": "unseen200 dr_full >= 77 (robustness gain retained within 3 pts of 79.8)",
+    "H_P3": "seen102 dr_full >= 79 and id_clean >= 90"
+  },
+  "verified": [], "not_yet_verified": ["all; written before launch"]
+}
