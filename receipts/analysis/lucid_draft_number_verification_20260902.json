@@ -1,0 +1,95 @@
+{
+ "kind": "lucid_draft_number_verification",
+ "schema_version": 1,
+ "created_at": "2026-09-02T17:43:44-04:00",
+ "git_sha": "f942acdc6421a4bfffa5720c292af2fcafce3fa7",
+ "question": "Does every number in paper/when-training-gets-easier.md match its receipt, and do the receipts agree with each other and with the raw training traces?",
+ "method": "Each claim was resolved to a receipt field or recomputed from raw curriculum traces (JSONL written during training). Derived values were recomputed rather than read.",
+ "confirmed": [
+  {
+   "claim": "two collapses at final lambda 0.062 / 0.012",
+   "source": "analysis/lucid_return_inversion_20260901.json pairs[0,1].final_lambda"
+  },
+  {
+   "claim": "collapsed terminal returns 15.29 / 14.40; holding runs 10.98-12.28",
+   "source": "same, terminal_return over 12 pairs; range recomputed"
+  },
+  {
+   "claim": "collapsed frontier AUC 73.99 / 69.73; holding runs 61.20-91.31",
+   "source": "same, frontier_success_auc; range recomputed"
+  },
+  {
+   "claim": "Spearman -0.73 across twelve arm-seed pairs",
+   "source": "same, spearman_return_vs_frontier = -0.7343, n_scored_pairs = 12"
+  },
+  {
+   "claim": "grouped means 14.84/0.719 evacuated vs 11.60/0.833 holding",
+   "source": "same, evacuated_vs_held"
+  },
+  {
+   "claim": "collapse scores 0.7399",
+   "source": "analysis/lucid_p3_readout.json frontier_success_auc = 0.739909"
+  },
+  {
+   "claim": "collapse costs 14.19 points vs fixed on the same seed",
+   "source": "recomputed: fixed@s8601 0.881836 - 0.739909 = 0.141927"
+  },
+  {
+   "claim": "collapse costs 17.32 points vs never-shrink on the same seed",
+   "source": "recomputed: ratchet@s8601 0.913086 - 0.739909 = 0.173177"
+  },
+  {
+   "claim": "never-shrink vs fixed per seed: -0.16 / +3.13 / -1.17",
+   "source": "recomputed from return_inversion AUCs 0.9030/0.9046, 0.9131/0.8818, 0.8203/0.8320"
+  },
+  {
+   "claim": "mean +0.60 points, sample SD 2.25",
+   "source": "recomputed from the three paired differences: mean 0.600, sd 2.249"
+  },
+  {
+   "claim": "2,033 requested reductions, 453/951/629 per seed, zero applied, all three end at lambda 1.0",
+   "source": "RAW TRACES: artifacts/curriculum_comparison/*/seed_{8600,8601,8602}/lucid_ratchet_rg/curriculum_*.jsonl, 8000 rows each; counted rows with control<0 and rows with lambda_after<lambda_before",
+   "note": "counted independently of any summary receipt; guard trips 0 in all three"
+  },
+  {
+   "claim": "signal audit: survival +0.987 (4.6 reversals), return +0.973 (3.2), learned mismatch -0.037 (19.2)",
+   "source": "analysis/lucid_signal_audit_20260901.json verdict_at_fixed_difficulty; gap spearman range -0.2996..+0.11"
+  },
+  {
+   "claim": "channel table for fixed / never-shrink / collapsed / no-DR at 2x and 3x, and first-to-fail channel",
+   "source": "analysis/lucid_channel_attribution_20260902.json arms[*].cells and scalar; every cell matched"
+  },
+  {
+   "claim": "interaction residual 0.174 - 0.111 = 0.063 for fixed",
+   "source": "recomputed from drops {fric .0195, mass .002, com .0059, joint .002, push .082} = 0.1114 and phys_100 0.9941 - phys_200 0.8203 = 0.1738"
+  },
+  {
+   "claim": "gate expanded at iterations 3362 / 4103 / 4790 / 5891 to lambda 1.5; 914 guard trips; probe telemetry on 7990 of 8000 iterations",
+   "source": "RAW TRACE: artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260901_232720/seed_8600/gate_150/curriculum_*.jsonl"
+  },
+  {
+   "claim": "held-out clip at phys_150: fixed 0.80, holding adaptive 0.73, collapsed 0.40, no-DR 0.18; ordering Spearman 0.8 and 1.0",
+   "source": "analysis/lucid_heldout_motion_20260901.json"
+  }
+ ],
+ "discrepancies": [
+  {
+   "item": "Appendix B citation for Section 9",
+   "draft": "cites receipts/analysis/lucid_gate_feasibility_20260901.json as the evidence for the from-scratch probe gate",
+   "receipt": "that file is kind=lucid_gate_replay, a REPLAY that uses a fixed-DR run's population time-out rate as a PROXY for probe survival; it is not the gate run",
+   "actual_evidence": "artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260901_232720/seed_8600/gate_150/curriculum_*.jsonl",
+   "severity": "citation only; the four expansion iterations, the guard-trip count and the telemetry coverage in the draft are all correct and were confirmed from that trace",
+   "action": "citation corrected in the draft"
+  }
+ ],
+ "cross_checks_passed": [
+  "the never-shrink and fixed AUCs in the phase-0 and return-inversion receipts agree to all printed digits for every shared arm-seed pair",
+  "453 + 951 + 629 = 2033",
+  "the five single-channel marginals cover exactly the five non-latency channels that the scalar phys_* ladder scales, so the interaction residual is well posed",
+  "the twelve-pair set contains three seeds x four arms with no duplicate arm-seed pair"
+ ],
+ "not_verified": [
+  "MuJoCo sim-to-sim pass rates were produced by this session's own tools and are reported from their own sweep files, not independently re-derived",
+  "the P3 frozen bands were fitted before the collapse was scored; this check confirms the scored value, not the pre-registration timestamp"
+ ]
+}

@@ -1,0 +1,132 @@
+{
+ "kind": "lucid_practice_allocation_screen_preregistration",
+ "schema_version": 1,
+ "created_at": "2026-09-02T17:48:48-04:00",
+ "status": "FROZEN BEFORE ANY OUTCOME. No arm has been trained.",
+ "sonic_sha_at_preregistration": "ca86b5e5a18b09f3a665fb2184a2828ae1fa7246",
+ "question": "Can we improve humanoid control by spending more training on difficult but learnable physical conditions, while preserving performance on conditions already learned?",
+ "why_this_comes_first": "Every curriculum result so far answers whether the training ranges move, not whether moving them helps. Before building any scheduler, this screen asks where extra practice is productive at all. It is exploratory: it guides the design and does not replace a from-scratch comparison.",
+ "design": {
+  "type": "matched continuation branches from one origin, single seed screen",
+  "origin": "fixed@s8600 final checkpoint (the lambda=1 envelope already solved)",
+  "held_constant": [
+   "policy and critic architecture",
+   "reward",
+   "motion clip",
+   "environment count 1024",
+   "iteration budget",
+   "optimizer settings",
+   "evaluation suite",
+   "random seed"
+  ],
+  "the_only_difference": "what a fixed 25% share of the same 1024 environments practises",
+  "reallocation_not_addition": "the practice share is taken out of the lambda=1 cohort. A targeted arm trains on FEWER standard-mixture episodes, never on more episodes, so no arm receives extra training.",
+  "probe_gradients": "there are no probes in this screen. The practice stratum is a training cohort and its episodes contribute to PPO updates like every other environment. Its simulation and training cost is counted in the shared budget.",
+  "retained_practice_is_fresh_rollouts": "the retained stratum draws fresh episodes at its own parameters every reset; nothing replays stored trajectories.",
+  "iterations": 1500,
+  "arms": {
+   "fixed": "the plain control: one stratum, all 1024 envs at lambda 1. Answers how much comes from simply continuing to train.",
+   "prac_null": "the matched control: two strata, 768/256, both at lambda 1. Dispatcher active, content identical. Every treatment effect is measured against THIS arm.",
+   "prac_easy": "placebo: 256 envs practise mass 3x, CoM 3x, joint 3x -- the channels the sweep found nearly free.",
+   "prac_push": "bottleneck: 256 envs practise push 3x -- the binding channel.",
+   "prac_pushfric": "interaction: 256 envs practise push 2x with friction 1.5x together."
+  }
+ },
+ "levels_are_measured_not_chosen": {
+  "source": "receipts/analysis/lucid_channel_attribution_20260902.json, arm fixed@s8600, 512 episodes per cell",
+  "origin_success": {
+   "push_2x": 0.9121,
+   "push_3x": 0.7461,
+   "mass_3x": 0.9492,
+   "com_3x": 0.9883,
+   "joint_3x": 0.9902,
+   "fric_1.5x": 0.9727,
+   "phys_100": 0.9941
+  },
+  "rule": "the bottleneck level is the measured one that is clearly failing and clearly off the floor (push 3x at 0.746); the placebo levels are the measured ones that are already manageable (>= 0.949)."
+ },
+ "evaluation": {
+  "identical_for_every_arm_and_frozen_now": true,
+  "also_scored": "the origin checkpoint itself, so improvement is measured against the starting point as well as against the control",
+  "episodes_per_cell": 512,
+  "cells": {
+   "already_learned": [
+    "phys_000",
+    "phys_100"
+   ],
+   "scalar_ladder": [
+    "phys_150",
+    "phys_200"
+   ],
+   "practised_or_adjacent": [
+    "ch_push_200",
+    "ch_push_300",
+    "ch_mass_300",
+    "ch_com_300",
+    "ch_joint_300",
+    "ch_push_fric_200_150"
+   ],
+   "above_every_practised_level": [
+    "ch_push_350",
+    "ch_push_fric_300_150"
+   ],
+   "untouched_channel": [
+    "ch_fric_150"
+   ]
+  },
+  "exposure_labelling": "each cell is labelled in-support or held-out per arm from the arm's realized per-stratum vectors in its own TACE telemetry. An in-support cell may never be used to claim generalization.",
+  "unseen_values_vs_unseen_draws": "cells above an arm's practised level test unseen parameter VALUES; cells at or below it test unseen DRAWS inside a familiar range. The two are reported separately and never pooled."
+ },
+ "margins": {
+  "meaningful_improvement_pts": 5.0,
+  "tie_band_pts": 2.0,
+  "retention_margin_pts": 2.0,
+  "basis": "paired single-cell noise at 512 episodes is 2-3 points (channel attribution caveats); the between-seed effect on absolute capability reaches 7.8 points, which is why one seed screens and does not decide."
+ },
+ "decision_rules_frozen_before_outcomes": {
+  "R1_is_the_bottleneck_learnable": "prac_push minus prac_null at ch_push_300 >= +5.0 pts means push failure is a practice deficit and targeted practice repairs it. |delta| < 2.0 means it is NOT a practice deficit at this budget: no allocation scheduler can fix push by exposure, and the range-expansion direction loses its main justification.",
+  "R2_does_targeting_matter": "prac_push minus prac_easy on the broad-suite macro average >= +5.0 pts means where you practise matters. A tie or a loss means extra exposure helps wherever it is aimed and the channel-selection machinery is unnecessary.",
+  "R3_do_combinations_need_their_own_practice": "prac_pushfric minus prac_push at ch_push_fric_300_150 >= +5.0 pts means practising a combination buys something beyond practising the single channel. Otherwise the joint-corner component is unnecessary and is dropped.",
+  "R4_no_hidden_trade_off": "any arm that gains on its target while losing more than 2.0 pts against prac_null at phys_000 or phys_100 is reported as a trade-off, not an improvement.",
+  "R5_more_training_alone": "prac_null minus the origin on the broad suite is the effect of continuing to train. Every treatment effect is reported against prac_null, never against the origin.",
+  "R6_generalization_beyond_the_practised_range": "an arm claims generalization only from cells above its own practised level (ch_push_350, ch_push_fric_300_150).",
+  "R7_negative_results_are_the_result": "a screen in which no targeted arm beats prac_null is reported as such and ends the allocation direction. It is not repeated with different levels in search of a positive."
+ },
+ "what_this_screen_cannot_decide": [
+  "one seed ranks designs and does not decide; a positive direction must be confirmed on new seeds",
+  "it does not compare against a preset expansion schedule or against fixed randomization over the wider target range; those are the next hurdle and are specified separately",
+  "it is one training clip",
+  "it warm-starts from a solved lambda=1 policy, so it says where practice helps a competent policy, not how to train one from scratch"
+ ],
+ "next_hurdle_if_positive": {
+  "comparators": [
+   "fixed randomization over the wider target range",
+   "a preset expansion schedule to the same final ranges",
+   "a preset PER-PARAMETER schedule with the same practice mixture"
+  ],
+  "rule": "a preset schedule is constructed from the screen runs and FROZEN before the confirmation seeds are trained; a schedule may never be derived from the run it is compared against",
+  "matching": "matched total resources including any probes, with realized exposure reported per arm",
+  "claim": "beating only the narrower fixed baseline does not establish the value of adaptation"
+ },
+ "primary_outcome": "per-cell success on the frozen suite after an equal total budget, reported as paired differences against prac_null with the exposure label attached to every cell",
+ "supporting_outcomes": [
+  "restricted-mean normalized progress",
+  "falls and tracking failures separately",
+  "performance on already-learned cells",
+  "the realized per-stratum exposure vectors",
+  "wall-clock and GPU-hours per arm"
+ ],
+ "cost_estimate_gpu_hours": {
+  "per_arm": 1.0,
+  "arms": 5,
+  "scoring": 0.6,
+  "total": 5.6
+ },
+ "implementation": {
+  "curriculum": "gear_sonic/research/practice_utility/dr_curriculum.py, practice_vectors_json: an explicit per-stratum vector of channel intensities, parsed once, never moved during a run, with no signal input and no path that can contract anything",
+  "arms": "scripts/practice_utility/run_curriculum_comparison.py, PRACTICE_ARMS / PRACTICE_CHANNELS / practice_vectors()",
+  "cells": "scripts/practice_utility/run_curriculum_robustness_eval.py, ch_push_350 and PRESET_PAIR",
+  "tests": "tests/practice_utility/test_practice_allocation.py",
+  "driver": "tools/run_practice_allocation_screen.sh"
+ }
+}

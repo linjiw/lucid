@@ -335,3 +335,101 @@ Phase 2 cell stays the confirmatory one; the prototype loop ranks designs.
    signal where survival is saturated (in-envelope). Needs per-env telemetry.
 4. Zero-gradient probe ablation (`probe_grad=off`), only if the probe's own
    training contribution is suspected of masking the gate's decision.
+
+## 9. Addendum 2026-09-02 (evening) — the question that comes before the scheduler
+
+Direction set by review on 2026-09-02: stop asking whether the training ranges
+expand, and ask where extra training produces real improvement.
+
+> Can we improve humanoid control by spending more training on difficult but
+> learnable physical conditions, while preserving performance on conditions
+> already learned?
+
+### 9.1 Difficulty is not learnability
+
+The attribution sweep says push binds and mass/CoM/joint are nearly free. It
+does **not** say practice at push would help. A condition can be hard because
+the policy lacks practice, because the observation cannot support the response,
+or because the motion is incompatible with that disturbance. Only the first is
+repaired by any curriculum. Nothing measured so far separates them, and every
+proposed component of the range-expansion curriculum silently assumes the first.
+
+### 9.2 Screen A — the practice-allocation screen (preregistered, ready to run)
+
+Five branches leave the fixed@s8600 final with the same architecture, reward,
+motion, 1,024 environments, 1,500 iterations and seed. The only difference is
+what a fixed 25% share of the same environments practises, **reallocated** out
+of the λ=1 cohort so no branch trains on more episodes.
+
+| branch | the 256-env share trains on | measured origin success there |
+|---|---|---|
+| `fixed` | nothing (one stratum, all at λ=1) | — |
+| `prac_null` | λ=1, like everyone else (matched control) | — |
+| `prac_easy` | mass 3×, CoM 3×, joint 3× | 0.949 / 0.988 / 0.990 |
+| `prac_push` | push 3× | 0.746 |
+| `prac_pushfric` | push 2× with friction 1.5× | 0.912 and 0.973 alone |
+
+Levels are read off the sweep, so "difficult" is a measured success level.
+Frozen 13-cell suite, identical for every branch, including ordinary conditions
+and two cells above every practised level. Rules R1–R7 frozen before any run;
+`prereg: receipts/manifests/lucid_practice_allocation_screen_preregistration_20260902.json`.
+
+**What each outcome ends.** R1: if dedicated practice at the failing push level
+does not move push, push failure is not a practice deficit and no allocation
+scheduler can fix it — the range-expansion direction loses its justification and
+the paper stays a failure analysis. R2: if the placebo branch matches the push
+branch on the broad suite, exposure helps wherever it is aimed and channel
+selection is unnecessary. R3: if the pair branch does not beat the push branch
+above the practised corner, the joint-corner component is dropped.
+
+Cost ≈ 5.6 GPU-h, one seed. Runs when the GPU frees.
+`tools/run_practice_allocation_screen.sh --execute` then
+`tools/run_practice_allocation_scoring.sh <dir> --execute` then
+`tools/analyze_practice_allocation.py`.
+
+### 9.3 The gate must ask a different question
+
+The built gate asks "can the policy already handle this?" and expands on high
+success. A performance-improving curriculum must ask "would practising this
+help?" — which is a question about *improvement*, estimated by repeated
+evaluation of **unchanged** conditions, never by a score that rose because the
+test got easier. Three groups follow: already learned (keep a floor of
+practice), difficult and improving (allocate more), repeatedly failing without
+improvement (step back and investigate rather than grind). Screen A supplies the
+first measurements of that improvement signal; a learned teacher must earn its
+complexity against a preset allocation before it is built.
+
+### 9.4 The next hurdle, and what novelty survives
+
+Beating the narrow fixed baseline establishes nothing. The comparators are fixed
+randomization over the **wider** target range, a preset expansion schedule, and a
+preset **per-parameter** schedule with the same practice mixture. Preset
+schedules are built from screen runs and frozen before the confirmation seeds.
+
+Two pieces of prior work bound the claim and are now in Related Work.
+TransCurriculum already does history-informed scheduling across task dimensions
+with separate history and dimensionality ablations, so "multiple parameters plus
+learning history" is not novel by itself. Automatic Domain Randomization already
+evaluates per-parameter boundaries and can expand or contract them, so a broad
+claim about adaptive randomization needs a faithful performance-driven baseline,
+not only the mismatch-driven controller we measured collapsing. What may remain
+is narrow and must be demonstrated: **allocation by measured improvement on
+fixed conditions, under non-shrinking support.**
+
+### 9.5 Evaluation corrections carried into every future readout
+
+- Name the held-out axis. Our ladder is held-out physics on one trained clip
+  plus one nearby clip. It is not motion generalization.
+- Once an arm trains or probes at 1.5, phys_125 and phys_150 are inside its
+  support. Unseen parameter **values** and unseen **draws** inside a familiar
+  range are reported separately and never pooled.
+- Report realized exposure per cell per arm, not intended support. Widening a
+  uniform range lowers the density at every fixed sub-range, so "still inside
+  the range" does not mean "still practised".
+- State whether probe episodes contribute to PPO updates, and count their cost
+  either way. In Screen A there are no probes: the practice stratum trains, and
+  that is the treatment.
+- Choose the primary claim in advance: better robustness at equal cost, or a
+  fixed robustness target reached at lower cost. Not whichever looks better.
+- Five seeds are not automatically enough; the replication needed depends on the
+  variability and the effect claimed. Our between-seed effect is 7.8 points.

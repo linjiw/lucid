@@ -372,7 +372,8 @@ Terms used in earlier drafts and their replacements in this one.
 | 6 | `receipts/analysis/lucid_signal_audit_20260901.json`, `lucid_physical_signal_audit_20260902.json` |
 | 7 | `receipts/analysis/lucid_channel_attribution_20260902.json` |
 | 8 | `receipts/analysis/mujoco_sim2sim_20260902/`, `lucid_heldout_motion_20260901.json` |
-| 9 | `receipts/analysis/lucid_gate_feasibility_20260901.json`, preregistration `lucid_support_expansion_screen_preregistration_20260901.json` |
+| all | `receipts/analysis/lucid_draft_number_verification_20260902.json` — every number above re-checked against its receipt or the raw training trace |
+| 9 | training trace `artifacts/.../curriculum_comparison_ne1024_20260901_232720/seed_8600/gate_150/curriculum_*.jsonl` (the gate run itself; `lucid_gate_feasibility_20260901.json` is a replay proxy, not this run), preregistration `lucid_support_expansion_screen_preregistration_20260901.json` |
 
 ## References
 
