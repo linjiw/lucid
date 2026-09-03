@@ -1,0 +1,67 @@
+{
+ "kind": "lucid_slip_resolution_audit",
+ "schema_version": 1,
+ "created_at": "2026-09-02T23:42:55-04:00",
+ "git_sha": "d1ce31d18ea2f7d717ee08eb0b350fa6e8344eba",
+ "question": "Episode-end survival saturates once a policy is competent. Does per-step foot slip have resolution there, and does that resolution carry competence?",
+ "why_asked": "The progress-signal audit showed an online learning-progress estimate is unavailable at these cohort sizes because one bit per episode is too coarse. Foot slip yields hundreds of samples per episode and was the only body-grounded signal the earlier audit found with a consistent difficulty response, so it was promoted to the head of the design queue. This audit tests it before anything is built on it.",
+ "data": "receipts/analysis/lucid_channel_attribution_20260902.json: 5 policies x 16 cells, 512 episodes per cell, seed 8600",
+ "reproducibility_handle": {
+  "method": "ch_fric_150 and ch_fric_200 differ only in the high friction bound because the floor clamps both, so their difference for one policy bounds cell-to-cell noise. It is contaminated by that real physical difference, so it OVER-estimates noise and makes the comparison below conservative.",
+  "success_pts": {
+   "mean": 0.82,
+   "max": 1.37
+  },
+  "slip_relative_pct": {
+   "mean": 6.18,
+   "max": 7.87
+  }
+ },
+ "resolution": {
+  "finding": "In the eight cells where success separates the three healthy policies by 0.2 to 2.1 times its own noise estimate, i.e. barely or not at all, foot slip separates the same three by 2.2 to 3.1 times its own.",
+  "reading": "Slip does have resolution where success saturates."
+ },
+ "validity": {
+  "test": "Does the signal read at an easy cell predict success at a harder one?",
+  "across_all_five_policies": {
+   "slip_spearman": 0.7,
+   "success_spearman": 0.6,
+   "reading": "over a wide competence range slip carries about as much as success"
+  },
+  "among_the_three_healthy_policies": {
+   "tests": [
+    "phys_100 -> phys_200",
+    "phys_100 -> ch_push_300",
+    "ch_push_200 -> ch_push_300",
+    "phys_100 -> phys_175"
+   ],
+   "slip_order_every_time": [
+    "lucid_rg",
+    "lucid_ratchet_rg",
+    "fixed"
+   ],
+   "true_order": [
+    "lucid_ratchet_rg",
+    "fixed",
+    "lucid_rg (first three tests)",
+    "fixed, lucid_ratchet_rg, lucid_rg (phys_175)"
+   ],
+   "result": "INVERTED in all four tests: slip ranks the least robust of the three first"
+  },
+  "reading": "Slip's resolution does not carry competence in the regime where the resolution would be used. Low slip looks like a conservative gait, not a robust one, which is consistent with the earlier physical-signal audit finding that slip improves when difficulty is cut (r approx +0.7 against lambda in both collapses)."
+ },
+ "decision": {
+  "verdict": "NOT SUPPORTED. The slip-augmented probe is demoted, not promoted. Nothing is built on foot slip as a competence or progress signal without a proper test.",
+  "what_a_proper_test_needs": [
+   "more than three healthy policies, and more than one seed",
+   "policies that differ in robustness but not in gait style, or a gait covariate to condition on",
+   "per-episode slip so a within-cell noise floor can be computed instead of a between-cell proxy"
+  ],
+  "consequence": "No online per-condition progress signal is currently available: episode-end survival is too coarse once the policy is competent, and the one signal with enough samples does not rank competence. Practice effects must be measured end to end against frozen evaluation cells, which is what the practice-allocation screen does."
+ },
+ "not_verified": [
+  "three healthy policies and one seed; the inverted ordering is consistent across four tests and with independent earlier evidence, but it is not a powered result",
+  "the noise handle is one cell pair per policy",
+  "slip is a mean per cell; no within-cell variance was available"
+ ]
+}

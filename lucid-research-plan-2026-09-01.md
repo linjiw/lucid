@@ -414,13 +414,39 @@ per iteration or a ~17,000-iteration window.
 2. Practice effects must be measured end-to-end against frozen evaluation cells,
    which is what Screen A does. This finding raises Screen A's priority; it does
    not weaken it.
-3. Design candidate 3 (slip-augmented probe) is promoted to the head of the
-   queue: per-step foot slip yields hundreds of samples per episode instead of
-   one bit, and it is the only body-grounded signal with a consistent difficulty
-   response. Its noise floor must be measured the same way before anything is
-   built on it.
+3. Design candidate 3 (slip-augmented probe) was promoted to the head of the
+   queue on the reasoning that per-step slip yields hundreds of samples per
+   episode instead of one bit. **It was then tested and demoted the same day**
+   (§9.4).
 4. Anything that reads reward progress per bin inherits this floor, including the
    published design in §9.6.
+
+### 9.4 Measured 2026-09-02: slip has the resolution but not the validity
+
+`receipts/analysis/lucid_slip_resolution_audit_20260902.json`, from the existing
+channel sweep (5 policies x 16 cells x 512 episodes, seed 8600). Noise handle:
+`ch_fric_150` vs `ch_fric_200` differ only in the high bound because the floor
+clamps both, so their difference bounds cell noise (success 0.82 pts mean, slip
+6.2% mean; contaminated by a real physical difference, so it over-estimates
+noise and makes the test conservative).
+
+**Resolution: yes.** In the eight cells where success separates the three healthy
+policies by 0.2-2.1x its own noise, slip separates them by 2.2-3.1x its own.
+
+**Validity: no.** Reading a signal at an easy cell to predict success at a harder
+one: across all five policies slip does about as well as success (rho 0.70 vs
+0.60). Among the three healthy policies, where the extra resolution would
+actually be used, slip's ordering is **inverted in all four tests** — it ranks
+the least robust of the three first, every time. Low slip is a conservative gait,
+not a robust one, which matches the earlier finding that slip improves when
+difficulty is cut.
+
+**Consequence.** No online per-condition progress signal is currently available:
+episode-end survival is too coarse once the policy is competent (§9.3), and the
+one signal with enough samples does not rank competence. Practice effects must be
+measured end to end against frozen evaluation cells, which is exactly what Screen
+A does. Not powered (3 policies, 1 seed); what a proper test needs is listed in
+the receipt.
 
 ### 9.6 Related work, checked 2026-09-02
 

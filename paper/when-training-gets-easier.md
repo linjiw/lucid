@@ -394,9 +394,22 @@ bit per episode is too coarse to resolve it. The consequence for design is
 concrete. An online allocator driven by episode-end survival or by reward
 progress cannot make trustworthy per-condition decisions at this budget, so the
 effect of practice has to be measured end to end against frozen evaluation cells,
-as Section 9.2 does. A signal with many samples per episode rather than one, such
-as the per-step foot slip that Section 6 found to be the only body-grounded
-signal with a consistent difficulty response, is the next thing to audit.
+as Section 9.2 does. We audited the obvious candidate for a
+finer signal. Per-step foot slip yields hundreds of samples per episode instead
+of one bit, and Section 6 found it the only body-grounded signal with a
+consistent difficulty response. It does have the resolution: in the eight cells
+where success separates the three healthy policies by at most twice its own
+cell-to-cell reproducibility, slip separates them by two to three times its own.
+It does not have the validity. Reading slip at an easy cell to predict success at
+a harder one ranks the three healthy policies in exactly the wrong order, in all
+four pairs of cells we tried, putting the least robust first every time. Low slip
+is a conservative gait rather than a robust one, which is consistent with slip
+improving whenever difficulty is cut. Three policies and one seed do not settle
+it, but they remove the reason to build on it.
+
+So no online per-condition progress signal is available to us at present. That is
+the case for measuring the effect of practice end to end, against frozen
+evaluation cells, as Section 9.2 does.
 
 ### 9.4 The hurdle any such curriculum must clear
 
