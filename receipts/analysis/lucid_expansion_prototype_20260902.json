@@ -9,9 +9,10 @@
     "/home/linjiw/lucid-sonic/manifests/expansion_prototype_scoring_20260902_224033",
     "/home/linjiw/lucid-sonic/manifests/expansion_prototype_scoring_20260903_003557",
     "/home/linjiw/lucid-sonic/manifests/expansion_prototype_scoring_20260903_022802",
+    "/home/linjiw/lucid-sonic/manifests/expansion_prototype_scoring_20260903_041656",
     "/home/linjiw/lucid-sonic/manifests/expansion_prototype_scoring_widecorner_20260903"
   ],
-  "cells_found": 195,
+  "cells_found": 221,
   "arms": {
     "box_150": {
       "seed": 8600,
@@ -1031,20 +1032,290 @@
         "phys_250": 0.802734375,
         "phys_300": 0.685546875,
         "ch_fric_150": 0.98046875,
-        "ch_fric_200": null,
-        "ch_mass_200": null,
-        "ch_mass_300": null,
-        "ch_com_200": null,
-        "ch_com_300": null,
-        "ch_joint_200": null,
-        "ch_joint_300": null,
-        "ch_push_200": null,
-        "ch_push_300": null
+        "ch_fric_200": 0.9765625,
+        "ch_mass_200": 0.97265625,
+        "ch_mass_300": 0.98046875,
+        "ch_com_200": 0.978515625,
+        "ch_com_300": 0.984375,
+        "ch_joint_200": 0.982421875,
+        "ch_joint_300": 0.986328125,
+        "ch_push_200": 0.92578125,
+        "ch_push_300": 0.783203125
       },
       "primary_phys175_200": 0.8955078125,
       "wide_corner_phys250_300": 0.744140625,
-      "asym_primary_mass_com_joint_3x": null,
-      "push_2x_3x": null,
+      "asym_primary_mass_com_joint_3x": 0.9837239583333334,
+      "push_2x_3x": 0.8544921875,
+      "in_support_labelled": [
+        "phys_100",
+        "phys_125",
+        "phys_150"
+      ]
+    },
+    "box_fast_300_ng": {
+      "seed": 8600,
+      "complete": true,
+      "checkpoint": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260903_024028/seed_8600/box_fast_300_ng/final_checkpoint.pt",
+      "training_receipt": "/home/linjiw/lucid-sonic/manifests/expansion_prototype_20260903_024026/curriculum_comparison_ne1024_20260903_024028.json",
+      "mechanism": {
+        "mode": "box_fast_300_ng",
+        "rows": 2000,
+        "lambda_first": 1.0,
+        "lambda_final": 1.7916666666666667,
+        "lambda_max": 1.7916666666666667,
+        "scalar_decreases_in_trace": 0,
+        "applied_decrease_flags": 0,
+        "guard_trip_iterations": 0,
+        "fired": [
+          [
+            60,
+            "add_joint_default_pos",
+            1.125
+          ],
+          [
+            110,
+            "base_com",
+            1.125
+          ],
+          [
+            160,
+            "physics_material",
+            1.125
+          ],
+          [
+            210,
+            "push_robot",
+            1.125
+          ],
+          [
+            260,
+            "randomize_action_delay",
+            1.125
+          ],
+          [
+            310,
+            "randomize_rigid_body_mass",
+            1.125
+          ],
+          [
+            360,
+            "add_joint_default_pos",
+            1.25
+          ],
+          [
+            410,
+            "base_com",
+            1.25
+          ],
+          [
+            460,
+            "physics_material",
+            1.25
+          ],
+          [
+            510,
+            "push_robot",
+            1.25
+          ],
+          [
+            560,
+            "randomize_action_delay",
+            1.25
+          ],
+          [
+            610,
+            "randomize_rigid_body_mass",
+            1.25
+          ],
+          [
+            660,
+            "add_joint_default_pos",
+            1.375
+          ],
+          [
+            710,
+            "base_com",
+            1.375
+          ],
+          [
+            760,
+            "physics_material",
+            1.375
+          ],
+          [
+            810,
+            "push_robot",
+            1.375
+          ],
+          [
+            860,
+            "randomize_action_delay",
+            1.375
+          ],
+          [
+            910,
+            "randomize_rigid_body_mass",
+            1.375
+          ],
+          [
+            960,
+            "add_joint_default_pos",
+            1.5
+          ],
+          [
+            1010,
+            "base_com",
+            1.5
+          ],
+          [
+            1060,
+            "physics_material",
+            1.5
+          ],
+          [
+            1110,
+            "push_robot",
+            1.5
+          ],
+          [
+            1160,
+            "randomize_action_delay",
+            1.5
+          ],
+          [
+            1210,
+            "randomize_rigid_body_mass",
+            1.5
+          ],
+          [
+            1260,
+            "add_joint_default_pos",
+            1.625
+          ],
+          [
+            1310,
+            "base_com",
+            1.625
+          ],
+          [
+            1360,
+            "physics_material",
+            1.625
+          ],
+          [
+            1410,
+            "push_robot",
+            1.625
+          ],
+          [
+            1460,
+            "randomize_rigid_body_mass",
+            1.625
+          ],
+          [
+            1510,
+            "add_joint_default_pos",
+            1.75
+          ],
+          [
+            1560,
+            "base_com",
+            1.75
+          ],
+          [
+            1610,
+            "physics_material",
+            1.75
+          ],
+          [
+            1710,
+            "randomize_rigid_body_mass",
+            1.75
+          ],
+          [
+            1760,
+            "add_joint_default_pos",
+            1.875
+          ],
+          [
+            1810,
+            "base_com",
+            1.875
+          ],
+          [
+            1860,
+            "physics_material",
+            1.875
+          ],
+          [
+            1910,
+            "randomize_rigid_body_mass",
+            1.875
+          ],
+          [
+            1960,
+            "add_joint_default_pos",
+            2.0
+          ]
+        ],
+        "expansions": 38,
+        "first_fire_iteration": 60,
+        "frontier_vector_final": {
+          "add_joint_default_pos": 2.0,
+          "base_com": 1.875,
+          "physics_material": 1.875,
+          "push_robot": 1.625,
+          "randomize_action_delay": 1.5,
+          "randomize_rigid_body_mass": 1.875
+        },
+        "channel_expansions": {
+          "add_joint_default_pos": 8,
+          "base_com": 7,
+          "physics_material": 7,
+          "push_robot": 5,
+          "randomize_action_delay": 4,
+          "randomize_rigid_body_mass": 7
+        },
+        "channel_visits": {
+          "add_joint_default_pos": 8,
+          "base_com": 8,
+          "physics_material": 7,
+          "push_robot": 6,
+          "randomize_action_delay": 4,
+          "randomize_rigid_body_mass": 7
+        },
+        "channels_visited": 6,
+        "vector_decreases_in_trace": 0,
+        "withheld_counts": {
+          "window_not_full": 1951,
+          "null": 38,
+          "below_threshold": 1
+        },
+        "stalled": false
+      },
+      "cells": {
+        "phys_100": 0.986328125,
+        "phys_125": 0.974609375,
+        "phys_150": 0.9453125,
+        "phys_175": 0.921875,
+        "phys_200": 0.884765625,
+        "phys_250": 0.794921875,
+        "phys_300": 0.67578125,
+        "ch_fric_150": 0.98046875,
+        "ch_fric_200": 0.98046875,
+        "ch_mass_200": 0.982421875,
+        "ch_mass_300": 0.958984375,
+        "ch_com_200": 0.986328125,
+        "ch_com_300": 0.982421875,
+        "ch_joint_200": 0.98046875,
+        "ch_joint_300": 0.98046875,
+        "ch_push_200": 0.9296875,
+        "ch_push_300": 0.810546875
+      },
+      "primary_phys175_200": 0.9033203125,
+      "wide_corner_phys250_300": 0.7353515625,
+      "asym_primary_mass_com_joint_3x": 0.9739583333333334,
+      "push_2x_3x": 0.8701171875,
       "in_support_labelled": [
         "phys_100",
         "phys_125",
@@ -1133,6 +1404,10 @@
       "gate_300_ng": {
         "phys_100": 0.984375,
         "verdict": "healthy"
+      },
+      "box_fast_300_ng": {
+        "phys_100": 0.986328125,
+        "verdict": "healthy"
       }
     },
     "R3_zero_decreases": {
@@ -1195,13 +1470,19 @@
         "scalar_decreases_in_trace": 0,
         "vector_decreases_in_trace": null,
         "applied_decrease_flags": 0
+      },
+      "box_fast_300_ng": {
+        "scalar_decreases_in_trace": 0,
+        "vector_decreases_in_trace": 0,
+        "applied_decrease_flags": 0
       }
     },
     "R3_all_zero": true,
     "R4_box_mechanism": {
       "box_150": "expanded",
       "box_asym": "expanded",
-      "box_fast_300": "expanded"
+      "box_fast_300": "expanded",
+      "box_fast_300_ng": "expanded"
     }
   },
   "caveats": [
