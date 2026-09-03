@@ -96,6 +96,8 @@
     }
    },
    "top_rung": "act_effort_150",
+   "rank_correlation_with_the_existing_ladder": 0.5,
+   "measures_a_new_axis": true,
    "reference_delta_at_top_pts": -18.95,
    "is_live": true,
    "is_survivable": true,
@@ -103,7 +105,7 @@
    "arm_spread_at_top_pts": 33.79,
    "separates_policies": true,
    "first_rung_below_bite": "act_effort_150",
-   "verdict": "CANDIDATE: live, survivable and it separates policies"
+   "verdict": "CANDIDATE: live, survivable and it separates policies, ranking them differently from the existing ladder (rho +0.50)"
   },
   "friction": {
    "cells_found": [
@@ -191,6 +193,8 @@
     }
    },
    "top_rung": "act_friction_300",
+   "rank_correlation_with_the_existing_ladder": 0.9,
+   "measures_a_new_axis": false,
    "reference_delta_at_top_pts": -12.3,
    "is_live": true,
    "is_survivable": true,
@@ -198,7 +202,7 @@
    "arm_spread_at_top_pts": 52.73,
    "separates_policies": true,
    "first_rung_below_bite": "act_friction_300",
-   "verdict": "CANDIDATE: live, survivable and it separates policies"
+   "verdict": "CANDIDATE: live, survivable and it separates policies, and it ranks them much as the existing ladder does (rho +0.90), so it restates general robustness rather than measuring a new axis"
   },
   "armature": {
    "cells_found": [
@@ -264,6 +268,8 @@
     }
    },
    "top_rung": "act_armature_200",
+   "rank_correlation_with_the_existing_ladder": 0.3,
+   "measures_a_new_axis": true,
    "reference_delta_at_top_pts": -0.2,
    "is_live": false,
    "is_survivable": true,
@@ -359,6 +365,8 @@
     }
    },
    "top_rung": "act_velocity_200",
+   "rank_correlation_with_the_existing_ladder": 0.5,
+   "measures_a_new_axis": true,
    "reference_delta_at_top_pts": 0.2,
    "is_live": false,
    "is_survivable": true,
@@ -393,42 +401,5 @@
   "one evaluation seed per cell; single-cell noise here is 2-3 points",
   "a channel that reads NOT LIVE may be unapplied rather than harmless; check the run's own dr_scale_report and its PhysX read-back before drawing a physical conclusion",
   "torque_saturation and energy_proxy are normalized by the live effort limit, the exact buffer the effort channel rewrites, so under act_effort_* they move by construction. They are a presence check there, never an outcome"
- ],
- "scored_frozen_predictions": {
-  "source": "receipts/analysis/lucid_thermal_p0_frozen_prediction_20260903.json, frozen before any actuator cell existed",
-  "caveat": "those predictions were written for a thermal derating channel. The effort-limit channel is the closest analogue, since both are torque budgets, but it is not the same instrument and the scoring says so.",
-  "P1_ordering_by_torque_saturation": {
-   "predicted": "relative loss orders by each policy's torque saturation, Spearman at least +0.50",
-   "observed_spearman": 0.3,
-   "verdict": "FALSIFIED"
-  },
-  "P2_fixed_is_second_most_vulnerable": {
-   "predicted": "fixed DR, which wins on every other channel, is the second most vulnerable to a torque budget",
-   "observed_rank": "4 of 5",
-   "observed_order": "lucid_s4_rg > off > lucid_ratchet_rg > fixed > lucid_rg",
-   "verdict": "NOT SUPPORTED"
-  },
-  "P4_the_channel_measures_effort_not_general_robustness": {
-   "predicted": "relative loss correlates better with torque saturation than with success on the existing scalar ladder",
-   "observed": {
-    "effort_vs_torque_saturation": 0.3,
-    "effort_vs_phys_200_success": 0.5,
-    "friction_vs_torque_saturation": -0.4,
-    "friction_vs_phys_200_success": 0.9
-   },
-   "verdict": "FALSIFIED, and clearly so for friction"
-  },
-  "what_the_misses_mean": [
-   "Both new channels separate policies, but along the SAME axis the existing scalar ladder already measures. Friction's loss correlates +0.90 with phys_200 success and -0.40 with torque saturation, so it is close to a restatement of general robustness rather than a new dimension of capability.",
-   "My read-out asked whether a channel separates policies. It should also have asked whether it separates them DIFFERENTLY from the cells we already have. That is a defect in the screen's own design, found by scoring a prediction rather than by inspection.",
-   "This weakens the case that these channels measure something new. It does NOT settle the barrier question, which is about a training distribution rather than a frozen-policy ranking: a channel can be redundant as a measurement and still differ as a distribution to train on. The point-versus-range test remains the decisive one, and its motivation is the SHAPE of the target, not the novelty of the channel."
-  ],
-  "n": "five policies, one evaluation seed per cell. A rank correlation on five points is weak evidence; these are recorded as scored predictions, not as established relationships."
- },
- "not_live_channels_open_question": {
-  "armature": "Credibly inert physics. Armature is a few per cent of the load-bearing joints' effective inertia, so a null here is the expected result and it was predicted as a negative control.",
-  "velocity_limit": "NOT RESOLVED. Every cell shows all ten terms live and the scale reaching the right channel, so the RANGE was set. At the deepest rung the lowest draw is 0.2 of the rating, well below the roughly 0.37 of the limit the reference clip is measured to demand, so some environments should have been constrained and none was. We cannot currently distinguish a physically inert channel from a writer PhysX does not enforce for an implicit actuator, because the PhysX read-back this module records is not yet surfaced into the evaluation receipt.",
-  "why_it_was_not_chased": "The channel is not a barrier candidate under either explanation, and the GPU is committed to the practice-allocation screen. The read-back is now surfaced so any future run answers it for free.",
-  "what_it_does_not_threaten": "The effort and friction results. Those channels moved success by up to 46 points in an ordered, monotone way, which is not something an unapplied write produces."
- }
+ ]
 }

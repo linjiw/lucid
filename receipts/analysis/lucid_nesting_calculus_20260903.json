@@ -1,0 +1,128 @@
+{
+ "kind": "lucid_nesting_calculus",
+ "schema_version": 1,
+ "claim": "Fixed randomization at full intensity already supplies, every iteration, a sub-population of episodes distributionally identical to each earlier stage of any curriculum that ramps toward it.",
+ "why_exact": "scale_range is affine about the nominal, so the stage-s range has exactly s times the full width and sits inside it. A uniform full-intensity draw therefore lands inside it with probability exactly s, and conditioned on landing there is uniform on it, which IS the stage-s distribution.",
+ "environments": 1024,
+ "channels_counted": 6,
+ "per_channel_ranges": {
+  "randomize_rigid_body_mass": {
+   "range": [
+    0.8,
+    1.5
+   ],
+   "nominal": 1.0,
+   "units": "mass multiplier",
+   "stage_0.5_range": [
+    0.9,
+    1.25
+   ]
+  },
+  "add_joint_default_pos": {
+   "range": [
+    -0.01,
+    0.01
+   ],
+   "nominal": 0.0,
+   "units": "rad offset",
+   "stage_0.5_range": [
+    -0.005,
+    0.005
+   ]
+  },
+  "base_com": {
+   "range": [
+    -0.05,
+    0.05
+   ],
+   "nominal": 0.0,
+   "units": "m, the widest axis",
+   "stage_0.5_range": [
+    -0.025,
+    0.025
+   ]
+  },
+  "push_robot": {
+   "range": [
+    -0.5,
+    0.5
+   ],
+   "nominal": 0.0,
+   "units": "m/s, planar",
+   "stage_0.5_range": [
+    -0.25,
+    0.25
+   ]
+  },
+  "physics_material": {
+   "range": [
+    0.3,
+    1.6
+   ],
+   "nominal": 0.95,
+   "units": "static friction",
+   "stage_0.5_range": [
+    0.625,
+    1.275
+   ]
+  },
+  "randomize_action_delay": {
+   "range": [
+    0.0,
+    8.0
+   ],
+   "nominal": 0.0,
+   "units": "physics steps",
+   "stage_0.5_range": [
+    0.0,
+    4.0
+   ]
+  }
+ },
+ "table": [
+  {
+   "stage": 0.25,
+   "share_of_draws_inside_the_stage_range_per_channel": 0.25,
+   "share_of_episodes_no_harder_than_the_stage_on_every_channel": 0.000244,
+   "expected_such_environments_per_iteration": 0.2
+  },
+  {
+   "stage": 0.5,
+   "share_of_draws_inside_the_stage_range_per_channel": 0.5,
+   "share_of_episodes_no_harder_than_the_stage_on_every_channel": 0.015625,
+   "expected_such_environments_per_iteration": 16.0
+  },
+  {
+   "stage": 0.6,
+   "share_of_draws_inside_the_stage_range_per_channel": 0.6,
+   "share_of_episodes_no_harder_than_the_stage_on_every_channel": 0.046656,
+   "expected_such_environments_per_iteration": 47.8
+  },
+  {
+   "stage": 0.75,
+   "share_of_draws_inside_the_stage_range_per_channel": 0.75,
+   "share_of_episodes_no_harder_than_the_stage_on_every_channel": 0.177979,
+   "expected_such_environments_per_iteration": 182.2
+  },
+  {
+   "stage": 0.9,
+   "share_of_draws_inside_the_stage_range_per_channel": 0.9,
+   "share_of_episodes_no_harder_than_the_stage_on_every_channel": 0.531441,
+   "expected_such_environments_per_iteration": 544.2
+  }
+ ],
+ "reading": [
+  "At full intensity 50% of draws on EVERY channel are already inside the half-intensity range.",
+  "182 of 1024 environments per iteration are no harder than a 0.75 stage on all six channels at once, and 16 are no harder than a 0.5 stage.",
+  "A curriculum that ramps intensity therefore cannot show the policy anything fixed randomization withholds, and cannot withhold the easy episodes it supplies. It can only change how often each is seen."
+ ],
+ "what_would_break_it": [
+  "A target distribution that is CONCENTRATED rather than a range: a point target has no easy sub-population, which is why the point-versus-range arms exist.",
+  "A channel drawn once per RUN rather than per episode, so a batch is homogeneous.",
+  "A non-affine schedule that moves a range away from its nominal instead of widening it about it, so earlier stages are not nested inside the target."
+ ],
+ "not_verified": [
+  "This is a property of the sampling scheme, not a measurement of learning. It says a curriculum cannot change WHICH episodes exist, not that changing their frequency cannot matter at all.",
+  "Channels are treated as independent draws, which they are here, and the push channel fires on an interval rather than at every reset, so its share is an approximation."
+ ]
+}

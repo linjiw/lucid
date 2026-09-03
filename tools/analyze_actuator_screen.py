@@ -51,6 +51,28 @@ REFERENCE_ARM = "fixed"
 LIVE_PTS = 5.0        # a change smaller than this is inside single-cell noise
 FLOOR = 0.05          # below this the cell is a floor, not a measurement
 SEPARATION_PTS = 5.0  # spread across arms that counts as separating policies
+REDUNDANT_RHO = 0.7   # above this, the channel ranks policies as the old ladder does
+
+#: Each arm's success on the widest cell of the EXISTING scalar ladder, which is
+#: what a new channel has to say something different from. Measured, seed 8600,
+#: 512 episodes: receipts/analysis/lucid_channel_attribution_20260902.json.
+EXISTING_LADDER = {
+    "fixed": 0.8203, "lucid_ratchet_rg": 0.8418, "lucid_rg": 0.7949,
+    "lucid_s4_rg": 0.5176, "off": 0.3340,
+}
+
+
+def spearman(x, y):
+    def rank(v):
+        order = sorted(range(len(v)), key=lambda i: v[i])
+        out = [0] * len(v)
+        for pos, i in enumerate(order):
+            out[i] = pos + 1
+        return out
+    if len(x) < 3:
+        return None
+    rx, ry, n = rank(x), rank(y), len(x)
+    return round(1 - 6 * sum((a - b) ** 2 for a, b in zip(rx, ry)) / (n * (n * n - 1)), 2)
 BITE = 0.90           # where the reference arm first drops below this
 
 
@@ -129,8 +151,18 @@ def main(argv=None) -> int:
         bite_rung = next((c for c in rungs
                           if (ref.get("rungs", {}).get(c) or 1.0) < BITE), None)
 
+        # 4. does it rank the policies any differently from the ladder we have?
+        shared = [m for m in arms if m in EXISTING_LADDER and (m, top) in cells] if top else []
+        redundancy = None
+        if len(shared) >= 3:
+            loss = [-(entry["by_arm"][m]["delta_pts"][top] or 0.0) for m in shared]
+            redundancy = spearman([-EXISTING_LADDER[m] for m in shared], loss)
+
         entry.update({
             "top_rung": top,
+            "rank_correlation_with_the_existing_ladder": redundancy,
+            "measures_a_new_axis": (None if redundancy is None
+                                    else bool(abs(redundancy) < REDUNDANT_RHO)),
             "reference_delta_at_top_pts": top_delta,
             "is_live": live,
             "is_survivable": survivable,
@@ -144,7 +176,12 @@ def main(argv=None) -> int:
                 "FLOOR: the top rung is unsurvivable for every policy, so it is an "
                 "unlearnable difficulty rather than a barrier candidate" if not survivable else
                 "CANDIDATE: live, survivable" + (" and it separates policies" if separates
-                                                 else " but it lowers every policy alike")),
+                                                 else " but it lowers every policy alike")
+                + ("" if redundancy is None else
+                   f", and it ranks them much as the existing ladder does (rho {redundancy:+.2f}), "
+                   "so it restates general robustness rather than measuring a new axis"
+                   if abs(redundancy) >= REDUNDANT_RHO else
+                   f", ranking them differently from the existing ladder (rho {redundancy:+.2f})")),
         })
         report["channels"][channel] = entry
 
@@ -197,6 +234,10 @@ def main(argv=None) -> int:
                               for c in e["cells_found"])
             print(f"{arm:22s} {base} {deltas}")
         print(f"  -> {e['verdict']}")
+        if e.get("rank_correlation_with_the_existing_ladder") is not None:
+            print(f"     rank correlation with the existing scalar ladder: "
+                  f"{e['rank_correlation_with_the_existing_ladder']:+.2f}"
+                  f"  (a new axis needs |rho| < {REDUNDANT_RHO})")
         if e["first_rung_below_bite"]:
             print(f"     reference arm first falls below {BITE:.2f} at {e['first_rung_below_bite']}")
     print(f"\ncandidates, most promising first: {ranked or 'none'}")
