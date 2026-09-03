@@ -448,6 +448,25 @@ measured end to end against frozen evaluation cells, which is exactly what Scree
 A does. Not powered (3 policies, 1 seed); what a proper test needs is listed in
 the receipt.
 
+### 9.5 Measured 2026-09-02: stated support is not practice
+
+`tools/realized_exposure.py`, receipt `lucid_realized_exposure_20260902.json`.
+Episodes per cohort per iteration, binned by that cohort's intensity.
+
+| run | at envelope | above 1.4 | <= envelope |
+|---|---:|---:|---:|
+| fixed (pinned at 1) | 100.0% | 0.0% | 100.0% |
+| lucid_ratchet_rg | 99.2% | 0.0% | 100.0% |
+| lucid_rg@s8601 (the collapse) | 72.2% | 0.0% | 100.0% (18.6% below 0.5) |
+| gate_150 (reached 1.5) | 41.5% | **13.7%** | 63.1% |
+
+The gate's headline support of 1.5 corresponds to 13.7% of its practice, and it
+bought that by cutting envelope practice from 100% to 41.5%. With the env count
+fixed, widening is a REALLOCATION and the reallocation is the treatment. This is
+a direct explanation for expansion arms tying fixed. Every future comparison
+reports realized exposure per band alongside the claimed support; Screen A's
+read-out already does.
+
 ### 9.6 Related work, checked 2026-09-02
 
 TransCurriculum (IROS 2026, arXiv 2603.14156) schedules a Go1 over a

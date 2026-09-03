@@ -215,6 +215,12 @@ controller trains a policy equivalent to fixed randomization within the declared
 It does not train a better one. Retaining the ranges also does not by itself guarantee that
 the policy retains its skills; that is what Table 2 measures.
 
+**Why it ties.** Training telemetry records how many episodes each training
+cohort ran and at what intensity, so realized practice can be counted rather than
+assumed. The never-shrink arm spent 99.2 percent of its training exposure at the
+envelope, against 100 percent for fixed randomization. In realized practice the
+two arms are the same experiment, which is what the outcome says.
+
 **Seed effect.** Between-seed offsets in frontier AUC reach 7.8 points on the same arm.
 Any claimed advantage of a curriculum over fixed randomization must be paired by seed and
 must clear this before it is believed.
@@ -411,7 +417,31 @@ So no online per-condition progress signal is available to us at present. That i
 the case for measuring the effect of practice end to end, against frozen
 evaluation cells, as Section 9.2 does.
 
-### 9.4 The hurdle any such curriculum must clear
+### 9.4 Stated support is not practice — Measured
+
+There is a second reason to measure the effect of practice end to end. Widening a
+uniform range lowers the density everywhere inside it, so a condition can remain
+formally inside the training support while being practised much less than
+before. Counting the episodes each cohort actually ran, at the intensity it ran
+them, separates the two.
+
+| Run | At the envelope | Above 1.4 | At or below the envelope |
+|---|---:|---:|---:|
+| Fixed randomization | 100.0% | 0.0% | 100.0% |
+| Never-shrink | 99.2% | 0.0% | 100.0% |
+| Probe gate that reached 1.5 | 41.5% | 13.7% | 63.1% |
+
+The gate reports a final range of 1.5 and spent 13.7 percent of its training
+exposure above 1.4. It also spent 41.5 percent at the envelope, where fixed
+randomization spends 100 percent. The frontier practice was bought with envelope
+practice rather than added to it, which is a direct explanation for expansion
+arms tying fixed randomization rather than beating it: with the environment count
+held constant, widening a range is a reallocation, and the reallocation is the
+treatment. That is the design the screen in Section 9.2 makes explicit and
+controls, and it is why any comparison here reports realized exposure per band
+rather than the range a curriculum claims.
+
+### 9.5 The hurdle any such curriculum must clear
 
 Beating the narrow fixed baseline of Section 5 would establish nothing. The
 comparators are fixed randomization over the wider target range, a preset
