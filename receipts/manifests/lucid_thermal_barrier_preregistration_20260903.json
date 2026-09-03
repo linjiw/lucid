@@ -1,0 +1,123 @@
+{
+ "kind": "lucid_thermal_barrier_preregistration",
+ "schema_version": 1,
+ "created_at": "2026-09-03T01:01:08-04:00",
+ "status": "FROZEN BEFORE ANY OUTCOME. No policy has been trained or evaluated under this channel.",
+ "sonic_sha": "350cae1ac8f9df823bd42f2a0518fdcb6d82f0c3",
+ "question": "Is there a randomization channel and severity at which equal-budget direct training does NOT reach the target, while a staged approach does? That is the regime in which a curriculum is necessary rather than optional, and we have not found one.",
+ "why_we_need_it": "Every channel measured so far is a bounded, memoryless perturbation of a task the policy already solves: a fixed-DR policy keeps 0.82 success with all five physics channels doubled, and the best single-channel loss is push at 3x (0.746). With no barrier anywhere in that space, staging the approach to a difficulty direct training already reaches cannot help, which is consistent with every curriculum result in this project tying fixed randomization.",
+ "the_candidate": {
+  "channel": "motor thermal derating: available torque falls as a joint heats, and heating is driven by the joint's own torque",
+  "why_it_is_real": [
+   "Unitree documents a thermal derating strategy on the G1 that limits current when a high-load joint such as the knee exceeds its safe temperature, and states that continuous operation ends in either a flat battery or that derating (https://www.unitree.com/g1/, teardown coverage).",
+   "Our simulator has no such limit. robots/g1.py sets effort_limit_sim to the PEAK rating (139 N.m knee and hip, 88 hip yaw and waist yaw, 50 feet and waist) and applies it forever, so a policy trained here may draw peak torque indefinitely and the robot it targets may not.",
+   "This is therefore a documented sim-to-real gap on the exact robot, not a difficulty invented to make a curriculum look good."
+  ],
+  "why_it_is_different_in_kind": [
+   "ENDOGENOUS: heating is driven by the policy's own torque, so an inefficient policy creates its own harder environment. No other channel here does that.",
+   "ACCUMULATING: the constraint arrives late in an episode, so early-episode reward says little about whether the episode survives.",
+   "REQUIRES A GLOBAL CHANGE: a torque budget cannot be reacted out of; the policy has to move more economically.",
+   "Our own measurements say it will discriminate: torque saturation at the envelope spans 0.005 to 0.058 across arms, a factor of twelve, while success at the same cell spans 8 points."
+  ],
+  "model": "dT/dt = (tau/tau_peak)^2 / heat_tau - T / cool_tau, available = tau_peak * (1 - depth * clip((T-onset)/(1-onset),0,1)); heating goes as torque squared because ohmic loss goes as current squared and current is proportional to torque",
+  "implementation": "gear_sonic/research/practice_utility/thermal.py, 20 CPU tests. lam = 0 is a bit-identical no-op, pinned by test.",
+  "integration_point": "a ThermalImplicitActuator mirroring SONIC's existing DelayedImplicitActuator: override compute() to clamp computed_effort to the budget and advance the state with the DELIVERED torque. Not yet written; it needs a GPU smoke test before it is trusted.",
+  "stated_assumptions": {
+   "continuous_over_peak": "0.5. Unitree publishes peak torque and documents derating without giving a curve; brushless servo actuators of this class sustain roughly half their peak indefinitely. This is an assumption, and it is the first thing to replace with a bench measurement.",
+   "heat_seconds": "4.0 s of sustained peak torque to the onset at lam = 1, chosen so the effect is visible inside a 4 s clip. A real motor's constant is minutes. This is a modelling choice about timescale, and it is what the severity ladder scales."
+  }
+ },
+ "the_risk_we_are_running": {
+  "threat": "Designing a channel until a curriculum wins on it is fitting the benchmark to the method. A win obtained that way would mean nothing.",
+  "mitigations": [
+   "The channel was chosen on documented-deployment grounds and closes a specific, nameable gap between our simulator and the target robot.",
+   "The severity ladder is fixed NOW, from the thermal model's own onset formula, before any outcome exists. It is not adjusted after seeing results; any change is a dated amendment with a reason.",
+   "The result is reported as a MAP, not as a win: every severity at which direct training already succeeds is reported as a severity where a curriculum is unnecessary. A map with a small necessary region is the honest finding, and is still the first such map we know of for humanoid randomization.",
+   "Direct training failing is not the claim. The claim needs BOTH that direct training fails AND that the target is reachable some other way. A severity that nothing reaches is an unlearnable task, not a curriculum result."
+  ]
+ },
+ "severity_ladder_fixed_now": {
+  "lam_values": [
+   0.0,
+   0.5,
+   1.0,
+   2.0,
+   3.0
+  ],
+  "chosen_from": "tools/thermal_ladder from sustained_duty_to_onset: seconds of constant duty before a COLD joint begins to derate. The reference clip is 4 s.",
+  "cold_start_onset_seconds_by_lam_and_duty": {
+   "0.0": {
+    "duty_0.3": "never",
+    "duty_0.4": "never",
+    "duty_0.5": "never",
+    "duty_0.6": "never",
+    "duty_0.8": "never",
+    "duty_1": "never"
+   },
+   "0.5": {
+    "duty_0.3": "never",
+    "duty_0.4": 31.4,
+    "duty_0.5": 15.1,
+    "duty_0.6": 9.4,
+    "duty_0.8": 4.8,
+    "duty_1": 3.0
+   },
+   "1.0": {
+    "duty_0.3": 25.1,
+    "duty_0.4": 10.9,
+    "duty_0.5": 6.4,
+    "duty_0.6": 4.2,
+    "duty_0.8": 2.3,
+    "duty_1": 1.4
+   },
+   "2.0": {
+    "duty_0.3": 9.4,
+    "duty_0.4": 4.8,
+    "duty_0.5": 3.0,
+    "duty_0.6": 2.0,
+    "duty_0.8": 1.1,
+    "duty_1": 0.7
+   },
+   "3.0": {
+    "duty_0.3": 5.8,
+    "duty_0.4": 3.1,
+    "duty_0.5": 1.9,
+    "duty_0.6": 1.3,
+    "duty_0.8": 0.7,
+    "duty_1": 0.5
+   }
+  },
+  "reading": "lam 0.5 essentially never bites within a 4 s clip below 60% duty, so it is the built-in 'curriculum unnecessary' control. lam 1 bites for duty >= 0.6, lam 2 for duty >= 0.4, lam 3 for duty >= 0.35. An episode that starts warm derates sooner than these cold-start figures."
+ },
+ "phases": {
+  "P0_does_it_bite_at_all": {
+   "cost": "about 0.25 GPU-h, no training",
+   "what": "score the five existing frozen policies (fixed, never-shrink, collapsed, no-DR, and the gate) on the five severities, 512 episodes per cell",
+   "decides": "whether the channel constrains a competent policy at a physically defensible severity, and whether it separates policies that the current channels barely separate",
+   "stop_rule": "if no severity in the ladder drops fixed@s8600 below 0.90 success, the channel is not a barrier candidate at this model's timescale and the direction stops here rather than being retuned until it bites"
+  },
+  "P1_where_does_direct_training_fail": {
+   "cost": "about 5 GPU-h warm start, then about 11 GPU-h from scratch on the two severities that bracket the transition",
+   "what": "train directly AT each severity that P0 shows bites, equal budget, same origin and seed; then repeat from scratch at the bracketing severities",
+   "decides": "the severity at which equal-budget direct training stops reaching the target. Everything below it is a region where a curriculum is unnecessary, and is reported as such"
+  },
+  "P2_only_where_a_barrier_exists": {
+   "cost": "about 22 GPU-h",
+   "what": "at a severity where direct training fails: direct, a preset schedule reaching the same final severity, and the probe-gated curriculum, matched on budget, environments, mixture and seed, paired",
+   "decides": "whether staging crosses the barrier, and whether feedback adds anything over a preset schedule that reaches the same place",
+   "note": "beating direct training is the low bar and does not establish that feedback helps; the preset schedule is the comparison that matters"
+  }
+ },
+ "frozen_decision_rules": {
+  "B1_bites": "P0 must show fixed@s8600 below 0.90 success at some ladder severity, else stop.",
+  "B2_barrier": "A barrier exists at severity S only if BOTH direct training at S falls at least 10 points below direct training at lam 0, AND some staged run reaches within 5 points of the lam 0 level at S. Direct failing alone is an unlearnable task, not a barrier.",
+  "B3_report_the_unnecessary_region": "Every severity at which direct training reaches the target is reported as a severity where a curriculum is unnecessary. This is part of the result, not an omission.",
+  "B4_no_retuning": "The ladder, the thermal constants and the margins are fixed in this document. Changing any of them after seeing an outcome requires a dated amendment stating what was seen and why the change is not fitting.",
+  "B5_efficiency_is_the_mechanism_to_check": "If a curriculum crosses a barrier, report the energy proxy and torque saturation of the crossing policy. The claimed mechanism is that it learned to move economically; if its effort is unchanged, the explanation is wrong even though the outcome is right."
+ },
+ "what_this_cannot_show": [
+  "That curricula help in general. It can show a regime where one is necessary on this robot, this task and this channel.",
+  "Anything about the real robot's thermal behaviour: the constants are assumptions, and the timescale is compressed so an effect fits inside a 4 s clip.",
+  "Anything at all until P0 runs; the channel has never been applied to a policy."
+ ]
+}
