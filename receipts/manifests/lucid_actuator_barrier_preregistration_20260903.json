@@ -1,0 +1,85 @@
+{
+ "kind": "lucid_actuator_barrier_preregistration",
+ "schema_version": 1,
+ "created_at": "2026-09-03T01:35:51-04:00",
+ "status": "FROZEN BEFORE ANY OUTCOME. No policy has been trained or evaluated under any actuator channel.",
+ "sonic_sha": "7cb34e615d73af8dad11839510179627086304c5",
+ "supersedes": "receipts/manifests/lucid_thermal_barrier_preregistration_20260903.json as the FIRST thing to try. That document stays valid for the thermal model itself, which remains the only route to an endogenous, accumulating constraint; it is no longer the first step because the deployment motivation behind it -- a motor that delivers less than its rating -- is obtainable directly from a parameter the simulator already has.",
+ "question": "Is there a randomization channel and severity at which equal-budget DIRECT training does not reach the target, while a staged approach does? No channel measured so far has one, which is why no curriculum here has beaten fixed randomization.",
+ "why_the_actuator": {
+  "observation": "All six existing channels are properties of the robot's LOAD or of the WORLD: mass, torso centre of mass, ground material, a joint default-position offset, pushes, latency. None is a property of the actuator.",
+  "verified_gaps": [
+   "The robot's URDF (gear_sonic/data/assets/robot_description/urdf/g1/main.urdf) contains ZERO <dynamics> tags, so no joint friction and no physical joint damping is declared for any joint. The simulated G1 has frictionless gearboxes; a real harmonic or planetary reducer does not, and is measurably stiffer cold than warm.",
+   "robots/g1.py sets effort_limit_sim to the URDF's PEAK rating and applies it forever. A deployed motor delivers less: the battery sags under load, the winding heats, and units vary. Unitree documents a derating strategy on the G1 that limits current when a joint passes its safe temperature.",
+   "The joint speed ceiling and the reflected inertia are likewise set once from motor specifications and never varied."
+  ],
+  "why_they_might_behave_differently": "Two of these REMOVE CAPABILITY (a lower torque or speed ceiling) and one ADDS A NONSMOOTH TERM (static friction has a sign discontinuity at zero velocity, producing stiction and a deadband). The six existing channels do neither: they move a smooth parameter of a task the policy already solves. Whether that difference produces a learnability barrier is a measurement, not a claim."
+ },
+ "the_risk_we_are_running": {
+  "threat": "Adding channels until a curriculum wins on one is fitting the benchmark to the method, and a win obtained that way means nothing.",
+  "mitigations": [
+   "Each channel closes a nameable gap between this simulator and the target robot, verified in the asset rather than asserted.",
+   "The severity ladders are fixed in this document, before any outcome exists. A ladder may be rescaled ONCE on frozen-policy evidence from P0, because that is range-finding with no curriculum involved, and the rescaling must be recorded with its reason. After P1 begins, nothing moves.",
+   "The result is reported as a MAP. Every channel and severity at which direct training already reaches the target is reported as a place where a curriculum is unnecessary, and armature is included precisely because it is expected to be such a place.",
+   "A barrier requires BOTH that direct training fails AND that the target is reachable another way. A severity nothing reaches is an unlearnable task; the read-out already refuses to call that a candidate."
+  ]
+ },
+ "phases": {
+  "P0_frozen_policy_screen": {
+   "status": "implemented and queued",
+   "cost_gpu_h": 0.6,
+   "training": "none",
+   "what": "five frozen policies x thirteen cells; tools/run_actuator_screen.sh",
+   "questions_in_order": [
+    "is the channel live at all",
+    "is the top rung survivable by anyone",
+    "does it separate policies more than the baseline cell does"
+   ],
+   "stop_rules": [
+    "NOT LIVE: report it and check the run's own dr_scale_report before concluding anything physical. A channel that does nothing is a wiring result, not a physics result.",
+    "FLOOR at every rung: the ladder is too harsh; rescale once, on this evidence, and record it.",
+    "LIVE but does not separate policies: the channel measures difficulty and not capability. Report it and do not train on it."
+   ]
+  },
+  "P1_can_fixed_randomization_train_at_the_severity": {
+   "cost_gpu_h": 4,
+   "what": "four warm-start arms from the fixed@s8600 final, 1500 iterations, one seed, identical budget, environments, mixture and origin. Only the actuator channel's schedule differs.",
+   "arms": {
+    "fixed_act_off": "the actuator channels collapsed to nominal: the control that says what this budget buys with no new channel",
+    "fixed_act_S": "the channel pinned at the target severity for the whole run: DIRECT training at the target",
+    "ramp_act_S": "an open-loop schedule from nominal to S over the run: staged, with no feedback",
+    "gate_act_S": "the probe-gated curriculum expanding toward S: staged, with feedback"
+   },
+   "decides": "whether direct training reaches the target, and whether staging is what makes the difference or merely the schedule",
+   "note": "This is the comparison in the plain question 'can fixed DR train a good policy here'. fixed_act_S answers it; the other three say what the answer means."
+  },
+  "P2_confirmation": {
+   "cost_gpu_h": 22,
+   "what": "the surviving contrast from scratch, paired on at least three seeds",
+   "decides": "whether the P1 effect survives the 7.8-point between-seed effect this project has measured"
+  }
+ },
+ "frozen_decision_rules": {
+  "C0_live": "A channel enters P1 only if P0 finds it live (reference arm moves at least 5 points at the top rung) and survivable (some policy above 0.05 there).",
+  "C1_direct_training_fails": "Direct training fails at severity S if fixed_act_S ends at least 10 points below fixed_act_off on the frozen held-out band. Smaller than that is a cost, not a failure.",
+  "C2_the_target_is_reachable": "S is reachable if any staged arm (ramp_act_S or gate_act_S) ends within 5 points of fixed_act_off. Without this, C1 alone means the task is unlearnable at S and the finding is reported that way.",
+  "C3_a_barrier_exists": "C1 AND C2. This is the first regime in this project where a curriculum could be necessary rather than optional.",
+  "C4_does_feedback_add_anything": "gate_act_S must beat ramp_act_S by at least 5 points to credit feedback. A tie means the SCHEDULE crossed the barrier and the feedback did not, which is a result about staging, not about our controller.",
+  "C5_report_the_unnecessary_region": "Every channel and severity where direct training reaches the target is reported as a place a curriculum is not needed.",
+  "C6_exposure_is_stated": "Every arm reports realized exposure per severity band in environment-iterations, never episodes, and never the intended schedule.",
+  "C7_one_seed_screens": "P1 is one seed. No superiority language until P2. The between-seed effect on absolute capability here is 7.8 points, larger than the C4 margin."
+ },
+ "what_would_make_us_stop": [
+  "P0 finds no live, survivable, separating channel: the actuator direction ends and the paper stays the failure analysis.",
+  "P1 finds direct training reaches the target everywhere: there is no barrier, and that is the map.",
+  "P1 finds nothing reaches the target: the severity is unlearnable, which is reported and not relabelled."
+ ],
+ "implementation": {
+  "channels": "gear_sonic/research/practice_utility/actuator_dr.py and events_actuator.py; four reset-mode event terms whose ranges are in dr_scaling.RANGE_NOMINALS, so the curriculum, the strata dispatchers, the box gate and the evaluator all see them as ordinary channels",
+  "preset": "gear_sonic/config/manager_env/events/tracking/lucid_actuator.yaml, a new file so no landed result changes",
+  "cells": "PRESET_ACTUATOR in run_curriculum_robustness_eval.py, thirteen cells including act_off",
+  "screen": "tools/run_actuator_screen.sh, read out by tools/analyze_actuator_screen.py",
+  "tests": "75 CPU tests across test_actuator_dr, test_events_actuator and test_actuator_preset",
+  "still_to_build": "the P1 training arms (fixed_act_S, ramp_act_S, gate_act_S) in run_curriculum_comparison.py, once P0 says which channel and severity"
+ }
+}
