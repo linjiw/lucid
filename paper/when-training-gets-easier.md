@@ -1,7 +1,7 @@
 # When Training Gets Easier: Training-Range Collapse in Humanoid Control
 
 **Working draft, reframed 2026-09-02.** Every number in this draft is measured and traceable
-to a receipt listed in Appendix B. Proposed work is confined to Section 9 and is labelled as
+to a receipt listed in Appendix B. Proposed work is confined to Section 10 and is labelled as
 such. Project title for the ongoing work: *Expanding Training Ranges for Humanoid Control*.
 
 ## Abstract
