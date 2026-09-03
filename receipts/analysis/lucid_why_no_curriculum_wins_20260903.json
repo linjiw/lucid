@@ -1,0 +1,39 @@
+{
+ "kind": "lucid_why_no_curriculum_wins",
+ "schema_version": 1,
+ "created_at": "2026-09-03T01:40:39-04:00",
+ "sonic_sha": "980913d8db1b299ee24a4223672ca5b3364082d7",
+ "question": "Why has no curriculum in this project beaten fixed domain randomization, on any channel, at any severity?",
+ "answer": "Because fixed domain randomization, as this project configures it, is ALREADY a curriculum. Its target distribution contains every easier distribution a curriculum could stage through, in every gradient batch. Staging can reorder exposure; it cannot show the policy anything fixed randomization withholds, and it cannot withhold the easy examples fixed randomization keeps supplying.",
+ "verified_in_code": [
+  {
+   "claim": "Every range shrinks toward its nominal, so the support at any intensity is strictly nested inside the support at the maximum.",
+   "evidence": "dr_scaling.scale_range: 'Shrink a [lo, hi] range toward its nominal by lambda.' Its own docstring adds that lambda = 1 returns the baseline exactly, 'so a curriculum that reaches full intensity is indistinguishable from fixed randomization at the configured maximum.'"
+  },
+  {
+   "claim": "The draw is per environment and per episode, not per batch or per run.",
+   "evidence": "IsaacLab _randomize_prop_by_op resolves shape (num_envs, num_bodies) and calls sample_uniform over it; every term in the LUCID preset is mode 'reset', so all 1024 environments redraw independently at every episode boundary."
+  },
+  {
+   "claim": "Therefore a single batch at full intensity already spans the whole difficulty range, including its easiest end.",
+   "evidence": "the two above, together: with 1024 independent uniform draws per episode over a range that contains the nominal, near-nominal episodes are present in essentially every batch."
+  }
+ ],
+ "what_this_explains": [
+  "The never-shrink rule ties fixed randomization on three seeds. It should: with shrinkage removed the controller holds at the envelope, and the realized exposure receipt independently measured it spending 99.2 per cent of its environment-iterations there, which is fixed randomization by another name.",
+  "The probe gate reaching 1.5 did not beat fixed randomization at 1.5. Its wider range still contains the narrower one, so the extra exposure was to a superset, not to something withheld.",
+  "The practice-allocation screen's premise is sharper than we wrote it: reallocating a share of environments to a harder condition is a change in the DENSITY of a distribution the policy already samples, not the introduction of a condition it never sees.",
+  "Every negative result in this project is consistent with one structural fact rather than with a series of unlucky designs."
+ ],
+ "what_it_predicts": {
+  "a_curriculum_can_only_help_when_the_target_is_CONCENTRATED": "If the target distribution is a point, or a narrow band away from the nominal, then easy examples are genuinely absent at the target and direct training has no automatic curriculum to fall back on. That is the regime in which staging can be necessary.",
+  "consequence_for_our_own_actuator_design": "The four actuator channels were configured as RANGES ([0.5, 1.0] of peak torque, [0, 6] N.m of friction, and so on), so they inherit exactly the same property and would NOT produce a barrier either. This is a correction to our own preregistration, made before any of it ran.",
+  "the_test": "fixed-at-a-point versus fixed-at-a-range versus staged-to-the-point, at the same final severity and budget. If the point target breaks direct training while the staged arm reaches it, the barrier is about the SHAPE of the target distribution rather than about which physical parameter is varied."
+ },
+ "why_this_matters_beyond_this_project": "Adaptive domain randomization is usually motivated as a way to reach a wide final distribution that direct training cannot handle. If the wide distribution is sampled per episode, it is self-curricularizing, and the motivation does not hold. That is a claim about a whole family of methods, it is checkable from any implementation's own sampling code, and it is the most useful thing this project has found.",
+ "not_verified": [
+  "This is an argument from the sampling code plus this project's measured results. It has not been tested by training a point-target arm, which is exactly the next experiment.",
+  "It does not rule out exploration barriers that are unrelated to distribution shape, for example a reward that goes flat at high difficulty. Our tracking reward is dense and does not.",
+  "It says nothing about tasks whose difficulty is not parameterised by a per-episode draw."
+ ]
+}
