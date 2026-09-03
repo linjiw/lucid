@@ -1,0 +1,751 @@
+{
+ "kind": "lucid_practice_allocation_readout",
+ "schema_version": 1,
+ "preregistration": "receipts/manifests/lucid_practice_allocation_screen_preregistration_20260902.json",
+ "scoring_dirs": [
+  "/home/linjiw/lucid-sonic/manifests/practice_allocation_scoring_20260903_115158"
+ ],
+ "training_dir": "/home/linjiw/lucid-sonic/manifests/practice_allocation_20260903_052617",
+ "margins": {
+  "improvement_pts": 5.0,
+  "tie_pts": 2.0,
+  "retention_pts": 2.0
+ },
+ "realized_practice_vectors": {
+  "fixed": {},
+  "prac_easy": {
+   "add_joint_default_pos": 3.0,
+   "base_com": 3.0,
+   "randomize_rigid_body_mass": 3.0
+  },
+  "prac_fric": {
+   "physics_material": 1.5
+  },
+  "prac_null": {},
+  "prac_push": {
+   "push_robot": 3.0
+  },
+  "prac_pushfric": {
+   "physics_material": 1.5,
+   "push_robot": 3.0
+  }
+ },
+ "cells": {
+  "phys_000": {
+   "fixed": {
+    "success": 1.0,
+    "progress": 1.0,
+    "in_support": true,
+    "vs_control_pts": 0.0
+   },
+   "prac_easy": {
+    "success": 1.0,
+    "progress": 1.0,
+    "in_support": true,
+    "vs_control_pts": 0.0
+   },
+   "prac_fric": {
+    "success": 1.0,
+    "progress": 1.0,
+    "in_support": true,
+    "vs_control_pts": 0.0
+   },
+   "prac_null": {
+    "success": 1.0,
+    "progress": 1.0,
+    "in_support": true,
+    "vs_control_pts": 0.0
+   },
+   "prac_push": {
+    "success": 1.0,
+    "progress": 1.0,
+    "in_support": true,
+    "vs_control_pts": 0.0
+   },
+   "prac_pushfric": {
+    "success": 1.0,
+    "progress": 1.0,
+    "in_support": true,
+    "vs_control_pts": 0.0
+   }
+  },
+  "phys_100": {
+   "fixed": {
+    "success": 0.984375,
+    "progress": 0.9970312500372529,
+    "in_support": true,
+    "vs_control_pts": -0.98
+   },
+   "prac_easy": {
+    "success": 0.9921875,
+    "progress": 0.9984570313245058,
+    "in_support": true,
+    "vs_control_pts": -0.2
+   },
+   "prac_fric": {
+    "success": 0.99609375,
+    "progress": 0.9986621093703434,
+    "in_support": true,
+    "vs_control_pts": 0.2
+   },
+   "prac_null": {
+    "success": 0.994140625,
+    "progress": 0.9981640625046566,
+    "in_support": true,
+    "vs_control_pts": 0.0
+   },
+   "prac_push": {
+    "success": 0.994140625,
+    "progress": 0.9982031249674037,
+    "in_support": true,
+    "vs_control_pts": 0.0
+   },
+   "prac_pushfric": {
+    "success": 0.9921875,
+    "progress": 0.99755859375,
+    "in_support": true,
+    "vs_control_pts": -0.2
+   }
+  },
+  "phys_150": {
+   "fixed": {
+    "success": 0.921875,
+    "progress": 0.9714648438966833,
+    "in_support": false,
+    "vs_control_pts": 1.37
+   },
+   "prac_easy": {
+    "success": 0.94921875,
+    "progress": 0.9771484374650754,
+    "in_support": false,
+    "vs_control_pts": 4.1
+   },
+   "prac_fric": {
+    "success": 0.96484375,
+    "progress": 0.9874707031121943,
+    "in_support": false,
+    "vs_control_pts": 5.66
+   },
+   "prac_null": {
+    "success": 0.908203125,
+    "progress": 0.96697265606781,
+    "in_support": false,
+    "vs_control_pts": 0.0
+   },
+   "prac_push": {
+    "success": 0.92578125,
+    "progress": 0.9710156251385342,
+    "in_support": false,
+    "vs_control_pts": 1.76
+   },
+   "prac_pushfric": {
+    "success": 0.9375,
+    "progress": 0.9828906248148996,
+    "in_support": false,
+    "vs_control_pts": 2.93
+   }
+  },
+  "phys_200": {
+   "fixed": {
+    "success": 0.80859375,
+    "progress": 0.9284863280772697,
+    "in_support": false,
+    "vs_control_pts": -0.59
+   },
+   "prac_easy": {
+    "success": 0.896484375,
+    "progress": 0.9634277340810513,
+    "in_support": false,
+    "vs_control_pts": 8.2
+   },
+   "prac_fric": {
+    "success": 0.859375,
+    "progress": 0.9569921871443512,
+    "in_support": false,
+    "vs_control_pts": 4.49
+   },
+   "prac_null": {
+    "success": 0.814453125,
+    "progress": 0.9437109379505273,
+    "in_support": false,
+    "vs_control_pts": 0.0
+   },
+   "prac_push": {
+    "success": 0.828125,
+    "progress": 0.9477636719238944,
+    "in_support": false,
+    "vs_control_pts": 1.37
+   },
+   "prac_pushfric": {
+    "success": 0.859375,
+    "progress": 0.9553710938344011,
+    "in_support": false,
+    "vs_control_pts": 4.49
+   }
+  },
+  "ch_push_200": {
+   "fixed": {
+    "success": 0.92578125,
+    "progress": 0.9778124999720603,
+    "in_support": false,
+    "vs_control_pts": -0.2
+   },
+   "prac_easy": {
+    "success": 0.939453125,
+    "progress": 0.9794726563268341,
+    "in_support": false,
+    "vs_control_pts": 1.17
+   },
+   "prac_fric": {
+    "success": 0.939453125,
+    "progress": 0.982089843833819,
+    "in_support": false,
+    "vs_control_pts": 1.17
+   },
+   "prac_null": {
+    "success": 0.927734375,
+    "progress": 0.9785644529038109,
+    "in_support": false,
+    "vs_control_pts": 0.0
+   },
+   "prac_push": {
+    "success": 0.916015625,
+    "progress": 0.9759179688990116,
+    "in_support": true,
+    "vs_control_pts": -1.17
+   },
+   "prac_pushfric": {
+    "success": 0.943359375,
+    "progress": 0.9825878906412981,
+    "in_support": true,
+    "vs_control_pts": 1.56
+   }
+  },
+  "ch_push_300": {
+   "fixed": {
+    "success": 0.8046875,
+    "progress": 0.9379296870902181,
+    "in_support": false,
+    "vs_control_pts": 7.42
+   },
+   "prac_easy": {
+    "success": 0.767578125,
+    "progress": 0.9250585933914408,
+    "in_support": false,
+    "vs_control_pts": 3.71
+   },
+   "prac_fric": {
+    "success": 0.78125,
+    "progress": 0.929531250090804,
+    "in_support": false,
+    "vs_control_pts": 5.08
+   },
+   "prac_null": {
+    "success": 0.73046875,
+    "progress": 0.9293847656226717,
+    "in_support": false,
+    "vs_control_pts": 0.0
+   },
+   "prac_push": {
+    "success": 0.822265625,
+    "progress": 0.9422363276826218,
+    "in_support": true,
+    "vs_control_pts": 9.18
+   },
+   "prac_pushfric": {
+    "success": 0.826171875,
+    "progress": 0.9491210936685093,
+    "in_support": true,
+    "vs_control_pts": 9.57
+   }
+  },
+  "ch_push_350": {
+   "fixed": {
+    "success": 0.666015625,
+    "progress": 0.892548827745486,
+    "in_support": false,
+    "vs_control_pts": 2.54
+   },
+   "prac_easy": {
+    "success": 0.701171875,
+    "progress": 0.9001074220868759,
+    "in_support": false,
+    "vs_control_pts": 6.05
+   },
+   "prac_fric": {
+    "success": 0.677734375,
+    "progress": 0.8969238275894895,
+    "in_support": false,
+    "vs_control_pts": 3.71
+   },
+   "prac_null": {
+    "success": 0.640625,
+    "progress": 0.885712890594732,
+    "in_support": false,
+    "vs_control_pts": 0.0
+   },
+   "prac_push": {
+    "success": 0.72265625,
+    "progress": 0.9145214845775627,
+    "in_support": false,
+    "vs_control_pts": 8.2
+   },
+   "prac_pushfric": {
+    "success": 0.75,
+    "progress": 0.9197265625698492,
+    "in_support": false,
+    "vs_control_pts": 10.94
+   }
+  },
+  "ch_mass_300": {
+   "fixed": {
+    "success": 0.927734375,
+    "progress": 0.9664648434263654,
+    "in_support": false,
+    "vs_control_pts": -1.17
+   },
+   "prac_easy": {
+    "success": 0.986328125,
+    "progress": 0.9969042966840789,
+    "in_support": true,
+    "vs_control_pts": 4.69
+   },
+   "prac_fric": {
+    "success": 0.951171875,
+    "progress": 0.9790722656762227,
+    "in_support": false,
+    "vs_control_pts": 1.17
+   },
+   "prac_null": {
+    "success": 0.939453125,
+    "progress": 0.9781347655807622,
+    "in_support": false,
+    "vs_control_pts": 0.0
+   },
+   "prac_push": {
+    "success": 0.95703125,
+    "progress": 0.9842773437849246,
+    "in_support": false,
+    "vs_control_pts": 1.76
+   },
+   "prac_pushfric": {
+    "success": 0.95703125,
+    "progress": 0.9851757813594304,
+    "in_support": false,
+    "vs_control_pts": 1.76
+   }
+  },
+  "ch_com_300": {
+   "fixed": {
+    "success": 0.9765625,
+    "progress": 0.9955273437080905,
+    "in_support": false,
+    "vs_control_pts": -0.39
+   },
+   "prac_easy": {
+    "success": 0.9921875,
+    "progress": 0.9981933594681323,
+    "in_support": true,
+    "vs_control_pts": 1.17
+   },
+   "prac_fric": {
+    "success": 0.994140625,
+    "progress": 0.998447265708819,
+    "in_support": false,
+    "vs_control_pts": 1.37
+   },
+   "prac_null": {
+    "success": 0.98046875,
+    "progress": 0.9935351561871357,
+    "in_support": false,
+    "vs_control_pts": 0.0
+   },
+   "prac_push": {
+    "success": 0.984375,
+    "progress": 0.9959765623789281,
+    "in_support": false,
+    "vs_control_pts": 0.39
+   },
+   "prac_pushfric": {
+    "success": 0.9921875,
+    "progress": 0.9977539061801508,
+    "in_support": false,
+    "vs_control_pts": 1.17
+   }
+  },
+  "ch_joint_300": {
+   "fixed": {
+    "success": 0.9765625,
+    "progress": 0.9941699218470603,
+    "in_support": false,
+    "vs_control_pts": -1.37
+   },
+   "prac_easy": {
+    "success": 0.994140625,
+    "progress": 0.9985156250186265,
+    "in_support": true,
+    "vs_control_pts": 0.39
+   },
+   "prac_fric": {
+    "success": 0.990234375,
+    "progress": 0.9967578126816079,
+    "in_support": false,
+    "vs_control_pts": 0.0
+   },
+   "prac_null": {
+    "success": 0.990234375,
+    "progress": 0.998378906166181,
+    "in_support": false,
+    "vs_control_pts": 0.0
+   },
+   "prac_push": {
+    "success": 0.98828125,
+    "progress": 0.9972949217772111,
+    "in_support": false,
+    "vs_control_pts": -0.2
+   },
+   "prac_pushfric": {
+    "success": 0.994140625,
+    "progress": 0.997861328185536,
+    "in_support": false,
+    "vs_control_pts": 0.39
+   }
+  },
+  "ch_fric_150": {
+   "fixed": {
+    "success": 0.955078125,
+    "progress": 0.9781835937028518,
+    "in_support": false,
+    "vs_control_pts": -0.78
+   },
+   "prac_easy": {
+    "success": 0.96484375,
+    "progress": 0.9859765626024455,
+    "in_support": false,
+    "vs_control_pts": 0.2
+   },
+   "prac_fric": {
+    "success": 0.990234375,
+    "progress": 0.9954687499557622,
+    "in_support": true,
+    "vs_control_pts": 2.73
+   },
+   "prac_null": {
+    "success": 0.962890625,
+    "progress": 0.981533203026629,
+    "in_support": false,
+    "vs_control_pts": 0.0
+   },
+   "prac_push": {
+    "success": 0.962890625,
+    "progress": 0.9854882810177514,
+    "in_support": false,
+    "vs_control_pts": 0.0
+   },
+   "prac_pushfric": {
+    "success": 0.984375,
+    "progress": 0.9955468750558794,
+    "in_support": true,
+    "vs_control_pts": 2.15
+   }
+  },
+  "ch_push_fric_300_150": {
+   "fixed": {
+    "success": 0.6796875,
+    "progress": 0.8851269526494434,
+    "in_support": false,
+    "vs_control_pts": 1.56
+   },
+   "prac_easy": {
+    "success": 0.697265625,
+    "progress": 0.8970800774404779,
+    "in_support": false,
+    "vs_control_pts": 3.32
+   },
+   "prac_fric": {
+    "success": 0.712890625,
+    "progress": 0.9131445310194977,
+    "in_support": false,
+    "vs_control_pts": 4.88
+   },
+   "prac_null": {
+    "success": 0.6640625,
+    "progress": 0.8914355474844342,
+    "in_support": false,
+    "vs_control_pts": 0.0
+   },
+   "prac_push": {
+    "success": 0.693359375,
+    "progress": 0.9019140621094266,
+    "in_support": false,
+    "vs_control_pts": 2.93
+   },
+   "prac_pushfric": {
+    "success": 0.71484375,
+    "progress": 0.9137597659719177,
+    "in_support": true,
+    "vs_control_pts": 5.08
+   }
+  },
+  "ch_push_fric_350_150": {
+   "fixed": {
+    "success": 0.572265625,
+    "progress": 0.8483105461200466,
+    "in_support": false,
+    "vs_control_pts": 4.88
+   },
+   "prac_easy": {
+    "success": 0.552734375,
+    "progress": 0.8420507803093642,
+    "in_support": false,
+    "vs_control_pts": 2.93
+   },
+   "prac_fric": {
+    "success": 0.6015625,
+    "progress": 0.8748242188012227,
+    "in_support": false,
+    "vs_control_pts": 7.81
+   },
+   "prac_null": {
+    "success": 0.5234375,
+    "progress": 0.836123047498404,
+    "in_support": false,
+    "vs_control_pts": 0.0
+   },
+   "prac_push": {
+    "success": 0.62890625,
+    "progress": 0.8772070304985391,
+    "in_support": false,
+    "vs_control_pts": 10.55
+   },
+   "prac_pushfric": {
+    "success": 0.623046875,
+    "progress": 0.8758691403199919,
+    "in_support": false,
+    "vs_control_pts": 9.96
+   }
+  }
+ },
+ "macro_success_pts": {
+  "fixed": 86.15,
+  "prac_easy": 87.95,
+  "prac_fric": 88.15,
+  "prac_null": 85.2,
+  "prac_push": 87.88,
+  "prac_pushfric": 89.03
+ },
+ "decisions": {
+  "R1_bottleneck_learnable": {
+   "delta_pts": 9.18,
+   "verdict": "LEARNABLE: +9.18 pts, at or above the 5.0-pt margin",
+   "reading": "practising push at 3x repairs push at 3x, so push failure is a practice deficit"
+  },
+  "R2_targeting_matters": {
+   "delta_pts": -0.07,
+   "verdict": "TIE: -0.07 pts, inside the 2.0-pt band",
+   "reading": "extra exposure helps wherever it is aimed; channel selection is not carrying the result"
+  },
+  "R3a_adding_friction_to_push_practice": {
+   "delta_pts": -0.59,
+   "cell": "ch_push_fric_350_150",
+   "verdict": "TIE: -0.59 pts, inside the 2.0-pt band",
+   "reading": "adding friction practice to push practice is not earning its place"
+  },
+  "R3b_interaction_term": {
+   "delta_pts": -8.4,
+   "cell": "ch_push_fric_350_150",
+   "definition": "(both - null) - [(push - null) + (fric - null)], all at the same cell",
+   "verdict": "NOT MET: -8.4 pts, below the 5.0-pt margin",
+   "reading": "the two factors are additive within the margin; a joint-corner component has nothing to add here"
+  },
+  "R4_trade_offs": {
+   "already_learned_cells": [
+    "phys_000",
+    "phys_100"
+   ],
+   "losses_beyond_margin": {
+    "prac_easy": [],
+    "prac_push": [],
+    "prac_fric": [],
+    "prac_pushfric": []
+   },
+   "verdict": "no branch loses more than the retention margin on an already-learned cell"
+  },
+  "R5_more_training_alone": {
+   "control_macro_pts": 85.2,
+   "plain_fixed_macro_pts": 86.15,
+   "note": "every treatment effect above is measured against prac_null, never against the origin"
+  },
+  "R6_generalization_only_above_the_practised_range": {
+   "prac_easy": {
+    "phys_150": 4.1,
+    "phys_200": 8.2,
+    "ch_push_200": 1.17,
+    "ch_push_300": 3.71,
+    "ch_push_350": 6.05,
+    "ch_fric_150": 0.2,
+    "ch_push_fric_300_150": 3.32,
+    "ch_push_fric_350_150": 2.93
+   },
+   "prac_push": {
+    "phys_150": 1.76,
+    "phys_200": 1.37,
+    "ch_push_350": 8.2,
+    "ch_mass_300": 1.76,
+    "ch_com_300": 0.39,
+    "ch_joint_300": -0.2,
+    "ch_fric_150": 0.0,
+    "ch_push_fric_300_150": 2.93,
+    "ch_push_fric_350_150": 10.55
+   },
+   "prac_fric": {
+    "phys_150": 5.66,
+    "phys_200": 4.49,
+    "ch_push_200": 1.17,
+    "ch_push_300": 5.08,
+    "ch_push_350": 3.71,
+    "ch_mass_300": 1.17,
+    "ch_com_300": 1.37,
+    "ch_joint_300": 0.0,
+    "ch_push_fric_300_150": 4.88,
+    "ch_push_fric_350_150": 7.81
+   },
+   "prac_pushfric": {
+    "phys_150": 2.93,
+    "phys_200": 4.49,
+    "ch_push_350": 10.94,
+    "ch_mass_300": 1.76,
+    "ch_com_300": 1.17,
+    "ch_joint_300": 0.39,
+    "ch_push_fric_350_150": 9.96
+   }
+  }
+ },
+ "cells_common_to_every_branch": [
+  "phys_000",
+  "phys_100",
+  "phys_150",
+  "phys_200",
+  "ch_push_200",
+  "ch_push_300",
+  "ch_push_350",
+  "ch_mass_300",
+  "ch_com_300",
+  "ch_joint_300",
+  "ch_fric_150",
+  "ch_push_fric_300_150",
+  "ch_push_fric_350_150"
+ ],
+ "cells_missing_by_branch": {},
+ "macro_denominator": 13,
+ "held_out_cells_per_branch": {
+  "fixed": [
+   "phys_150",
+   "phys_200",
+   "ch_push_200",
+   "ch_push_300",
+   "ch_push_350",
+   "ch_mass_300",
+   "ch_com_300",
+   "ch_joint_300",
+   "ch_fric_150",
+   "ch_push_fric_300_150",
+   "ch_push_fric_350_150"
+  ],
+  "prac_easy": [
+   "phys_150",
+   "phys_200",
+   "ch_push_200",
+   "ch_push_300",
+   "ch_push_350",
+   "ch_fric_150",
+   "ch_push_fric_300_150",
+   "ch_push_fric_350_150"
+  ],
+  "prac_fric": [
+   "phys_150",
+   "phys_200",
+   "ch_push_200",
+   "ch_push_300",
+   "ch_push_350",
+   "ch_mass_300",
+   "ch_com_300",
+   "ch_joint_300",
+   "ch_push_fric_300_150",
+   "ch_push_fric_350_150"
+  ],
+  "prac_null": [
+   "phys_150",
+   "phys_200",
+   "ch_push_200",
+   "ch_push_300",
+   "ch_push_350",
+   "ch_mass_300",
+   "ch_com_300",
+   "ch_joint_300",
+   "ch_fric_150",
+   "ch_push_fric_300_150",
+   "ch_push_fric_350_150"
+  ],
+  "prac_push": [
+   "phys_150",
+   "phys_200",
+   "ch_push_350",
+   "ch_mass_300",
+   "ch_com_300",
+   "ch_joint_300",
+   "ch_fric_150",
+   "ch_push_fric_300_150",
+   "ch_push_fric_350_150"
+  ],
+  "prac_pushfric": [
+   "phys_150",
+   "phys_200",
+   "ch_push_350",
+   "ch_mass_300",
+   "ch_com_300",
+   "ch_joint_300",
+   "ch_push_fric_350_150"
+  ]
+ },
+ "cells_with_unknown_exposure_per_branch": {
+  "fixed": [],
+  "prac_easy": [],
+  "prac_fric": [],
+  "prac_null": [],
+  "prac_push": [],
+  "prac_pushfric": []
+ },
+ "not_verified": [
+  "a negative result rejects THIS allocation, at this origin, budget and dose; it does not establish that any scheduler or any practice dose would fail",
+  "single seed: this ranks designs and does not decide; the between-seed effect on absolute capability reaches 7.8 points",
+  "one training clip",
+  "warm start from a solved lambda=1 policy, so this says where practice helps a competent policy, not how to train one",
+  "one seed. The between-seed effect on absolute capability in this project reaches 7.8 points, larger than the R2 and R3 margins, so the ties are screening results and not equivalence claims."
+ ],
+ "finding": {
+  "headline": "Reallocating a quarter of the environments to ANY harder condition improves broad robustness by about the same amount. Which condition you pick barely matters.",
+  "R1_the_bottleneck_is_a_practice_deficit": {
+   "at_the_practised_cell": "prac_push 82.2 vs prac_null 73.0, +9.2 points",
+   "and_it_generalizes_past_it": [
+    "ch_push_350, held out for every branch: prac_push 72.3 vs prac_null 64.1, +8.2",
+    "ch_push_fric_350_150, also held out: 62.9 vs 52.3, +10.6"
+   ],
+   "reading": "Practice at the failing condition repairs it, and the repair reaches beyond the level practised. Push failure was a practice deficit."
+  },
+  "R2_but_aiming_does_not_matter": {
+   "broad_macro": "prac_push and prac_easy differ by -0.07 points over the thirteen-cell suite: a tie inside the 2-point band",
+   "at_the_bottleneck_itself": "prac_push +9.2 against prac_null, prac_easy only +3.7",
+   "the_placebo_wins_where_it_should_not": "at phys_200 the placebo arm scores 89.6 against the bottleneck arm's 82.8 and the control's 81.4",
+   "reading": "Targeted practice beats untargeted practice AT ITS OWN TARGET and nowhere else. On the broad suite, practising the channels the attribution sweep called nearly free helps as much as practising the binding one, and at the widest scalar cell it helps more. What the reallocation buys is exposure to harder physics in general, not the choice of which physics."
+  },
+  "R3_combinations_buy_nothing": {
+   "adding_friction_to_push_practice": "-0.59 points above the practised corner: a tie",
+   "interaction_term": "-8.4 points, sub-additive rather than super-additive",
+   "reading": "A component that exists to protect combinations has nothing to add here. The two factors do not compound; together they are worth less than the sum of their parts."
+  },
+  "R4_nothing_was_traded_away": "No branch loses more than the retention margin on the already-learned cells, and every branch is at 100.0 and 99+ on nominal physics and the envelope.",
+  "structural_control": "the plain continuation arm scores 80.9 at phys_200 against the matched control's 81.4, so the two-cohort dispatcher itself costs nothing and the treated arms are being compared against a fair control.",
+  "how_this_sits_with_the_nesting_result": "It is what the nesting argument predicts. Reallocating environments changes the DENSITY of a distribution the policy already samples; it does not introduce a condition the policy never saw. Density helps, which is why every treated arm improves. Which region gets the density barely matters on a held-out suite, which is why targeting ties. Neither is evidence that a curriculum is needed: none of these arms is a curriculum, they are fixed reallocations, and the improvement they buy is available without any scheduler at all."
+ }
+}

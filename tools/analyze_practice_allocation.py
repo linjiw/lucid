@@ -93,7 +93,14 @@ def practised(training_dir: Path | None, mode: str) -> dict[str, float] | None:
     found = False
     for path in sorted(glob.glob(str(training_dir / "*.json"))):
         receipt = json.loads(Path(path).read_text())
-        for arm in receipt.get("arms") or []:
+        # The training receipt keys its arms by branch id, so iterating it directly
+        # yields strings. Both shapes appear across this project's receipts.
+        arms = receipt.get("arms") or []
+        if isinstance(arms, dict):
+            arms = list(arms.values())
+        for arm in arms:
+            if not isinstance(arm, dict):
+                continue
             if arm.get("mode") != mode:
                 continue
             found = True
