@@ -22,7 +22,7 @@ readonly PY="/home/linjiw/isaaclab-install/env_isaaclab/bin/python"
 # against the matched control.
 readonly PANEL="${LUCID_ROOT}/manifests/replicate_panel_panel_hob002_k512.json"
 readonly ORIGIN_INDEX="${LUCID_ROOT}/manifests/lucid_channel_sweep_index_20260902.json"
-readonly ORIGIN_CAMPAIGN="${LUCID_ROOT}/logs_rl/lucid-campaign/manager/universal_token/all_modes/sonic_release_test-20260829_000251/config.yaml"
+readonly ORIGIN_REL="logs_rl/lucid-campaign/manager/universal_token/all_modes/sonic_release_test-20260829_000251"
 readonly NEW_CELLS="ch_push_350 ch_push_fric_300_150 ch_push_fric_350_150"
 
 # Ordinary (already learned) | scalar ladder | practised or adjacent | above every
@@ -45,8 +45,22 @@ OUT="${LUCID_ROOT}/manifests/practice_allocation_scoring_${STAMP}"
 log "scoring ${TRAIN_DIR} on ${PRESETS}"
 
 CFG="$(grep -haoE "logs_rl/[^\"]*sonic_release_test-[0-9_]+" "${TRAIN_DIR}"/*.json 2>/dev/null | head -1)"
+# The resolved config lives under the SONIC repo's logs_rl, not under the data
+# root. Searching both is what keeps this working whichever host trained the arm,
+# and failing loudly beats passing a path that does not exist to the evaluator.
+resolve_config() {
+    local rel="$1" root
+    for root in "${DEV_REPO}" "${LUCID_ROOT}" /home/linjiw/lucid-ratchet-confirm; do
+        [[ -f "${root}/${rel}/config.yaml" ]] && { echo "${root}/${rel}/config.yaml"; return 0; }
+    done
+    return 1
+}
+TRAIN_CONFIG="$(resolve_config "${CFG}" || true)"
+ORIGIN_CAMPAIGN="$(resolve_config "${ORIGIN_REL}" || true)"
 [[ -n "${CFG}" ]] || { echo "REFUSED: no campaign config found under ${TRAIN_DIR}" >&2; exit 1; }
 [[ -n "${TRAIN_RECEIPT}" ]] || { echo "REFUSED: no training receipt under ${TRAIN_DIR}" >&2; exit 1; }
+[[ -n "${TRAIN_CONFIG}" ]] || { echo "REFUSED: resolved config ${CFG}/config.yaml not found under the repo, the data root, or the ratchet worktree" >&2; exit 1; }
+[[ -n "${ORIGIN_CAMPAIGN}" ]] || { echo "REFUSED: origin config ${ORIGIN_REL}/config.yaml not found under any known root" >&2; exit 1; }
 for path in "${PANEL}" "${ORIGIN_INDEX}"; do
     [[ -f "${path}" ]] || { echo "REFUSED: missing required input ${path}" >&2; exit 1; }
 done
@@ -58,7 +72,7 @@ done
 args=(
     "${PY}" scripts/practice_utility/run_curriculum_robustness_eval.py
     --training-receipt "${TRAIN_RECEIPT}"
-    --training-config "${LUCID_ROOT}/${CFG}/config.yaml"
+    --training-config "${TRAIN_CONFIG}"
     --num-envs 512
     --seeds 8600
     --modes prac_null prac_push prac_fric prac_pushfric prac_easy fixed
