@@ -1,0 +1,70 @@
+{
+ "kind": "lucid_actuator_rating_discrepancy",
+ "schema_version": 1,
+ "created_at": "2026-09-03T01:39:22-04:00",
+ "sonic_sha": "7cb34e615d73af8dad11839510179627086304c5",
+ "question": "Do the torque and speed ratings this project trains with match the robot's own asset?",
+ "method": "Read three sources directly: the URDF the robot is converted from, the vendor MJCF shipped with the deploy stack, and the Isaac Lab actuator config that training actually uses.",
+ "sources": {
+  "urdf": "gear_sonic/data/assets/robot_description/urdf/g1/main.urdf",
+  "vendor_mjcf": "/home/linjiw/lucid-phase0-eval/gear_sonic_deploy/g1/g1_29dof.xml",
+  "training_config": "gear_sonic/envs/manager_env/robots/g1.py"
+ },
+ "table_effort_nm": {
+  "hip_pitch": {
+   "urdf": 88,
+   "vendor_mjcf": 88,
+   "training_config": 139
+  },
+  "hip_roll": {
+   "urdf": 139,
+   "vendor_mjcf": 88,
+   "training_config": 139
+  },
+  "hip_yaw": {
+   "urdf": 88,
+   "vendor_mjcf": 88,
+   "training_config": 88
+  },
+  "knee": {
+   "urdf": 139,
+   "vendor_mjcf": 139,
+   "training_config": 139
+  },
+  "ankle_pitch": {
+   "urdf": 50,
+   "vendor_mjcf": 50,
+   "training_config": 50
+  }
+ },
+ "table_velocity_rad_s": {
+  "hip_pitch": {
+   "urdf": 32,
+   "training_config": 20
+  },
+  "hip_roll": {
+   "urdf": 20,
+   "training_config": 20
+  },
+  "knee": {
+   "urdf": 20,
+   "training_config": 20
+  }
+ },
+ "findings": [
+  "HIP PITCH is the clear one. Training uses 139 N.m where BOTH the URDF and the vendor MJCF say 88, so the simulated robot's primary walking joint is 58 per cent stronger than its own asset declares. Every policy in this project was trained with that surplus.",
+  "HIP ROLL is a disagreement between the two assets themselves: the URDF says 139 and the vendor MJCF says 88. The training config follows the URDF. Which is right is a question for the vendor, not for us to assume.",
+  "Hip pitch's speed limit also differs: the URDF says 32 rad/s and training uses 20.",
+  "Knee, hip yaw and ankle agree across all three sources."
+ ],
+ "why_it_matters": [
+  "It is a sim-to-real gap of exactly the kind the actuator channels were added to represent, and it is larger than the gap we proposed to introduce deliberately.",
+  "It makes the effort-limit channel concrete rather than hypothetical: scaling hip pitch to 0.63 of the trained value does not stress the robot, it restores the rating its own asset gives.",
+  "It bears on every landed result. A policy that leans on hip torque the hardware does not have would fail on deployment for a reason none of our evaluation cells can see, because every cell shares the same over-rated actuator."
+ ],
+ "what_this_is_not": [
+  "This is not evidence of a bug. SONIC may have chosen 139 deliberately, for a different G1 variant or to compensate elsewhere, and the EDU model is documented with stronger knee actuators. The finding is a DISCREPANCY between three sources, not a verdict on which is correct.",
+  "Nothing here has been tested in simulation. It is a reading of three configuration files."
+ ],
+ "recommended_action": "Ask the SONIC authors which rating is intended before changing anything. Until then, do not silently 'fix' robots/g1.py: every landed result in this project was produced at 139, and changing it would break comparability with all of them. The honest route is an actuator-channel arm that derates hip pitch to the asset value and reports what it costs."
+}
