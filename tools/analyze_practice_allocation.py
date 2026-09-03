@@ -37,7 +37,7 @@ import sys
 PREREG = Path("receipts/manifests/lucid_practice_allocation_screen_preregistration_20260902.json")
 
 CONTROL = "prac_null"
-TREATMENTS = ("prac_easy", "prac_push", "prac_pushfric")
+TREATMENTS = ("prac_easy", "prac_push", "prac_fric", "prac_pushfric")
 ORDINARY = ("phys_000", "phys_100")
 #: Which channels each cell widens, so support can be decided per branch rather
 #: than assumed. Mirrors the evaluator's own preset tables.
@@ -56,6 +56,7 @@ CELL_CHANNELS: dict[str, dict[str, float]] = {
     "ch_fric_150": {"physics_material": 1.5},
     "ch_push_fric_200_150": {"push_robot": 2.0, "physics_material": 1.5},
     "ch_push_fric_300_150": {"push_robot": 3.0, "physics_material": 1.5},
+    "ch_push_fric_350_150": {"push_robot": 3.5, "physics_material": 1.5},
 }
 
 
@@ -80,27 +81,40 @@ def load_cells(dirs: list[Path]) -> dict[tuple[str, str], dict]:
     return cells
 
 
-def practised(training_dir: Path | None, mode: str) -> dict[str, float]:
-    """The branch's realized practice vector, read from its own telemetry."""
+def practised(training_dir: Path | None, mode: str) -> dict[str, float] | None:
+    """The branch's realized practice vector, read from its own telemetry.
+
+    Returns ``None`` when the run's exposure was not found. That is not the same as an
+    empty vector: an unrecorded exposure cannot be used to call a cell held out, because
+    the branch may well have practised it. The two are kept apart deliberately.
+    """
     if training_dir is None:
-        return {}
+        return None
+    found = False
     for path in sorted(glob.glob(str(training_dir / "*.json"))):
         receipt = json.loads(Path(path).read_text())
         for arm in receipt.get("arms") or []:
             if arm.get("mode") != mode:
                 continue
+            found = True
             strata = ((arm.get("tace_final") or {}).get("stratum_lambdas")) or []
             top = strata[-1] if strata else {}
             if isinstance(top, dict):
                 return {k: float(v) for k, v in top.items() if float(v) > 1.0}
-    return {}
+    return {} if found else None
 
 
-def in_support(cell: str, vector: dict[str, float]) -> bool:
-    """A cell is in support when the branch practised every channel it widens."""
+def in_support(cell: str, vector: dict[str, float] | None) -> bool | None:
+    """Did the branch practise every channel this cell widens?
+
+    ``None`` means the branch's exposure was not recorded, so the question cannot be
+    answered. A ``None`` never becomes a held-out label.
+    """
     widened = CELL_CHANNELS.get(cell, {})
     if not widened:
         return True  # nominal / envelope cells are inside every branch's support
+    if vector is None:
+        return None
     return all(vector.get(name, 1.0) >= value - 1e-9 for name, value in widened.items())
 
 
@@ -148,8 +162,15 @@ def main(argv=None) -> int:
         return pts((cells.get((mode, preset)) or {}).get("success"),
                    (cells.get((other, preset)) or {}).get("success"))
 
+    # Cells present for EVERY mode being compared. A macro average taken over whatever
+    # each mode happens to have would give the modes different denominators, so a mode
+    # missing its hardest cell would look better for missing it.
+    common = [p for p in presets if all((m, p) in cells for m in modes)]
+    missing = {m: [p for p in presets if (m, p) not in cells] for m in modes}
+    missing = {m: v for m, v in missing.items() if v}
+
     def macro(mode: str) -> float | None:
-        values = [cells[(mode, p)]["success"] for p in presets if (mode, p) in cells]
+        values = [cells[(mode, p)]["success"] for p in common if (mode, p) in cells]
         return round(100.0 * statistics.fmean(values), 2) if values else None
 
     def verdict(value: float | None, name: str) -> str:
@@ -164,7 +185,15 @@ def main(argv=None) -> int:
     r1 = delta("prac_push", CONTROL, "ch_push_300")
     r2 = (None if macro("prac_push") is None or macro("prac_easy") is None
           else round(macro("prac_push") - macro("prac_easy"), 2))
-    r3 = delta("prac_pushfric", "prac_push", "ch_push_fric_300_150")
+    r3 = delta("prac_pushfric", "prac_push", "ch_push_fric_350_150")
+    # The 2x2 interaction: does practising both factors buy more than the sum of practising
+    # each? Estimable only because both arms practise push at the same level (amendment A1).
+    def eff(mode: str, preset: str) -> float | None:
+        return delta(mode, CONTROL, preset)
+    cell_for_interaction = "ch_push_fric_350_150"
+    parts = [eff(m, cell_for_interaction) for m in ("prac_push", "prac_fric", "prac_pushfric")]
+    r3b = (None if any(v is None for v in parts)
+           else round(parts[2] - (parts[0] + parts[1]), 2))
     trade_offs = {
         mode: {p: table.get(p, {}).get(mode, {}).get("vs_control_pts") for p in ORDINARY}
         for mode in TREATMENTS
@@ -173,9 +202,11 @@ def main(argv=None) -> int:
         mode: [p for p, d in row.items() if d is not None and d < -retention]
         for mode, row in trade_offs.items()
     }
+    # A generalization claim may rest only on a cell KNOWN to be outside the branch's
+    # support. A cell whose exposure was not recorded is excluded from both sides.
     generalization = {
         mode: {p: table[p][mode]["vs_control_pts"] for p in presets
-               if mode in table.get(p, {}) and not table[p][mode]["in_support"]}
+               if mode in table.get(p, {}) and table[p][mode]["in_support"] is False}
         for mode in TREATMENTS
     }
 
@@ -205,12 +236,24 @@ def main(argv=None) -> int:
                             else "extra exposure helps wherever it is aimed; channel selection is "
                                  "not carrying the result"),
             },
-            "R3_combinations_need_own_practice": {
+            "R3a_adding_friction_to_push_practice": {
                 "delta_pts": r3,
+                "cell": cell_for_interaction,
                 "verdict": verdict(r3, "COMBINATION PAYS"),
-                "reading": ("practising a combination buys more than practising the channel alone"
+                "reading": ("practising a combination buys more than practising push alone"
                             if r3 is not None and r3 >= improve else
-                            "the joint-corner component is not earning its complexity"),
+                            "adding friction practice to push practice is not earning its place"),
+            },
+            "R3b_interaction_term": {
+                "delta_pts": r3b,
+                "cell": cell_for_interaction,
+                "definition": "(both - null) - [(push - null) + (fric - null)], all at the same cell",
+                "verdict": verdict(r3b, "SUPER-ADDITIVE"),
+                "reading": ("practising the pair buys more than the sum of its parts, which is "
+                            "what a joint-corner component would be for"
+                            if r3b is not None and r3b >= improve else
+                            "the two factors are additive within the margin; a joint-corner "
+                            "component has nothing to add here"),
             },
             "R4_trade_offs": {
                 "already_learned_cells": ORDINARY,
@@ -226,11 +269,22 @@ def main(argv=None) -> int:
             },
             "R6_generalization_only_above_the_practised_range": generalization,
         },
+        "cells_common_to_every_branch": common,
+        "cells_missing_by_branch": missing,
+        "macro_denominator": len(common),
         "held_out_cells_per_branch": {
-            mode: [p for p in presets if mode in table.get(p, {}) and not table[p][mode]["in_support"]]
+            mode: [p for p in presets
+                   if mode in table.get(p, {}) and table[p][mode]["in_support"] is False]
+            for mode in modes
+        },
+        "cells_with_unknown_exposure_per_branch": {
+            mode: [p for p in presets
+                   if mode in table.get(p, {}) and table[p][mode]["in_support"] is None]
             for mode in modes
         },
         "not_verified": [
+            "a negative result rejects THIS allocation, at this origin, budget and dose; it "
+            "does not establish that any scheduler or any practice dose would fail",
             "single seed: this ranks designs and does not decide; the between-seed effect on "
             "absolute capability reaches 7.8 points",
             "one training clip",
@@ -250,10 +304,14 @@ def main(argv=None) -> int:
             if entry is None:
                 cellstr.append(f"{'-':>14s}")
                 continue
-            mark = "*" if entry["in_support"] else " "
+            mark = {True: "*", False: " ", None: "?"}[entry["in_support"]]
             cellstr.append(f"{100 * entry['success']:12.1f}{mark} ")
         print(f"{preset:24s} " + " ".join(cellstr))
-    print("\n* = in that branch's training support; no generalization claim may rest on it\n")
+    print("\n* = in that branch's training support; no generalization claim may rest on it")
+    print("? = exposure not recorded for that branch, so support is unknown; excluded from both")
+    if missing:
+        print(f"cells missing for some branch (excluded from every macro): {missing}")
+    print(f"macro average taken over {len(common)} cells common to every branch\n")
     for name, decision in out["decisions"].items():
         if "verdict" in decision:
             print(f"{name}: {decision['verdict']}")

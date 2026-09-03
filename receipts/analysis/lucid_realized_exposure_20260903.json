@@ -1,0 +1,164 @@
+{
+ "kind": "lucid_realized_exposure",
+ "schema_version": 2,
+ "question": "How many training episodes did each run actually spend at each difficulty, as opposed to which difficulties were formally inside its support?",
+ "method": "Exposure per cohort per iteration, binned by that cohort's intensity from the curriculum trace and summed over the run. The default unit is environment-iterations, which every arm can be counted in and which does not vary with episode length; episodes are available as an alternative but are NOT comparable across intensities, because a harder cohort ends more and shorter episodes.",
+ "unit": "env_iterations",
+ "bins": {
+  "below 0.5": [
+   0.0,
+   0.5
+  ],
+  "0.5-0.9": [
+   0.5,
+   0.9
+  ],
+  "at the envelope": [
+   0.9,
+   1.1
+  ],
+  "1.1-1.4": [
+   1.1,
+   1.4
+  ],
+  "1.4-1.75": [
+   1.4,
+   1.75
+  ],
+  "above 1.75": [
+   1.75,
+   10.0
+  ]
+ },
+ "runs": {
+  "fixed@seed_8600": {
+   "path": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260829_000249/seed_8600/fixed",
+   "exposure_source": "environment-iterations per cohort intensity",
+   "unit": "env_iterations",
+   "total_units": 8000,
+   "episodes_by_difficulty": {
+    "below 0.5": 0,
+    "0.5-0.9": 0,
+    "at the envelope": 8000,
+    "1.1-1.4": 0,
+    "1.4-1.75": 0,
+    "above 1.75": 0
+   },
+   "share_by_difficulty": {
+    "below 0.5": 0.0,
+    "0.5-0.9": 0.0,
+    "at the envelope": 1.0,
+    "1.1-1.4": 0.0,
+    "1.4-1.75": 0.0,
+    "above 1.75": 0.0
+   },
+   "share_at_or_below_the_envelope": 1.0
+  },
+  "lucid_ratchet_rg@seed_8600": {
+   "path": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260831_231901/seed_8600/lucid_ratchet_rg",
+   "exposure_source": "environment-iterations per cohort intensity",
+   "unit": "env_iterations",
+   "total_units": 8000,
+   "episodes_by_difficulty": {
+    "below 0.5": 39,
+    "0.5-0.9": 21,
+    "at the envelope": 7940,
+    "1.1-1.4": 0,
+    "1.4-1.75": 0,
+    "above 1.75": 0
+   },
+   "share_by_difficulty": {
+    "below 0.5": 0.0049,
+    "0.5-0.9": 0.0026,
+    "at the envelope": 0.9925,
+    "1.1-1.4": 0.0,
+    "1.4-1.75": 0.0,
+    "above 1.75": 0.0
+   },
+   "share_at_or_below_the_envelope": 1.0
+  },
+  "lucid_rg@seed_8601": {
+   "path": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260829_000249/seed_8601/lucid_rg",
+   "exposure_source": "environment-iterations per cohort intensity",
+   "unit": "env_iterations",
+   "total_units": 8000,
+   "episodes_by_difficulty": {
+    "below 0.5": 1488,
+    "0.5-0.9": 738,
+    "at the envelope": 5774,
+    "1.1-1.4": 0,
+    "1.4-1.75": 0,
+    "above 1.75": 0
+   },
+   "share_by_difficulty": {
+    "below 0.5": 0.186,
+    "0.5-0.9": 0.0922,
+    "at the envelope": 0.7218,
+    "1.1-1.4": 0.0,
+    "1.4-1.75": 0.0,
+    "above 1.75": 0.0
+   },
+   "share_at_or_below_the_envelope": 1.0
+  },
+  "gate_150@seed_8600": {
+   "path": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260901_232720/seed_8600/gate_150",
+   "exposure_source": "environment-iterations per cohort intensity",
+   "unit": "env_iterations",
+   "total_units": 8181770,
+   "episodes_by_difficulty": {
+    "below 0.5": 863096,
+    "0.5-0.9": 852644,
+    "at the envelope": 2339488,
+    "1.1-1.4": 2365134,
+    "1.4-1.75": 1761408,
+    "above 1.75": 0
+   },
+   "share_by_difficulty": {
+    "below 0.5": 0.1055,
+    "0.5-0.9": 0.1042,
+    "at the envelope": 0.2859,
+    "1.1-1.4": 0.2891,
+    "1.4-1.75": 0.2153,
+    "above 1.75": 0.0
+   },
+   "share_at_or_below_the_envelope": 0.4956
+  }
+ },
+ "supersedes": "receipts/analysis/lucid_realized_exposure_20260902.json, which mixed denominators: the gate was counted in episodes and the pinned arms in iterations. Those are not comparable, and the episode count is additionally confounded.",
+ "why_this_unit": [
+  "Episode counts are not comparable across intensities or across training time. A harder cohort ends more and shorter episodes, and an early, incompetent policy ends far more episodes than a late one, so an episode share is driven by episode length as much as by practice.",
+  "Environment-iterations are available for every arm, need no episode data, and are unbiased: each iteration every environment in a cohort trains for the same rollout length at that cohort's intensity.",
+  "The correction is material. On episodes the gate reads 41.5% at the envelope and 13.7% above 1.4; on environment-iterations it reads 28.6% and 21.5%. The episode count was dominated by the early high-churn phase, when the frontier was still at 1.0."
+ ],
+ "finding": {
+  "headline": "An expansion arm's headline range overstates what it practised, and it buys that range by giving up envelope practice.",
+  "table_common_unit_env_iterations": {
+   "fixed (pinned at 1)": {
+    "at the envelope": "100.0%",
+    "above 1.4": "0.0%",
+    "at or below the envelope": "100.0%"
+   },
+   "never-shrink ratchet": {
+    "at the envelope": "99.2%",
+    "above 1.4": "0.0%",
+    "at or below the envelope": "100.0%"
+   },
+   "the collapse (lucid_rg@s8601)": {
+    "below 0.5": "18.6%",
+    "at the envelope": "72.2%",
+    "at or below the envelope": "100.0%"
+   },
+   "probe gate that reached 1.5": {
+    "at the envelope": "28.6%",
+    "above 1.4": "21.5%",
+    "at or below the envelope": "49.6%"
+   }
+  },
+  "reading": [
+   "The gate reports a final support of 1.5 and spent 21.5% of its training exposure above 1.4. Stated support is not practice.",
+   "It spent 28.6% of its exposure at the envelope where fixed randomization spends 100%. The frontier practice is bought with envelope practice, not added to it, which is a direct explanation for expansion arms tying fixed rather than beating it.",
+   "The ratchet's 99.2% at the envelope confirms it is fixed randomization by another name in realized exposure, not only in outcome."
+  ],
+  "caveat": "One seed per arm. The pinned arms are exact by construction in any unit; the gate is computed from its own recorded cohort sizes and intensities."
+ }
+}

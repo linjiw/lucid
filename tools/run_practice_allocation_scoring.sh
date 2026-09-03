@@ -21,11 +21,11 @@ readonly PY="/home/linjiw/isaaclab-install/env_isaaclab/bin/python"
 # time. Improvement is then readable against the starting point as well as
 # against the matched control.
 readonly ORIGIN_CAMPAIGN="${LUCID_ROOT}/logs_rl/lucid-campaign/manager/universal_token/all_modes/sonic_release_test-20260829_000251/config.yaml"
-readonly NEW_CELLS="ch_push_350 ch_push_fric_200_150 ch_push_fric_300_150"
+readonly NEW_CELLS="ch_push_350 ch_push_fric_300_150 ch_push_fric_350_150"
 
 # Ordinary (already learned) | scalar ladder | practised or adjacent | above every
 # practised level | untouched channel.
-readonly PRESETS="phys_000 phys_100 phys_150 phys_200 ch_push_200 ch_push_300 ch_mass_300 ch_com_300 ch_joint_300 ch_push_fric_200_150 ch_push_350 ch_push_fric_300_150 ch_fric_150"
+readonly PRESETS="phys_000 phys_100 phys_150 phys_200 ch_push_200 ch_push_300 ch_mass_300 ch_com_300 ch_joint_300 ch_fric_150 ch_push_fric_300_150 ch_push_350 ch_push_fric_350_150"
 
 TRAIN_DIR="${1:?pass the training receipt directory}"; shift || true
 EXECUTE=0
@@ -49,11 +49,11 @@ args=(
     --presets ${PRESETS}
     --episodes 512
     --receipt-dir "${OUT}"
-    --modes prac_null prac_push prac_easy prac_pushfric fixed
+    --modes prac_null prac_push prac_fric prac_pushfric prac_easy fixed
 )
 if (( EXECUTE )); then
     args+=(--execute)
-    log "scoring 6 policies x 13 cells; receipts -> ${OUT}"
+    log "scoring 7 policies x 13 cells; receipts -> ${OUT}"
 fi
 "${args[@]}"
 

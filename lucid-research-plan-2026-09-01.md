@@ -367,12 +367,21 @@ of the λ=1 cohort so no branch trains on more episodes.
 | `prac_null` | λ=1, like everyone else (matched control) | — |
 | `prac_easy` | mass 3×, CoM 3×, joint 3× | 0.949 / 0.988 / 0.990 |
 | `prac_push` | push 3× | 0.746 |
-| `prac_pushfric` | push 2× with friction 1.5× | 0.912 and 0.973 alone |
+| `prac_fric` | friction 1.5× | 0.973 |
+| `prac_pushfric` | push 3× **and** friction 1.5× (same levels) | — |
 
 Levels are read off the sweep, so "difficult" is a measured success level.
 Frozen 13-cell suite, identical for every branch, including ordinary conditions
 and two cells above every practised level. Rules R1–R7 frozen before any run;
 `prereg: receipts/manifests/lucid_practice_allocation_screen_preregistration_20260902.json`.
+
+Amended 2026-09-03 (A1–A4, before any arm trained): the combination arm now
+shares the push level with `prac_push`, `prac_fric` supplies friction alone, and
+the four form a 2×2 whose interaction is estimable rather than confounded with a
+change of dose. A negative is bounded to this origin, budget and dose. The
+readout drops cells missing for any branch from every macro and marks unrecorded
+exposure "unknown" rather than "held out". "Within margin" is always reported
+with its one-sided interval.
 
 **What each outcome ends.** R1: if dedicated practice at the failing push level
 does not move push, push failure is not a practice deficit and no allocation
@@ -401,11 +410,18 @@ against a null that keeps the values and destroys their time order.
 | regime | window | change over it | trend / noise at W=100 | sign reliable? |
 |---|---|---|---|---|
 | from scratch (gate_150, λ held at 1.0) | 3,362 it | +101 to +123 pts | — | yes, at W=200–400 |
-| warm start (gate_150, λ held at 1.5) | 1,590 it | −1.2 to +3.6 pts | **0.01–0.08** | **no, at any W ≤ 400** |
+| warm start (gate_150, λ held at 1.5) | 1,590 it | −1.2 to +3.6 pts | **0.01–0.08** | **no cohort meets the criterion at any W ≤ 400** |
 
 On the largest stratum (85 episodes/iteration) the noise floor is 13× the trend
 at W=100; matching it needs ~170× the episodes per window, i.e. ~14,000 episodes
 per iteration or a ~17,000-iteration window.
+
+**Precision on the sign.** Agreement is 0.42–0.63 at W=100 and 0.42–**0.83** at
+W=400 — widening the window does recover agreement, and "coin flip at every
+window" (written 2026-09-02) was wrong. The criterion is agreement ≥ 0.80 AND
+trend above the noise floor on ≥ 50% of windows; **no cohort meets both at any
+width** (best above-noise fraction 0.42, on the frontier cohort at W=400). The
+sign can look right while the magnitude stays indistinguishable from noise.
 
 **Consequences.**
 1. The gate's current cadence (window 100, dwell 50) cannot support a
@@ -458,10 +474,16 @@ Episodes per cohort per iteration, binned by that cohort's intensity.
 | fixed (pinned at 1) | 100.0% | 0.0% | 100.0% |
 | lucid_ratchet_rg | 99.2% | 0.0% | 100.0% |
 | lucid_rg@s8601 (the collapse) | 72.2% | 0.0% | 100.0% (18.6% below 0.5) |
-| gate_150 (reached 1.5) | 41.5% | **13.7%** | 63.1% |
+| gate_150 (reached 1.5) | 28.6% | **21.5%** | 49.6% |
 
-The gate's headline support of 1.5 corresponds to 13.7% of its practice, and it
-bought that by cutting envelope practice from 100% to 41.5%. With the env count
+Unit: **environment-iterations**, the one denominator every arm can be counted
+in. The 2026-09-02 version mixed denominators (gate in episodes, pinned arms in
+iterations) and is superseded; episodes are additionally confounded by episode
+length, which varies with both difficulty and competence. On episodes the gate
+read 41.5% / 13.7%; the correction is material.
+
+The gate's headline support of 1.5 corresponds to 21.5% of its practice, and it
+bought that by cutting envelope practice from 100% to 28.6%. With the env count
 fixed, widening is a REALLOCATION and the reallocation is the treatment. This is
 a direct explanation for expansion arms tying fixed. Every future comparison
 reports realized exposure per band alongside the claimed support; Screen A's

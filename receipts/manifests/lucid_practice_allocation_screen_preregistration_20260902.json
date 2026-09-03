@@ -29,7 +29,8 @@
    "prac_null": "the matched control: two strata, 768/256, both at lambda 1. Dispatcher active, content identical. Every treatment effect is measured against THIS arm.",
    "prac_easy": "placebo: 256 envs practise mass 3x, CoM 3x, joint 3x -- the channels the sweep found nearly free.",
    "prac_push": "bottleneck: 256 envs practise push 3x -- the binding channel.",
-   "prac_pushfric": "interaction: 256 envs practise push 2x with friction 1.5x together."
+   "prac_pushfric": "both factors at the SAME levels the single-factor arms use, so the interaction is estimable",
+   "prac_fric": "the second factor alone: 256 envs practise friction at 1.5x"
   }
  },
  "levels_are_measured_not_chosen": {
@@ -64,11 +65,12 @@
     "ch_mass_300",
     "ch_com_300",
     "ch_joint_300",
-    "ch_push_fric_200_150"
+    "ch_fric_150",
+    "ch_push_fric_300_150"
    ],
    "above_every_practised_level": [
     "ch_push_350",
-    "ch_push_fric_300_150"
+    "ch_push_fric_350_150"
    ],
    "untouched_channel": [
     "ch_fric_150"
@@ -86,7 +88,7 @@
  "decision_rules_frozen_before_outcomes": {
   "R1_is_the_bottleneck_learnable": "prac_push minus prac_null at ch_push_300 >= +5.0 pts means push failure is a practice deficit and targeted practice repairs it. |delta| < 2.0 means it is NOT a practice deficit at this budget: no allocation scheduler can fix push by exposure, and the range-expansion direction loses its main justification.",
   "R2_does_targeting_matter": "prac_push minus prac_easy on the broad-suite macro average >= +5.0 pts means where you practise matters. A tie or a loss means extra exposure helps wherever it is aimed and the channel-selection machinery is unnecessary.",
-  "R3_do_combinations_need_their_own_practice": "prac_pushfric minus prac_push at ch_push_fric_300_150 >= +5.0 pts means practising a combination buys something beyond practising the single channel. Otherwise the joint-corner component is unnecessary and is dropped.",
+  "R3_do_combinations_need_their_own_practice": "R3a: prac_pushfric minus prac_push at ch_push_fric_350_150 >= +5.0 pts means adding friction practice to push practice buys something. R3b (the interaction): (pushfric - null) - [(push - null) + (fric - null)] at the same cell >= +5.0 pts means the pair is super-additive, which is what a joint-corner component would be for. Additive within the margin means that component has nothing to add here.",
   "R4_no_hidden_trade_off": "any arm that gains on its target while losing more than 2.0 pts against prac_null at phys_000 or phys_100 is reported as a trade-off, not an improvement.",
   "R5_more_training_alone": "prac_null minus the origin on the broad suite is the effect of continuing to train. Every treatment effect is reported against prac_null, never against the origin.",
   "R6_generalization_beyond_the_practised_range": "an arm claims generalization only from cells above its own practised level (ch_push_350, ch_push_fric_300_150).",
@@ -118,9 +120,9 @@
  ],
  "cost_estimate_gpu_hours": {
   "per_arm": 1.0,
-  "arms": 5,
-  "scoring": 0.6,
-  "total": 5.6
+  "arms": 6,
+  "scoring": 0.7,
+  "total": 6.7
  },
  "implementation": {
   "curriculum": "gear_sonic/research/practice_utility/dr_curriculum.py, practice_vectors_json: an explicit per-stratum vector of channel intensities, parsed once, never moved during a run, with no signal input and no path that can contract anything",
@@ -128,5 +130,33 @@
   "cells": "scripts/practice_utility/run_curriculum_robustness_eval.py, ch_push_350 and PRESET_PAIR",
   "tests": "tests/practice_utility/test_practice_allocation.py",
   "driver": "tools/run_practice_allocation_screen.sh"
- }
+ },
+ "amendments": [
+  {
+   "id": "A1-A4",
+   "date": "2026-09-03",
+   "made_before_any_arm_was_trained": true,
+   "trigger": "advisor review 2026-09-03: give each claimed mechanism a comparison that could show it is unnecessary, and check the readout's missing-data behaviour",
+   "A1_interaction_is_now_estimable": {
+    "was": "prac_pushfric practised push at 2.0 while prac_push practised it at 3.0, so their difference mixed 'add friction' with 'lower the push dose' and compared recipes",
+    "now": "prac_pushfric practises push at 3.0 (the same level as prac_push) and friction at 1.5 (the same level as the new prac_fric arm). {null, push, fric, pushfric} is a 2x2 on {push practice, friction practice}",
+    "new_arm": "prac_fric practises friction at 1.5 alone",
+    "new_cell": "ch_push_fric_350_150, above the corner the combination arm practises, so it stays held out for it",
+    "cost": "one extra arm, about 1 GPU-h; total about 6.6"
+   },
+   "A2_a_negative_result_is_bounded": {
+    "rule": "R1 and R2 negatives reject THIS allocation at THIS origin, budget and dose. They do not establish that any scheduler, any dose, or any origin would fail, and the readout and the paper must say so.",
+    "why": "the screen fixes the practised level, the share, the budget and the starting policy; each is a parameter of the result, not a property of allocation in general"
+   },
+   "A3_readout_missing_data_rules": {
+    "macro_denominator": "macro averages are taken only over cells present for EVERY compared branch; branches missing a cell are listed and the denominator is reported, so a branch cannot look better by missing its hardest cell",
+    "unknown_exposure": "a branch whose realized exposure was not recorded gets support 'unknown' for every widened cell, never 'held out'; those cells are excluded from generalization claims on both sides",
+    "implemented_in": "tools/analyze_practice_allocation.py"
+   },
+   "A4_equivalence_language": {
+    "rule": "a preregistered tolerance rule passing is a decision, not a demonstration of equivalence. Wherever this screen reports 'within margin', it also reports the one-sided interval and says whether it lies inside the margin.",
+    "worked_example": "the three-seed never-shrink comparison passes its rule with mean +0.60 pts, and its one-sided 95% lower bound is -3.19 pts, outside the 2-point margin"
+   }
+  }
+ ]
 }

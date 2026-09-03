@@ -15,7 +15,8 @@
 #   prac_null      768 / 256 both at lambda 1 (the matched control: dispatcher on, content same)
 #   prac_easy      256 practise mass 3x, CoM 3x, joint 3x   (already manageable: 0.949 / 0.988 / 0.990)
 #   prac_push      256 practise push 3x                     (the bottleneck: 0.746)
-#   prac_pushfric  256 practise push 2x with friction 1.5x  (cheap alone: 0.912 and 0.973)
+#   prac_fric      256 practise friction 1.5x                (cheap alone: 0.973)
+#   prac_pushfric  256 practise BOTH, at the same levels      (so the 2x2 interaction is estimable)
 #
 # The levels are read off the measured single-channel sweep, so "difficult"
 # means a measured success level rather than an intuition.
@@ -25,7 +26,7 @@
 # cells ABOVE every level any branch practises. The origin is scored too, so
 # improvement is measured against the starting point as well as the control.
 #
-# Cost: 5 x ~1.0 GPU-h serial, then ~0.6 GPU-h scoring. Single seed: this ranks
+# Cost: 6 x ~1.0 GPU-h serial, then ~0.7 GPU-h scoring. Single seed: this ranks
 # designs, it does not decide.
 #
 # usage: run_practice_allocation_screen.sh [--execute] [--arms a b ...] [--seed N]
@@ -48,7 +49,7 @@ readonly PREREG="/home/linjiw/lucid/receipts/manifests/lucid_practice_allocation
 
 EXECUTE=0
 SEED=8600
-ARMS=(prac_null prac_push prac_easy prac_pushfric fixed)
+ARMS=(prac_null prac_push prac_fric prac_pushfric prac_easy fixed)
 while [[ $# -gt 0 ]]; do
     case "$1" in
         --execute) EXECUTE=1; shift ;;

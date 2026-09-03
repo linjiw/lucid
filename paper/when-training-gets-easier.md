@@ -17,9 +17,11 @@ across all twelve runs, terminal return and robustness are inversely ranked (Spe
 −0.73). One collapsed run scores 14.2 success-AUC points below fixed domain randomization
 on the same seed. To prevent shrinkage we test a rule that allows training ranges to expand
 or stay fixed but never shrink. Across three seeds it blocked all 2,033 requested reductions,
-and its robustness was within a preregistered margin of fixed domain randomization (mean
-difference +0.60 points, sample standard deviation 2.25), which establishes noninferiority
-and not an advantage. An audit of five candidate readiness signals shows that time-out
+and its robustness satisfied a preregistered tolerance rule against fixed domain randomization
+(mean difference +0.60 points, sample standard deviation 2.25). Three seeds do not establish
+equivalence: the one-sided 95% lower bound on that difference is −3.19 points, outside the
+2-point margin, so the rule passing is a decision, not a demonstration that the two are
+equally robust. An audit of five candidate readiness signals shows that time-out
 survival tracks competence while the learned mismatch signal used by the collapsing
 curriculum does not. Replaying the exported policies in MuJoCo with independently
 implemented randomization preserves the ordering: beyond the training envelope, both
@@ -28,8 +30,9 @@ survives 16% and an unrandomized policy 3%. A prototype that tests proposed cond
 before expanding raised the training-range scale from 1.0 to 1.5 in four steps. Finally we
 measure whether a curriculum could allocate practice by learning progress, as recent
 multi-dimensional curricula do: from scratch the progress signal is clear, but once the
-policy is competent it falls to between 0.01 and 0.08 of its own noise floor, and closing
-that gap would need roughly 170 times the episodes per decision window. Whether adaptive
+policy is competent it falls to between 0.01 and 0.08 of its own noise floor, no cohort meets
+our reliability criterion at any window width we can afford, and closing the gap would need
+roughly 170 times the episodes per decision window. Whether adaptive
 expansion improves robustness over a preset schedule remains open; the present results
 show why better policies must be distinguished from easier training.
 
@@ -210,10 +213,17 @@ of fixed randomization on at least two of three paired seeds.
 
 All four components pass on all three seeds (frontier success +0.60, in-envelope success
 +0.07, frontier progress +0.50, in-envelope progress +0.01). Two seeds favour fixed
-randomization slightly. The supported claim is exact: with shrinkage removed, the adaptive
-controller trains a policy equivalent to fixed randomization within the declared margins.
-It does not train a better one. Retaining the ranges also does not by itself guarantee that
-the policy retains its skills; that is what Table 2 measures.
+randomization slightly.
+
+**What that does and does not establish.** The rule was fixed before the data and it passed;
+that is the decision it was written to make. It is not a demonstration of equivalence. With
+three seeds and a paired standard deviation of 2.25 points, the one-sided 95% lower bound on
+the frontier-success difference is −3.19 points, which lies outside the 2-point margin. A
+proper equivalence claim needs enough seeds for the interval to sit inside the margin, and we
+do not have them. The supported statement is narrower: removing shrinkage did not cost
+measurable robustness in this experiment, and it did not add any. Retaining the ranges also
+does not by itself guarantee that the policy retains its skills; that is what Table 2
+measures.
 
 **Why it ties.** Training telemetry records how many episodes each training
 cohort ran and at what intensity, so realized practice can be counted rather than
@@ -340,7 +350,14 @@ branch trains on more episodes than another.
 | Matched control | the envelope, like every other environment | — |
 | Manageable channels | mass, center of mass, joint offset at 3× | 0.949 / 0.988 / 0.990 |
 | The bottleneck | pushes at 3× | 0.746 |
-| The combination | pushes at 2× with friction at 1.5× | 0.912 and 0.973 alone |
+| The second factor | friction at 1.5× | 0.973 |
+| Both factors | pushes at 3× with friction at 1.5× | — |
+
+The last three branches share their levels exactly, so the four branches without
+the manageable-channel placebo form a two-by-two on push practice and friction
+practice. That makes the interaction estimable: whether practising the pair buys
+more than practising each part is a difference of differences, not a comparison
+between two different recipes.
 
 The practised levels are read off Section 7 rather than chosen, so "difficult"
 means a measured success level. Every branch is scored on one frozen thirteen
@@ -362,9 +379,13 @@ level does not move push, then push failure is not a practice deficit, no
 allocation scheduler can repair it by exposure, and the expansion direction
 loses its justification. If practising the manageable channels helps as much as
 practising the bottleneck, then extra exposure helps wherever it is aimed and
-choosing channels buys nothing. If practising the combination does not beat
-practising the channel alone above the practised corner, the combination test is
-dropped.
+choosing channels buys nothing. If the pair is additive within the margin above the practised
+corner, a component that exists to protect combinations has nothing to add here.
+
+A negative result is bounded. It rejects this allocation at this starting policy,
+this budget, and this practised dose. It does not establish that some other
+scheduler, dose, or origin would also fail, and we do not report it as though it
+did.
 
 ### 9.3 What a curriculum would have to ask, and what that costs — Measured
 
@@ -389,10 +410,14 @@ iterations and the sign of the local trend is reliable once the window reaches
 envelope, which is the state any expansion curriculum operates in, the whole
 1,590-iteration window moves each cohort by between −1.2 and +3.6 points, and the
 local trend sits between 0.01 and 0.08 times its own noise floor at a 100
-iteration window. The sign agrees with the window's own trend 42 to 68 percent of
-the time, which is a coin flip. On the largest cohort, closing that gap would take
-roughly 170 times the episodes per window: about 14,000 episodes per iteration, or
-a window of about 17,000 iterations at present cohort sizes.
+iteration window. Sign agreement runs from 0.42 to 0.63 at a 100-iteration window
+and from 0.42 to 0.83 at 400 iterations, so widening the window does recover some
+agreement. It does not make the estimate usable: our reliability criterion asks
+for agreement of at least 0.80 together with a trend above the noise floor on at
+least half the windows, and no cohort meets both at any width, the best clearing
+the floor on 42 percent of its windows. On the largest cohort, closing that gap
+would take roughly 170 times the episodes per window: about 14,000 episodes per
+iteration, or a window of about 17,000 iterations at present cohort sizes.
 
 This is not an estimator defect. A competent policy's episode-end survival at a
 fixed condition is flat within noise, so there is little left to detect, and one
@@ -425,14 +450,21 @@ formally inside the training support while being practised much less than
 before. Counting the episodes each cohort actually ran, at the intensity it ran
 them, separates the two.
 
+Exposure is counted in environment-iterations: each iteration, every environment
+in a cohort trains for the same rollout length at that cohort's intensity. That
+unit is available for every arm and does not depend on episode length. Counting
+episodes instead is not comparable, because a harder cohort ends more and shorter
+episodes and an incompetent policy ends far more of them than a competent one, so
+an episode share is driven by episode length as much as by practice.
+
 | Run | At the envelope | Above 1.4 | At or below the envelope |
 |---|---:|---:|---:|
 | Fixed randomization | 100.0% | 0.0% | 100.0% |
 | Never-shrink | 99.2% | 0.0% | 100.0% |
-| Probe gate that reached 1.5 | 41.5% | 13.7% | 63.1% |
+| Probe gate that reached 1.5 | 28.6% | 21.5% | 49.6% |
 
-The gate reports a final range of 1.5 and spent 13.7 percent of its training
-exposure above 1.4. It also spent 41.5 percent at the envelope, where fixed
+The gate reports a final range of 1.5 and spent 21.5 percent of its training
+exposure above 1.4. It also spent 28.6 percent at the envelope, where fixed
 randomization spends 100 percent. The frontier practice was bought with envelope
 practice rather than added to it, which is a direct explanation for expansion
 arms tying fixed randomization rather than beating it: with the environment count
