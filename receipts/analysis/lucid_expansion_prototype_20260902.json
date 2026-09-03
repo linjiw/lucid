@@ -1,0 +1,916 @@
+{
+  "kind": "lucid_expansion_prototype_readout",
+  "schema_version": 1,
+  "threshold": 0.03,
+  "scoring_dirs": [
+    "/home/linjiw/lucid-sonic/manifests/expansion_prototype_scoring_20260902_132410",
+    "/home/linjiw/lucid-sonic/manifests/expansion_prototype_scoring_20260902_192754",
+    "/home/linjiw/lucid-sonic/manifests/expansion_prototype_scoring_20260902_222807",
+    "/home/linjiw/lucid-sonic/manifests/expansion_prototype_scoring_20260902_224033"
+  ],
+  "cells_found": 112,
+  "arms": {
+    "box_150": {
+      "seed": 8600,
+      "complete": true,
+      "checkpoint": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260902_072800/seed_8600/box_150/final_checkpoint.pt",
+      "training_receipt": "/home/linjiw/lucid-sonic/manifests/expansion_prototype_20260902_072758/curriculum_comparison_ne1024_20260902_072800.json",
+      "mechanism": {
+        "mode": "box_150",
+        "rows": 2000,
+        "lambda_first": 1.0,
+        "lambda_final": 1.375,
+        "lambda_max": 1.375,
+        "scalar_decreases_in_trace": 0,
+        "applied_decrease_flags": 0,
+        "guard_trip_iterations": 16,
+        "fired": [
+          [
+            110,
+            "add_joint_default_pos",
+            1.125
+          ],
+          [
+            210,
+            "base_com",
+            1.125
+          ],
+          [
+            310,
+            "physics_material",
+            1.125
+          ],
+          [
+            410,
+            "push_robot",
+            1.125
+          ],
+          [
+            510,
+            "randomize_action_delay",
+            1.125
+          ],
+          [
+            610,
+            "randomize_rigid_body_mass",
+            1.125
+          ],
+          [
+            710,
+            "add_joint_default_pos",
+            1.25
+          ],
+          [
+            810,
+            "base_com",
+            1.25
+          ],
+          [
+            910,
+            "physics_material",
+            1.25
+          ],
+          [
+            1010,
+            "push_robot",
+            1.25
+          ],
+          [
+            1110,
+            "randomize_action_delay",
+            1.25
+          ],
+          [
+            1210,
+            "randomize_rigid_body_mass",
+            1.25
+          ],
+          [
+            1310,
+            "add_joint_default_pos",
+            1.375
+          ],
+          [
+            1410,
+            "base_com",
+            1.375
+          ],
+          [
+            1510,
+            "physics_material",
+            1.375
+          ],
+          [
+            1610,
+            "push_robot",
+            1.375
+          ],
+          [
+            1710,
+            "randomize_action_delay",
+            1.375
+          ],
+          [
+            1810,
+            "randomize_rigid_body_mass",
+            1.375
+          ]
+        ],
+        "expansions": 18,
+        "first_fire_iteration": 110,
+        "frontier_vector_final": {
+          "add_joint_default_pos": 1.375,
+          "base_com": 1.375,
+          "physics_material": 1.375,
+          "push_robot": 1.375,
+          "randomize_action_delay": 1.375,
+          "randomize_rigid_body_mass": 1.375
+        },
+        "channel_expansions": {
+          "add_joint_default_pos": 3,
+          "base_com": 3,
+          "physics_material": 3,
+          "push_robot": 3,
+          "randomize_action_delay": 3,
+          "randomize_rigid_body_mass": 3
+        },
+        "channel_visits": {
+          "add_joint_default_pos": 4,
+          "base_com": 3,
+          "physics_material": 3,
+          "push_robot": 3,
+          "randomize_action_delay": 3,
+          "randomize_rigid_body_mass": 3
+        },
+        "channels_visited": 6,
+        "vector_decreases_in_trace": 0,
+        "withheld_counts": {
+          "window_not_full": 1874,
+          "null": 18,
+          "guard_freeze": 98
+        },
+        "stalled": false
+      },
+      "cells": {
+        "phys_100": 0.99609375,
+        "phys_125": 0.98046875,
+        "phys_150": 0.947265625,
+        "phys_175": 0.9140625,
+        "phys_200": 0.87109375,
+        "phys_250": null,
+        "phys_300": null,
+        "ch_fric_150": 0.98046875,
+        "ch_fric_200": 0.982421875,
+        "ch_mass_200": 0.990234375,
+        "ch_mass_300": 0.96484375,
+        "ch_com_200": 0.9921875,
+        "ch_com_300": 0.98828125,
+        "ch_joint_200": 0.98828125,
+        "ch_joint_300": 0.99609375,
+        "ch_push_200": 0.91796875,
+        "ch_push_300": 0.787109375
+      },
+      "primary_phys175_200": 0.892578125,
+      "wide_corner_phys250_300": null,
+      "asym_primary_mass_com_joint_3x": 0.9830729166666666,
+      "push_2x_3x": 0.8525390625,
+      "in_support_labelled": [
+        "phys_100",
+        "phys_125",
+        "phys_150"
+      ]
+    },
+    "gate_150": {
+      "seed": 8600,
+      "complete": true,
+      "checkpoint": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260902_072800/seed_8600/gate_150/final_checkpoint.pt",
+      "training_receipt": "/home/linjiw/lucid-sonic/manifests/expansion_prototype_20260902_072758/curriculum_comparison_ne1024_20260902_072800.json",
+      "mechanism": {
+        "mode": "gate_150",
+        "rows": 2000,
+        "lambda_first": 1.0,
+        "lambda_final": 1.5,
+        "lambda_max": 1.5,
+        "scalar_decreases_in_trace": 0,
+        "applied_decrease_flags": 0,
+        "guard_trip_iterations": 1423,
+        "fired": [
+          [
+            110,
+            1.0,
+            1.125
+          ],
+          [
+            210,
+            1.125,
+            1.25
+          ],
+          [
+            310,
+            1.25,
+            1.375
+          ],
+          [
+            410,
+            1.375,
+            1.5
+          ]
+        ],
+        "expansions": 4,
+        "first_fire_iteration": 110
+      },
+      "cells": {
+        "phys_100": 0.994140625,
+        "phys_125": 0.984375,
+        "phys_150": 0.953125,
+        "phys_175": 0.947265625,
+        "phys_200": 0.916015625,
+        "phys_250": null,
+        "phys_300": null,
+        "ch_fric_150": 0.986328125,
+        "ch_fric_200": 0.98828125,
+        "ch_mass_200": 0.98828125,
+        "ch_mass_300": 0.990234375,
+        "ch_com_200": 0.984375,
+        "ch_com_300": 0.994140625,
+        "ch_joint_200": 0.990234375,
+        "ch_joint_300": 0.984375,
+        "ch_push_200": 0.95703125,
+        "ch_push_300": 0.83984375
+      },
+      "primary_phys175_200": 0.931640625,
+      "wide_corner_phys250_300": null,
+      "asym_primary_mass_com_joint_3x": 0.9895833333333334,
+      "push_2x_3x": 0.8984375,
+      "in_support_labelled": [
+        "phys_100",
+        "phys_125",
+        "phys_150"
+      ]
+    },
+    "box_asym": {
+      "seed": 8600,
+      "complete": true,
+      "checkpoint": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260902_072800/seed_8600/box_asym/final_checkpoint.pt",
+      "training_receipt": "/home/linjiw/lucid-sonic/manifests/expansion_prototype_20260902_072758/curriculum_comparison_ne1024_20260902_072800.json",
+      "mechanism": {
+        "mode": "box_asym",
+        "rows": 2000,
+        "lambda_first": 1.0,
+        "lambda_final": 1.375,
+        "lambda_max": 1.375,
+        "scalar_decreases_in_trace": 0,
+        "applied_decrease_flags": 0,
+        "guard_trip_iterations": 16,
+        "fired": [
+          [
+            110,
+            "add_joint_default_pos",
+            1.125
+          ],
+          [
+            210,
+            "base_com",
+            1.125
+          ],
+          [
+            310,
+            "physics_material",
+            1.125
+          ],
+          [
+            410,
+            "push_robot",
+            1.125
+          ],
+          [
+            510,
+            "randomize_action_delay",
+            1.125
+          ],
+          [
+            610,
+            "randomize_rigid_body_mass",
+            1.125
+          ],
+          [
+            710,
+            "add_joint_default_pos",
+            1.25
+          ],
+          [
+            810,
+            "base_com",
+            1.25
+          ],
+          [
+            910,
+            "physics_material",
+            1.25
+          ],
+          [
+            1010,
+            "push_robot",
+            1.25
+          ],
+          [
+            1110,
+            "randomize_action_delay",
+            1.25
+          ],
+          [
+            1210,
+            "randomize_rigid_body_mass",
+            1.25
+          ],
+          [
+            1310,
+            "add_joint_default_pos",
+            1.375
+          ],
+          [
+            1410,
+            "base_com",
+            1.375
+          ],
+          [
+            1510,
+            "physics_material",
+            1.375
+          ],
+          [
+            1610,
+            "push_robot",
+            1.375
+          ],
+          [
+            1710,
+            "randomize_action_delay",
+            1.375
+          ],
+          [
+            1810,
+            "randomize_rigid_body_mass",
+            1.375
+          ]
+        ],
+        "expansions": 18,
+        "first_fire_iteration": 110,
+        "frontier_vector_final": {
+          "add_joint_default_pos": 1.375,
+          "base_com": 1.375,
+          "physics_material": 1.375,
+          "push_robot": 1.375,
+          "randomize_action_delay": 1.375,
+          "randomize_rigid_body_mass": 1.375
+        },
+        "channel_expansions": {
+          "add_joint_default_pos": 3,
+          "base_com": 3,
+          "physics_material": 3,
+          "push_robot": 3,
+          "randomize_action_delay": 3,
+          "randomize_rigid_body_mass": 3
+        },
+        "channel_visits": {
+          "add_joint_default_pos": 4,
+          "base_com": 3,
+          "physics_material": 3,
+          "push_robot": 3,
+          "randomize_action_delay": 3,
+          "randomize_rigid_body_mass": 3
+        },
+        "channels_visited": 6,
+        "vector_decreases_in_trace": 0,
+        "withheld_counts": {
+          "window_not_full": 1874,
+          "null": 18,
+          "guard_freeze": 98
+        },
+        "stalled": false
+      },
+      "cells": {
+        "phys_100": 0.99609375,
+        "phys_125": 0.98046875,
+        "phys_150": 0.947265625,
+        "phys_175": 0.9140625,
+        "phys_200": 0.87109375,
+        "phys_250": null,
+        "phys_300": null,
+        "ch_fric_150": 0.98046875,
+        "ch_fric_200": 0.982421875,
+        "ch_mass_200": 0.990234375,
+        "ch_mass_300": 0.96484375,
+        "ch_com_200": 0.9921875,
+        "ch_com_300": 0.98828125,
+        "ch_joint_200": 0.98828125,
+        "ch_joint_300": 0.99609375,
+        "ch_push_200": 0.91796875,
+        "ch_push_300": 0.787109375
+      },
+      "primary_phys175_200": 0.892578125,
+      "wide_corner_phys250_300": null,
+      "asym_primary_mass_com_joint_3x": 0.9830729166666666,
+      "push_2x_3x": 0.8525390625,
+      "in_support_labelled": [
+        "phys_100",
+        "phys_125",
+        "phys_150",
+        "phys_175",
+        "phys_200"
+      ]
+    },
+    "ramp_asym": {
+      "seed": 8600,
+      "complete": true,
+      "checkpoint": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260902_175835/seed_8600/ramp_asym/final_checkpoint.pt",
+      "training_receipt": "/home/linjiw/lucid-sonic/manifests/expansion_prototype_20260902_175833/curriculum_comparison_ne1024_20260902_175835.json",
+      "mechanism": {
+        "mode": "ramp_asym",
+        "rows": 2000,
+        "lambda_first": 1.0066666666666666,
+        "lambda_final": 2.0,
+        "lambda_max": 2.0,
+        "scalar_decreases_in_trace": 0,
+        "applied_decrease_flags": 0,
+        "guard_trip_iterations": 0,
+        "fired": [],
+        "expansions": 0,
+        "first_fire_iteration": null
+      },
+      "cells": {
+        "phys_100": 0.99609375,
+        "phys_125": 0.98046875,
+        "phys_150": 0.97265625,
+        "phys_175": 0.91015625,
+        "phys_200": 0.931640625,
+        "phys_250": 0.83984375,
+        "phys_300": 0.701171875,
+        "ch_fric_150": 0.9921875,
+        "ch_fric_200": 0.9921875,
+        "ch_mass_200": 0.9921875,
+        "ch_mass_300": 0.982421875,
+        "ch_com_200": 0.986328125,
+        "ch_com_300": 0.98828125,
+        "ch_joint_200": 0.98046875,
+        "ch_joint_300": 0.990234375,
+        "ch_push_200": 0.921875,
+        "ch_push_300": 0.83984375
+      },
+      "primary_phys175_200": 0.9208984375,
+      "wide_corner_phys250_300": 0.7705078125,
+      "asym_primary_mass_com_joint_3x": 0.9869791666666666,
+      "push_2x_3x": 0.880859375,
+      "in_support_labelled": [
+        "phys_100",
+        "phys_125",
+        "phys_150",
+        "phys_175",
+        "phys_200"
+      ]
+    },
+    "fixed_150": {
+      "seed": 8600,
+      "complete": true,
+      "checkpoint": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260902_072800/seed_8600/fixed_150/final_checkpoint.pt",
+      "training_receipt": "/home/linjiw/lucid-sonic/manifests/expansion_prototype_20260902_072758/curriculum_comparison_ne1024_20260902_072800.json",
+      "mechanism": {
+        "mode": "fixed_150",
+        "rows": 2000,
+        "lambda_first": 1.5,
+        "lambda_final": 1.5,
+        "lambda_max": 1.5,
+        "scalar_decreases_in_trace": 0,
+        "applied_decrease_flags": 0,
+        "guard_trip_iterations": 0,
+        "fired": [],
+        "expansions": 0,
+        "first_fire_iteration": null
+      },
+      "cells": {
+        "phys_100": 0.9921875,
+        "phys_125": 0.986328125,
+        "phys_150": 0.98046875,
+        "phys_175": 0.96484375,
+        "phys_200": 0.904296875,
+        "phys_250": null,
+        "phys_300": null,
+        "ch_fric_150": 0.994140625,
+        "ch_fric_200": 0.990234375,
+        "ch_mass_200": 0.994140625,
+        "ch_mass_300": 0.98828125,
+        "ch_com_200": 0.986328125,
+        "ch_com_300": 0.990234375,
+        "ch_joint_200": 0.9921875,
+        "ch_joint_300": 0.98828125,
+        "ch_push_200": 0.947265625,
+        "ch_push_300": 0.80859375
+      },
+      "primary_phys175_200": 0.9345703125,
+      "wide_corner_phys250_300": null,
+      "asym_primary_mass_com_joint_3x": 0.9889322916666666,
+      "push_2x_3x": 0.8779296875,
+      "in_support_labelled": [
+        "phys_100",
+        "phys_125",
+        "phys_150"
+      ]
+    },
+    "ramp_150": {
+      "seed": 8600,
+      "complete": true,
+      "checkpoint": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260902_132054/seed_8600/ramp_150/final_checkpoint.pt",
+      "training_receipt": "/home/linjiw/lucid-sonic/manifests/expansion_prototype_20260902_132052/curriculum_comparison_ne1024_20260902_132054.json",
+      "mechanism": {
+        "mode": "ramp_150",
+        "rows": 2000,
+        "lambda_first": 1.0033333333333334,
+        "lambda_final": 1.5,
+        "lambda_max": 1.5,
+        "scalar_decreases_in_trace": 0,
+        "applied_decrease_flags": 0,
+        "guard_trip_iterations": 0,
+        "fired": [],
+        "expansions": 0,
+        "first_fire_iteration": null
+      },
+      "cells": {
+        "phys_100": 0.990234375,
+        "phys_125": 0.984375,
+        "phys_150": 0.94921875,
+        "phys_175": null,
+        "phys_200": null,
+        "phys_250": null,
+        "phys_300": null,
+        "ch_fric_150": null,
+        "ch_fric_200": null,
+        "ch_mass_200": null,
+        "ch_mass_300": null,
+        "ch_com_200": null,
+        "ch_com_300": null,
+        "ch_joint_200": null,
+        "ch_joint_300": null,
+        "ch_push_200": null,
+        "ch_push_300": null
+      },
+      "primary_phys175_200": null,
+      "wide_corner_phys250_300": null,
+      "asym_primary_mass_com_joint_3x": null,
+      "push_2x_3x": null,
+      "in_support_labelled": [
+        "phys_100",
+        "phys_125",
+        "phys_150"
+      ]
+    },
+    "fixed": {
+      "seed": 8600,
+      "complete": true,
+      "checkpoint": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260902_132054/seed_8600/fixed/final_checkpoint.pt",
+      "training_receipt": "/home/linjiw/lucid-sonic/manifests/expansion_prototype_20260902_132052/curriculum_comparison_ne1024_20260902_132054.json",
+      "mechanism": {
+        "mode": "fixed",
+        "rows": 2000,
+        "lambda_first": 1.0,
+        "lambda_final": 1.0,
+        "lambda_max": 1.0,
+        "scalar_decreases_in_trace": 0,
+        "applied_decrease_flags": 0,
+        "guard_trip_iterations": 0,
+        "fired": [],
+        "expansions": 0,
+        "first_fire_iteration": null
+      },
+      "cells": {
+        "phys_100": 0.98828125,
+        "phys_125": 0.98046875,
+        "phys_150": null,
+        "phys_175": null,
+        "phys_200": null,
+        "phys_250": null,
+        "phys_300": null,
+        "ch_fric_150": null,
+        "ch_fric_200": null,
+        "ch_mass_200": null,
+        "ch_mass_300": null,
+        "ch_com_200": null,
+        "ch_com_300": null,
+        "ch_joint_200": null,
+        "ch_joint_300": null,
+        "ch_push_200": null,
+        "ch_push_300": null
+      },
+      "primary_phys175_200": null,
+      "wide_corner_phys250_300": null,
+      "asym_primary_mass_com_joint_3x": null,
+      "push_2x_3x": null,
+      "in_support_labelled": [
+        "phys_100",
+        "phys_125",
+        "phys_150"
+      ]
+    },
+    "fixed_asym": {
+      "seed": 8600,
+      "complete": true,
+      "checkpoint": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260902_132054/seed_8600/fixed_asym/final_checkpoint.pt",
+      "training_receipt": "/home/linjiw/lucid-sonic/manifests/expansion_prototype_20260902_132052/curriculum_comparison_ne1024_20260902_132054.json",
+      "mechanism": {
+        "mode": "fixed_asym",
+        "rows": 2000,
+        "lambda_first": 2.0,
+        "lambda_final": 2.0,
+        "lambda_max": 2.0,
+        "scalar_decreases_in_trace": 0,
+        "applied_decrease_flags": 0,
+        "guard_trip_iterations": 0,
+        "fired": [],
+        "expansions": 0,
+        "first_fire_iteration": null
+      },
+      "cells": {
+        "phys_100": 0.984375,
+        "phys_125": 0.97265625,
+        "phys_150": null,
+        "phys_175": null,
+        "phys_200": null,
+        "phys_250": null,
+        "phys_300": null,
+        "ch_fric_150": null,
+        "ch_fric_200": null,
+        "ch_mass_200": null,
+        "ch_mass_300": null,
+        "ch_com_200": null,
+        "ch_com_300": null,
+        "ch_joint_200": null,
+        "ch_joint_300": null,
+        "ch_push_200": null,
+        "ch_push_300": null
+      },
+      "primary_phys175_200": null,
+      "wide_corner_phys250_300": null,
+      "asym_primary_mass_com_joint_3x": null,
+      "push_2x_3x": null,
+      "in_support_labelled": [
+        "phys_100",
+        "phys_125",
+        "phys_150",
+        "phys_175",
+        "phys_200"
+      ]
+    },
+    "gate_300": {
+      "seed": 8600,
+      "complete": true,
+      "checkpoint": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260902_193802/seed_8600/gate_300/final_checkpoint.pt",
+      "training_receipt": "/home/linjiw/lucid-sonic/manifests/expansion_prototype_20260902_193801/curriculum_comparison_ne1024_20260902_193802.json",
+      "mechanism": {
+        "mode": "gate_300",
+        "rows": 2000,
+        "lambda_first": 1.0,
+        "lambda_final": 1.5,
+        "lambda_max": 1.5,
+        "scalar_decreases_in_trace": 0,
+        "applied_decrease_flags": 0,
+        "guard_trip_iterations": 1465,
+        "fired": [
+          [
+            110,
+            1.0,
+            1.125
+          ],
+          [
+            210,
+            1.125,
+            1.25
+          ],
+          [
+            310,
+            1.25,
+            1.375
+          ],
+          [
+            410,
+            1.375,
+            1.5
+          ]
+        ],
+        "expansions": 4,
+        "first_fire_iteration": 110
+      },
+      "cells": {
+        "phys_100": 0.984375,
+        "phys_125": 0.9765625,
+        "phys_150": 0.9453125,
+        "phys_175": 0.92578125,
+        "phys_200": 0.91015625,
+        "phys_250": 0.8125,
+        "phys_300": 0.65234375,
+        "ch_fric_150": 0.984375,
+        "ch_fric_200": 0.986328125,
+        "ch_mass_200": 0.984375,
+        "ch_mass_300": 0.970703125,
+        "ch_com_200": 0.9765625,
+        "ch_com_300": 0.98828125,
+        "ch_joint_200": 0.982421875,
+        "ch_joint_300": null,
+        "ch_push_200": null,
+        "ch_push_300": null
+      },
+      "primary_phys175_200": 0.91796875,
+      "wide_corner_phys250_300": 0.732421875,
+      "asym_primary_mass_com_joint_3x": null,
+      "push_2x_3x": null,
+      "in_support_labelled": [
+        "phys_100",
+        "phys_125",
+        "phys_150"
+      ]
+    },
+    "fixed_300": {
+      "seed": 8600,
+      "complete": true,
+      "checkpoint": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260902_193802/seed_8600/fixed_300/final_checkpoint.pt",
+      "training_receipt": "/home/linjiw/lucid-sonic/manifests/expansion_prototype_20260902_193801/curriculum_comparison_ne1024_20260902_193802.json",
+      "mechanism": {
+        "mode": "fixed_300",
+        "rows": 2000,
+        "lambda_first": 3.0,
+        "lambda_final": 3.0,
+        "lambda_max": 3.0,
+        "scalar_decreases_in_trace": 0,
+        "applied_decrease_flags": 0,
+        "guard_trip_iterations": 0,
+        "fired": [],
+        "expansions": 0,
+        "first_fire_iteration": null
+      },
+      "cells": {
+        "phys_100": 0.95703125,
+        "phys_125": 0.931640625,
+        "phys_150": 0.900390625,
+        "phys_175": 0.85546875,
+        "phys_200": 0.822265625,
+        "phys_250": 0.720703125,
+        "phys_300": 0.556640625,
+        "ch_fric_150": 0.9609375,
+        "ch_fric_200": 0.96875,
+        "ch_mass_200": 0.958984375,
+        "ch_mass_300": 0.951171875,
+        "ch_com_200": 0.96484375,
+        "ch_com_300": 0.96484375,
+        "ch_joint_200": 0.9609375,
+        "ch_joint_300": null,
+        "ch_push_200": null,
+        "ch_push_300": null
+      },
+      "primary_phys175_200": 0.8388671875,
+      "wide_corner_phys250_300": 0.638671875,
+      "asym_primary_mass_com_joint_3x": null,
+      "push_2x_3x": null,
+      "in_support_labelled": [
+        "phys_100",
+        "phys_125",
+        "phys_150"
+      ]
+    }
+  },
+  "rules": {
+    "R1_box_vs_gate_primary": {
+      "delta": -0.0390625,
+      "verdict": "box shelved; diagnose frontier_vector offline"
+    },
+    "R6_box_asym_vs_ramp_asym_asym_primary": {
+      "delta": -0.00390625,
+      "verdict": "no feedback effect on the asymmetric box at this budget"
+    },
+    "R5_width_wins": {
+      "delta": 0.0029296875,
+      "verdict": "scheduling not beaten by plain width by >= 0.03"
+    },
+    "R7_fixed_asym_vs_fixed_150_asym_cells": {
+      "delta": null,
+      "reading": "informational: what widening the cheap channels buys on their own cells"
+    },
+    "R2_gate_vs_ramp_primary": {
+      "delta": null,
+      "reading": "informational at this budget"
+    },
+    "R8_gate_vs_blind_width_wide_corner": {
+      "delta": 0.09375,
+      "verdict": "feedback beats blind width where width is unsafe"
+    },
+    "R9_box_vs_gate_wide_corner": {
+      "delta": null,
+      "verdict": "not scored"
+    },
+    "R11_guard_free_gate_vs_guarded": {
+      "delta": null,
+      "reading": "where the survival probe alone stops; read with the arm's final frontier"
+    },
+    "R10_damage_at_phys_100": {
+      "box_150": {
+        "phys_100": 0.99609375,
+        "verdict": "healthy"
+      },
+      "gate_150": {
+        "phys_100": 0.994140625,
+        "verdict": "healthy"
+      },
+      "box_asym": {
+        "phys_100": 0.99609375,
+        "verdict": "healthy"
+      },
+      "ramp_asym": {
+        "phys_100": 0.99609375,
+        "verdict": "healthy"
+      },
+      "fixed_150": {
+        "phys_100": 0.9921875,
+        "verdict": "healthy"
+      },
+      "ramp_150": {
+        "phys_100": 0.990234375,
+        "verdict": "healthy"
+      },
+      "fixed": {
+        "phys_100": 0.98828125,
+        "verdict": "healthy"
+      },
+      "fixed_asym": {
+        "phys_100": 0.984375,
+        "verdict": "healthy"
+      },
+      "gate_300": {
+        "phys_100": 0.984375,
+        "verdict": "healthy"
+      },
+      "fixed_300": {
+        "phys_100": 0.95703125,
+        "verdict": "DAMAGED"
+      }
+    },
+    "R3_zero_decreases": {
+      "box_150": {
+        "scalar_decreases_in_trace": 0,
+        "vector_decreases_in_trace": 0,
+        "applied_decrease_flags": 0
+      },
+      "gate_150": {
+        "scalar_decreases_in_trace": 0,
+        "vector_decreases_in_trace": null,
+        "applied_decrease_flags": 0
+      },
+      "box_asym": {
+        "scalar_decreases_in_trace": 0,
+        "vector_decreases_in_trace": 0,
+        "applied_decrease_flags": 0
+      },
+      "ramp_asym": {
+        "scalar_decreases_in_trace": 0,
+        "vector_decreases_in_trace": null,
+        "applied_decrease_flags": 0
+      },
+      "fixed_150": {
+        "scalar_decreases_in_trace": 0,
+        "vector_decreases_in_trace": null,
+        "applied_decrease_flags": 0
+      },
+      "ramp_150": {
+        "scalar_decreases_in_trace": 0,
+        "vector_decreases_in_trace": null,
+        "applied_decrease_flags": 0
+      },
+      "fixed": {
+        "scalar_decreases_in_trace": 0,
+        "vector_decreases_in_trace": null,
+        "applied_decrease_flags": 0
+      },
+      "fixed_asym": {
+        "scalar_decreases_in_trace": 0,
+        "vector_decreases_in_trace": null,
+        "applied_decrease_flags": 0
+      },
+      "gate_300": {
+        "scalar_decreases_in_trace": 0,
+        "vector_decreases_in_trace": null,
+        "applied_decrease_flags": 0
+      },
+      "fixed_300": {
+        "scalar_decreases_in_trace": 0,
+        "vector_decreases_in_trace": null,
+        "applied_decrease_flags": 0
+      }
+    },
+    "R3_all_zero": true,
+    "R4_box_mechanism": {
+      "box_150": "expanded",
+      "box_asym": "expanded"
+    }
+  },
+  "caveats": [
+    "single seed; paired noise on the two-cell band ~2.7 points",
+    "warm start from the fixed@s8600 final; from-scratch confirmation is Phase 2's job",
+    "asym arms: phys_175/phys_200 are IN SUPPORT on mass/CoM/joint and are labelled, not gated on"
+  ]
+}

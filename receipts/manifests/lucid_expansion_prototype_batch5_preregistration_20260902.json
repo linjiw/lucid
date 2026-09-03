@@ -1,0 +1,44 @@
+{
+  "kind": "lucid_expansion_prototype_batch5_preregistration",
+  "schema_version": 1,
+  "created_at": "2026-09-02T22:44:40.141220-04:00",
+  "status": "frozen before gate_300_ng has trained; written after the batch-4a readout, which motivates it",
+  "finding_that_motivates_it": {
+    "R8": "gate_300 0.7324 vs fixed_300 0.6387 on the preregistered wide corner {phys_250, phys_300}, delta +0.0938 (>= +0.03). fixed_300 is DAMAGED under R10 (phys_100 0.957 < 0.97; origin 0.994) and scores below the untrained origin on {phys_175, phys_200} despite training AT 3.0, i.e. on that physics.",
+    "the_catch": "gate_300 stopped at frontier 1.5 of a permitted 3.0, but the RELATIVE RETURN GUARD did the stopping, not the survival probe: first trip at iteration 492 (82 iterations after the last expansion), then guard_freeze on 1,509 of 1,990 iterations, while the probe at 1.625 cleared its 0.80 threshold on 67% of iterations (window mean 0.826). From a warm start the guard's reference is the return earned at low difficulty (max 13.32); once difficulty rises the trailing mean (8.17) can never recover to 75% of it, so the guard latches permanently. A relative guard is no better than an absolute one at telling 'harder distribution' from 'policy failing' when its reference predates the difficulty change."
+  },
+  "question": "With the return guard inert, where does the survival probe alone stop a monotone frontier that is permitted to reach 3.0 -- and is that stopping point still safe?",
+  "design": {
+    "arm": "gate_300_ng",
+    "identical_to": "gate_300 in every respect except return_relative_drop 0.99 (guard inert)",
+    "origin": "fixed@s8600 final",
+    "seed": 8600,
+    "num_envs": 1024,
+    "iterations": 2000,
+    "ceiling": 3.0,
+    "latency_cap": 1.5,
+    "gate": "threshold 0.80, window 100, dwell 50, min 200 episodes, step 0.125",
+    "driver": "tools/run_queue_batch5_20260902.sh"
+  },
+  "endpoints": {
+    "wide_corner": [
+      "phys_250",
+      "phys_300"
+    ],
+    "held_out_band": [
+      "phys_175",
+      "phys_200"
+    ],
+    "damage": "phys_100",
+    "mechanism": "final frontier and the iteration of every expansion, from the arm's curriculum jsonl"
+  },
+  "decision_rules": {
+    "R11_where_survival_stops": "Report the final frontier. It is a measurement, not a pass/fail: 1.5 means the guard was redundant and survival alone finds the same width; between 1.5 and 3.0 means survival stops short of the destructive ceiling on its own (the claim the method rests on); 3.0 means the survival probe does NOT protect the policy and the gate's safety came entirely from the guard.",
+    "R12_safety": "gate_300_ng is SAFE if phys_100 >= 0.97 and its wide corner is within 0.03 of gate_300's; DAMAGED if phys_100 < 0.97. A damaged guard-free arm alongside an undamaged gate_300 shows the guard, not the probe, is what protects the policy -- which would be a negative result for the survival-gate design and must be reported as such.",
+    "R13_probe_admissibility": "Report the probe survival at the frontier the arm stopped at, and at the level above it. If the probe reads >= 0.80 at a level whose training damages the policy, probe survival is not a sufficient expansion signal and the paper must say so."
+  },
+  "not_claimed": [
+    "that 0.99 is a principled tolerance (it is a switch that makes the guard inert)",
+    "single seed, one clip"
+  ]
+}
