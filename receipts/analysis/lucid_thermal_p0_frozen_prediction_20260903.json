@@ -1,0 +1,70 @@
+{
+ "kind": "lucid_thermal_p0_frozen_prediction",
+ "schema_version": 1,
+ "created_at": "2026-09-03T01:02:29-04:00",
+ "status": "FROZEN BEFORE P0 RUNS. No policy has been evaluated under the thermal channel.",
+ "preregistration": "receipts/manifests/lucid_thermal_barrier_preregistration_20260903.json",
+ "what_is_predicted": "the ORDER in which the five frozen policies lose success as thermal severity rises, relative to each policy's own severity-zero score",
+ "the_measured_basis": {
+  "source": "receipts/analysis/lucid_channel_attribution_20260902.json, cell phys_100, 512 episodes, seed 8600",
+  "statistic": "torque_saturation = fraction of (timestep, joint) samples at or beyond 95% of the peak limit. It is the only clean torque-relative-to-limit statistic these runs recorded; energy_proxy mixes torque with joint speed and cannot be inverted to a duty cycle.",
+  "per_arm": {
+   "fixed@s8600": {
+    "torque_saturation": 0.0317,
+    "energy_proxy_W": 162.5,
+    "success_phys_100": 0.9941
+   },
+   "lucid_ratchet_rg@s8600": {
+    "torque_saturation": 0.0125,
+    "energy_proxy_W": 140.1,
+    "success_phys_100": 0.9902
+   },
+   "lucid_rg@s8600": {
+    "torque_saturation": 0.005,
+    "energy_proxy_W": 145.4,
+    "success_phys_100": 0.9941
+   },
+   "lucid_s4_rg@s8600": {
+    "torque_saturation": 0.0579,
+    "energy_proxy_W": 161.6,
+    "success_phys_100": 0.9688
+   },
+   "off@s8600": {
+    "torque_saturation": 0.0046,
+    "energy_proxy_W": 134.7,
+    "success_phys_100": 0.9102
+   }
+  }
+ },
+ "prediction_1_ordering": {
+  "claim": "relative loss under thermal stress orders by torque saturation, most vulnerable first",
+  "predicted_order": [
+   "lucid_s4_rg@s8600",
+   "fixed@s8600",
+   "lucid_ratchet_rg@s8600",
+   "lucid_rg@s8600",
+   "off@s8600"
+  ],
+  "falsified_if": "the observed order of relative loss has Spearman correlation below +0.5 with this one"
+ },
+ "prediction_2_the_interesting_one": {
+  "claim": "fixed randomization, which wins or ties on every channel measured so far, is the SECOND most thermally vulnerable arm, and the low-effort adaptive arms are the least. If the ordering holds, thermal stress partially reverses the ranking that every other channel produces.",
+  "why_it_matters": "a channel that reorders the arms is measuring something the existing six do not, which is the entire reason to add one",
+  "falsified_if": "fixed@s8600 loses no more, relative to its own baseline, than lucid_rg@s8600 and lucid_ratchet_rg@s8600"
+ },
+ "prediction_3_where_it_bites": {
+  "claim": "the first ladder severity at which fixed@s8600 drops below 0.90 success is lam = 1 or lam = 2, not lam = 0.5 and not beyond 3",
+  "reasoning": "3.2% of its joint-samples run at 95% of peak or above. At duty 1.0 a cold joint reaches onset in 3.0 s at lam 0.5, 1.4 s at lam 1 and 0.7 s at lam 2, against a 4 s clip, so the saturating joints derate within the clip from lam 0.5 upward; whether that costs success depends on whether the saturating joints are load-bearing. lam 0.5 is included precisely as the severity expected NOT to matter.",
+  "falsified_if": "no severity in the ladder drops it below 0.90, or lam = 0.5 already does"
+ },
+ "prediction_4_the_mechanism": {
+  "claim": "the arms' relative loss correlates better with torque saturation than with their success at phys_200",
+  "why": "if thermal loss tracked general robustness instead of effort, the channel would be redundant with the scalar ladder rather than new",
+  "falsified_if": "the correlation with phys_200 success is at least as strong"
+ },
+ "not_predicted": [
+  "absolute success at any severity; the thermal constants are assumptions and the timescale is compressed",
+  "anything about a curriculum. These are frozen-policy evaluations with no training at all"
+ ],
+ "scoring": "score every prediction the moment P0's receipts exist, before any further design decision, and record misses as prominently as hits"
+}

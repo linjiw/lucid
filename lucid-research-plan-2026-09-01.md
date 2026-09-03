@@ -554,3 +554,65 @@ fixed conditions, under non-shrinking support.**
   fixed robustness target reached at lower cost. Not whichever looks better.
 - Five seeds are not automatically enough; the replication needed depends on the
   variability and the effect claimed. Our between-seed effect is 7.8 points.
+
+## 10. Addendum 2026-09-03 — look for the regime where a curriculum is necessary
+
+Direction set by the user, 2026-09-03: every curriculum result here ties fixed
+randomization, so introduce a randomization channel that direct training cannot
+handle and a curriculum can.
+
+The diagnosis is in our own measurements. All six channels are bounded,
+memoryless perturbations of a task the policy already solves: fixed DR keeps
+0.82 with all five physics channels at 2x and 0.746 under the worst single
+channel at 3x. **A curriculum stages the approach to a difficulty, so it can only
+help where direct training does not already arrive** — and direct training
+arrives everywhere we have looked. There is no barrier for it to cross.
+
+### 10.1 The candidate: motor thermal derating
+
+Unitree documents a derating strategy on the G1 that limits current when a joint
+such as the knee passes its safe temperature. Our `robots/g1.py` sets
+`effort_limit_sim` to the **peak** rating (139 N·m knee/hip, 88 hip-yaw/waist-yaw,
+50 feet/waist) and applies it forever, so a sim policy may draw peak torque
+indefinitely and the target robot may not. This is a documented sim-to-real gap
+on the exact robot, not an invented difficulty.
+
+Different in kind from the other six:
+- **endogenous** — heating is driven by the policy's own torque, so an
+  inefficient policy makes its own environment harder;
+- **accumulating** — the constraint arrives late, so early reward says little
+  about whether the episode survives;
+- **needs a global change** — a torque budget cannot be reacted out of.
+
+Our data says it will discriminate: torque saturation at the envelope spans
+0.005–0.058 across arms (12×) where success spans 8 points.
+
+`thermal.py` (model, 20 CPU tests, λ=0 a bit-identical no-op) and
+`thermal_actuator.py` (runtime limit adapter, 7 tests against a fake
+articulation). Preregistration
+`receipts/manifests/lucid_thermal_barrier_preregistration_20260903.json`.
+
+### 10.2 The risk, named
+
+Designing a channel until a curriculum wins is fitting the benchmark to the
+method. Mitigations, all in the prereg: the channel closes a nameable
+sim-to-real gap; the severity ladder is fixed **now** from the model's own onset
+formula; the result is reported as a **map**, with every severity where direct
+training already succeeds reported as a severity where a curriculum is
+unnecessary; and a barrier requires **both** that direct training fails **and**
+that the target is reachable another way, since a severity nothing reaches is an
+unlearnable task, not a curriculum result.
+
+### 10.3 Phases, cheapest first
+
+| phase | cost | what it decides |
+|---|---:|---|
+| P0 frozen-policy severity sweep | 0.25 GPU-h | does it bite a competent policy at a defensible severity? Stop rule: if no rung drops fixed@s8600 below 0.90, stop rather than retune |
+| P1 direct training at the biting severities | ~5 h warm, ~11 h scratch | where does equal-budget direct training stop arriving? |
+| P2 curriculum vs preset schedule vs direct | ~22 h | only where a barrier exists. Beating direct is the low bar; the preset schedule is the comparison that matters |
+
+A frozen prediction for P0 is already recorded
+(`lucid_thermal_p0_frozen_prediction_20260903.json`): relative loss should order
+by torque saturation, which puts **fixed DR second most vulnerable** and the
+low-effort adaptive arms least — so if it holds, thermal stress partially
+reverses the ranking every other channel produces.
