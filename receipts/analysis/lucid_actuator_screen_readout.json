@@ -1,0 +1,434 @@
+{
+ "kind": "lucid_actuator_screen_readout",
+ "schema_version": 1,
+ "receipt_dirs": [
+  "/home/linjiw/lucid-sonic/manifests/actuator_screen_20260903_043627"
+ ],
+ "baseline_cell": "act_off",
+ "reference_arm": "fixed",
+ "thresholds": {
+  "live_pts": 5.0,
+  "floor": 0.05,
+  "separation_pts": 5.0,
+  "bite_below": 0.9
+ },
+ "arms": [
+  "fixed",
+  "lucid_ratchet_rg",
+  "lucid_rg",
+  "lucid_s4_rg",
+  "off"
+ ],
+ "arms_without_a_baseline_cell": [],
+ "channels": {
+  "effort": {
+   "cells_found": [
+    "act_effort_050",
+    "act_effort_100",
+    "act_effort_150"
+   ],
+   "cells_missing": [],
+   "by_arm": {
+    "fixed": {
+     "baseline": 0.99609375,
+     "rungs": {
+      "act_effort_050": 1.0,
+      "act_effort_100": 0.994140625,
+      "act_effort_150": 0.806640625
+     },
+     "delta_pts": {
+      "act_effort_050": 0.39,
+      "act_effort_100": -0.2,
+      "act_effort_150": -18.95
+     }
+    },
+    "lucid_ratchet_rg": {
+     "baseline": 0.99609375,
+     "rungs": {
+      "act_effort_050": 0.99609375,
+      "act_effort_100": 0.98046875,
+      "act_effort_150": 0.78125
+     },
+     "delta_pts": {
+      "act_effort_050": 0.0,
+      "act_effort_100": -1.56,
+      "act_effort_150": -21.48
+     }
+    },
+    "lucid_rg": {
+     "baseline": 0.99609375,
+     "rungs": {
+      "act_effort_050": 0.986328125,
+      "act_effort_100": 0.970703125,
+      "act_effort_150": 0.8203125
+     },
+     "delta_pts": {
+      "act_effort_050": -0.98,
+      "act_effort_100": -2.54,
+      "act_effort_150": -17.58
+     }
+    },
+    "lucid_s4_rg": {
+     "baseline": 0.97265625,
+     "rungs": {
+      "act_effort_050": 0.970703125,
+      "act_effort_100": 0.8828125,
+      "act_effort_150": 0.513671875
+     },
+     "delta_pts": {
+      "act_effort_050": -0.2,
+      "act_effort_100": -8.98,
+      "act_effort_150": -45.9
+     }
+    },
+    "off": {
+     "baseline": 0.92578125,
+     "rungs": {
+      "act_effort_050": 0.900390625,
+      "act_effort_100": 0.80859375,
+      "act_effort_150": 0.482421875
+     },
+     "delta_pts": {
+      "act_effort_050": -2.54,
+      "act_effort_100": -11.72,
+      "act_effort_150": -44.34
+     }
+    }
+   },
+   "top_rung": "act_effort_150",
+   "reference_delta_at_top_pts": -18.95,
+   "is_live": true,
+   "is_survivable": true,
+   "arm_spread_at_baseline_pts": 7.03,
+   "arm_spread_at_top_pts": 33.79,
+   "separates_policies": true,
+   "first_rung_below_bite": "act_effort_150",
+   "verdict": "CANDIDATE: live, survivable and it separates policies"
+  },
+  "friction": {
+   "cells_found": [
+    "act_friction_050",
+    "act_friction_100",
+    "act_friction_200",
+    "act_friction_300"
+   ],
+   "cells_missing": [],
+   "by_arm": {
+    "fixed": {
+     "baseline": 0.99609375,
+     "rungs": {
+      "act_friction_050": 0.99609375,
+      "act_friction_100": 0.98828125,
+      "act_friction_200": 0.96875,
+      "act_friction_300": 0.873046875
+     },
+     "delta_pts": {
+      "act_friction_050": 0.0,
+      "act_friction_100": -0.78,
+      "act_friction_200": -2.73,
+      "act_friction_300": -12.3
+     }
+    },
+    "lucid_ratchet_rg": {
+     "baseline": 0.99609375,
+     "rungs": {
+      "act_friction_050": 0.994140625,
+      "act_friction_100": 0.986328125,
+      "act_friction_200": 0.966796875,
+      "act_friction_300": 0.85546875
+     },
+     "delta_pts": {
+      "act_friction_050": -0.2,
+      "act_friction_100": -0.98,
+      "act_friction_200": -2.93,
+      "act_friction_300": -14.06
+     }
+    },
+    "lucid_rg": {
+     "baseline": 0.99609375,
+     "rungs": {
+      "act_friction_050": 0.98828125,
+      "act_friction_100": 0.986328125,
+      "act_friction_200": 0.958984375,
+      "act_friction_300": 0.802734375
+     },
+     "delta_pts": {
+      "act_friction_050": -0.78,
+      "act_friction_100": -0.98,
+      "act_friction_200": -3.71,
+      "act_friction_300": -19.34
+     }
+    },
+    "lucid_s4_rg": {
+     "baseline": 0.97265625,
+     "rungs": {
+      "act_friction_050": 0.962890625,
+      "act_friction_100": 0.923828125,
+      "act_friction_200": 0.80859375,
+      "act_friction_300": 0.583984375
+     },
+     "delta_pts": {
+      "act_friction_050": -0.98,
+      "act_friction_100": -4.88,
+      "act_friction_200": -16.41,
+      "act_friction_300": -38.87
+     }
+    },
+    "off": {
+     "baseline": 0.92578125,
+     "rungs": {
+      "act_friction_050": 0.900390625,
+      "act_friction_100": 0.875,
+      "act_friction_200": 0.7109375,
+      "act_friction_300": 0.345703125
+     },
+     "delta_pts": {
+      "act_friction_050": -2.54,
+      "act_friction_100": -5.08,
+      "act_friction_200": -21.48,
+      "act_friction_300": -58.01
+     }
+    }
+   },
+   "top_rung": "act_friction_300",
+   "reference_delta_at_top_pts": -12.3,
+   "is_live": true,
+   "is_survivable": true,
+   "arm_spread_at_baseline_pts": 7.03,
+   "arm_spread_at_top_pts": 52.73,
+   "separates_policies": true,
+   "first_rung_below_bite": "act_friction_300",
+   "verdict": "CANDIDATE: live, survivable and it separates policies"
+  },
+  "armature": {
+   "cells_found": [
+    "act_armature_100",
+    "act_armature_200"
+   ],
+   "cells_missing": [],
+   "by_arm": {
+    "fixed": {
+     "baseline": 0.99609375,
+     "rungs": {
+      "act_armature_100": 1.0,
+      "act_armature_200": 0.994140625
+     },
+     "delta_pts": {
+      "act_armature_100": 0.39,
+      "act_armature_200": -0.2
+     }
+    },
+    "lucid_ratchet_rg": {
+     "baseline": 0.99609375,
+     "rungs": {
+      "act_armature_100": 0.9921875,
+      "act_armature_200": 0.994140625
+     },
+     "delta_pts": {
+      "act_armature_100": -0.39,
+      "act_armature_200": -0.2
+     }
+    },
+    "lucid_rg": {
+     "baseline": 0.99609375,
+     "rungs": {
+      "act_armature_100": 0.98828125,
+      "act_armature_200": 0.990234375
+     },
+     "delta_pts": {
+      "act_armature_100": -0.78,
+      "act_armature_200": -0.59
+     }
+    },
+    "lucid_s4_rg": {
+     "baseline": 0.97265625,
+     "rungs": {
+      "act_armature_100": 0.9765625,
+      "act_armature_200": 0.98046875
+     },
+     "delta_pts": {
+      "act_armature_100": 0.39,
+      "act_armature_200": 0.78
+     }
+    },
+    "off": {
+     "baseline": 0.92578125,
+     "rungs": {
+      "act_armature_100": 0.912109375,
+      "act_armature_200": 0.91015625
+     },
+     "delta_pts": {
+      "act_armature_100": -1.37,
+      "act_armature_200": -1.56
+     }
+    }
+   },
+   "top_rung": "act_armature_200",
+   "reference_delta_at_top_pts": -0.2,
+   "is_live": false,
+   "is_survivable": true,
+   "arm_spread_at_baseline_pts": 7.03,
+   "arm_spread_at_top_pts": 8.4,
+   "separates_policies": false,
+   "first_rung_below_bite": null,
+   "verdict": "NOT LIVE: the channel did not move the reference policy; check that it was actually applied before concluding anything about physics"
+  },
+  "velocity": {
+   "cells_found": [
+    "act_velocity_050",
+    "act_velocity_100",
+    "act_velocity_150",
+    "act_velocity_200"
+   ],
+   "cells_missing": [],
+   "by_arm": {
+    "fixed": {
+     "baseline": 0.99609375,
+     "rungs": {
+      "act_velocity_050": 0.998046875,
+      "act_velocity_100": 0.998046875,
+      "act_velocity_150": 0.998046875,
+      "act_velocity_200": 0.998046875
+     },
+     "delta_pts": {
+      "act_velocity_050": 0.2,
+      "act_velocity_100": 0.2,
+      "act_velocity_150": 0.2,
+      "act_velocity_200": 0.2
+     }
+    },
+    "lucid_ratchet_rg": {
+     "baseline": 0.99609375,
+     "rungs": {
+      "act_velocity_050": 0.99609375,
+      "act_velocity_100": 0.9921875,
+      "act_velocity_150": 0.9921875,
+      "act_velocity_200": 0.99609375
+     },
+     "delta_pts": {
+      "act_velocity_050": 0.0,
+      "act_velocity_100": -0.39,
+      "act_velocity_150": -0.39,
+      "act_velocity_200": 0.0
+     }
+    },
+    "lucid_rg": {
+     "baseline": 0.99609375,
+     "rungs": {
+      "act_velocity_050": 0.986328125,
+      "act_velocity_100": 0.98828125,
+      "act_velocity_150": 0.986328125,
+      "act_velocity_200": 0.986328125
+     },
+     "delta_pts": {
+      "act_velocity_050": -0.98,
+      "act_velocity_100": -0.78,
+      "act_velocity_150": -0.98,
+      "act_velocity_200": -0.98
+     }
+    },
+    "lucid_s4_rg": {
+     "baseline": 0.97265625,
+     "rungs": {
+      "act_velocity_050": 0.974609375,
+      "act_velocity_100": 0.974609375,
+      "act_velocity_150": 0.982421875,
+      "act_velocity_200": 0.974609375
+     },
+     "delta_pts": {
+      "act_velocity_050": 0.2,
+      "act_velocity_100": 0.2,
+      "act_velocity_150": 0.98,
+      "act_velocity_200": 0.2
+     }
+    },
+    "off": {
+     "baseline": 0.92578125,
+     "rungs": {
+      "act_velocity_050": 0.91796875,
+      "act_velocity_100": 0.916015625,
+      "act_velocity_150": 0.90234375,
+      "act_velocity_200": 0.904296875
+     },
+     "delta_pts": {
+      "act_velocity_050": -0.78,
+      "act_velocity_100": -0.98,
+      "act_velocity_150": -2.34,
+      "act_velocity_200": -2.15
+     }
+    }
+   },
+   "top_rung": "act_velocity_200",
+   "reference_delta_at_top_pts": 0.2,
+   "is_live": false,
+   "is_survivable": true,
+   "arm_spread_at_baseline_pts": 7.03,
+   "arm_spread_at_top_pts": 9.38,
+   "separates_policies": false,
+   "first_rung_below_bite": null,
+   "verdict": "NOT LIVE: the channel did not move the reference policy; check that it was actually applied before concluding anything about physics"
+  }
+ },
+ "aa_null": {
+  "cells": [
+   "phys_100",
+   "act_off"
+  ],
+  "per_arm_delta_pts": {
+   "fixed": 0.2,
+   "lucid_ratchet_rg": 0.59,
+   "lucid_rg": 0.2,
+   "lucid_s4_rg": 0.39,
+   "off": 1.56
+  },
+  "max_abs_gap_pts": 1.56,
+  "verdict": "PASS: adding four inert terms changed nothing beyond single-cell noise"
+ },
+ "candidates_most_promising_first": [
+  "friction",
+  "effort"
+ ],
+ "not_verified": [
+  "frozen policies only: this locates where a channel matters, it does not show that training at that severity fails or that staging helps",
+  "one evaluation seed per cell; single-cell noise here is 2-3 points",
+  "a channel that reads NOT LIVE may be unapplied rather than harmless; check the run's own dr_scale_report and its PhysX read-back before drawing a physical conclusion",
+  "torque_saturation and energy_proxy are normalized by the live effort limit, the exact buffer the effort channel rewrites, so under act_effort_* they move by construction. They are a presence check there, never an outcome"
+ ],
+ "scored_frozen_predictions": {
+  "source": "receipts/analysis/lucid_thermal_p0_frozen_prediction_20260903.json, frozen before any actuator cell existed",
+  "caveat": "those predictions were written for a thermal derating channel. The effort-limit channel is the closest analogue, since both are torque budgets, but it is not the same instrument and the scoring says so.",
+  "P1_ordering_by_torque_saturation": {
+   "predicted": "relative loss orders by each policy's torque saturation, Spearman at least +0.50",
+   "observed_spearman": 0.3,
+   "verdict": "FALSIFIED"
+  },
+  "P2_fixed_is_second_most_vulnerable": {
+   "predicted": "fixed DR, which wins on every other channel, is the second most vulnerable to a torque budget",
+   "observed_rank": "4 of 5",
+   "observed_order": "lucid_s4_rg > off > lucid_ratchet_rg > fixed > lucid_rg",
+   "verdict": "NOT SUPPORTED"
+  },
+  "P4_the_channel_measures_effort_not_general_robustness": {
+   "predicted": "relative loss correlates better with torque saturation than with success on the existing scalar ladder",
+   "observed": {
+    "effort_vs_torque_saturation": 0.3,
+    "effort_vs_phys_200_success": 0.5,
+    "friction_vs_torque_saturation": -0.4,
+    "friction_vs_phys_200_success": 0.9
+   },
+   "verdict": "FALSIFIED, and clearly so for friction"
+  },
+  "what_the_misses_mean": [
+   "Both new channels separate policies, but along the SAME axis the existing scalar ladder already measures. Friction's loss correlates +0.90 with phys_200 success and -0.40 with torque saturation, so it is close to a restatement of general robustness rather than a new dimension of capability.",
+   "My read-out asked whether a channel separates policies. It should also have asked whether it separates them DIFFERENTLY from the cells we already have. That is a defect in the screen's own design, found by scoring a prediction rather than by inspection.",
+   "This weakens the case that these channels measure something new. It does NOT settle the barrier question, which is about a training distribution rather than a frozen-policy ranking: a channel can be redundant as a measurement and still differ as a distribution to train on. The point-versus-range test remains the decisive one, and its motivation is the SHAPE of the target, not the novelty of the channel."
+  ],
+  "n": "five policies, one evaluation seed per cell. A rank correlation on five points is weak evidence; these are recorded as scored predictions, not as established relationships."
+ },
+ "not_live_channels_open_question": {
+  "armature": "Credibly inert physics. Armature is a few per cent of the load-bearing joints' effective inertia, so a null here is the expected result and it was predicted as a negative control.",
+  "velocity_limit": "NOT RESOLVED. Every cell shows all ten terms live and the scale reaching the right channel, so the RANGE was set. At the deepest rung the lowest draw is 0.2 of the rating, well below the roughly 0.37 of the limit the reference clip is measured to demand, so some environments should have been constrained and none was. We cannot currently distinguish a physically inert channel from a writer PhysX does not enforce for an implicit actuator, because the PhysX read-back this module records is not yet surfaced into the evaluation receipt.",
+  "why_it_was_not_chased": "The channel is not a barrier candidate under either explanation, and the GPU is committed to the practice-allocation screen. The read-back is now surfaced so any future run answers it for free.",
+  "what_it_does_not_threaten": "The effort and friction results. Those channels moved success by up to 46 points in an ordered, monotone way, which is not something an unapplied write produces."
+ }
+}
