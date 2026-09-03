@@ -23,15 +23,17 @@
    "state_in_g1_config": "set to the PEAK rating (139 N.m knee and hip roll/pitch, 88 hip yaw and waist yaw, 50 feet and waist) and never varied",
    "deployment_relevance": "HIGH. A deployed motor delivers less than peak: the battery sags under load, the winding heats, and units vary. Unitree documents derating on the G1 when a joint passes its safe temperature.",
    "barrier_reasoning": "removes capability outright. Below the torque needed to hold a pose the robot falls immediately and the gradient carries little information, which is the shape a learnability barrier has.",
-   "verdict": "strongest candidate: real, directly settable, needs no new physics model"
+   "verdict": "strongest candidate: real, directly settable, needs no new physics model",
+   "verification": "the URDF's own joint limits carry effort=139 and velocity=20 for the knee, matching robots/g1.py, so the config values are the URDF's hardware ratings"
   },
   {
    "property": "joint friction, static / dynamic / viscous",
    "writer": "write_joint_friction_coefficient_to_sim and the dynamic and viscous variants",
-   "state_in_g1_config": "NOT SET ANYWHERE in the Python configuration. The simulated G1 has frictionless gearboxes. The effective value comes from the USD asset, which this inspection did not read, so confirm it at runtime before relying on the claim.",
+   "state_in_g1_config": "NOT SET ANYWHERE, verified at the source asset. The robot is converted from gear_sonic/data/assets/robot_description/urdf/g1/main.urdf, which contains ZERO <dynamics> tags, so neither joint friction nor physical joint damping is declared for any joint. The simulated G1 has frictionless, undamped joints; the only damping present is the PD controller's gain, which is a control term and not a property of the mechanism.",
    "deployment_relevance": "HIGH. A harmonic or planetary reducer has Coulomb friction that varies with temperature, load and wear; a cold robot is measurably stiffer than a warm one.",
    "barrier_reasoning": "adds a NONSMOOTH term. Static friction has a sign discontinuity at zero velocity, so it creates stiction, a deadband and limit cycles that a smooth perturbation does not. Its magnitude at physically honest levels is a few N.m against a 139 N.m peak, so whether it is hard rather than merely present is genuinely uncertain.",
-   "verdict": "the largest unmodelled gap; barrier potential unknown and worth measuring"
+   "verdict": "the largest unmodelled gap; barrier potential unknown and worth measuring",
+   "verification": "grep -c '<dynamics' main.urdf -> 0"
   },
   {
    "property": "joint speed limit",
@@ -87,7 +89,7 @@
  "recommended_next": "Extend the frozen-policy severity screen to these four channels alongside the thermal one. Five frozen policies, five severities, about 0.25 GPU-h per channel and no training. Whichever channel shows a cliff is the one worth training against; whichever does not is reported as another channel with no barrier, which is itself the map this project is building.",
  "not_verified": [
   "no simulation has been run with any of these channels",
-  "the claim that joint friction is unset is from the Python configuration only; the USD asset was not read",
-  "the action-scale coupling for stiffness has not been resolved"
+  "the action-scale coupling for stiffness has not been resolved",
+  "the USD conversion was not inspected; the claim rests on the URDF source, which is what the converter reads"
  ]
 }
