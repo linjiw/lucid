@@ -185,9 +185,18 @@ def main(argv=None) -> int:
         })
         report["channels"][channel] = entry
 
+    # Rank by whether the channel says something NEW first, and only then by how
+    # widely it separates. A channel with a huge spread that reproduces the
+    # existing ladder's ordering is a louder version of a measurement we have.
+    def rank_key(c):
+        e = report["channels"][c]
+        return (0 if e.get("measures_a_new_axis") else 1, -(e["arm_spread_at_top_pts"] or 0))
+
     ranked = sorted(
         (c for c, e in report["channels"].items() if e["is_live"] and e["is_survivable"]),
-        key=lambda c: -(report["channels"][c]["arm_spread_at_top_pts"] or 0))
+        key=rank_key)
+    report["ranking_rule"] = ("channels that rank policies differently from the existing scalar "
+                              "ladder first, then by how widely they separate them")
     # The A/A null, checked before any channel is interpreted.
     aa = {}
     for arm in arms:

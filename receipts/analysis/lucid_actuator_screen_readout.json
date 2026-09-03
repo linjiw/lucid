@@ -377,6 +377,7 @@
    "verdict": "NOT LIVE: the channel did not move the reference policy; check that it was actually applied before concluding anything about physics"
   }
  },
+ "ranking_rule": "channels that rank policies differently from the existing scalar ladder first, then by how widely they separate them",
  "aa_null": {
   "cells": [
    "phys_100",
@@ -393,8 +394,8 @@
   "verdict": "PASS: adding four inert terms changed nothing beyond single-cell noise"
  },
  "candidates_most_promising_first": [
-  "friction",
-  "effort"
+  "effort",
+  "friction"
  ],
  "not_verified": [
   "frozen policies only: this locates where a channel matters, it does not show that training at that severity fails or that staging helps",
