@@ -1,0 +1,330 @@
+{
+ "kind": "lucid_progress_signal_audit",
+ "schema_version": 1,
+ "question": "How much evidence does an estimate of learning progress at a FIXED condition need before its sign can be trusted, and do conditions plateau at different times?",
+ "method": "Per-iteration per-stratum survival from the longest window in which the frontier never moved, so every stratum is a fixed condition. The null is the same series with its time order destroyed.",
+ "runs": {
+  "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260901_232720/seed_8600/gate_150": {
+   "frontier_held_at": 1.0,
+   "iterations": [
+    1,
+    3362
+   ],
+   "iterations_used": 3361,
+   "strata": {
+    "0": {
+     "episodes_per_iteration_median": 8.0,
+     "survival_first_10pct": 0.0074,
+     "survival_last_10pct": 0.9303,
+     "total_change_pts": 121.67,
+     "by_window": {
+      "25": {
+       "null_p95_abs_slope_pts_per_iter": 2.03497,
+       "true_slope_mean_pts_per_iter": 0.01908,
+       "sign_agrees_with_window_trend": 0.539,
+       "fraction_above_noise_floor": 0.0
+      },
+      "50": {
+       "null_p95_abs_slope_pts_per_iter": 0.71751,
+       "true_slope_mean_pts_per_iter": 0.02579,
+       "sign_agrees_with_window_trend": 0.596,
+       "fraction_above_noise_floor": 0.0
+      },
+      "100": {
+       "null_p95_abs_slope_pts_per_iter": 0.27286,
+       "true_slope_mean_pts_per_iter": 0.0274,
+       "sign_agrees_with_window_trend": 0.677,
+       "fraction_above_noise_floor": 0.0
+      },
+      "200": {
+       "null_p95_abs_slope_pts_per_iter": 0.09864,
+       "true_slope_mean_pts_per_iter": 0.02875,
+       "sign_agrees_with_window_trend": 0.81,
+       "fraction_above_noise_floor": 0.127
+      },
+      "400": {
+       "null_p95_abs_slope_pts_per_iter": 0.03388,
+       "true_slope_mean_pts_per_iter": 0.03059,
+       "sign_agrees_with_window_trend": 1.0,
+       "fraction_above_noise_floor": 0.2
+      }
+     }
+    },
+    "1": {
+     "episodes_per_iteration_median": 8.0,
+     "survival_first_10pct": 0.007,
+     "survival_last_10pct": 0.9321,
+     "total_change_pts": 123.28,
+     "by_window": {
+      "25": {
+       "null_p95_abs_slope_pts_per_iter": 2.11749,
+       "true_slope_mean_pts_per_iter": 0.02532,
+       "sign_agrees_with_window_trend": 0.531,
+       "fraction_above_noise_floor": 0.0
+      },
+      "50": {
+       "null_p95_abs_slope_pts_per_iter": 0.79464,
+       "true_slope_mean_pts_per_iter": 0.03321,
+       "sign_agrees_with_window_trend": 0.593,
+       "fraction_above_noise_floor": 0.0
+      },
+      "100": {
+       "null_p95_abs_slope_pts_per_iter": 0.26153,
+       "true_slope_mean_pts_per_iter": 0.02703,
+       "sign_agrees_with_window_trend": 0.669,
+       "fraction_above_noise_floor": 0.0
+      },
+      "200": {
+       "null_p95_abs_slope_pts_per_iter": 0.09223,
+       "true_slope_mean_pts_per_iter": 0.02862,
+       "sign_agrees_with_window_trend": 0.841,
+       "fraction_above_noise_floor": 0.095
+      },
+      "400": {
+       "null_p95_abs_slope_pts_per_iter": 0.03234,
+       "true_slope_mean_pts_per_iter": 0.03024,
+       "sign_agrees_with_window_trend": 1.0,
+       "fraction_above_noise_floor": 0.267
+      }
+     }
+    },
+    "2": {
+     "episodes_per_iteration_median": 9,
+     "survival_first_10pct": 0.0064,
+     "survival_last_10pct": 0.9215,
+     "total_change_pts": 121.61,
+     "by_window": {
+      "25": {
+       "null_p95_abs_slope_pts_per_iter": 2.22068,
+       "true_slope_mean_pts_per_iter": 0.02298,
+       "sign_agrees_with_window_trend": 0.523,
+       "fraction_above_noise_floor": 0.0
+      },
+      "50": {
+       "null_p95_abs_slope_pts_per_iter": 0.70036,
+       "true_slope_mean_pts_per_iter": 0.02656,
+       "sign_agrees_with_window_trend": 0.593,
+       "fraction_above_noise_floor": 0.0
+      },
+      "100": {
+       "null_p95_abs_slope_pts_per_iter": 0.26939,
+       "true_slope_mean_pts_per_iter": 0.02779,
+       "sign_agrees_with_window_trend": 0.669,
+       "fraction_above_noise_floor": 0.0
+      },
+      "200": {
+       "null_p95_abs_slope_pts_per_iter": 0.09346,
+       "true_slope_mean_pts_per_iter": 0.02946,
+       "sign_agrees_with_window_trend": 0.778,
+       "fraction_above_noise_floor": 0.095
+      },
+      "400": {
+       "null_p95_abs_slope_pts_per_iter": 0.03315,
+       "true_slope_mean_pts_per_iter": 0.0298,
+       "sign_agrees_with_window_trend": 1.0,
+       "fraction_above_noise_floor": 0.233
+      }
+     }
+    },
+    "3": {
+     "episodes_per_iteration_median": 8,
+     "survival_first_10pct": 0.006,
+     "survival_last_10pct": 0.9075,
+     "total_change_pts": 120.63,
+     "by_window": {
+      "25": {
+       "null_p95_abs_slope_pts_per_iter": 2.15694,
+       "true_slope_mean_pts_per_iter": 0.01953,
+       "sign_agrees_with_window_trend": 0.517,
+       "fraction_above_noise_floor": 0.0
+      },
+      "50": {
+       "null_p95_abs_slope_pts_per_iter": 0.78498,
+       "true_slope_mean_pts_per_iter": 0.02555,
+       "sign_agrees_with_window_trend": 0.551,
+       "fraction_above_noise_floor": 0.0
+      },
+      "100": {
+       "null_p95_abs_slope_pts_per_iter": 0.26697,
+       "true_slope_mean_pts_per_iter": 0.02774,
+       "sign_agrees_with_window_trend": 0.718,
+       "fraction_above_noise_floor": 0.0
+      },
+      "200": {
+       "null_p95_abs_slope_pts_per_iter": 0.10223,
+       "true_slope_mean_pts_per_iter": 0.02835,
+       "sign_agrees_with_window_trend": 0.891,
+       "fraction_above_noise_floor": 0.078
+      },
+      "400": {
+       "null_p95_abs_slope_pts_per_iter": 0.0357,
+       "true_slope_mean_pts_per_iter": 0.03055,
+       "sign_agrees_with_window_trend": 1.0,
+       "fraction_above_noise_floor": 0.267
+      }
+     }
+    },
+    "4": {
+     "episodes_per_iteration_median": 9,
+     "survival_first_10pct": 0.0064,
+     "survival_last_10pct": 0.9075,
+     "total_change_pts": 118.53,
+     "by_window": {
+      "25": {
+       "null_p95_abs_slope_pts_per_iter": 2.05588,
+       "true_slope_mean_pts_per_iter": 0.02676,
+       "sign_agrees_with_window_trend": 0.538,
+       "fraction_above_noise_floor": 0.0
+      },
+      "50": {
+       "null_p95_abs_slope_pts_per_iter": 0.79672,
+       "true_slope_mean_pts_per_iter": 0.02747,
+       "sign_agrees_with_window_trend": 0.589,
+       "fraction_above_noise_floor": 0.0
+      },
+      "100": {
+       "null_p95_abs_slope_pts_per_iter": 0.27415,
+       "true_slope_mean_pts_per_iter": 0.02845,
+       "sign_agrees_with_window_trend": 0.7,
+       "fraction_above_noise_floor": 0.0
+      },
+      "200": {
+       "null_p95_abs_slope_pts_per_iter": 0.098,
+       "true_slope_mean_pts_per_iter": 0.02944,
+       "sign_agrees_with_window_trend": 0.81,
+       "fraction_above_noise_floor": 0.063
+      },
+      "400": {
+       "null_p95_abs_slope_pts_per_iter": 0.03179,
+       "true_slope_mean_pts_per_iter": 0.03031,
+       "sign_agrees_with_window_trend": 1.0,
+       "fraction_above_noise_floor": 0.333
+      }
+     }
+    },
+    "5": {
+     "episodes_per_iteration_median": 9.0,
+     "survival_first_10pct": 0.0053,
+     "survival_last_10pct": 0.8869,
+     "total_change_pts": 114.86,
+     "by_window": {
+      "25": {
+       "null_p95_abs_slope_pts_per_iter": 2.16299,
+       "true_slope_mean_pts_per_iter": 0.02672,
+       "sign_agrees_with_window_trend": 0.515,
+       "fraction_above_noise_floor": 0.0
+      },
+      "50": {
+       "null_p95_abs_slope_pts_per_iter": 0.7821,
+       "true_slope_mean_pts_per_iter": 0.03322,
+       "sign_agrees_with_window_trend": 0.6,
+       "fraction_above_noise_floor": 0.0
+      },
+      "100": {
+       "null_p95_abs_slope_pts_per_iter": 0.24787,
+       "true_slope_mean_pts_per_iter": 0.02711,
+       "sign_agrees_with_window_trend": 0.708,
+       "fraction_above_noise_floor": 0.0
+      },
+      "200": {
+       "null_p95_abs_slope_pts_per_iter": 0.08892,
+       "true_slope_mean_pts_per_iter": 0.02665,
+       "sign_agrees_with_window_trend": 0.81,
+       "fraction_above_noise_floor": 0.063
+      },
+      "400": {
+       "null_p95_abs_slope_pts_per_iter": 0.03023,
+       "true_slope_mean_pts_per_iter": 0.02858,
+       "sign_agrees_with_window_trend": 0.967,
+       "fraction_above_noise_floor": 0.333
+      }
+     }
+    },
+    "6": {
+     "episodes_per_iteration_median": 122,
+     "survival_first_10pct": 0.0066,
+     "survival_last_10pct": 0.8288,
+     "total_change_pts": 107.15,
+     "by_window": {
+      "25": {
+       "null_p95_abs_slope_pts_per_iter": 1.80709,
+       "true_slope_mean_pts_per_iter": 0.02544,
+       "sign_agrees_with_window_trend": 0.609,
+       "fraction_above_noise_floor": 0.0
+      },
+      "50": {
+       "null_p95_abs_slope_pts_per_iter": 0.56436,
+       "true_slope_mean_pts_per_iter": 0.02496,
+       "sign_agrees_with_window_trend": 0.71,
+       "fraction_above_noise_floor": 0.0
+      },
+      "100": {
+       "null_p95_abs_slope_pts_per_iter": 0.2305,
+       "true_slope_mean_pts_per_iter": 0.02588,
+       "sign_agrees_with_window_trend": 0.87,
+       "fraction_above_noise_floor": 0.0
+      },
+      "200": {
+       "null_p95_abs_slope_pts_per_iter": 0.06936,
+       "true_slope_mean_pts_per_iter": 0.02653,
+       "sign_agrees_with_window_trend": 1.0,
+       "fraction_above_noise_floor": 0.094
+      },
+      "400": {
+       "null_p95_abs_slope_pts_per_iter": 0.02704,
+       "true_slope_mean_pts_per_iter": 0.02728,
+       "sign_agrees_with_window_trend": 1.0,
+       "fraction_above_noise_floor": 0.4
+      }
+     }
+    },
+    "7": {
+     "episodes_per_iteration_median": 27,
+     "survival_first_10pct": 0.0065,
+     "survival_last_10pct": 0.7881,
+     "total_change_pts": 101.16,
+     "by_window": {
+      "25": {
+       "null_p95_abs_slope_pts_per_iter": 1.80363,
+       "true_slope_mean_pts_per_iter": 0.02963,
+       "sign_agrees_with_window_trend": 0.571,
+       "fraction_above_noise_floor": 0.0
+      },
+      "50": {
+       "null_p95_abs_slope_pts_per_iter": 0.56249,
+       "true_slope_mean_pts_per_iter": 0.02596,
+       "sign_agrees_with_window_trend": 0.641,
+       "fraction_above_noise_floor": 0.0
+      },
+      "100": {
+       "null_p95_abs_slope_pts_per_iter": 0.19953,
+       "true_slope_mean_pts_per_iter": 0.025,
+       "sign_agrees_with_window_trend": 0.748,
+       "fraction_above_noise_floor": 0.0
+      },
+      "200": {
+       "null_p95_abs_slope_pts_per_iter": 0.06563,
+       "true_slope_mean_pts_per_iter": 0.02604,
+       "sign_agrees_with_window_trend": 0.984,
+       "fraction_above_noise_floor": 0.047
+      },
+      "400": {
+       "null_p95_abs_slope_pts_per_iter": 0.02591,
+       "true_slope_mean_pts_per_iter": 0.02663,
+       "sign_agrees_with_window_trend": 1.0,
+       "fraction_above_noise_floor": 0.533
+      }
+     }
+    }
+   }
+  }
+ },
+ "discrimination": {
+  "strata_still_improving_by_5pts_or_more": 8,
+  "strata_plateaued": 0,
+  "reading": "every condition in the window moves the same way, so progress cannot separate them here"
+ },
+ "smallest_window_with_trustworthy_sign_per_stratum": {
+  "7": 400
+ }
+}

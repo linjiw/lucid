@@ -387,7 +387,61 @@ Cost ≈ 5.6 GPU-h, one seed. Runs when the GPU frees.
 `tools/run_practice_allocation_scoring.sh <dir> --execute` then
 `tools/analyze_practice_allocation.py`.
 
-### 9.3 The gate must ask a different question
+### 9.3 Measured 2026-09-02: the progress signal is not available online
+
+Before building an allocator that reads learning progress, we measured whether
+that signal exists at the cohort sizes and windows this loop provides.
+`tools/progress_signal_audit.py`, receipts
+`lucid_progress_signal_audit_20260902.json` and `..._warmstart_20260902.json`.
+
+Method: take the longest window in which the frontier never moved, so every
+stratum is a fixed condition; compare the windowed slope of per-stratum survival
+against a null that keeps the values and destroys their time order.
+
+| regime | window | change over it | trend / noise at W=100 | sign reliable? |
+|---|---|---|---|---|
+| from scratch (gate_150, λ held at 1.0) | 3,362 it | +101 to +123 pts | — | yes, at W=200–400 |
+| warm start (gate_150, λ held at 1.5) | 1,590 it | −1.2 to +3.6 pts | **0.01–0.08** | **no, at any W ≤ 400** |
+
+On the largest stratum (85 episodes/iteration) the noise floor is 13× the trend
+at W=100; matching it needs ~170× the episodes per window, i.e. ~14,000 episodes
+per iteration or a ~17,000-iteration window.
+
+**Consequences.**
+1. The gate's current cadence (window 100, dwell 50) cannot support a
+   progress-based decision on a competent policy. A success-*level* gate still
+   can, because a level is estimable from the same samples that a slope is not.
+2. Practice effects must be measured end-to-end against frozen evaluation cells,
+   which is what Screen A does. This finding raises Screen A's priority; it does
+   not weaken it.
+3. Design candidate 3 (slip-augmented probe) is promoted to the head of the
+   queue: per-step foot slip yields hundreds of samples per episode instead of
+   one bit, and it is the only body-grounded signal with a consistent difficulty
+   response. Its noise floor must be measured the same way before anything is
+   built on it.
+4. Anything that reads reward progress per bin inherits this floor, including the
+   published design in §9.6.
+
+### 9.6 Related work, checked 2026-09-02
+
+TransCurriculum (IROS 2026, arXiv 2603.14156) schedules a Go1 over a
+20×10×20 bin grid spanning command velocity, terrain difficulty and two
+randomization parameters (friction, payload mass). A transformer teacher reads
+per-bin reward history and predicts reward, success and **learning progress**,
+computed as current average reward minus a per-bin EMA; weights expand outward
+from bins where the policy already succeeds and are **never contracted**. It
+ablates history (transformer vs RNN vs MLP) and dimensionality separately.
+
+So multi-parameter scheduling, learning-history input, progress-driven
+allocation and expansion-only support are all published. We claim none of them.
+What it does not report, and what our programme is about: **no preset-schedule
+baseline reaching the same final ranges**, so whether online decisions beat a
+good hand-designed allocation is open; and its progress signal is read from
+reward on the bin the curriculum controls, which is the signal our audit ranks
+least trustworthy and, under a controller permitted to contract, the one that
+drives collapse.
+
+### 9.7 The gate must ask a different question
 
 The built gate asks "can the policy already handle this?" and expands on high
 success. A performance-improving curriculum must ask "would practising this

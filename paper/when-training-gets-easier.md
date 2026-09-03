@@ -25,9 +25,13 @@ curriculum does not. Replaying the exported policies in MuJoCo with independentl
 implemented randomization preserves the ordering: beyond the training envelope, both
 never-shrink and fixed policies survive 38% of physics draws where the collapsed policy
 survives 16% and an unrandomized policy 3%. A prototype that tests proposed conditions
-before expanding raised the training-range scale from 1.0 to 1.5 in four steps. Whether
-adaptive expansion improves robustness over a preset schedule remains open; the present
-results show why better policies must be distinguished from easier training.
+before expanding raised the training-range scale from 1.0 to 1.5 in four steps. Finally we
+measure whether a curriculum could allocate practice by learning progress, as recent
+multi-dimensional curricula do: from scratch the progress signal is clear, but once the
+policy is competent it falls to between 0.01 and 0.08 of its own noise floor, and closing
+that gap would need roughly 170 times the episodes per decision window. Whether adaptive
+expansion improves robustness over a preset schedule remains open; the present results
+show why better policies must be distinguished from easier training.
 
 ## 1. Introduction
 
@@ -356,17 +360,43 @@ choosing channels buys nothing. If practising the combination does not beat
 practising the channel alone above the practised corner, the combination test is
 dropped.
 
-### 9.3 What a curriculum would have to ask
+### 9.3 What a curriculum would have to ask, and what that costs — Measured
 
 Our gate asks whether the policy can already handle a harder condition, and
 expands when success is high. A curriculum that improves the policy has to ask a
 different question: would practising this help? That is a question about
 improvement, and it has to be estimated by repeatedly evaluating conditions that
-do not change. A score that rose because the test got easier is the failure this
-paper is about. Three groups follow: conditions already learned keep a floor of
-practice, conditions that are difficult and improving get more, and conditions
-that fail repeatedly without improving are stepped back from and investigated
-rather than ground against.
+do not change, because a score that rose after the test got easier is the failure
+this paper is about.
+
+We measured whether that estimate is available. Training runs record survival per
+iteration for each training cohort, and each cohort sits at a fixed condition for
+as long as the curriculum does not move, so the longest window in which the range
+never moved gives per-condition series at genuinely fixed difficulty. Against a
+null that keeps the same values and destroys their time order, we asked how wide
+a window must be before the sign of the local trend can be trusted.
+
+The answer depends entirely on whether the policy is still learning the task.
+From scratch, survival at every cohort climbs about 120 points over 3,362
+iterations and the sign of the local trend is reliable once the window reaches
+200 to 400 iterations. Warm-started from a policy that has already solved the
+envelope, which is the state any expansion curriculum operates in, the whole
+1,590-iteration window moves each cohort by between −1.2 and +3.6 points, and the
+local trend sits between 0.01 and 0.08 times its own noise floor at a 100
+iteration window. The sign agrees with the window's own trend 42 to 68 percent of
+the time, which is a coin flip. On the largest cohort, closing that gap would take
+roughly 170 times the episodes per window: about 14,000 episodes per iteration, or
+a window of about 17,000 iterations at present cohort sizes.
+
+This is not an estimator defect. A competent policy's episode-end survival at a
+fixed condition is flat within noise, so there is little left to detect, and one
+bit per episode is too coarse to resolve it. The consequence for design is
+concrete. An online allocator driven by episode-end survival or by reward
+progress cannot make trustworthy per-condition decisions at this budget, so the
+effect of practice has to be measured end to end against frozen evaluation cells,
+as Section 9.2 does. A signal with many samples per episode rather than one, such
+as the per-step foot slip that Section 6 found to be the only body-grounded
+signal with a consistent difficulty response, is the next thing to audit.
 
 ### 9.4 The hurdle any such curriculum must clear
 
@@ -434,7 +464,7 @@ Terms used in earlier drafts and their replacements in this one.
 | 7 | `receipts/analysis/lucid_channel_attribution_20260902.json` |
 | 8 | `receipts/analysis/mujoco_sim2sim_20260902/`, `lucid_heldout_motion_20260901.json` |
 | all | `receipts/analysis/lucid_draft_number_verification_20260902.json` — every number above re-checked against its receipt or the raw training trace |
-| 9 | preregistration `lucid_practice_allocation_screen_preregistration_20260902.json`; training trace `artifacts/.../curriculum_comparison_ne1024_20260901_232720/seed_8600/gate_150/curriculum_*.jsonl` (the gate run itself; `lucid_gate_feasibility_20260901.json` is a replay proxy, not this run), preregistration `lucid_support_expansion_screen_preregistration_20260901.json` |
+| 9 | `receipts/analysis/lucid_progress_signal_audit_20260902.json` and `..._warmstart_20260902.json`; preregistration `lucid_practice_allocation_screen_preregistration_20260902.json`; training trace `artifacts/.../curriculum_comparison_ne1024_20260901_232720/seed_8600/gate_150/curriculum_*.jsonl` (the gate run itself; `lucid_gate_feasibility_20260901.json` is a replay proxy, not this run), preregistration `lucid_support_expansion_screen_preregistration_20260901.json` |
 
 ## References
 
