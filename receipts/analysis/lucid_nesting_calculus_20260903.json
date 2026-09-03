@@ -1,10 +1,12 @@
 {
  "kind": "lucid_nesting_calculus",
- "schema_version": 1,
- "claim": "Fixed randomization at full intensity already supplies, every iteration, a sub-population of episodes distributionally identical to each earlier stage of any curriculum that ramps toward it.",
+ "schema_version": 2,
+ "supersedes": "schema 1 of this receipt, which reported 182 of 1024 environments as if it were a measurement. It raised the per-channel probability to the sixth power when the draws are per dimension and there are 45 of them, and the answer spans eleven orders of magnitude over the plausible range.",
+ "what_survives_exactly": "Per PARAMETER, the supports are nested: the stage-s range sits inside the full range and a full-intensity draw lands in it with probability exactly s. No parameter VALUE is withheld by fixed randomization that a curriculum would introduce.",
+ "what_does_not_survive": "The claim that whole EPISODES as easy as an earlier stage appear in every batch. That is the joint event across every independent draw, and its frequency depends on how many dimensions actually drive difficulty, which we have not measured. At six effective dimensions it is 182 environments per iteration; at the 45 the configs actually draw, it is 0.002.",
  "why_exact": "scale_range is affine about the nominal, so the stage-s range has exactly s times the full width and sits inside it. A uniform full-intensity draw therefore lands inside it with probability exactly s, and conditioned on landing there is uniform on it, which IS the stage-s distribution.",
  "environments": 1024,
- "channels_counted": 6,
+ "channels_counted": 45,
  "per_channel_ranges": {
   "randomize_rigid_body_mass": {
    "range": [
@@ -81,40 +83,46 @@
  },
  "table": [
   {
-   "stage": 0.25,
-   "share_of_draws_inside_the_stage_range_per_channel": 0.25,
-   "share_of_episodes_no_harder_than_the_stage_on_every_channel": 0.000244,
-   "expected_such_environments_per_iteration": 0.2
+   "effective_dimensions": 1,
+   "envs_per_iteration_no_harder_than_stage_0.5": 512.0,
+   "envs_per_iteration_no_harder_than_stage_0.75": 768.0,
+   "envs_per_iteration_no_harder_than_stage_0.9": 921.6
   },
   {
-   "stage": 0.5,
-   "share_of_draws_inside_the_stage_range_per_channel": 0.5,
-   "share_of_episodes_no_harder_than_the_stage_on_every_channel": 0.015625,
-   "expected_such_environments_per_iteration": 16.0
+   "effective_dimensions": 3,
+   "envs_per_iteration_no_harder_than_stage_0.5": 128.0,
+   "envs_per_iteration_no_harder_than_stage_0.75": 432.0,
+   "envs_per_iteration_no_harder_than_stage_0.9": 746.496
   },
   {
-   "stage": 0.6,
-   "share_of_draws_inside_the_stage_range_per_channel": 0.6,
-   "share_of_episodes_no_harder_than_the_stage_on_every_channel": 0.046656,
-   "expected_such_environments_per_iteration": 47.8
+   "effective_dimensions": 6,
+   "envs_per_iteration_no_harder_than_stage_0.5": 16.0,
+   "envs_per_iteration_no_harder_than_stage_0.75": 182.25,
+   "envs_per_iteration_no_harder_than_stage_0.9": 544.1956
   },
   {
-   "stage": 0.75,
-   "share_of_draws_inside_the_stage_range_per_channel": 0.75,
-   "share_of_episodes_no_harder_than_the_stage_on_every_channel": 0.177979,
-   "expected_such_environments_per_iteration": 182.2
+   "effective_dimensions": 10,
+   "envs_per_iteration_no_harder_than_stage_0.5": 1.0,
+   "envs_per_iteration_no_harder_than_stage_0.75": 57.665,
+   "envs_per_iteration_no_harder_than_stage_0.9": 357.0467
   },
   {
-   "stage": 0.9,
-   "share_of_draws_inside_the_stage_range_per_channel": 0.9,
-   "share_of_episodes_no_harder_than_the_stage_on_every_channel": 0.531441,
-   "expected_such_environments_per_iteration": 544.2
+   "effective_dimensions": 20,
+   "envs_per_iteration_no_harder_than_stage_0.5": 0.001,
+   "envs_per_iteration_no_harder_than_stage_0.75": 3.2473,
+   "envs_per_iteration_no_harder_than_stage_0.9": 124.4945
+  },
+  {
+   "effective_dimensions": 45,
+   "envs_per_iteration_no_harder_than_stage_0.5": 0.0,
+   "envs_per_iteration_no_harder_than_stage_0.75": 0.0024,
+   "envs_per_iteration_no_harder_than_stage_0.9": 8.9374
   }
  ],
  "reading": [
-  "At full intensity 50% of draws on EVERY channel are already inside the half-intensity range.",
-  "182 of 1024 environments per iteration are no harder than a 0.75 stage on all six channels at once, and 16 are no harder than a 0.5 stage.",
-  "A curriculum that ramps intensity therefore cannot show the policy anything fixed randomization withholds, and cannot withhold the easy episodes it supplies. It can only change how often each is seen."
+  "Exact and unaffected by the correction: on EVERY individual parameter, a full-intensity draw is inside the half-intensity range half the time. Fixed randomization withholds no parameter value that a curriculum would introduce.",
+  "Not established: how often a whole episode is as easy as an earlier stage. Over the 45 independent draws the configs actually make it is essentially never; if difficulty is dominated by a handful of channels it is hundreds of environments per iteration. We did not measure which, so this cannot carry the weight the first version put on it.",
+  "The consequence for the project is therefore weaker than first written. Nesting alone does not explain why no curriculum has won here; it rules out one explanation, that a curriculum introduces parameter values fixed randomization never shows."
  ],
  "what_would_break_it": [
   "A target distribution that is CONCENTRATED rather than a range: a point target has no easy sub-population, which is why the point-versus-range arms exist.",

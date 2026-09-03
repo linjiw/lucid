@@ -1,6 +1,22 @@
 #!/usr/bin/env python3
 """How much of a full-intensity batch is already as easy as an earlier stage?
 
+CORRECTED 2026-09-03. The first version of this tool answered with a single number,
+182 of 1024 environments, and that number was wrong. It raised the per-channel
+probability to the SIXTH power, once per channel, when the draws are per DIMENSION:
+the joint-offset term alone draws independently for each of 29 joints, mass for
+three bodies, centre of mass for three axes, pushes for six components, the
+material for three coefficients, and the delay once. That is 45 independent scalar
+draws per episode, not 6, and the answer moves by eleven orders of magnitude across
+that range. The exponent is not a detail; it IS the answer.
+
+So this tool no longer reports one number. It reports the whole curve against
+effective dimensionality, because how many dimensions actually drive difficulty is
+something we do not know and did not measure. Twenty-nine joint offsets of one
+hundredth of a radian probably do not each contribute as much as a push impulse
+does, so the truth is somewhere between the extremes and closer to the low end,
+but "probably" is not a measurement.
+
 The claim this quantifies: fixed domain randomization as configured here is
 already a curriculum, so staging toward its distribution cannot withhold the easy
 episodes it keeps supplying.
@@ -63,24 +79,36 @@ def main(argv=None) -> int:
                     default=Path("receipts/analysis/lucid_nesting_calculus_20260903.json"))
     a = ap.parse_args(argv)
 
-    stages = [0.25, 0.5, 0.6, 0.75, 0.9]
+    stages = [0.5, 0.75, 0.9]
+    #: How many INDEPENDENT scalar draws an episode makes. 45 is the count from the
+    #: configs; the lower numbers are what it would be if difficulty were dominated
+    #: by a few channels rather than spread evenly over all of them.
+    dimensionalities = [1, 3, 6, 10, 20, 45]
     rows = []
-    for s in stages:
-        per_channel = s
-        joint = s ** a.channels
+    for k in dimensionalities:
         rows.append({
-            "stage": s,
-            "share_of_draws_inside_the_stage_range_per_channel": round(per_channel, 4),
-            "share_of_episodes_no_harder_than_the_stage_on_every_channel": round(joint, 6),
-            "expected_such_environments_per_iteration": round(a.envs * joint, 1),
+            "effective_dimensions": k,
+            **{f"envs_per_iteration_no_harder_than_stage_{s}": round(a.envs * (s ** k), 4)
+               for s in stages},
         })
 
     report = {
         "kind": "lucid_nesting_calculus",
-        "schema_version": 1,
-        "claim": ("Fixed randomization at full intensity already supplies, every iteration, a "
-                  "sub-population of episodes distributionally identical to each earlier stage "
-                  "of any curriculum that ramps toward it."),
+        "schema_version": 2,
+        "supersedes": ("schema 1 of this receipt, which reported 182 of 1024 environments as if it "
+                       "were a measurement. It raised the per-channel probability to the sixth "
+                       "power when the draws are per dimension and there are 45 of them, and the "
+                       "answer spans eleven orders of magnitude over the plausible range."),
+        "what_survives_exactly": ("Per PARAMETER, the supports are nested: the stage-s range sits "
+                                  "inside the full range and a full-intensity draw lands in it with "
+                                  "probability exactly s. No parameter VALUE is withheld by fixed "
+                                  "randomization that a curriculum would introduce."),
+        "what_does_not_survive": ("The claim that whole EPISODES as easy as an earlier stage appear "
+                                  "in every batch. That is the joint event across every independent "
+                                  "draw, and its frequency depends on how many dimensions actually "
+                                  "drive difficulty, which we have not measured. At six effective "
+                                  "dimensions it is 182 environments per iteration; at the 45 the "
+                                  "configs actually draw, it is 0.002."),
         "why_exact": ("scale_range is affine about the nominal, so the stage-s range has exactly s "
                       "times the full width and sits inside it. A uniform full-intensity draw "
                       "therefore lands inside it with probability exactly s, and conditioned on "
@@ -91,14 +119,16 @@ def main(argv=None) -> int:
                                for k, v in CHANNELS.items()},
         "table": rows,
         "reading": [
-            f"At full intensity {rows[1]['share_of_draws_inside_the_stage_range_per_channel']:.0%} of draws on "
-            "EVERY channel are already inside the half-intensity range.",
-            f"{rows[3]['expected_such_environments_per_iteration']:.0f} of {a.envs} environments per iteration are "
-            "no harder than a 0.75 stage on all six channels at once, and "
-            f"{rows[1]['expected_such_environments_per_iteration']:.0f} are no harder than a 0.5 stage.",
-            "A curriculum that ramps intensity therefore cannot show the policy anything fixed "
-            "randomization withholds, and cannot withhold the easy episodes it supplies. It can "
-            "only change how often each is seen.",
+            "Exact and unaffected by the correction: on EVERY individual parameter, a "
+            "full-intensity draw is inside the half-intensity range half the time. Fixed "
+            "randomization withholds no parameter value that a curriculum would introduce.",
+            "Not established: how often a whole episode is as easy as an earlier stage. Over the "
+            "45 independent draws the configs actually make it is essentially never; if difficulty "
+            "is dominated by a handful of channels it is hundreds of environments per iteration. "
+            "We did not measure which, so this cannot carry the weight the first version put on it.",
+            "The consequence for the project is therefore weaker than first written. Nesting alone "
+            "does not explain why no curriculum has won here; it rules out one explanation, that a "
+            "curriculum introduces parameter values fixed randomization never shows.",
         ],
         "what_would_break_it": [
             "A target distribution that is CONCENTRATED rather than a range: a point target has no "
@@ -118,11 +148,11 @@ def main(argv=None) -> int:
     a.out.parent.mkdir(parents=True, exist_ok=True)
     a.out.write_text(json.dumps(report, indent=1) + "\n")
 
-    print(f"{'stage':>6} {'per channel':>12} {'all six':>10} {'envs/iter':>10}")
+    print(f"{'effective dims':>14} " + " ".join(f"{'stage ' + str(s):>14}" for s in stages)
+          + f"   (of {a.envs} environments per iteration)")
     for r in rows:
-        print(f"{r['stage']:>6.2f} {r['share_of_draws_inside_the_stage_range_per_channel']:>11.0%} "
-              f"{r['share_of_episodes_no_harder_than_the_stage_on_every_channel']:>10.4f} "
-              f"{r['expected_such_environments_per_iteration']:>10.1f}")
+        print(f"{r['effective_dimensions']:>14} " +
+              " ".join(f"{r[f'envs_per_iteration_no_harder_than_stage_{s}']:>14.4g}" for s in stages))
     print()
     for line in report["reading"]:
         print(" -", line)

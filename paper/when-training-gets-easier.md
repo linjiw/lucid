@@ -30,14 +30,15 @@ survives 16% and an unrandomized policy 3%. We then explain why the never-shrink
 matches fixed randomization rather than beating it, and why nothing else we tried beat it
 either. The scaling is affine about each parameter's nominal value and every environment
 redraws at each episode reset, so a draw at full intensity lands inside the intensity-s range
-with probability exactly s and is then distributed exactly as that stage. Fixed randomization
-therefore supplies every earlier stage of any ramp toward it in every gradient batch: 182 of
-1024 environments per iteration are already no harder than a 0.75 stage on all six channels
-at once. A curriculum can change how often a difficulty is seen, but it cannot withhold what
-fixed randomization keeps supplying. This is a property of the sampling scheme rather than of
-any controller, it is checkable in any implementation from its own sampling code, and it
-predicts where a curriculum could still matter: when the target distribution is concentrated
-rather than a range about the nominal. That comparison is specified here and has not been run.
+with probability exactly s and is then distributed exactly as that stage. So fixed randomization withholds no
+parameter VALUE that a curriculum would introduce. Whether it also supplies whole episodes as
+easy as an earlier stage is a different question and we cannot answer it: that is a joint event
+over the 45 independent draws an episode makes, and its frequency ranges over eleven orders of
+magnitude depending on how many of those dimensions actually drive difficulty, which we did not
+measure. Nesting therefore rules out one explanation for our null results rather than
+establishing one. It also predicts where a curriculum could still matter, when the target is
+concentrated rather than a range about the nominal, and that comparison is specified here and
+has not been run.
 
 ## 1. Introduction
 
@@ -90,11 +91,12 @@ against that baseline with the collapse pathway closed.
    healthy policies while mass, center-of-mass, and joint offsets can be widened to three
    times their range at little cost, and that widening all channels together costs about six
    success points more than the sum of the individual costs (Section 7).
-5. **An explanation, not just a null.** Because ranges scale affinely about their nominal and
-   every environment redraws each episode, the full-intensity distribution contains every
-   earlier stage of any ramp toward it, exactly and in every batch. That accounts for all of
-   the above in one fact, and it says what would have to change for a curriculum to have
-   anything to contribute (Section 9).
+5. **One explanation ruled out.** Because ranges scale affinely about their nominal and every
+   environment redraws each episode, the support of every parameter at full intensity contains
+   the support at every earlier stage. So a curriculum here cannot be introducing parameter
+   values fixed randomization never shows. Whether it introduces easier whole EPISODES depends
+   on the effective dimensionality of difficulty, which we did not measure and do not claim
+   (Section 9).
 
 We claim no improvement in robustness from any curriculum. The paper is about a
 failure of adaptive curricula and the independent measurement that exposes it. A
@@ -358,24 +360,37 @@ intensity-*s* distribution itself. The easy sub-population of a full-intensity
 batch is therefore not merely easier. It is distributionally identical to the
 stage a curriculum would have ramped through.
 
-### 9.2 What that costs, in environments
+### 9.2 What that does and does not license
 
-| Stage a curriculum would pass through | Environments per iteration already no harder, on all six channels |
-|---|---:|
-| 0.50 | 16 of 1024 |
-| 0.75 | 182 of 1024 |
-| 0.90 | 544 of 1024 |
+The per-parameter statement is exact and is the useful one. On every individual
+parameter, half of all full-intensity draws are already inside the half-intensity
+range. Fixed randomization withholds no parameter value that a curriculum would
+introduce, so no curriculum here can be showing the policy physics it had not
+otherwise seen.
 
-Half of all draws on every individual channel are already inside the
-half-intensity range. Fixed randomization supplies every earlier stage of any
-ramp toward it, in every gradient batch, without being asked to. A curriculum can
-change how often each difficulty is seen. It cannot show the policy anything
-fixed randomization withholds, and it cannot withhold what fixed randomization
-supplies.
+The stronger statement, that whole episodes as easy as an earlier stage arrive in
+every batch, does not follow, and an earlier version of this section asserted it
+with a number. That number was wrong. It treated each channel as one draw, when an
+episode makes 45 independent scalar draws: one offset per joint for 29 joints,
+three body masses, three centre-of-mass axes, six push components, three material
+coefficients, one delay. The frequency of the all-easy joint event depends on how
+many of those dimensions actually drive difficulty, and it moves by eleven orders
+of magnitude across the plausible range:
 
-This is why the never-shrink rule matches fixed randomization rather than beating
-it, why the gate's wider range bought nothing, and why the arms are hard to tell
-apart. It is one fact, not a series of unlucky designs.
+| Dimensions that drive difficulty | Environments per iteration no harder than a 0.75 stage |
+|---:|---:|
+| 3 | 432 of 1024 |
+| 6 | 182 of 1024 |
+| 10 | 58 of 1024 |
+| 45 | 0.002 of 1024 |
+
+We did not measure which. Twenty-nine joint offsets of a hundredth of a radian
+plausibly do not each weigh as much as a push impulse, so the truth is likely
+nearer the top of that table than the bottom, but plausibly is not measured.
+
+What this licenses is therefore narrower than we first wrote. It rules out one
+explanation for the null results, that a curriculum introduces parameter values
+fixed randomization never presents. It does not on its own explain them.
 
 ### 9.3 Scope, and what would break it
 
@@ -617,15 +632,16 @@ training ranges removes that path and recovers the robustness of fixed randomiza
 more and no less. Survival measured on proposed conditions is the one signal in our audit
 that can drive expansion safely, and robustness is anisotropic and interactive.
 
-What none of this shows is that any curriculum makes the policy better, and we can
-now say why rather than only that. The randomization is drawn per episode from
-ranges that scale about their nominal, so the distribution a curriculum ramps
-toward already contains every stage it would ramp through, in every batch.
-Staging changes how often a difficulty appears; it cannot change which
-difficulties exist. A curriculum has something to contribute here only where that
-stops being true, and the clearest such case is a target that is concentrated
-rather than a range about the nominal. That is a configuration line, not a new
-method, and it is the next thing to measure.
+What none of this shows is that any curriculum makes the policy better. We can rule
+out one explanation for that: because the randomization is drawn per episode from
+ranges scaling about their nominal, the support of every parameter at full
+intensity already contains its support at every earlier stage, so no curriculum
+here is presenting physics fixed randomization withholds. We cannot yet say
+whether it presents easier whole episodes, which turns on how many of the 45
+independent draws an episode makes actually drive difficulty. A curriculum has
+something to contribute where the target stops being a range about the nominal,
+and the clearest such case is a concentrated target. That is a configuration line
+rather than a new method, and it is the next thing to measure.
 
 ## Appendix A. Vocabulary
 

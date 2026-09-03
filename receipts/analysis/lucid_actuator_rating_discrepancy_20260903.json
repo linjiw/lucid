@@ -66,5 +66,20 @@
   "This is not evidence of a bug. SONIC may have chosen 139 deliberately, for a different G1 variant or to compensate elsewhere, and the EDU model is documented with stronger knee actuators. The finding is a DISCREPANCY between three sources, not a verdict on which is correct.",
   "Nothing here has been tested in simulation. It is a reading of three configuration files."
  ],
- "recommended_action": "Ask the SONIC authors which rating is intended before changing anything. Until then, do not silently 'fix' robots/g1.py: every landed result in this project was produced at 139, and changing it would break comparability with all of them. The honest route is an actuator-channel arm that derates hip pitch to the asset value and reports what it costs."
+ "recommended_action": "Ask the SONIC authors which rating is intended before changing anything. Until then, do not silently 'fix' robots/g1.py: every landed result in this project was produced at 139, and changing it would break comparability with all of them. The honest route is an actuator-channel arm that derates hip pitch to the asset value and reports what it costs.",
+ "RETRACTED": {
+  "date": "2026-09-03",
+  "what_was_claimed": "That training rates hip pitch at 139 N.m where the robot's own assets say 88, making the simulated joint 58 per cent stronger than the hardware, and that the SONIC authors should be asked which is intended.",
+  "why_it_is_wrong": "The three files are three robot generations, not three opinions about one robot. Unitree ships the G1 with three hip reducer variants and documents them in a gear-ratio column in g1_description/README.md: 88 N.m at 32 rad/s is the 14.3:1 hip, and 139 N.m at 20 rad/s is the 22.5:1 hip. Both are official.",
+  "verified_locally": [
+   "SONIC's own deploy header comments the swap on the hip pitch and hip roll rows: 'old is 7520_14 new is 7520_22' (gear_sonic_deploy/.../policy_parameters.hpp:110 and :144).",
+   "The two ratings are one motor behind two reducers, and three independent arithmetic checks agree to within 2 per cent: implied rotor torque 88/14.3 = 6.154 against 139/22.5 = 6.178 N.m; implied rotor speed 32*14.3 = 457.6 against 20*22.5 = 450.0 rad/s; and SONIC's own armature ratio 2.4664 against the square of the reduction ratio, 2.4757.",
+   "The velocity 'discrepancy' I also reported, 20 against 32 rad/s, is the same fact: more reduction buys torque and costs speed."
+  ],
+  "external_evidence": "NVIDIA's maintainer states it directly in GR00T-WholeBodyControl issue 174: the newer G1 differs in the hip pitch motor and the released policy was trained for it. Which robot is in front of you is readable at runtime, since the deploy stack already prints the machine mode off the DDS state.",
+  "what_this_costs": "The 'our simulator over-torques the hip by 58 per cent' finding is withdrawn. It was reported to the user as a headline result and it was wrong.",
+  "what_survives": "Two things. The vendor-gap experiment is still worth running with a corrected motivation: our policies target the newer 22.5:1 robot, so the cells now measure what the SAME policy costs on the older 14.3:1 G1, which is a real deployment question rather than a configuration error. And the joint-friction finding is untouched: the asset declares no joint dynamics at all, on any variant.",
+  "flagged_but_not_verified_by_us": "An independent check reports that our ankle and waist roll/pitch use 50 N.m and 37 rad/s where all 18 official Unitree G1 assets use 35 and 30, a discrepancy that no variant explains and that this receipt never looked at. We have confirmed our own values but not the official ones, so it is recorded as a lead rather than a finding.",
+  "lesson": "Three files disagreeing is not evidence that one is wrong. I compared assets without establishing that they described the same hardware, and the check that would have caught it, whether the numbers are consistent as one motor behind different reducers, took under a minute once asked."
+ }
 }
