@@ -75,9 +75,10 @@ against that baseline with the collapse pathway closed.
 1. **A measured failure mode.** We show that an adaptive curriculum that can narrow its own
    training ranges collapses them in two of six long runs, and that terminal training
    return and held-out robustness are inversely ranked across twelve runs (Section 4).
-2. **A rule that prevents it.** Training ranges that never shrink block all 2,033 requested
-   reductions over three seeds and are noninferior to fixed randomization under a rule fixed
-   before the data existed (Section 5).
+2. **A rule that prevents it, at no measured cost.** Training ranges that never shrink block
+   all 2,033 requested reductions over three seeds and satisfy a tolerance rule against fixed
+   randomization that was fixed before the data existed. Three seeds cannot establish
+   equivalence, and we do not claim it (Section 5).
 3. **Which signals can be trusted.** An audit at fixed difficulty shows that time-out
    survival tracks competence (rank correlation +0.99 with training progress) and the
    learned mismatch signal does not (−0.04), which explains why the collapsing curriculum
@@ -86,6 +87,12 @@ against that baseline with the collapse pathway closed.
    healthy policies while mass, center-of-mass, and joint offsets can be widened to three
    times their range at little cost, and that widening all channels together costs about six
    success points more than the sum of the individual costs (Section 7).
+
+We claim no improvement in robustness from any curriculum. The paper is about a
+failure of adaptive curricula and the independent measurement that exposes it. A
+contribution about adaptive performance belongs here only once the comparison in
+Section 9 against a schedule reaching the same ranges supports one, and that
+comparison has not been run.
 
 We also replay the exported policies in a second simulator with independently implemented
 randomization (Section 8). The ordering survives. Finally we describe the range-expansion
