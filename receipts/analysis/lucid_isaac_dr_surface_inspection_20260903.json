@@ -1,0 +1,93 @@
+{
+ "kind": "lucid_isaac_dr_surface_inspection",
+ "schema_version": 1,
+ "created_at": "2026-09-03T01:12:34-04:00",
+ "sonic_sha": "6c1aa28147908f9099dbee5f895f4fa98be858aa",
+ "question": "Which parameters already present in Isaac Lab and this robot's configuration can we set directly, per environment, that are also hard to train against and important on a real deployment?",
+ "method": "Read the Isaac Lab articulation writers, the event-term library, and this project's G1 configuration. No simulation was run.",
+ "what_sonic_randomizes_today": {
+  "channels": [
+   "randomize_rigid_body_mass",
+   "base_com",
+   "physics_material (ground)",
+   "add_joint_default_pos",
+   "push_robot",
+   "randomize_action_delay"
+  ],
+  "observation": "every one is a property of the robot's LOAD or of the WORLD. None is a property of the actuator, and the actuator is where a deployed humanoid differs most from its simulator."
+ },
+ "directly_settable_and_unused": [
+  {
+   "property": "peak torque per joint",
+   "writer": "Articulation.write_joint_effort_limit_to_sim",
+   "state_in_g1_config": "set to the PEAK rating (139 N.m knee and hip roll/pitch, 88 hip yaw and waist yaw, 50 feet and waist) and never varied",
+   "deployment_relevance": "HIGH. A deployed motor delivers less than peak: the battery sags under load, the winding heats, and units vary. Unitree documents derating on the G1 when a joint passes its safe temperature.",
+   "barrier_reasoning": "removes capability outright. Below the torque needed to hold a pose the robot falls immediately and the gradient carries little information, which is the shape a learnability barrier has.",
+   "verdict": "strongest candidate: real, directly settable, needs no new physics model"
+  },
+  {
+   "property": "joint friction, static / dynamic / viscous",
+   "writer": "write_joint_friction_coefficient_to_sim and the dynamic and viscous variants",
+   "state_in_g1_config": "NOT SET ANYWHERE in the Python configuration. The simulated G1 has frictionless gearboxes. The effective value comes from the USD asset, which this inspection did not read, so confirm it at runtime before relying on the claim.",
+   "deployment_relevance": "HIGH. A harmonic or planetary reducer has Coulomb friction that varies with temperature, load and wear; a cold robot is measurably stiffer than a warm one.",
+   "barrier_reasoning": "adds a NONSMOOTH term. Static friction has a sign discontinuity at zero velocity, so it creates stiction, a deadband and limit cycles that a smooth perturbation does not. Its magnitude at physically honest levels is a few N.m against a 139 N.m peak, so whether it is hard rather than merely present is genuinely uncertain.",
+   "verdict": "the largest unmodelled gap; barrier potential unknown and worth measuring"
+  },
+  {
+   "property": "joint speed limit",
+   "writer": "write_joint_velocity_limit_to_sim",
+   "state_in_g1_config": "set (20 rad/s knee and hip, 32 hip yaw, 37 feet) and never varied",
+   "deployment_relevance": "HIGH. Back-EMF caps joint speed and a motor at its limit cannot track a fast reference.",
+   "barrier_reasoning": "removes capability, but on a motion-TRACKING task a limit below what the clip demands may make the reference physically untrackable. That is an unlearnable task rather than a barrier, and the preregistration's rule already separates the two.",
+   "verdict": "real, but carries the clearest risk of producing unlearnability"
+  },
+  {
+   "property": "armature (reflected rotor inertia)",
+   "writer": "write_joint_armature_to_sim",
+   "state_in_g1_config": "set from motor specifications and never varied",
+   "deployment_relevance": "MEDIUM. A known identification error, but smooth.",
+   "barrier_reasoning": "smooth parameter of a solved task, the same shape as the six channels that produced no barrier.",
+   "verdict": "include for completeness, expect no barrier"
+  },
+  {
+   "property": "actuator gains, stiffness and damping",
+   "writer": "write_joint_stiffness_to_sim / write_joint_damping_to_sim",
+   "state_in_g1_config": "set per joint group and never varied",
+   "deployment_relevance": "HIGH, arguably the classic sim-to-real gap for a position-controlled robot.",
+   "barrier_reasoning": "low damping causes oscillation and can destabilise outright, which is a real cliff. BUT this project derives the action scale as 0.25 * effort / stiffness, so changing stiffness changes what the policy's action MEANS. That confound has to be resolved before the channel is interpretable.",
+   "verdict": "high value, blocked on the action-scale coupling"
+  }
+ ],
+ "ready_made_isaac_term": {
+  "name": "isaaclab.envs.mdp.events.randomize_joint_parameters",
+  "covers": [
+   "friction_distribution_params (static, dynamic and viscous)",
+   "armature_distribution_params",
+   "joint position limits"
+  ],
+  "caveat": "its own docstring recommends using it only at environment initialisation because it assigns through CPU tensors. A curriculum needs a channel it can move at every reset, so the reset-safe route this project already built for three other startup-only channels applies here too."
+ },
+ "what_was_built": {
+  "module": "gear_sonic/research/practice_utility/actuator_dr.py",
+  "covers": [
+   "effort_limit",
+   "joint_friction",
+   "armature",
+   "velocity_limit"
+  ],
+  "tests": "18 CPU tests against a fake articulation implementing exactly the writers used",
+  "properties_pinned": [
+   "lam = 0 writes the nominal back exactly",
+   "every draw re-derives from a cached nominal, so repeated resets do not stack",
+   "friction is ADDED rather than scaled, because a scale on a nominal of zero does nothing",
+   "the term reports what it wrote, including how many of the three friction writers this Isaac Sim actually exposes"
+  ]
+ },
+ "how_this_changes_the_thermal_proposal": "The deployment motivation for thermal derating is that a real motor delivers less than peak. That is obtainable directly, by randomizing the effort limit that already exists, with no thermal model and no assumed time constants. The thermal model remains the only way to get the ENDOGENOUS and ACCUMULATING properties, where the policy's own effort creates the constraint; it is kept for that reason alone and is no longer the first thing to try.",
+ "recommended_next": "Extend the frozen-policy severity screen to these four channels alongside the thermal one. Five frozen policies, five severities, about 0.25 GPU-h per channel and no training. Whichever channel shows a cliff is the one worth training against; whichever does not is reported as another channel with no barrier, which is itself the map this project is building.",
+ "not_verified": [
+  "no simulation has been run with any of these channels",
+  "the claim that joint friction is unset is from the Python configuration only; the USD asset was not read",
+  "the action-scale coupling for stiffness has not been resolved"
+ ]
+}
