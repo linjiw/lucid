@@ -33,12 +33,17 @@ import statistics
 import sys
 
 BASELINE_CELL = "act_off"
+#: The standard preset at its envelope. Against the baseline cell this is an A/A
+#: null: same six channels, same intensities, the four new terms inert. A gap
+#: between them is a wiring defect, not physics.
+AA_CELL = "phys_100"
 #: Which channel each cell varies, and its rung. Mirrors PRESET_ACTUATOR.
 CHANNELS = {
     "effort": ("act_effort_050", "act_effort_100", "act_effort_150"),
     "friction": ("act_friction_050", "act_friction_100", "act_friction_200", "act_friction_300"),
     "armature": ("act_armature_100", "act_armature_200"),
-    "velocity": ("act_velocity_050", "act_velocity_100", "act_velocity_150"),
+    "velocity": ("act_velocity_050", "act_velocity_100", "act_velocity_150",
+                 "act_velocity_200"),
 }
 #: The arm a "is it live" check is made against: competent and not fragile.
 REFERENCE_ARM = "fixed"
@@ -146,16 +151,40 @@ def main(argv=None) -> int:
     ranked = sorted(
         (c for c, e in report["channels"].items() if e["is_live"] and e["is_survivable"]),
         key=lambda c: -(report["channels"][c]["arm_spread_at_top_pts"] or 0))
+    # The A/A null, checked before any channel is interpreted.
+    aa = {}
+    for arm in arms:
+        aa[arm] = pts(cells.get((arm, BASELINE_CELL)), cells.get((arm, AA_CELL)))
+    gaps = [abs(v) for v in aa.values() if v is not None]
+    report["aa_null"] = {
+        "cells": [AA_CELL, BASELINE_CELL],
+        "per_arm_delta_pts": aa,
+        "max_abs_gap_pts": None if not gaps else round(max(gaps), 2),
+        "verdict": (
+            "NOT RUN: one of the two cells is missing" if not gaps else
+            "PASS: adding four inert terms changed nothing beyond single-cell noise"
+            if max(gaps) < LIVE_PTS else
+            "FAIL: the actuator preset differs from the standard one with every actuator "
+            "channel at its nominal. Fix the wiring before reading any channel below."),
+    }
     report["candidates_most_promising_first"] = ranked
     report["not_verified"] = [
         "frozen policies only: this locates where a channel matters, it does not show that "
         "training at that severity fails or that staging helps",
         "one evaluation seed per cell; single-cell noise here is 2-3 points",
         "a channel that reads NOT LIVE may be unapplied rather than harmless; check the run's "
-        "own dr_scale_report before drawing a physical conclusion",
+        "own dr_scale_report and its PhysX read-back before drawing a physical conclusion",
+        "torque_saturation and energy_proxy are normalized by the live effort limit, the exact "
+        "buffer the effort channel rewrites, so under act_effort_* they move by construction. "
+        "They are a presence check there, never an outcome",
     ]
     a.out.parent.mkdir(parents=True, exist_ok=True)
     a.out.write_text(json.dumps(report, indent=1) + "\n")
+
+    aa = report["aa_null"]
+    print(f"A/A null ({AA_CELL} vs {BASELINE_CELL}): {aa['verdict']}")
+    if aa["max_abs_gap_pts"] is not None:
+        print(f"  largest per-arm gap {aa['max_abs_gap_pts']} points")
 
     for channel, e in report["channels"].items():
         print(f"\n{channel}  (baseline {BASELINE_CELL}; deltas in success points)")

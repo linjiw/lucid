@@ -11,6 +11,11 @@
 # constrains a competent policy, the channel is not a barrier candidate and is
 # reported as such rather than retuned until it bites.
 #
+#   phys_100         the STANDARD preset at its envelope. Against act_off this is a
+#                    pure A/A null: the same six channels, the same intensities,
+#                    the four new terms inert. It asserts nothing about physics and
+#                    everything about the wiring, and it is the one cell that can
+#                    show the new preset changed something it should not have.
 #   act_off          every actuator channel collapsed to its nominal; the
 #                    within-preset reference the other cells are read against
 #   act_effort_*     peak torque, the rating a deployed motor does not meet
@@ -41,7 +46,7 @@ readonly PANEL="${LUCID_ROOT}/manifests/replicate_panel_panel_hob002_k512.json"
 readonly PY="/home/linjiw/isaaclab-install/env_isaaclab/bin/python"
 readonly STAMP="$(date +%Y%m%d_%H%M%S)"
 readonly EXPERIMENT="actuator_screen_${STAMP}"
-readonly PRESETS="act_off act_effort_050 act_effort_100 act_effort_150 act_friction_050 act_friction_100 act_friction_200 act_friction_300 act_armature_100 act_armature_200 act_velocity_050 act_velocity_100 act_velocity_150"
+readonly PRESETS="phys_100 act_off act_effort_050 act_effort_100 act_effort_150 act_friction_050 act_friction_100 act_friction_200 act_friction_300 act_armature_100 act_armature_200 act_velocity_050 act_velocity_100 act_velocity_150 act_velocity_200"
 
 EXECUTE=0
 [[ "${1:-}" == "--execute" ]] && EXECUTE=1
