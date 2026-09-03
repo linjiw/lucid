@@ -60,15 +60,18 @@ survival tracks competence while the learned mismatch signal used by the collaps
 curriculum does not. Replaying the exported policies in MuJoCo with independently
 implemented randomization preserves the ordering: beyond the training envelope, both
 never-shrink and fixed policies survive 38% of physics draws where the collapsed policy
-survives 16% and an unrandomized policy 3%. A prototype that tests proposed conditions
-before expanding raised the training-range scale from 1.0 to 1.5 in four steps. Finally we
-measure whether a curriculum could allocate practice by learning progress, as recent
-multi-dimensional curricula do: from scratch the progress signal is clear, but once the
-policy is competent it falls to between 0.01 and 0.08 of its own noise floor, no cohort meets
-our reliability criterion at any window width we can afford, and closing the gap would need
-roughly 170 times the episodes per decision window. Whether adaptive
-expansion improves robustness over a preset schedule remains open; the present results
-show why better policies must be distinguished from easier training.</p>
+survives 16% and an unrandomized policy 3%. We then explain why the never-shrink rule
+matches fixed randomization rather than beating it, and why nothing else we tried beat it
+either. The scaling is affine about each parameter's nominal value and every environment
+redraws at each episode reset, so a draw at full intensity lands inside the intensity-s range
+with probability exactly s and is then distributed exactly as that stage. Fixed randomization
+therefore supplies every earlier stage of any ramp toward it in every gradient batch: 182 of
+1024 environments per iteration are already no harder than a 0.75 stage on all six channels
+at once. A curriculum can change how often a difficulty is seen, but it cannot withhold what
+fixed randomization keeps supplying. This is a property of the sampling scheme rather than of
+any controller, it is checkable in any implementation from its own sampling code, and it
+predicts where a curriculum could still matter: when the target distribution is concentrated
+rather than a range about the nominal. That comparison is specified here and has not been run.</p>
 <h2>1. Introduction</h2>
 <p>A humanoid policy trained in simulation must work on a robot whose mass, friction, actuator
 delay, and disturbances differ from the simulator's nominal values. Domain randomization
@@ -115,6 +118,11 @@ against that baseline with the collapse pathway closed.</p>
    healthy policies while mass, center-of-mass, and joint offsets can be widened to three
    times their range at little cost, and that widening all channels together costs about six
    success points more than the sum of the individual costs (Section 7).</li>
+<li><strong>An explanation, not just a null.</strong> Because ranges scale affinely about their nominal and
+   every environment redraws each episode, the full-intensity distribution contains every
+   earlier stage of any ramp toward it, exactly and in every batch. That accounts for all of
+   the above in one fact, and it says what would have to change for a curriculum to have
+   anything to contribute (Section 9).</li>
 </ol>
 <p>We claim no improvement in robustness from any curriculum. The paper is about a
 failure of adaptive curricula and the independent measurement that exposes it. A
@@ -124,7 +132,7 @@ comparison has not been run.</p>
 <p>We also replay the exported policies in a second simulator with independently implemented
 randomization (Section 8). The ordering survives. Finally we describe the range-expansion
 curriculum this evidence motivates, report a scalar prototype that expanded ranges in four
-evidence-triggered steps, and state the test it must pass before we credit it (Section 9).</p>
+evidence-triggered steps, and state the test it must pass before we credit it (Section 10).</p>
 <h2>2. Background and Related Work</h2>
 <p><strong>Domain randomization</strong> trains on a distribution of physical parameters so that the
 deployed system falls inside or near the training distribution [1–4]. <strong>Adaptive
@@ -498,7 +506,99 @@ draw marked pass or fall accompany the paper.</p>
 adaptive run, 0.40 for the collapsed run, and 0.18 without randomization. Rank correlation
 of the arm ordering with the trained clip is 0.8 and 1.0 across the two cells. This is one
 nearby clip, not motion generalization.</p>
-<h2>9. Where Should the Extra Training Go?</h2>
+<h2>9. Why None of This Helps: The Target Already Contains Every Stage</h2>
+<p>Sections 4 to 8 report a curriculum that ties fixed randomization on three seeds,
+an expansion gate that reaches a wider range without beating it, and a signal that
+cannot be read online. Each was treated as its own result. They have one
+explanation, and it is a property of how the randomization is sampled rather than
+of any controller.</p>
+<h3>9.1 The nesting argument</h3>
+<p>A curriculum here scales each channel's range by an intensity. The scaling is
+affine about that channel's nominal value, so the range at intensity <em>s</em> is</p>
+<pre><code>[nominal − s·dev_low,  nominal + s·dev_high]
+</code></pre>
+<p>which lies inside the full range and has exactly <em>s</em> times its width. Every
+randomization term is applied at episode reset, and every one of the 1,024
+environments draws independently. Two consequences follow, and both are exact
+rather than statistical.</p>
+<p>First, a draw at full intensity lands inside the intensity-<em>s</em> range with
+probability exactly <em>s</em>, for every channel, whatever its units or asymmetry.
+Second, conditioned on landing there, it is uniform on that range, which is the
+intensity-<em>s</em> distribution itself. The easy sub-population of a full-intensity
+batch is therefore not merely easier. It is distributionally identical to the
+stage a curriculum would have ramped through.</p>
+<h3>9.2 What that costs, in environments</h3>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Stage a curriculum would pass through</th>
+<th style="text-align: right;">Environments per iteration already no harder, on all six channels</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.50</td>
+<td style="text-align: right;">16 of 1024</td>
+</tr>
+<tr>
+<td>0.75</td>
+<td style="text-align: right;">182 of 1024</td>
+</tr>
+<tr>
+<td>0.90</td>
+<td style="text-align: right;">544 of 1024</td>
+</tr>
+</tbody>
+</table></div>
+<p>Half of all draws on every individual channel are already inside the
+half-intensity range. Fixed randomization supplies every earlier stage of any
+ramp toward it, in every gradient batch, without being asked to. A curriculum can
+change how often each difficulty is seen. It cannot show the policy anything
+fixed randomization withholds, and it cannot withhold what fixed randomization
+supplies.</p>
+<p>This is why the never-shrink rule matches fixed randomization rather than beating
+it, why the gate's wider range bought nothing, and why the arms are hard to tell
+apart. It is one fact, not a series of unlucky designs.</p>
+<h3>9.3 Scope, and what would break it</h3>
+<p>The argument applies to a curriculum that widens a range about a nominal value,
+with the parameter redrawn per episode. That covers every channel in this work and,
+we believe, most implementations of adaptive domain randomization, but it is a
+claim about a sampling scheme rather than about curricula in general, and it is
+checkable in any implementation from its own sampling code.</p>
+<p>Three things break it, and they say where a curriculum could still matter.</p>
+<ul>
+<li><strong>A concentrated target.</strong> If the target is a point, or a narrow band away from
+  the nominal, it has no easy sub-population and direct training has no automatic
+  curriculum to fall back on.</li>
+<li><strong>A draw held fixed for longer than an episode.</strong> If a parameter is drawn once
+  per run, a batch is homogeneous and staging changes what a batch contains.</li>
+<li><strong>A schedule that moves the range rather than widening it.</strong> Earlier stages are
+  then not nested inside the target.</li>
+</ul>
+<p>The first is testable at the cost of a configuration line, and Section 10
+describes that comparison. We report it as the experiment this argument implies,
+not as a result: it has not been run.</p>
+<h3>9.4 What we did not find</h3>
+<p>We looked for a randomization channel whose difficulty might break direct
+training, on the reasoning that the six existing ones are smooth perturbations of
+a task the policy already solves. Four actuator properties that Isaac Lab exposes
+and this robot holds fixed were added and screened on frozen policies: peak
+torque, joint friction, reflected inertia, and the joint speed ceiling.</p>
+<p>Two are live. Reducing peak torque costs the healthy policies 19 to 22 success
+points at the deepest setting and the weaker ones 44 to 46. Adding gearbox
+friction, which the robot's own asset declares none of, costs 12 to 19 against 39
+to 58. Reflected inertia does nothing, which we predicted. The speed ceiling also
+does nothing, which we did not: at the deepest setting a fifth of environments
+are limited below the reference motion's own measured demand and none was
+affected, and we cannot yet separate a physically inert channel from a write the
+engine does not enforce.</p>
+<p>Neither live channel measures a new axis of capability. Ranking the five policies
+by how much each loses, friction reproduces the ordering of the existing
+difficulty ladder at a rank correlation of +0.90 and torque at +0.50. They are
+harder, and one of them is a real gap between this simulator and the robot, but
+they are not a different kind of difficulty. Under the nesting argument that is
+what should have been expected: a harder range is still a range.</p>
+<h2>10. Where Should the Extra Training Go?</h2>
 <p>Sections 4 to 7 fix what a curriculum may do and what it may listen to. They do
 not show that any curriculum improves the policy. The question that decides that
 comes first, and we have not answered it:</p>
@@ -507,7 +607,7 @@ comes first, and we have not answered it:</p>
 learnable physical conditions, while preserving performance on conditions
 already learned?</p>
 </blockquote>
-<h3>9.1 Difficult is not the same as learnable</h3>
+<h3>10.1 Difficult is not the same as learnable</h3>
 <p>Section 7 says pushes bind and mass, center of mass, and joint offsets are
 nearly free. It does not say that practising pushes would help. A condition can
 be hard because the policy lacks practice at it, because the observation cannot
@@ -515,7 +615,7 @@ support the required response, or because the reference motion is incompatible
 with that disturbance. Only the first is repaired by any curriculum, and every
 component of an expansion curriculum silently assumes the first. Nothing we have
 measured separates them.</p>
-<h3>9.2 The screen that separates them</h3>
+<h3>10.2 The screen that separates them</h3>
 <p>Five branches leave the same competent policy with the same architecture,
 reward, motion, environment count, iteration budget, and seed. The only
 difference is what a fixed quarter of the same 1,024 environments practises, and
@@ -591,7 +691,7 @@ corner, a component that exists to protect combinations has nothing to add here.
 this budget, and this practised dose. It does not establish that some other
 scheduler, dose, or origin would also fail, and we do not report it as though it
 did.</p>
-<h3>9.3 What a curriculum would have to ask, and what that costs — Measured</h3>
+<h3>10.3 What a curriculum would have to ask, and what that costs — Measured</h3>
 <p>Our gate asks whether the policy can already handle a harder condition, and
 expands when success is high. A curriculum that improves the policy has to ask a
 different question: would practising this help? That is a question about
@@ -625,7 +725,7 @@ bit per episode is too coarse to resolve it. The consequence for design is
 concrete. An online allocator driven by episode-end survival or by reward
 progress cannot make trustworthy per-condition decisions at this budget, so the
 effect of practice has to be measured end to end against frozen evaluation cells,
-as Section 9.2 does. We audited the obvious candidate for a
+as Section 10.2 does. We audited the obvious candidate for a
 finer signal. Per-step foot slip yields hundreds of samples per episode instead
 of one bit, and Section 6 found it the only body-grounded signal with a
 consistent difficulty response. It does have the resolution: in the eight cells
@@ -639,8 +739,8 @@ improving whenever difficulty is cut. Three policies and one seed do not settle
 it, but they remove the reason to build on it.</p>
 <p>So no online per-condition progress signal is available to us at present. That is
 the case for measuring the effect of practice end to end, against frozen
-evaluation cells, as Section 9.2 does.</p>
-<h3>9.4 Stated support is not practice — Measured</h3>
+evaluation cells, as Section 10.2 does.</p>
+<h3>10.4 Stated support is not practice — Measured</h3>
 <p>There is a second reason to measure the effect of practice end to end. Widening a
 uniform range lowers the density everywhere inside it, so a condition can remain
 formally inside the training support while being practised much less than
@@ -688,10 +788,10 @@ randomization spends 100 percent. The frontier practice was bought with envelope
 practice rather than added to it, which is a direct explanation for expansion
 arms tying fixed randomization rather than beating it: with the environment count
 held constant, widening a range is a reallocation, and the reallocation is the
-treatment. That is the design the screen in Section 9.2 makes explicit and
+treatment. That is the design the screen in Section 10.2 makes explicit and
 controls, and it is why any comparison here reports realized exposure per band
 rather than the range a curriculum claims.</p>
-<h3>9.5 The hurdle any such curriculum must clear</h3>
+<h3>10.5 The hurdle any such curriculum must clear</h3>
 <p>Beating the narrow fixed baseline of Section 5 would establish nothing. The
 comparators are fixed randomization over the wider target range, a preset
 expansion schedule reaching the same final ranges, and a preset per-parameter
@@ -705,7 +805,7 @@ fixed robustness target reached at lower cost.</p>
 which parameter to emphasize, choosing when to change the emphasis, checking
 combinations, and maintaining earlier practice. Each is kept only if an
 experiment could show it is unnecessary.</p>
-<h2>10. Limitations</h2>
+<h2>11. Limitations</h2>
 <p>All capability results come from one training motion and one primary simulator, with one
 nearby untrained clip and one sim-to-sim replay. The channel sweep uses one seed; the
 ordering is informative, exact gaps are not. Three seeds bound the never-shrink comparison
@@ -714,14 +814,22 @@ the variability and the size of the effect claimed rather than on a convention
 [19]. The MuJoCo replay uses our own randomization and the ONNX
 policy, not the deployment binary. The proposed curriculum has a scalar prototype only.
 Nothing here has been run on hardware.</p>
-<h2>11. Conclusion</h2>
+<h2>12. Conclusion</h2>
 <p>An adaptive curriculum should not be allowed to pass its own test by making the test
 easier. In long humanoid training runs, the curriculum that could do so did: it earned the
 highest training returns while losing the physics its policy would need. Refusing to shrink
 training ranges removes that path and recovers the robustness of fixed randomization, no
 more and no less. Survival measured on proposed conditions is the one signal in our audit
-that can drive expansion safely, and robustness must be widened parameter by parameter with
-combinations checked. Whether doing so beats a preset schedule is the next experiment.</p>
+that can drive expansion safely, and robustness is anisotropic and interactive.</p>
+<p>What none of this shows is that any curriculum makes the policy better, and we can
+now say why rather than only that. The randomization is drawn per episode from
+ranges that scale about their nominal, so the distribution a curriculum ramps
+toward already contains every stage it would ramp through, in every batch.
+Staging changes how often a difficulty appears; it cannot change which
+difficulties exist. A curriculum has something to contribute here only where that
+stops being true, and the clearest such case is a target that is concentrated
+rather than a range about the nominal. That is a configuration line, not a new
+method, and it is the next thing to measure.</p>
 <h2>Appendix A. Vocabulary</h2>
 <p>Terms used in earlier drafts and their replacements in this one.</p>
 <div class="tbl"><table>
@@ -813,6 +921,10 @@ combinations checked. Whether doing so beats a preset schedule is the next exper
 </tr>
 <tr>
 <td>9</td>
+<td><code>receipts/analysis/lucid_why_no_curriculum_wins_20260903.json</code>, <code>lucid_nesting_calculus_20260903.json</code>, <code>lucid_actuator_screen_readout.json</code></td>
+</tr>
+<tr>
+<td>10</td>
 <td><code>receipts/analysis/lucid_progress_signal_audit_20260902.json</code> and <code>..._warmstart_20260902.json</code>; preregistration <code>lucid_practice_allocation_screen_preregistration_20260902.json</code>; training trace <code>artifacts/.../curriculum_comparison_ne1024_20260901_232720/seed_8600/gate_150/curriculum_*.jsonl</code> (the gate run itself; <code>lucid_gate_feasibility_20260901.json</code> is a replay proxy, not this run), preregistration <code>lucid_support_expansion_screen_preregistration_20260901.json</code></td>
 </tr>
 </tbody>
