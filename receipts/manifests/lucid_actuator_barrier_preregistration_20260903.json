@@ -45,10 +45,11 @@
    "cost_gpu_h": 4,
    "what": "four warm-start arms from the fixed@s8600 final, 1500 iterations, one seed, identical budget, environments, mixture and origin. Only the actuator channel's schedule differs.",
    "arms": {
-    "fixed_act_off": "the actuator channels collapsed to nominal: the control that says what this budget buys with no new channel",
-    "fixed_act_S": "the channel pinned at the target severity for the whole run: DIRECT training at the target",
-    "ramp_act_S": "an open-loop schedule from nominal to S over the run: staged, with no feedback",
-    "gate_act_S": "the probe-gated curriculum expanding toward S: staged, with feedback"
+    "act_off": "every actuator channel at nominal: what this budget buys with none of it",
+    "act_range": "the target as a RANGE, which is self-curricularizing and expected to behave like fixed randomization",
+    "act_point": "the same target as a POINT, every environment every episode: direct training at a concentrated target",
+    "act_ramp": "an open-loop schedule ending at that point",
+    "act_gate": "the probe-gated curriculum expanding toward that point"
    },
    "decides": "whether direct training reaches the target, and whether staging is what makes the difference or merely the schedule",
    "note": "This is the comparison in the plain question 'can fixed DR train a good policy here'. fixed_act_S answers it; the other three say what the answer means."
@@ -61,7 +62,7 @@
  },
  "frozen_decision_rules": {
   "C0_live": "A channel enters P1 only if P0 finds it live (reference arm moves at least 5 points at the top rung) and survivable (some policy above 0.05 there).",
-  "C1_direct_training_fails": "Direct training fails at severity S if fixed_act_S ends at least 10 points below fixed_act_off on the frozen held-out band. Smaller than that is a cost, not a failure.",
+  "C1_direct_training_fails": "Direct training fails at the target if act_point ends at least 10 points below act_off on the frozen held-out band. act_range is reported beside it: if act_range does NOT fail while act_point does, the barrier is about the shape of the target distribution rather than about the parameter, which is the claim under test.",
   "C2_the_target_is_reachable": "S is reachable if any staged arm (ramp_act_S or gate_act_S) ends within 5 points of fixed_act_off. Without this, C1 alone means the task is unlearnable at S and the finding is reported that way.",
   "C3_a_barrier_exists": "C1 AND C2. This is the first regime in this project where a curriculum could be necessary rather than optional.",
   "C4_does_feedback_add_anything": "gate_act_S must beat ramp_act_S by at least 5 points to credit feedback. A tie means the SCHEDULE crossed the barrier and the feedback did not, which is a result about staging, not about our controller.",
@@ -81,5 +82,30 @@
   "screen": "tools/run_actuator_screen.sh, read out by tools/analyze_actuator_screen.py",
   "tests": "75 CPU tests across test_actuator_dr, test_events_actuator and test_actuator_preset",
   "still_to_build": "the P1 training arms (fixed_act_S, ramp_act_S, gate_act_S) in run_curriculum_comparison.py, once P0 says which channel and severity"
- }
+ },
+ "amendments": [
+  {
+   "id": "A1-A3",
+   "date": "2026-09-03",
+   "made_before_any_arm_was_trained": true,
+   "trigger": "an adversarial read of the wiring and the physics, before anything ran",
+   "A1_the_decisive_variable_is_the_target_SHAPE_not_the_parameter": {
+    "finding": "Fixed randomization here is already a curriculum: ranges shrink toward their nominal so supports are nested, and reset-mode per-environment draws put near-nominal episodes in every batch. Receipt: lucid_why_no_curriculum_wins_20260903.json.",
+    "consequence": "The four actuator channels were preregistered as RANGES and would have inherited exactly that property, so none of them could have produced a barrier however hard the parameter was. The P1 arms are therefore act_off / act_range / act_point / act_ramp / act_gate, and the decisive contrast is act_point against act_range at the same target: a concentrated target has no easy episodes in it.",
+    "why_this_is_not_moving_the_goalposts": "It makes the hypothesis HARDER, not easier: act_range is now an explicit arm and is expected to behave like fixed randomization. If act_point does not break direct training either, the barrier hypothesis fails on its own strongest configuration."
+   },
+   "A2_channel_ranking_from_measurement": {
+    "effort_limit": "FIRST. The only channel that persistently removes capability for a whole episode. Also the most concrete: the training config rates hip pitch at 139 N.m where both the URDF and the vendor MJCF say 88, so derating to 0.63 restores the asset's own value rather than inventing a stress (receipt: lucid_actuator_rating_discrepancy_20260903.json).",
+    "joint_friction": "SECOND. The largest verified sim-to-real gap, since the asset declares no joint dynamics at all, and the only nonsmooth channel.",
+    "velocity_limit": "THIRD and expected to fail. The reference clip never exceeds about 37 per cent of any velocity limit, so the channel is inert across its defensible range and then steps straight to untrackable. It stays in the screen because reporting an inert channel is part of the map.",
+    "armature": "FOURTH and expected to show nothing. It moves the load-bearing hip and knee by a few per cent across its whole range. It is in the set precisely as a negative control."
+   },
+   "A3_corrections_made_to_the_implementation": [
+    "The random draw was created on the CPU while the nominal lives on the articulation's device, which would have raised on the first reset in Isaac.",
+    "The friction channel wrote its Coulomb magnitude into the VISCOUS coefficient, which is a velocity-proportional damping in different units. Any barrier it produced would have been the wrong physics. It now writes static and dynamic only.",
+    "Physical validity limits were added for all four ranges, since extrapolation drives a scale channel toward zero and a joint with no torque is a broken robot rather than a hard one.",
+    "The count of writers called is documented as not being proof a value reached PhysX, because the articulation writes its own mirror unconditionally and older Isaac Sim builds log and return."
+   ]
+  }
+ ]
 }
