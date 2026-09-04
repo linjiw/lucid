@@ -92,16 +92,19 @@ or contact-heavy solution is not described as nominal-quality imitation.
 
 ## 4. Serial next-stage plan
 
-### Phase 0 — finish the live point-0.30 decision
+### Phase 0 — point-0.30 barrier decision complete; finish endpoint scoring
 
 - **Measured at iteration 1500:** `time_out = 0.5235`; C1 did not fire.
 - **Measured at iteration 2000:** `time_out = 0.6555`, with a trailing-50 mean
-  of `0.660118`. This remains below the strict 0.70 takeoff threshold, but the
-  curve rose smoothly from `0.0528` at 1000 to `0.3055` at 1200 and `0.5235`
-  at 1500. It is not the signal-truncation pattern required by C1.
-- Continue the direct seed-8600 run untouched to the later horizons. Do not
-  launch the barrier-recovery ramp. Read the iteration-4000 checkpoint and run
-  an isolated frozen endpoint evaluation before closing the effort channel.
+  of `0.660118`.
+- **Direct takeoff confirmed:** the first single iteration at or above 0.70 was
+  2011 (`0.7023`); the first trailing-50 mean at or above 0.70 ended at
+  iteration 2221 (`0.700420`). Point 0.30 is directly learnable under this
+  seed/clip/architecture contract, so the point-effort barrier direction is
+  closed for this scope.
+- Continue the direct seed-8600 run untouched to the later horizons. Read the
+  iteration-4000 checkpoint and run an isolated frozen endpoint/quality
+  evaluation. Do not launch the barrier-recovery ramp.
 - Keep the mean-matched `U[0.25, 0.35]` arm only as a separate distribution-
   shape/compensation study; it is no longer evidence needed to rescue a C1/C2
   barrier claim.
@@ -157,8 +160,8 @@ comparator—not simply rerun the same box controller.
 
 ## 5. Provisional contribution statement
 
-If point 0.30 also learns directly, the strongest defensible contribution is a
-negative/mechanistic one: in this humanoid tracking setup, severe frozen-policy
+Point 0.30 learned directly. The strongest defensible contribution is therefore
+a negative/mechanistic one: in this humanoid tracking setup, severe frozen-policy
 failure and static torque bounds did not predict a from-scratch curriculum
 barrier; concentrated targets were the correct test, but point effort down to
 the deepest feasible tested endpoint remained directly learnable. Separately,
@@ -173,6 +176,7 @@ one-seed barrier candidate until the paired multi-seed contrast is complete.
 - `lucid-effort-point-status-2026-09-04.md`
 - `receipts/manifests/effort_point030_iter1500_milestone_20260904.json`
 - `receipts/manifests/effort_point030_iter2000_milestone_20260904.json`
+- `receipts/manifests/effort_point030_direct_takeoff_20260904.json`
 - `receipts/analysis/lucid_channel_attribution_20260902.json`
 - `receipts/analysis/lucid_practice_allocation_readout.json`
 - `receipts/analysis/lucid_expansion_prototype_20260902.json`

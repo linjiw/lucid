@@ -11,6 +11,14 @@ crossed the direct-learning threshold by iteration 2000 (`0.7743`), and sustaine
 trailing-50 mean of `0.952524` at iteration 6000. It stopped after trainer step 7500,
 not 8000; the last 50 logged iterations average `0.959536`.
 
+Point 0.30 is also **directly learnable under the same one-seed, one-clip
+contract**. It rejected C1 at iteration 1500 (`time_out = 0.5235` versus the
+barrier threshold `< 0.30`), first crossed the strict direct-takeoff threshold
+at iteration 2011 (`0.7023`), and first sustained a trailing-50 mean above 0.70
+at iteration 2221 (`0.700420`). The common-point effort channel is therefore
+closed as a curriculum-barrier candidate in this tested setting. The run
+continues for final endpoint and tracking-quality evaluation.
+
 Equal-step frozen evaluation at horizon 6000 shows a real adaptation effect. With every
 other event and actuator channel pinned at nominal, the 0.40-trained policy beats the
 nominally trained policy at the 0.40 plant by 512/512 versus 379/512 completions
@@ -75,13 +83,10 @@ from-scratch open-loop ramp to the same 0.30 endpoint run. The mean-matched rang
 `U[0.25, 0.35]` is a separate distribution-shape test, not proof of a curriculum barrier.
 
 The point-0.30 arm reached the iteration-1500 tripwire at `time_out = 0.5235`,
-so it did **not** satisfy C1 (`< 0.30`). At iteration 2000 it reached `0.6555`
-with a trailing-50 mean of `0.660118`, below the strict `>= 0.70` takeoff
-threshold but on a smooth direct-learning trajectory (`0.0528` at 1000,
-`0.3055` at 1200, `0.5235` at 1500). The hard-barrier condition is therefore
-not present under its predeclared definition, while full direct convergence is
-not yet established. Keep the direct arm unchanged to the later horizons and
-do not launch the conditional recovery ramp from this result.
+so it did **not** satisfy C1 (`< 0.30`). At iteration 2000 it was `0.6555`
+(trailing-50 `0.660118`), first crossed 0.70 at iteration 2011, and sustained a
+trailing-50 mean of `0.700420` by iteration 2221. Keep the direct arm unchanged
+to the later horizons and do not launch the conditional recovery ramp.
 
 The arm continues running as experiment
 `curriculum_comparison_ne1024_20260904_080627`, branch
@@ -95,3 +100,4 @@ Claim-bearing sources are the isolated-ladder receipt and its frozen analysis re
 - `/home/linjiw/lucid/receipts/manifests/effort_point040_isolated_ladder_analysis_20260904.json`
 - `/home/linjiw/lucid/receipts/manifests/effort_point030_iter1500_milestone_20260904.json`
 - `/home/linjiw/lucid/receipts/manifests/effort_point030_iter2000_milestone_20260904.json`
+- `/home/linjiw/lucid/receipts/manifests/effort_point030_direct_takeoff_20260904.json`
