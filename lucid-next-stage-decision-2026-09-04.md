@@ -94,15 +94,17 @@ or contact-heavy solution is not described as nominal-quality imitation.
 
 ### Phase 0 — finish the live point-0.30 decision
 
-- Keep the direct seed-8600 run untouched through iteration 1500.
-- At iteration 1500:
-  - `< 0.30`: C1 candidate; continue the direct arm and queue the preset ramp to
-    point 0.30. The mean-matched `U[0.25, 0.35]` arm remains a separate
-    distribution-shape test.
-  - `0.30–0.70`: gray zone; make no decision before iteration 2000.
-  - `>= 0.70`: direct takeoff; continue to the evaluation horizon and close the
-    effort-barrier direction for this tested architecture/clip/budget if it
-    remains learned.
+- **Measured at iteration 1500:** `time_out = 0.5235`, mean length `110.77`,
+  and mean reward `6.83572`. This is the predeclared gray zone: C1 did not fire,
+  but direct takeoff has not yet crossed 0.70.
+- Keep the direct seed-8600 run untouched through iteration 2000. Do not launch
+  the conditional ramp from a gray-zone observation.
+- At iteration 2000, classify direct learning under the frozen decision rule. If
+  direct takeoff is established and persists at the evaluation horizon, close
+  the effort-barrier direction for this tested architecture/clip/budget. If it
+  remains failed under the preregistered rule, queue the preset ramp to point
+  0.30; keep the mean-matched `U[0.25, 0.35]` arm as a separate
+  distribution-shape test.
 - Because there is one RTX 5080, conditional arms run serially; the tripwire
   does not authorize interrupting the direct arm.
 
@@ -169,6 +171,7 @@ one-seed barrier candidate until the paired multi-seed contrast is complete.
 ## 6. Claim-bearing receipts
 
 - `lucid-effort-point-status-2026-09-04.md`
+- `receipts/manifests/effort_point030_iter1500_milestone_20260904.json`
 - `receipts/analysis/lucid_channel_attribution_20260902.json`
 - `receipts/analysis/lucid_practice_allocation_readout.json`
 - `receipts/analysis/lucid_expansion_prototype_20260902.json`

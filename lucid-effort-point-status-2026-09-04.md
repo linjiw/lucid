@@ -74,7 +74,13 @@ takeoff; the gray zone continues unchanged to iteration 2000. Only if C1 fires s
 from-scratch open-loop ramp to the same 0.30 endpoint run. The mean-matched range
 `U[0.25, 0.35]` is a separate distribution-shape test, not proof of a curriculum barrier.
 
-The point-0.30 arm is now running as experiment
+The point-0.30 arm reached the iteration-1500 tripwire at `time_out = 0.5235`,
+with mean episode length `110.77` and mean reward `6.83572`. This is the
+predeclared gray zone: it does **not** satisfy C1 (`< 0.30`) and it has not yet
+reached direct takeoff (`>= 0.70`). Keep the arm unchanged through iteration
+2000; do not launch the conditional ramp from this gray-zone observation.
+
+The arm continues running as experiment
 `curriculum_comparison_ne1024_20260904_080627`, branch
 `curriculum_comparison_ne1024_20260904_080627_s8600_act_point`, in managed execution
 session `24268`. Its live log is
@@ -84,3 +90,4 @@ Claim-bearing sources are the isolated-ladder receipt and its frozen analysis re
 
 - `/home/linjiw/lucid-sonic/manifests/effort_point040_isolated_ladder_20260904/curriculum_robustness_ne512_20260904_074254.json`
 - `/home/linjiw/lucid/receipts/manifests/effort_point040_isolated_ladder_analysis_20260904.json`
+- `/home/linjiw/lucid/receipts/manifests/effort_point030_iter1500_milestone_20260904.json`

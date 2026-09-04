@@ -1,0 +1,47 @@
+{
+  "kind": "effort_point030_iter1500_milestone",
+  "schema_version": 1,
+  "created_at": "2026-09-04T09:35:02-04:00",
+  "experiment_id": "curriculum_comparison_ne1024_20260904_080627",
+  "branch_id": "curriculum_comparison_ne1024_20260904_080627_s8600_act_point",
+  "sonic_head": "cfd26b4a500af300727178778b2405ea0712b981",
+  "sonic_worktree_clean": false,
+  "training_contract": {
+    "mode": "act_point",
+    "from_scratch": true,
+    "seed": 8600,
+    "num_envs": 1024,
+    "total_iteration_budget": 8000,
+    "actuator_channel": "effort_limit",
+    "point_effort_scale": 0.30,
+    "other_event_dr": "nominal",
+    "other_actuator_dr": "nominal",
+    "latency": 0,
+    "motion": "m1_hob002/robot_filtered",
+    "source_manifest": "/home/linjiw/lucid-sonic/manifests/effort_barrier_point030_phase2/curriculum_comparison_ne1024_20260904_080627.json"
+  },
+  "iteration_1500": {
+    "time_out": 0.5235,
+    "mean_length": 110.77,
+    "mean_rewards": 6.83572,
+    "total_episodes": 1536000,
+    "total_timesteps": 36864000,
+    "elapsed_training_seconds": 5221.66,
+    "capsule": "/home/linjiw/lucid-sonic/artifacts/effort_barrier_point030_phase2/curriculum_comparison_ne1024_20260904_080627/seed_8600/act_point/capsules/curriculum_comparison_ne1024_20260904_080627_s8600_act_point_h1500.capsule.pt",
+    "capsule_sha256": "3931f89e140e92314abb2ca4a488e90e5b082022f4a342a69fec8d0655d1b055"
+  },
+  "predeclared_thresholds": {
+    "c1_candidate": "time_out < 0.30 at iteration 1500",
+    "gray_zone": "0.30 <= time_out < 0.70 at iteration 1500; continue unchanged to iteration 2000",
+    "direct_takeoff": "time_out >= 0.70 at iteration 1500"
+  },
+  "decision": "GRAY_ZONE_CONTINUE_TO_2000",
+  "interpretation": "Point 0.30 does not satisfy the preregistered C1 condition at iteration 1500. It has not yet met the direct-takeoff threshold either. Keep the direct arm unchanged and do not launch the conditional ramp before the iteration-2000 readout.",
+  "live_log": "/home/linjiw/lucid-sonic/outputs/effort_barrier_point030_phase2/curriculum_comparison_ne1024_20260904_080627_s8600_act_point.log",
+  "not_verified": [
+    "No frozen-policy evaluation of the iteration-1500 checkpoint was run for this milestone.",
+    "The direct arm has not completed its training budget.",
+    "The iteration-1500 gray-zone observation is not evidence that a ramp would or would not help.",
+    "This is one seed and one motion clip in simulation."
+  ]
+}
