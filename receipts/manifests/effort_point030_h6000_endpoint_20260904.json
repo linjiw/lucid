@@ -1,0 +1,49 @@
+{
+  "kind": "lucid_effort_point_endpoint_training_receipt",
+  "schema_version": 1,
+  "created_at": "2026-09-04T13:08:00-04:00",
+  "experiment_id": "effort_point030_h6000_endpoint_20260904",
+  "evidence_tier": "closed-loop simulation training checkpoint",
+  "estimand": "frozen-policy behavior of the direct point-0.30 checkpoint at the equal h6000 training horizon",
+  "config": {
+    "seed": 8600,
+    "num_envs": 1024,
+    "iterations": 6000,
+    "from_scratch": true,
+    "motion": "walk_hands_on_back_loop_002__A066_M",
+    "termination_thresholds": "upstream term-file defaults",
+    "background_event_dr": "six inherited event terms pinned at lambda=0",
+    "non_target_actuator_channels": "pinned at nominal",
+    "checkpoint": "/home/linjiw/lucid/GR00T-WholeBodyControl/logs_rl/lucid-campaign/manager/universal_token/all_modes/sonic_release_test-20260904_080628/model_step_006000.pt",
+    "training_config": "/home/linjiw/lucid/GR00T-WholeBodyControl/logs_rl/lucid-campaign/manager/universal_token/all_modes/sonic_release_test-20260904_080628/config.yaml",
+    "training_config_sha256": "2b41278201052751634ed2d7590415bea04baefd3cc0f1ca6c7895ae56da0ab7"
+  },
+  "arms": {
+    "act_point_s8600_h6000": {
+      "seed": 8600,
+      "mode": "act_point",
+      "iterations": 6000,
+      "effort_scale": 0.3,
+      "draw_shape": "common_point_all_envs_all_joints",
+      "checkpoint": "/home/linjiw/lucid-sonic/artifacts/effort_barrier_point030_endpoint_h6000/act_point/checkpoint_h6000.pt",
+      "checkpoint_sha256": "cf318c637665ab6927c7d40a6e327db02c1d1d339c1f4b8b5efd5ae84205f191",
+      "source_capsule": "/home/linjiw/lucid-sonic/artifacts/effort_barrier_point030_phase2/curriculum_comparison_ne1024_20260904_080627/seed_8600/act_point/capsules/curriculum_comparison_ne1024_20260904_080627_s8600_act_point_h6000.capsule.pt",
+      "source_capsule_sha256": "31d9f48626a1f662cdd4cdca6f7223f791b36424111134cd9f28a0b8b81fd77e",
+      "training_time_out_at_h6000": 0.9306,
+      "training_time_out_trailing_50": 0.930768,
+      "training_mean_length_trailing_50": 179.1866,
+      "training_mean_reward_trailing_50": 12.5073774
+    }
+  },
+  "verified": [
+    "the checkpoint is from-scratch seed 8600 on the same single motion and 1024-environment contract as the point-0.40 comparator",
+    "the source capsule and exported h6000 checkpoint were hashed",
+    "training-side h6000 and trailing-50 metrics were parsed from the durable SONIC log"
+  ],
+  "not_yet_verified": [
+    "frozen-policy performance on the isolated effort ladder",
+    "between-seed variability",
+    "unseen-motion generalization",
+    "hardware transfer"
+  ]
+}

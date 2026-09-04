@@ -26,10 +26,9 @@
   },
   "strict_direct_takeoff": {
     "threshold": 0.70,
-    "first_single_iteration_at_or_above_threshold": 2011,
-    "time_out": 0.7023,
-    "mean_length": 139.17,
-    "mean_rewards": 9.54483
+    "first_single_iteration_at_or_above_threshold": 1991,
+    "time_out": 0.7052,
+    "correction": "The earlier receipt searched forward from iteration 2000 and incorrectly labeled iteration 2011 as the first crossing. A full iteration-1-through-6000 audit finds the actual first crossing at iteration 1991. The sustained trailing-50 crossing and scientific decision are unchanged."
   },
   "sustained_direct_takeoff": {
     "criterion": "trailing mean over 50 logged iterations >= 0.70",
@@ -48,7 +47,7 @@
     "capsule_sha256": "93b3fb5272008abd62353b2e303ac5d5636de4dee932ae63fc8fe2654a71e501"
   },
   "decision": "DIRECT_TAKEOFF_CONFIRMED_NO_BARRIER_RECOVERY_RAMP",
-  "bounded_interpretation": "At seed 8600 on one training clip, fixed common-point effort 0.30 learned directly from scratch. It failed the preregistered C1 barrier condition by recording 0.5235 rather than less than 0.30 at iteration 1500, crossed the strict 0.70 direct-takeoff line at iteration 2011, and sustained a trailing-50 mean above 0.70 by iteration 2221. This closes the common-point effort channel as a curriculum-barrier candidate under this tested contract; it does not establish seed-general, motion-general, hardware, or final tracking-quality performance.",
+  "bounded_interpretation": "At seed 8600 on one training clip, fixed common-point effort 0.30 learned directly from scratch. It failed the preregistered C1 barrier condition by recording 0.5235 rather than less than 0.30 at iteration 1500, crossed the strict 0.70 direct-takeoff line at iteration 1991, and sustained a trailing-50 mean above 0.70 by iteration 2221. This closes the common-point effort channel as a curriculum-barrier candidate under this tested contract; it does not establish seed-general, motion-general, hardware, or final tracking-quality performance.",
   "next_action": "Continue the existing direct arm to its later checkpoints and run isolated frozen endpoint/quality evaluation. Do not launch act_ramp as a barrier-recovery experiment. Retain act_range_matched only as an optional distribution-shape study.",
   "live_log": "/home/linjiw/lucid-sonic/outputs/effort_barrier_point030_phase2/curriculum_comparison_ne1024_20260904_080627_s8600_act_point.log",
   "not_verified": [
