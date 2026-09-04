@@ -148,7 +148,7 @@ footer{padding:36px 0 60px;font-size:14px;color:var(--muted)}
 </div></section>
 
 <section id="effort-barrier"><div class="wrap">
-<p class="kicker">Latest experiment · 2026-09-04 <span class="tag live">h6000 benchmark ready · final run live</span></p>
+<p class="kicker">Latest experiment · 2026-09-04 <span class="tag done">training + frozen benchmark published</span></p>
 <h2>What would count as an RL curriculum barrier?</h2>
 <div class="measure">
 <p>The actuator study asks a narrower question than the broad domain-randomization work above. We multiply all 29 joint effort limits by one common scale <i>s</i>, leaving every other event and actuator randomization channel at nominal and latency at zero. A low <i>s</i> removes the near-nominal samples that make ordinary fixed randomization an implicit curriculum. The scientific question is not merely whether a nominal policy fails there; it is whether a policy trained from scratch at that exact plant also fails while a policy staged into the same endpoint succeeds.</p>
@@ -156,9 +156,9 @@ footer{padding:36px 0 60px;font-size:14px;color:var(--muted)}
 </div>
 
 <div class="grid g3" style="margin:18px 0 28px">
-<div class="stat"><div class="n">0.40</div><div class="l">hard enough to expose a large adaptation effect, but directly learned from scratch; not a barrier</div></div>
-<div class="stat"><div class="n good">+25.98 pts</div><div class="l">endpoint completion gain from training at 0.40: 512/512 versus 379/512 for the nominal-trained policy</div></div>
-<div class="stat"><div class="n">0.30</div><div class="l">directly learnable: C1 rejected at 1,500; first ≥0.70 at 1,991; trailing-50 ≥0.70 at 2,221</div></div>
+<div class="stat"><div class="n">0.30</div><div class="l">directly learned from scratch: C1 rejected at 1,500; no recovery curriculum was eligible to run</div></div>
+<div class="stat"><div class="n good">512 / 512</div><div class="l">point-0.30 h6000 policy completion when frozen and evaluated at its training plant</div></div>
+<div class="stat"><div class="n good">508 / 512</div><div class="l">the same frozen policy at point 0.25; the torque channel remains dynamically feasible below training</div></div>
 </div>
 
 <h3>What we vary—and what each comparison can tell us</h3>
@@ -170,22 +170,40 @@ footer{padding:36px 0 60px;font-size:14px;color:var(--muted)}
 <tr><td>Arm B · mean-matched range</td><td>At target 0.30: independent per-joint draws from U[0.25, 0.35]</td><td>Mean effort scale 0.30 and the same training budget</td><td>Whether distribution shape and jointwise compensation—not curriculum—change learnability</td></tr>
 </table></div>
 
-<h3>Why 0.40 changed the conclusion</h3>
-<div class="measure"><p>At equal training horizon 6,000 and seed 8600, we froze a nominal-trained checkpoint and a checkpoint trained directly at point 0.40. Each cell below contains 512 fresh physics/noise replicates of the same hands-on-back walking clip. The 512 replicates tighten the per-checkpoint estimate; they are not 512 independent motions or 512 training seeds.</p></div>
+<h3>The complete frozen h6000 benchmark</h3>
+<div class="measure"><p>At equal horizon 6,000 and seed 8600, we froze the nominal-trained, point-0.40-trained, and point-0.30-trained checkpoints. Each cell below contains 512 fresh physics/noise replicates of the same hands-on-back walking clip. The checkpoint, motion panel, evaluation seed, and every non-effort DR channel are matched; only the shared all-joint effort scale changes. The 512 replicates tighten each checkpoint estimate—they are not independent motions or training seeds.</p>
+<p><a href="https://wandb.ai/16726/lucid-campaign/reports/LUCID-Effort-Barrier-%E2%80%94-Frozen-h6000-Benchmark--VmlldzoxNzg3MjAxNQ=="><b>Open the W&amp;B frozen-policy benchmark: all 64 outcome and quality curves →</b></a><br><span style="font-size:14px;color:var(--muted)">Runs: <a href="https://wandb.ai/16726/lucid-campaign/runs/effort-eval-nominal-s8600-h6000-20260904">nominal-trained</a> · <a href="https://wandb.ai/16726/lucid-campaign/runs/effort-eval-p040-s8600-h6000-20260904">point-0.40-trained</a> · <a href="https://wandb.ai/16726/lucid-campaign/runs/effort-eval-p030-s8600-h6000-20260904">point-0.30-trained</a>. Every run has seven rows and uses effort scale as its W&amp;B step axis.</span></p></div>
 <div class="tbl"><table>
-<tr><th>Effort scale <i>s</i></th><th class="num">Nominal-trained (n/512)</th><th class="num">0.40-trained (n/512)</th><th class="num">Δ (points)</th></tr>
-<tr><td>1.00</td><td class="num">512/512</td><td class="num">512/512</td><td class="num">0.00 pts</td></tr>
-<tr><td>0.75</td><td class="num">511/512</td><td class="num">512/512</td><td class="num">+0.20 pts</td></tr>
-<tr><td>0.50</td><td class="num">506/512</td><td class="num">512/512</td><td class="num">+1.17 pts</td></tr>
-<tr><td>0.40</td><td class="num">379/512</td><td class="num">512/512</td><td class="num">+25.98 pts</td></tr>
-<tr><td>0.35</td><td class="num">187/512</td><td class="num">512/512</td><td class="num">+63.48 pts</td></tr>
-<tr><td>0.30</td><td class="num">27/512</td><td class="num">511/512</td><td class="num">+94.53 pts</td></tr>
-<tr><td>0.25</td><td class="num">0/512</td><td class="num">192/512</td><td class="num">+37.50 pts</td></tr>
+<tr><th>Effort scale <i>s</i></th><th class="num">Nominal-trained</th><th class="num">0.40-trained</th><th class="num">0.30-trained</th></tr>
+<tr><td>1.00</td><td class="num">512/512</td><td class="num">512/512</td><td class="num">512/512</td></tr>
+<tr><td>0.75</td><td class="num">511/512</td><td class="num">512/512</td><td class="num">512/512</td></tr>
+<tr><td>0.50</td><td class="num">506/512</td><td class="num">512/512</td><td class="num">512/512</td></tr>
+<tr><td>0.40</td><td class="num">379/512</td><td class="num">512/512</td><td class="num">512/512</td></tr>
+<tr><td>0.35</td><td class="num">187/512</td><td class="num">512/512</td><td class="num">512/512</td></tr>
+<tr><td>0.30</td><td class="num">27/512</td><td class="num">511/512</td><td class="num">512/512</td></tr>
+<tr><td>0.25</td><td class="num">0/512</td><td class="num">192/512</td><td class="num">508/512</td></tr>
+</table></div>
+<figure><a href="img/effort_barrier/frozen_completion.webp"><img loading="lazy" src="img/effort_barrier/frozen_completion.webp" alt="Frozen h6000 completion and progress curves for nominal, point 0.40, and point 0.30 training across seven effort scales"></a>
+<figcaption><b>Completion is plant-specific.</b> Direct point training moves the robustness knee left. The 0.30 policy is perfect through its training point and loses four of 512 episodes at 0.25; that is evidence of successful direct adaptation, not curriculum recovery.</figcaption></figure>
+
+<h3>At the common point-0.30 plant: outcomes and behavior</h3>
+<div class="tbl"><table>
+<tr><th>All-episode metric at <i>s</i> = 0.30</th><th class="num">Nominal-trained</th><th class="num">0.40-trained</th><th class="num">0.30-trained</th></tr>
+<tr><td>Completion</td><td class="num">27/512</td><td class="num">511/512</td><td class="num">512/512</td></tr>
+<tr><td>Mean progress</td><td class="num">51.20%</td><td class="num">99.996%</td><td class="num">100.00%</td></tr>
+<tr><td>Global / local MPJPE</td><td class="num">233.9 / 65.2 mm</td><td class="num">182.9 / 33.4 mm</td><td class="num">132.1 / 28.8 mm</td></tr>
+<tr><td>Velocity / acceleration distance</td><td class="num">13.19 / 9.03</td><td class="num">5.54 / 1.45</td><td class="num">5.21 / 1.51</td></tr>
+<tr><td>Foot slip per step</td><td class="num">5.61 mm</td><td class="num">1.59 mm</td><td class="num">2.05 mm</td></tr>
+<tr><td>Torque-saturation fraction</td><td class="num">11.75%</td><td class="num">23.25%</td><td class="num">16.47%</td></tr>
+<tr><td>Energy proxy</td><td class="num">338.6</td><td class="num">154.1</td><td class="num">155.7</td></tr>
 </table></div>
 <div class="measure">
-<p>The 0.40 arm sat in the preregistered gray zone at iteration 1,500 (<code>time_out = 0.5997</code>), crossed the direct-learning threshold by iteration 2,000 (<code>0.7743</code>), and reached a trailing-50 mean of <code>0.9525</code> at iteration 6,000. It therefore closes 0.40 as hard but directly learnable for this seed and clip. The same checkpoint's 511/512 completion at 0.30 is also an empirical feasibility witness: the earlier conjecture that 0.35 or 0.30 was physically impossible is false in this tested setting.</p>
-<p>Completion is not nominal-quality imitation. At nominal torque both checkpoints complete 512/512, but global MPJPE is 262.7 mm for the 0.40-trained policy and 91.4 mm for the nominal-trained policy. We therefore carry tracking error beside survival and do not call the adapted gait equivalent.</p>
+<p>The point-0.30 policy improves all-episode global and local MPJPE at every tested effort point relative to point-0.40 training, and dramatically suppresses the nominal policy's low-effort velocity and acceleration blow-up. But specialization has a cost: at nominal torque its global MPJPE is 239.1 mm versus 91.4 mm for nominal training, local MPJPE is 37.2 versus 22.7 mm, and energy is 242.1 versus 107.9. Completion therefore cannot stand in for imitation quality.</p>
+<p>The contact-quality signals are shown but remain diagnostic: the current evaluator aggregates contact activity over all steps rather than episode-masking it, and the high absolute undesired-contact rates for the point policies need a dedicated contact audit. Success-conditioned curves are also selection-biased where the nominal policy rarely completes. The all-episode pose, dynamics, and completion panels carry the primary comparison.</p>
+<p style="font-size:14px">Full frozen panels: <a href="img/effort_barrier/frozen_all_episode_pose.webp">15 all-episode pose curves</a> · <a href="img/effort_barrier/frozen_all_episode_dynamics.webp">10 all-episode dynamics curves</a> · <a href="img/effort_barrier/frozen_quality.webp">12 quality curves</a> · <a href="img/effort_barrier/frozen_success_conditioned.webp">25 success-conditioned curves</a>.</p>
 </div>
+<figure><a href="img/effort_barrier/frozen_quality.webp"><img loading="lazy" src="img/effort_barrier/frozen_quality.webp" alt="Frozen h6000 action, contact, torque saturation, energy, slip, and joint-limit quality curves for three training conditions"></a>
+<figcaption><b>Quality curves prevent a survival-only conclusion.</b> Low-effort training is robust at low torque but changes action, contact, saturation, and energy profiles. Absolute contact rates are retained for transparency and flagged for metric-specific validation.</figcaption></figure>
 
 <h3>How lowering the training plant from 0.40 to 0.30 changed learning</h3>
 <div class="measure">
@@ -225,7 +243,7 @@ footer{padding:36px 0 60px;font-size:14px;color:var(--muted)}
 <tr><td>Fails</td><td>Mean-matched Arm B succeeds</td><td><b>Sampling-shape effect.</b> Jointwise variation enables compensation, but it is not evidence for a staged curriculum.</td></tr>
 </table></div>
 
-<div class="callout"><b>Direct takeoff confirmed; final training still live.</b> The point-0.30 arm rejected C1 at iteration 1,500 (<code>time_out = 0.5235</code> versus the barrier threshold below 0.30). A full-log audit places its first strict 0.70 crossing at iteration 1,991 (<code>0.7052</code>); an earlier milestone receipt incorrectly began this search after iteration 2,000 and reported 2,011. The first sustained trailing-50 crossing remains iteration 2,221 (<code>0.700420</code>), so the decision is unchanged. Point effort 0.30 is directly learnable for this seed and clip; the recovery ramp is not run. The equal h6000 checkpoint is frozen and its isolated endpoint evaluation is queued behind the untouched final trainer.</div>
+<div class="callout"><b>Effort-barrier direction closed for this seed and clip.</b> The point-0.30 arm rejected C1 at iteration 1,500 (<code>time_out = 0.5235</code> versus the barrier threshold below 0.30), first crossed 0.70 at iteration 1,991, and reached a sustained trailing-50 crossing at 2,221. Training then completed cleanly through iteration 8,000; the matched h6000 checkpoint used above was never modified by evaluation. Its 512/512 result at 0.30 and 508/512 at 0.25 leave no evidence-bounded reason to spend GPU time on an effort recovery ramp. The next claim-bearing work returns to the measured, practice-responsive push frontier.</div>
 
 <div class="callout warn"><b>Scope.</b> This is closed-loop simulation on one motion clip and currently one checkpoint seed. PhysX max-force readback matches the requested effort limits exactly, but no result here establishes hardware transfer, unseen-motion generalization, physical infeasibility, or a specific stepping strategy.</div>
 </div></section>
@@ -246,7 +264,7 @@ footer{padding:36px 0 60px;font-size:14px;color:var(--muted)}
 <tr><td>Can a curriculum read learning progress? <span class="tag done">measured</span></td><td>Per-condition survival from the windows where the range never moved, against a time-shuffled null</td><td>From scratch the signal is clear. On a competent policy it sits at 0.01 to 0.08 of its own noise floor and no cohort meets the reliability criterion at any affordable window, so an online progress-driven allocator cannot be built on episode-end survival at this budget</td></tr>
 <tr><td>Is a finer signal available? <span class="tag done">measured</span></td><td>Per-step foot slip against success, five policies, sixteen cells</td><td>Slip has the resolution where success saturates but ranks the three healthy policies backwards in all four tests. Low slip is a conservative gait, not a robust one. Demoted</td></tr>
 <tr><td>Effort point 0.40 <span class="tag done">measured</span></td><td>From-scratch seed 8600; equal-step frozen ladder, 512 replicates per cell</td><td>Directly learnable, not a barrier. At point 0.40 the trained policy completes 512/512 versus 379/512 for nominal training; the adaptation effect is real but plant-specific</td></tr>
-<tr><td>Effort point 0.30 <span class="tag done">direct takeoff</span></td><td>Direct from scratch, seed 8600, 1,024 environments; matched h6000 learning curves published and final training continues</td><td>C1 rejected at iteration 1,500 (0.5235). First ≥0.70 at 1,991; first trailing-50 ≥0.70 at 2,221 (0.700420). At h6000 the trailing-50 completion is 0.930768 versus 0.952524 at point 0.40. Directly learnable; no recovery ramp</td></tr>
+<tr><td>Effort point 0.30 <span class="tag done">closed</span></td><td>Direct from scratch through h8000, seed 8600, 1,024 environments; matched h6000 learning and seven-point frozen curves published</td><td>C1 rejected. At h6000 the trailing-50 training completion is 0.930768; frozen completion is 512/512 at point 0.30 and 508/512 at point 0.25. Directly learnable; no recovery ramp and no further effort-channel GPU allocation</td></tr>
 <tr><td>Practice-allocation screen <span class="tag done">measured</span></td><td>6 matched branches, 1 seed, 1,500 iterations; 25% of 1,024 environments reallocated, not added</td><td>Push practice passed the productivity gate: +9.18 points at Push 3×, +8.20 at held-out Push 3.5×, and +10.55 at held-out Push+Friction. But <code>prac_push</code> and the manageable-channel placebo tied on the 13-cell macro (−0.07 points), so intelligent channel selection is not established</td></tr>
 <tr><td>Matched preset schedule vs adaptive gate <span class="tag done">screened</span></td><td>One development seed</td><td>No asymmetric feedback advantage at 2,000 iterations. Any follow-up must add confirmation seeds, longer frontier exposure, or a stricter exposure-matched comparator rather than repeat the same controller</td></tr>
 <tr><td>Hardware <span class="tag next">not run</span></td><td>—</td><td>Nothing has run on the robot</td></tr>
@@ -262,7 +280,7 @@ footer{padding:36px 0 60px;font-size:14px;color:var(--muted)}
 <p>Measured rates on the single RTX 5080: a from-scratch 8,000-iteration arm takes about 5.4 GPU-hours, a 1,500-iteration warm-start arm about one, an evaluation cell about 33 seconds. Everything below is serial on that card.</p></div>
 <div class="tbl"><table class="timeline">
 <tr><th>Step</th><th>What runs</th><th>Decides</th><th class="num">GPU-h</th></tr>
-<tr><td>Current · Finish point-0.30 endpoint scoring</td><td>Direct takeoff is established: first ≥0.70 at iteration 1,991 and trailing-50 ≥0.70 at 2,221. The matched h6000 checkpoint is frozen; its seven-cell isolated effort ladder is queued behind the untouched h8000 trainer. Keep the independent mean-matched range only as a separate shape study</td><td>The effort-barrier direction is closed for this seed/clip. Endpoint scoring now measures robustness and specialization, not C1 recovery</td><td class="num">queued</td></tr>
+<tr><td>Completed · Point-0.30 endpoint scoring</td><td>Seven effort-only frozen cells at h6000, 512 replicates each; full learning, outcome, pose, dynamics, and quality curves published. The independent mean-matched range is retained only as a separate sampling-shape question</td><td>The effort-barrier direction is closed for this seed/clip: direct training succeeds and remains 99.22% complete even at point 0.25</td><td class="num">done</td></tr>
 <tr><td>1 · Confirm productive practice and test whether aiming matters</td><td>Repeat <code>prac_null</code>, <code>prac_push</code>, and <code>prac_easy</code> on seeds 8601 and 8602; score Push 3×, held-out Push 3.5×, the held-out combination, nominal retention, and the frozen macro</td><td>Whether the +9.18-point push benefit repeats, and whether channel choice truly beats an equal-density hard-practice placebo</td><td class="num">≈ 5.6 + eval</td></tr>
 <tr><td>2 · The real online hurdle</td><td>Only if the practice benefit repeats: static fixed reallocation versus a frozen asymmetric preset versus a one-way forward-probe gate, with matched endpoints, environment count, optimization budget, and reported realized exposure</td><td>Whether online decisions improve a frozen outcome or reach it with lower total selection cost. Beating narrow fixed DR establishes nothing</td><td class="num">preregister after step 1</td></tr>
 <tr><td>2b · Account for decision cost</td><td>Count online probe episodes, offline evaluation cells, wall time, and GPU-hours together. Survival probes measure current frontier capability, not practice utility</td><td>Whether avoiding a 55-cell manual sweep is a measured resource benefit rather than an assertion</td><td class="num">included</td></tr>
@@ -289,6 +307,7 @@ footer{padding:36px 0 60px;font-size:14px;color:var(--muted)}
 <li><a href="https://github.com/linjiw/lucid/blob/main/receipts/manifests/effort_point030_iter2000_milestone_20260904.json">Point-0.30 iteration-2,000 milestone</a>: direct-learning trajectory, trailing-window metrics, and capsule hash</li>
 <li><a href="https://github.com/linjiw/lucid/blob/main/receipts/manifests/effort_point030_direct_takeoff_20260904.json">Point-0.30 direct-takeoff receipt</a>: first strict and sustained threshold crossings</li>
 <li><a href="https://github.com/linjiw/lucid/blob/main/receipts/analysis/effort_barrier_learning_curves_20260904.json">Point-0.30 versus point-0.40 learning-curve audit</a>: matched contract, all 55 scalar keys, hashes, milestone and trailing-window readouts</li>
+<li><a href="https://github.com/linjiw/lucid/blob/main/receipts/analysis/effort_barrier_frozen_ladder_curves_20260904.json">Complete h6000 frozen effort ladder</a>: three policies × seven points, 512 replicates per cell, all 64 outcome and quality metrics, source-manifest hashes, and bounded interpretation</li>
 </ul></div>
 <div class="measure"><ul>
 <li><a href="https://github.com/linjiw/lucid/blob/main/receipts/analysis/lucid_gate_feasibility_20260901.json">From-scratch probe gate</a> and <a href="https://github.com/linjiw/lucid/blob/main/receipts/analysis/lucid_expansion_prototype_batch1_20260902.json">warm-start screen, batch 1</a></li>
