@@ -1,0 +1,192 @@
+{
+  "kind": "lucid_practice_allocation_confirmation_preregistration",
+  "schema_version": 1,
+  "created_at": "2026-09-04T15:24:45-04:00",
+  "status": "FROZEN BEFORE ANY SEED-8601 OR SEED-8602 TRAINING OUTCOME",
+  "question": "Does the seed-8600 push-practice benefit repeat from independently trained solved origins, and does selecting push outperform an equal-density manageable-channel placebo on the frozen broad suite?",
+  "claim_scope": "One G1 hands-on-back tracking clip in Isaac Lab, the named SONIC architecture and optimizer, 1024 training environments, a 1500-iteration warm-start budget, and the frozen 512-replicate evaluation panel.",
+  "independent_unit": "solved origin policy plus continuation-training seed",
+  "discovery_evidence_not_used_to_grade_confirmation": {
+    "checkpoint_seed": 8600,
+    "training_receipt": "/home/linjiw/lucid-sonic/manifests/practice_allocation_20260903_052617/curriculum_comparison_ne1024_20260903_052619.json",
+    "training_receipt_sha256": "0d1559b25e3fdb0bd2c126a758e71c4ef219eda8d8e6a8abf81a6cbb70c9d0ce",
+    "evaluation_receipt": "/home/linjiw/lucid-sonic/manifests/practice_allocation_scoring_20260903_115158/curriculum_robustness_ne512_20260903_115159.json",
+    "evaluation_receipt_sha256": "b4ca1208174bbab122213787c07273854de91887e190ee7c1bb1b635a6493cab",
+    "analysis_receipt": "receipts/analysis/lucid_practice_allocation_readout.json",
+    "analysis_receipt_sha256": "d1dc6317aefbe46aac17b056312685493c155d2de2990ca187576e080c5307d3",
+    "observed_push3_delta_pts_prac_push_minus_prac_null": 9.18,
+    "observed_broad_macro_delta_pts_prac_push_minus_prac_easy": -0.07
+  },
+  "confirmation_origins": {
+    "8601": {
+      "checkpoint": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260829_000249/seed_8601/fixed/final_checkpoint.pt",
+      "checkpoint_sha256": "227a1c2f9822e8968fd17810ae2a2ea87193d0f5c00d052c37bb7f212df26bb1",
+      "resolved_config": "/home/linjiw/lucid/GR00T-WholeBodyControl/logs_rl/lucid-campaign/manager/universal_token/all_modes/sonic_release_test-20260830_002425/config.yaml",
+      "resolved_config_sha256": "d8e20c259517bba97a0c6779e7537e52f85327124466cd46dd12d7137671d98d",
+      "frozen_origin_receipt": "/home/linjiw/lucid-sonic/manifests/ratchet_confirmation_20260831/frozen_checkpoints/fixed_s8601.json",
+      "frozen_origin_receipt_sha256": "bf0b103b2584df906d12551701e82934ee5a07c111c3f0de1cf589e983d6b0c0"
+    },
+    "8602": {
+      "checkpoint": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260901_044118/seed_8602/fixed/final_checkpoint.pt",
+      "checkpoint_sha256": "1e230abf2230362e2ad32e798fa85c50bf6130390dfdba4069dc3e0acb33e4e8",
+      "resolved_config": "/home/linjiw/lucid-ratchet-confirm/logs_rl/lucid-campaign/manager/universal_token/all_modes/sonic_release_test-20260901_044119/config.yaml",
+      "resolved_config_sha256": "5c89d27dfd94e0f979bf7412b4fa71be1dcde98624d3b72a5d9b9367469f7f82",
+      "frozen_origin_receipt": "/home/linjiw/lucid-sonic/manifests/ratchet_confirmation_20260831/frozen_checkpoints/fixed_s8602.json",
+      "frozen_origin_receipt_sha256": "daf69e074790a7b96fcecc4498f6d5ad74faa20d486cc0d442da2271c9140717"
+    }
+  },
+  "training": {
+    "confirmation_seeds": [
+      8601,
+      8602
+    ],
+    "arms": [
+      "prac_null",
+      "prac_push",
+      "prac_easy"
+    ],
+    "arm_contracts": {
+      "prac_null": "768 retained lambda-1 environments plus 256 matched lambda-1 practice environments",
+      "prac_push": "768 retained lambda-1 environments plus 256 environments with only push_robot at 3x",
+      "prac_easy": "768 retained lambda-1 environments plus 256 environments with mass, base CoM, and joint-offset channels at 3x"
+    },
+    "origin_binding": "Each continuation seed loads its matching independently trained fixed-lambda-1 final checkpoint. No confirmation seed may load the seed-8600 origin.",
+    "arm_order_by_seed": {
+      "8601": [
+        "prac_push",
+        "prac_easy",
+        "prac_null"
+      ],
+      "8602": [
+        "prac_easy",
+        "prac_null",
+        "prac_push"
+      ]
+    },
+    "arm_order_reason": "Together with the seed-8600 discovery order, the three arms occupy each serial position once.",
+    "num_envs": 1024,
+    "iterations": 1500,
+    "warmup_iterations": 10,
+    "capsule_horizons": [
+      500,
+      1000,
+      1500
+    ],
+    "event_preset": "tracking/lucid_curriculum",
+    "termination_thresholds": "default",
+    "motion_file": "/home/linjiw/lucid-sonic/pools/subsets/m1_hob002/robot_filtered",
+    "smpl_motion_file": "dummy",
+    "max_delay_steps": 12,
+    "wandb_project": "lucid-campaign",
+    "equal_resources": "Every arm uses the same environments, PPO iterations, optimizer configuration, motion, and 25% practice share; only the practice content differs."
+  },
+  "evaluation": {
+    "no_learning": true,
+    "episodes_per_cell": 512,
+    "replicate_panel": "/home/linjiw/lucid-sonic/manifests/replicate_panel_panel_hob002_k512.json",
+    "replicate_panel_sha256": "e2e61933405e6701b0563eb4df793b6faf5c90d8ae5b7d8fc1e11f47142aefd7",
+    "evaluation_seed_by_checkpoint_seed": {
+      "8600": 8700,
+      "8601": 8701,
+      "8602": 8702
+    },
+    "cells": [
+      "phys_000",
+      "phys_100",
+      "phys_150",
+      "phys_200",
+      "ch_push_200",
+      "ch_push_300",
+      "ch_mass_300",
+      "ch_com_300",
+      "ch_joint_300",
+      "ch_fric_150",
+      "ch_push_fric_300_150",
+      "ch_push_350",
+      "ch_push_fric_350_150"
+    ],
+    "broad_macro": "Unweighted mean success rate over all 13 named cells. It is evaluable only when every compared arm has every cell.",
+    "primary_metrics": [
+      "success_rate",
+      "progress_rate"
+    ],
+    "secondary_metrics": [
+      "mpjpe_g",
+      "mpjpe_l",
+      "foot_slip_per_step_m",
+      "undesired_contact_rate",
+      "torque_saturation",
+      "energy_proxy"
+    ],
+    "pairing": "Within each checkpoint seed, all arms use the identical evaluation seed, preset, and 512-replicate panel."
+  },
+  "margins": {
+    "meaningful_improvement_pts": 5.0,
+    "tie_band_pts": 2.0,
+    "retention_margin_pts": 2.0,
+    "source": "Frozen in the 2026-09-02 discovery preregistration; unchanged for confirmation."
+  },
+  "decision_rules_frozen_before_confirmation_outcomes": {
+    "D1_push_practice_is_productive": {
+      "estimand_per_seed": "100 * [success(prac_push, ch_push_300) - success(prac_null, ch_push_300)]",
+      "confirmation_set": [
+        8601,
+        8602
+      ],
+      "confirm_if": "Both new-seed deltas are greater than 0 and their arithmetic mean is at least +5.0 points.",
+      "fail_to_confirm_if": "Either new-seed delta is non-positive or their arithmetic mean is below +5.0 points.",
+      "interpretation": "A positive decision supports a practice deficit at this origin class, dose, budget, clip, and optimizer. A negative decision does not establish a universal sensorimotor wall."
+    },
+    "D2_selecting_push_beats_manageable_placebo": {
+      "estimand_per_seed": "broad_macro(prac_push) - broad_macro(prac_easy), in percentage points",
+      "confirmation_set": [
+        8601,
+        8602
+      ],
+      "targeting_pays_if": "Both new-seed deltas are greater than 0 and their arithmetic mean is at least +5.0 points.",
+      "inside_screen_band_if": "The absolute new-seed mean is below 2.0 points; this is a screen-band decision, not evidence of statistical equivalence.",
+      "otherwise": "Inconclusive or directionally adverse; do not claim that an adaptive channel selector is justified."
+    },
+    "D3_retention_tradeoff": {
+      "estimand_per_seed": "100 * [success(treatment, phys_100) - success(prac_null, phys_100)] for prac_push and prac_easy",
+      "report_as_tradeoff_if": "Any treatment loses more than 2.0 points on either new seed."
+    },
+    "supportive_transfer_not_a_separate_gate": {
+      "cells": [
+        "ch_push_350",
+        "ch_push_fric_350_150"
+      ],
+      "report": "Per-seed prac_push-minus-prac_null success and progress deltas, with in-support versus held-out labels from realized training exposure."
+    },
+    "three_seed_descriptive_summary": "After applying D1-D3 only to the two confirmation seeds, append seed 8600 and report every per-seed value plus mean and sample standard deviation. Do not claim statistical significance from n=3."
+  },
+  "phase_2_authorization": {
+    "if_D1_fails": "Stop the push scheduler direction at this dose and budget.",
+    "if_D1_passes_but_D2_does_not": "Push practice is productive, but the evidence does not justify a practice-utility channel selector. Any later forward probe must be framed and tested as a capability/frontier guard against matched static and preset comparators.",
+    "if_D1_and_D2_pass": "A matched static-versus-preset-versus-one-way-forward-probe study is eligible; endpoints, hard-example density, optimization budget, realized exposure, wall time, and GPU-hours must all be reported."
+  },
+  "code_snapshot": {
+    "root_git_sha": "ced786fa424563281b61f34c0cd39579a4d68e4c",
+    "sonic_git_sha": "cfd26b4a500af300727178778b2405ea0712b981",
+    "sonic_dirty_diff_sha256_at_preregistration": "5cddebb0c893dccfd503e2b782454340f71b8fea291ca1ef777f56b851b9f720",
+    "training_launcher_sha256": "938a50581ddf40f41fcf1f666f5a5ca87c4219b006874a67588373cfc7bfc01b",
+    "curriculum_callback_sha256": "067daa452fea7a180e912cce2a0c00a78c51eef0054d2d62afb85c94af2617c1",
+    "evaluation_launcher_sha256": "d38e2f8a920a23eddc24199772caad040bf579a52942a5f85699a37dbd78aac9",
+    "note": "The dirty changes are the already-tested concentrated-effort and expanded quality-telemetry work from the immediately preceding milestone; the practice-allocation arm definitions and their 25% exposure contract are unchanged."
+  },
+  "resource_plan": {
+    "hardware": "one RTX 5080",
+    "execution": "serial only; never preempt another GPU process",
+    "training_runs": 6,
+    "evaluation_cells": 78,
+    "estimated_training_gpu_hours": 5.6,
+    "estimated_evaluation_gpu_hours": 0.8
+  },
+  "not_claimed": [
+    "unseen-motion generalization",
+    "hardware transfer or real-world safety",
+    "statistical significance or population-level equivalence from three seeds",
+    "a universal property of push disturbances outside the named simulator, policy, clip, dose, and budget",
+    "practice utility from a capability probe"
+  ]
+}
