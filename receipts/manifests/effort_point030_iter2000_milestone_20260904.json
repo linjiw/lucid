@@ -1,0 +1,54 @@
+{
+  "kind": "effort_point030_iter2000_milestone",
+  "schema_version": 1,
+  "created_at": "2026-09-04T09:58:19-04:00",
+  "experiment_id": "curriculum_comparison_ne1024_20260904_080627",
+  "branch_id": "curriculum_comparison_ne1024_20260904_080627_s8600_act_point",
+  "sonic_head": "cfd26b4a500af300727178778b2405ea0712b981",
+  "sonic_worktree_clean": false,
+  "training_contract": {
+    "mode": "act_point",
+    "from_scratch": true,
+    "seed": 8600,
+    "num_envs": 1024,
+    "total_iteration_budget": 8000,
+    "actuator_channel": "effort_limit",
+    "point_effort_scale": 0.30,
+    "other_event_dr": "nominal",
+    "other_actuator_dr": "nominal",
+    "latency": 0,
+    "motion": "m1_hob002/robot_filtered",
+    "source_manifest": "/home/linjiw/lucid-sonic/manifests/effort_barrier_point030_phase2/curriculum_comparison_ne1024_20260904_080627.json"
+  },
+  "iteration_2000": {
+    "time_out": 0.6555,
+    "time_out_mean_iterations_1951_2000": 0.660118,
+    "mean_length": 142.84,
+    "mean_length_mean_iterations_1951_2000": 141.3706,
+    "mean_rewards": 9.24045,
+    "mean_rewards_mean_iterations_1951_2000": 9.315506,
+    "total_episodes": 2048000,
+    "total_timesteps": 49152000,
+    "elapsed_training_seconds": 6636.73,
+    "capsule": "/home/linjiw/lucid-sonic/artifacts/effort_barrier_point030_phase2/curriculum_comparison_ne1024_20260904_080627/seed_8600/act_point/capsules/curriculum_comparison_ne1024_20260904_080627_s8600_act_point_h2000.capsule.pt",
+    "capsule_sha256": "93b3fb5272008abd62353b2e303ac5d5636de4dee932ae63fc8fe2654a71e501"
+  },
+  "trajectory_context": {
+    "time_out_at_iteration_1000": 0.0528,
+    "time_out_at_iteration_1200": 0.3055,
+    "time_out_at_iteration_1500": 0.5235,
+    "time_out_at_iteration_1800": 0.6016,
+    "time_out_at_iteration_2000": 0.6555,
+    "point040_time_out_at_iteration_2000": 0.7743
+  },
+  "decision": "C1_REJECTED_DIRECT_LEARNING_UNDERWAY_STRICT_TAKEOFF_NOT_YET_REACHED",
+  "bounded_interpretation": "The preregistered hard-barrier condition was time_out < 0.30 at iteration 1500; point 0.30 recorded 0.5235 and therefore did not satisfy C1. By iteration 2000 it had risen smoothly to 0.6555 (trailing-50 mean 0.660118). This is direct learning rather than a truncated survival signal, but it remains below the strict 0.70 direct-takeoff threshold. Continue the direct arm to later evaluation horizons and do not launch a barrier-recovery ramp from this trajectory.",
+  "next_action": "Continue the existing point-0.30 direct arm unchanged; read the iteration-4000 and later checkpoints, then run the isolated frozen endpoint evaluation before closing the effort channel.",
+  "live_log": "/home/linjiw/lucid-sonic/outputs/effort_barrier_point030_phase2/curriculum_comparison_ne1024_20260904_080627_s8600_act_point.log",
+  "not_verified": [
+    "The strict time_out >= 0.70 direct-takeoff threshold was not reached at iteration 2000.",
+    "No frozen-policy evaluation of the iteration-2000 checkpoint was run for this milestone.",
+    "The direct arm has not completed its training budget.",
+    "This is one seed and one motion clip in simulation."
+  ]
+}

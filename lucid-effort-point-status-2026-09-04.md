@@ -75,10 +75,13 @@ from-scratch open-loop ramp to the same 0.30 endpoint run. The mean-matched rang
 `U[0.25, 0.35]` is a separate distribution-shape test, not proof of a curriculum barrier.
 
 The point-0.30 arm reached the iteration-1500 tripwire at `time_out = 0.5235`,
-with mean episode length `110.77` and mean reward `6.83572`. This is the
-predeclared gray zone: it does **not** satisfy C1 (`< 0.30`) and it has not yet
-reached direct takeoff (`>= 0.70`). Keep the arm unchanged through iteration
-2000; do not launch the conditional ramp from this gray-zone observation.
+so it did **not** satisfy C1 (`< 0.30`). At iteration 2000 it reached `0.6555`
+with a trailing-50 mean of `0.660118`, below the strict `>= 0.70` takeoff
+threshold but on a smooth direct-learning trajectory (`0.0528` at 1000,
+`0.3055` at 1200, `0.5235` at 1500). The hard-barrier condition is therefore
+not present under its predeclared definition, while full direct convergence is
+not yet established. Keep the direct arm unchanged to the later horizons and
+do not launch the conditional recovery ramp from this result.
 
 The arm continues running as experiment
 `curriculum_comparison_ne1024_20260904_080627`, branch
@@ -91,3 +94,4 @@ Claim-bearing sources are the isolated-ladder receipt and its frozen analysis re
 - `/home/linjiw/lucid-sonic/manifests/effort_point040_isolated_ladder_20260904/curriculum_robustness_ne512_20260904_074254.json`
 - `/home/linjiw/lucid/receipts/manifests/effort_point040_isolated_ladder_analysis_20260904.json`
 - `/home/linjiw/lucid/receipts/manifests/effort_point030_iter1500_milestone_20260904.json`
+- `/home/linjiw/lucid/receipts/manifests/effort_point030_iter2000_milestone_20260904.json`

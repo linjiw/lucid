@@ -94,17 +94,17 @@ or contact-heavy solution is not described as nominal-quality imitation.
 
 ### Phase 0 — finish the live point-0.30 decision
 
-- **Measured at iteration 1500:** `time_out = 0.5235`, mean length `110.77`,
-  and mean reward `6.83572`. This is the predeclared gray zone: C1 did not fire,
-  but direct takeoff has not yet crossed 0.70.
-- Keep the direct seed-8600 run untouched through iteration 2000. Do not launch
-  the conditional ramp from a gray-zone observation.
-- At iteration 2000, classify direct learning under the frozen decision rule. If
-  direct takeoff is established and persists at the evaluation horizon, close
-  the effort-barrier direction for this tested architecture/clip/budget. If it
-  remains failed under the preregistered rule, queue the preset ramp to point
-  0.30; keep the mean-matched `U[0.25, 0.35]` arm as a separate
-  distribution-shape test.
+- **Measured at iteration 1500:** `time_out = 0.5235`; C1 did not fire.
+- **Measured at iteration 2000:** `time_out = 0.6555`, with a trailing-50 mean
+  of `0.660118`. This remains below the strict 0.70 takeoff threshold, but the
+  curve rose smoothly from `0.0528` at 1000 to `0.3055` at 1200 and `0.5235`
+  at 1500. It is not the signal-truncation pattern required by C1.
+- Continue the direct seed-8600 run untouched to the later horizons. Do not
+  launch the barrier-recovery ramp. Read the iteration-4000 checkpoint and run
+  an isolated frozen endpoint evaluation before closing the effort channel.
+- Keep the mean-matched `U[0.25, 0.35]` arm only as a separate distribution-
+  shape/compensation study; it is no longer evidence needed to rescue a C1/C2
+  barrier claim.
 - Because there is one RTX 5080, conditional arms run serially; the tripwire
   does not authorize interrupting the direct arm.
 
@@ -172,6 +172,7 @@ one-seed barrier candidate until the paired multi-seed contrast is complete.
 
 - `lucid-effort-point-status-2026-09-04.md`
 - `receipts/manifests/effort_point030_iter1500_milestone_20260904.json`
+- `receipts/manifests/effort_point030_iter2000_milestone_20260904.json`
 - `receipts/analysis/lucid_channel_attribution_20260902.json`
 - `receipts/analysis/lucid_practice_allocation_readout.json`
 - `receipts/analysis/lucid_expansion_prototype_20260902.json`
