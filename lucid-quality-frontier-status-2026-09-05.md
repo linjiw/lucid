@@ -40,7 +40,18 @@ Attempt B uses corrected commit `35f19a2` and a fresh immutable directory:
 - Plan: `/home/linjiw/lucid-sonic/experiments/quality_frontier_smoke_20260905_b/plan.json`.
 - SHA-256: `91dac75733137dfa6f0143a152db90cbca82372409fdfdfaed91d57b193c0383`.
 - Driver PID at launch: `847668`; managed session `38728`.
-- At this status update, the first evaluation is waiting at the 11,000 MiB free-memory gate behind other shared-GPU workloads. A receipt's `running` cell includes time waiting for capacity; it does not by itself establish that simulation has started.
+- After an initial capacity wait, both frozen-origin evaluations completed successfully and the static arm completed all 16 training iterations. Its clean evaluation is the next active cell. Cells may wait at the 11,000 MiB free-memory gate behind other shared-GPU workloads. A receipt's `running` cell includes time waiting for capacity; it does not by itself establish that simulation has started.
+
+Accepted frozen-origin instrument results (512 matched replicates, one development origin):
+
+| Condition | Completion | Tracking-qualified success |
+| --- | --- | --- |
+| Clean `phys_000` | 512/512 = 100% | 512/512 = 100% |
+| Push 3.5× `ch_push_350` | 332/512 = 64.84% | 251/512 = 49.02% |
+
+At Push 3.5×, 81 completed episodes failed at least one tracking threshold: 63 failed global, 49 failed local, and 31 failed both. This demonstrates a distinction between the frozen screening definitions, not a curriculum benefit or a calibrated hardware tolerance. All episodes had valid pre-step first-episode observations, and completion reconciled exactly with the unchanged upstream metric.
+
+Static smoke checkpoint SHA-256: `8a0104ee6a1856df12d9b04fb8d3952afd684d2132533cdc38598e8c27632895`. Its own resolved config SHA-256 is `dd64060931a4d60cd38fe3e683b1e348d4bfa0e79bf4732a7379787eac8c736a`. Runtime validation passed the 16-row count, exact static per-stratum vectors, five delayed actuator groups, completion, and checkpoint export. The remaining smoke cells must pass before the pilot launches.
 
 The full development pilot is prepared but has not begun training:
 
