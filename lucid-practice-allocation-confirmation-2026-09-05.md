@@ -131,6 +131,19 @@ Work proceeds serially:
    evaluation episodes, wall time, and failed/retried simulator starts. A lower search
    bill is an outcome, not an assumption.
 
+CPU-contract progress on 2026-09-05: the canonical vector-yoke builder is implemented
+at nested commit `22475f3` and passes the full 1,852-test practice-utility suite. Applied
+to the development `box_fast_300_ng` trace, it preserved 2,000 iterations, six channels,
+and the fixed eight-stratum sizes `[43, 43, 43, 43, 42, 42, 640, 128]`; it reconstructed
+only the ten explicitly marked warm-up rows and produced canonical digest
+`cfa2375645d39acb3fcb8f5ab36ce6e2515023c81a849c1a0609259c22872581`. The audit also
+found 39 rotation steps where the probe vector used for the just-completed decision is
+not the probe vector dispatched for the next rollout. The yoke therefore stores the
+actual per-stratum dispatch vectors rather than replaying the headline
+`probe_vector`. A 731/1,269 split-resume replay matched the uninterrupted 2,000-row
+sequence exactly. Runtime callback integration and the quality thresholds remain to be
+completed before any GPU arm is authorized.
+
 No utility estimator or residual allocator is authorized. If the online probe ties
 the frozen preset, the result closes adaptive timing for this setup and redirects the
 program to motion diversity and transfer.
@@ -144,6 +157,6 @@ program to motion diversity and transfer.
 - W&B publication and source-hash audit:
   `receipts/analysis/lucid_practice_allocation_wandb_20260905.json`
 - SONIC analysis code: `gear_sonic/research/practice_utility/practice_confirmation.py`
-  at nested commit `85ff922`
+  at nested commit `85ff922`; vector-yoke contract at nested commit `22475f3`
 - All simulator logs, checkpoints, per-replicate metrics, and training/evaluation
   manifests remain outside Git under `/home/linjiw/lucid-sonic/`.
