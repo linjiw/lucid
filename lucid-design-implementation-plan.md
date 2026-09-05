@@ -1,5 +1,7 @@
 # LUCID Research Program — Design & Implementation Plan
 
+> **2026-09-05 continuation:** The completed practice-allocation confirmation and its failed selector gate motivate a staged quality-preserving curriculum investigation. Current method details are in [quality-frontier design](lucid-quality-frontier-design-2026-09-05.md), prospective comparisons in [research plan](lucid-quality-frontier-research-plan-2026-09-05.md), and implementation/run receipts in [execution status](lucid-quality-frontier-status-2026-09-05.md). This continuation does not reopen the utility-estimator or residual-allocator gates, and the historical sections below are retained as their original record.
+
 **Version:** v1 · 2026-08-17
 **Inputs reconciled:** `lucid-original-paper.md` (IROS-2026 manuscript, scalar LUCID), `lucid-proposal.md` (Counterfactual Practice Utility over LUCID), `lucid-sonic.md` (SONIC-grounded design, 29 sections)
 **Code on disk:** `GR00T-WholeBodyControl/` (SONIC, upstream `c374bae`), `whole_body_tracking/` (BeyondMimic, upstream `cd65172`). Neither contains LUCID code yet.
