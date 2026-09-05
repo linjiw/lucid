@@ -40,7 +40,7 @@ Attempt B uses corrected commit `35f19a2` and a fresh immutable directory:
 - Plan: `/home/linjiw/lucid-sonic/experiments/quality_frontier_smoke_20260905_b/plan.json`.
 - SHA-256: `91dac75733137dfa6f0143a152db90cbca82372409fdfdfaed91d57b193c0383`.
 - Driver PID at launch: `847668`; managed session `38728`.
-- After an initial capacity wait, both frozen-origin evaluations completed successfully and the static arm completed all 16 training iterations. Its clean evaluation is the next active cell. Cells may wait at the 11,000 MiB free-memory gate behind other shared-GPU workloads. A receipt's `running` cell includes time waiting for capacity; it does not by itself establish that simulation has started.
+- **Attempt B completed all 11 cells at 2026-09-05 16:14:31 UTC.** All three 16-iteration training arms and all eight evaluations passed. Cells can wait at the 11,000 MiB free-memory gate behind other shared-GPU workloads; a receipt's `running` cell includes that waiting time.
 
 Accepted frozen-origin instrument results (512 matched replicates, one development origin):
 
@@ -51,17 +51,21 @@ Accepted frozen-origin instrument results (512 matched replicates, one developme
 
 At Push 3.5×, 81 completed episodes failed at least one tracking threshold: 63 failed global, 49 failed local, and 31 failed both. This demonstrates a distinction between the frozen screening definitions, not a curriculum benefit or a calibrated hardware tolerance. All episodes had valid pre-step first-episode observations, and completion reconciled exactly with the unchanged upstream metric.
 
-Static smoke checkpoint SHA-256: `8a0104ee6a1856df12d9b04fb8d3952afd684d2132533cdc38598e8c27632895`. Its own resolved config SHA-256 is `dd64060931a4d60cd38fe3e683b1e348d4bfa0e79bf4732a7379787eac8c736a`. Runtime validation passed the 16-row count, exact static per-stratum vectors, five delayed actuator groups, completion, and checkpoint export. The remaining smoke cells must pass before the pilot launches.
+Static smoke checkpoint SHA-256: `8a0104ee6a1856df12d9b04fb8d3952afd684d2132533cdc38598e8c27632895`. Its own resolved config SHA-256 is `dd64060931a4d60cd38fe3e683b1e348d4bfa0e79bf4732a7379787eac8c736a`. Replay/gate policy and value tensors match exactly over their common initial schedule. Complete audited smoke outcomes and the next probe-resolution experiment are in [measurement readiness and probe resolution](lucid-quality-probe-resolution-2026-09-05.md).
 
-The full development pilot is prepared but has not begun training:
+The full development pilot started at 2026-09-05 16:14:53 UTC and is training its static arm:
 
 - Plan: `/home/linjiw/lucid-sonic/experiments/quality_frontier_pilot_20260905_a/plan.json`.
 - SHA-256: `165e8d126136cd26e688ea4b78b17330e788e10128407ba771601f21b0bc7874`.
 - 2,000 iterations × three arms, 1,024 training environments; two frozen-origin evaluations and five evaluations per trained arm, each with 512 replicates.
-- Historical estimate: about 4.5 GPU-hours for training, plus evaluation/startup and shared-resource queue time. Contended wall time will not establish a throughput claim.
+- Historical estimate was about 4.5 GPU-hours for training. Current shared-GPU iterations take roughly 6–7 seconds, implying approximately 10–12 hours of training wall time if sustained, plus evaluation/startup and queueing. Contended wall time will not establish an uncontended throughput claim.
 
 Detached supervisor PID `862400` waits for the complete B receipt and exact planned cells, verifies finite receipt/dispatch values and all six scalable channels, then executes the frozen pilot. It stops on any smoke failure. It never launches the pilot from a partial smoke. The pilot itself re-verifies code/input/panel hashes before each cell and stops on a failed cell; there are no automatic cell retries.
 
 Supervisor, status, and logs: `/home/linjiw/lucid-sonic/experiments/quality_frontier_campaign_20260905/`. `status.json` and each experiment's `receipt.json` are authoritative for current execution status. The supervisor waits at most 12 hours for the smoke; the already-started B driver retains its existing 30-minute per-cell GPU capacity timeout. The pilot permits up to 12 hours of capacity waiting per cell. Other jobs are not terminated or reconfigured.
 
 No superiority, tracking-retention, or sim-to-real result is claimed from these starts. Quality veto, recovery instrumentation, and learned dynamics feedback remain subsequent measurement-gated stages.
+
+## Analysis continuation
+
+Commit `074046e` in `/home/linjiw/lucid-quality-feedback` adds the receipt-verified all-cell analyzer, finite-panel clean-probe resolution study, and completion-only report watcher. Full CPU suite: **1,893 passed**; Black/Ruff pass for the six additions. Analysis watcher PID `906291` is active and will write the full pilot report only after its complete receipt. See the [probe-resolution memo](lucid-quality-probe-resolution-2026-09-05.md) for results, scope, and source paths. The GPU pilot remains on its original frozen commit `35f19a2`.
