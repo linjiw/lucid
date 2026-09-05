@@ -2,7 +2,9 @@
 
 Date: 2026-09-05. Companion [design](lucid-quality-frontier-design-2026-09-05.md) and [research plan](lucid-quality-frontier-research-plan-2026-09-05.md).
 
-**Live campaign status:** [/home/linjiw/lucid-sonic/experiments/quality_frontier_campaign_20260905/monitor_a/live.md](/home/linjiw/lucid-sonic/experiments/quality_frontier_campaign_20260905/monitor_a/live.md). This local report refreshes every minute; the dated narrative below is a historical execution ledger.
+**Completed pilot:** all 20 cells and automatic analysis finished on September 5. [Results and research decision](lucid-quality-frontier-pilot-results-2026-09-05.md). Gate gains are +1.17 points over static and +3.32 over replay, but all arms substantially degrade clean tracking relative to the starting policy. Original inter-arm retention passes must not be read as preservation of that starting policy.
+
+**Active diagnostic:** [initial-distribution campaign status](/home/linjiw/lucid-sonic/experiments/initial_hold_campaign_20260905/status.json), updated every minute. The previous [pilot monitor](/home/linjiw/lucid-sonic/experiments/quality_frontier_campaign_20260905/monitor_a/live.md) is complete and no longer polling. The narrative below preserves historical launch details.
 
 ## Implementation
 
@@ -55,7 +57,7 @@ At Push 3.5×, 81 completed episodes failed at least one tracking threshold: 63 
 
 Static smoke checkpoint SHA-256: `8a0104ee6a1856df12d9b04fb8d3952afd684d2132533cdc38598e8c27632895`. Its own resolved config SHA-256 is `dd64060931a4d60cd38fe3e683b1e348d4bfa0e79bf4732a7379787eac8c736a`. Replay/gate policy and value tensors match exactly over their common initial schedule. Complete audited smoke outcomes and the next probe-resolution experiment are in [measurement readiness and probe resolution](lucid-quality-probe-resolution-2026-09-05.md).
 
-The full development pilot started at 2026-09-05 16:14:53 UTC and is training its static arm:
+The full development pilot ran from 2026-09-05 16:14:53 to 21:37:46 UTC and completed all three arms:
 
 - Plan: `/home/linjiw/lucid-sonic/experiments/quality_frontier_pilot_20260905_a/plan.json`.
 - SHA-256: `165e8d126136cd26e688ea4b78b17330e788e10128407ba771601f21b0bc7874`.
@@ -70,7 +72,7 @@ No superiority, tracking-retention, or sim-to-real result is claimed from these 
 
 ## Analysis continuation
 
-Commit `074046e` in `/home/linjiw/lucid-quality-feedback` adds the receipt-verified all-cell analyzer, finite-panel clean-probe resolution study, and completion-only report watcher. Full CPU suite: **1,893 passed**; Black/Ruff pass for the six additions. Analysis watcher PID `906291` is active and will write the full pilot report only after its complete receipt. See the [probe-resolution memo](lucid-quality-probe-resolution-2026-09-05.md) for results, scope, and source paths. The GPU pilot remains on its original frozen commit `35f19a2`.
+Commit `074046e` in `/home/linjiw/lucid-quality-feedback` adds the receipt-verified all-cell analyzer, finite-panel clean-probe resolution study, and completion-only report watcher. Full CPU suite: **1,893 passed**; Black/Ruff pass for the six additions. Analysis watcher PID `906291` completed its report and exited normally. See the [probe-resolution memo](lucid-quality-probe-resolution-2026-09-05.md) for its earlier development analysis. The completed GPU pilot retains its original frozen commit `35f19a2`.
 
 ## Scheduled health and completion monitoring
 
