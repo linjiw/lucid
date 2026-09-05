@@ -72,6 +72,8 @@ Source row k is a dispatch installed after PPO iteration k. Target rollout k+1 r
 
 A schedule-state restart stores canonical schedule hash, allocation mode, cursor, target step, and every stratum's environment IDs. It rejects altered membership, skips/repeats, modified schedules, and exhausted schedules. This is not seamless simulator resume. Causal training comparisons use symmetric fresh restarts from the same origin checkpoint.
 
+September 5 implementation audit: these fresh restarts restore policy/value weights and reset optimizer/scheduler history. Saved reward, observation, action, and termination settings match the origin; runtime DR is changed by the experiment callbacks. The [continuation audit](lucid-continuation-contract-audit-2026-09-05.md) records the actual loader behavior. If the fixed-initial-distribution diagnostic still loses quality, isolate restart and retention mechanisms before assigning the loss to frontier expansion.
+
 ## Tracking measurement contract
 
 The new evaluator is opt-in and retains legacy scalar keys unchanged. Before `env.step`, it reads reference/executed world-space body positions. Global MPJPE is mean Euclidean body error in mm. Local MPJPE subtracts each pose's root position before differencing. Body zero must be the root in this benchmark; the launch contract records the reference body order. Accumulate only while the environment belongs to its first scored episode and within its reference horizon. Consume `dones`, including time-outs, before the upstream evaluator mutates that tensor. Once ended, an environment cannot contribute reset-state poses.

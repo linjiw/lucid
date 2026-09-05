@@ -6,6 +6,8 @@ Date: 2026-09-05. Companion [design](lucid-quality-frontier-design-2026-09-05.md
 
 **Active diagnostic:** [initial-distribution campaign status](/home/linjiw/lucid-sonic/experiments/initial_hold_campaign_20260905/status.json), updated every minute. The previous [pilot monitor](/home/linjiw/lucid-sonic/experiments/quality_frontier_campaign_20260905/monitor_a/live.md) is complete and no longer polling. The narrative below preserves historical launch details.
 
+**23:09 UTC update:** all six initial-hold smoke cells and their analysis completed; the long diagnostic is at 95/2,000 iterations with no monitor warnings. Intermediate snapshots will be evaluated after training. The frozen runtime passed 1,908 CPU tests. A separate [checkpoint contract audit](lucid-continuation-contract-audit-2026-09-05.md), with five passing focused tests, confirms exact policy/value smoke parity and identifies fresh optimizer history as a shared restart property. Its causal role in tracking drift is unresolved. No online quality veto or learned feedback signal has been activated.
+
 ## Implementation
 
 Isolated SONIC worktree: `/home/linjiw/lucid-quality-frontier`, branch `research/quality-frontier`. Commit `bdb4dbc` adds the runtime vector replay, fixed per-stratum support allocation, bounded box-gate comparator, first-episode tracking qualification, and the serial pilot runner. Commit `35f19a2` fixes reconciliation with the upstream `eval/success/success_rate` namespace and adds a regression test. Original worktree changes are preserved.

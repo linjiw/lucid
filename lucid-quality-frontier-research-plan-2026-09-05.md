@@ -16,7 +16,9 @@ Version 1, 2026-09-05. Companion [method design](lucid-quality-frontier-design-2
 
 Purpose: validate runtime replay, new per-episode tracking measurement, and the complete train–freeze–evaluate path. This is not a superiority confirmation. Seed 8600 is development, and all prior outcomes on this seed are known.
 
-Source: frozen 2,000-row `box_fast_300_ng` trace from `curriculum_comparison_ne1024_20260903_024028`. Origin: its seed-8600 solved fixed-DR checkpoint. Preserve reference motion, initialization, optimizer, 1,024 training environments, 12-step delay-buffer capacity, default termination thresholds, and per-stratum membership seed.
+Source: frozen 2,000-row `box_fast_300_ng` trace from `curriculum_comparison_ne1024_20260903_024028`. Origin: its seed-8600 solved fixed-DR checkpoint. Preserve reference motion, policy/value initialization, optimizer configuration, 1,024 training environments, 12-step delay-buffer capacity, default termination thresholds, and per-stratum membership seed.
+
+September 5 audit clarification: the original wording “optimizer” was imprecise. The configuration is preserved, while the executed contract starts fresh optimizer/scheduler state from the common policy/value checkpoint. The active loader keys restoration on top-level `resume`, which defaults to false, despite the saved `load_optimizer=True` setting. The [continuation audit](lucid-continuation-contract-audit-2026-09-05.md) documents this shared restart and its unresolved contribution to origin-relative drift. No frozen experiment was changed.
 
 Three pilot arms:
 
