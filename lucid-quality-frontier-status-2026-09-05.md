@@ -2,6 +2,8 @@
 
 Date: 2026-09-05. Companion [design](lucid-quality-frontier-design-2026-09-05.md) and [research plan](lucid-quality-frontier-research-plan-2026-09-05.md).
 
+**Live campaign status:** [/home/linjiw/lucid-sonic/experiments/quality_frontier_campaign_20260905/monitor_a/live.md](/home/linjiw/lucid-sonic/experiments/quality_frontier_campaign_20260905/monitor_a/live.md). This local report refreshes every minute; the dated narrative below is a historical execution ledger.
+
 ## Implementation
 
 Isolated SONIC worktree: `/home/linjiw/lucid-quality-frontier`, branch `research/quality-frontier`. Commit `bdb4dbc` adds the runtime vector replay, fixed per-stratum support allocation, bounded box-gate comparator, first-episode tracking qualification, and the serial pilot runner. Commit `35f19a2` fixes reconciliation with the upstream `eval/success/success_rate` namespace and adds a regression test. Original worktree changes are preserved.
@@ -69,3 +71,22 @@ No superiority, tracking-retention, or sim-to-real result is claimed from these 
 ## Analysis continuation
 
 Commit `074046e` in `/home/linjiw/lucid-quality-feedback` adds the receipt-verified all-cell analyzer, finite-panel clean-probe resolution study, and completion-only report watcher. Full CPU suite: **1,893 passed**; Black/Ruff pass for the six additions. Analysis watcher PID `906291` is active and will write the full pilot report only after its complete receipt. See the [probe-resolution memo](lucid-quality-probe-resolution-2026-09-05.md) for results, scope, and source paths. The GPU pilot remains on its original frozen commit `35f19a2`.
+
+## Scheduled health and completion monitoring
+
+The user explicitly requested scheduling, monitoring, and post-completion analysis. A detached health monitor started at **2026-09-05 16:46:19 UTC**, PID `917843`, checking every **60 seconds for up to 24 hours**. Its first snapshot reported static training at 406/2,000 iterations, both origin evaluations complete, and no health warnings. The frozen schedule remains static training → five evaluations → replay training → five evaluations → gate training → five evaluations. No duplicate GPU campaign was launched.
+
+The monitor runs from `/home/linjiw/lucid-campaign-monitor`, branch `research/campaign-monitor`, commit `b60eef6`. Nine focused tests passed; Black, Ruff, and `git diff --check` passed. The training and analysis checkouts retain their frozen source.
+
+Monitoring records planned-cell status, training iteration counts, process identity including Linux start time, GPU-capacity waiting, stale logs, experiment/analysis failures, and analysis source drift. It never restarts or modifies an experimental cell. Its immutable configuration SHA-256 is `3b3bf282773d2fffa2183aeceebf5028a80fd53e3f8ee2fc7f5962f6a5e5febe`.
+
+When the full pilot finishes, the existing analysis watcher verifies the artifacts and writes the complete comparison. The health monitor then verifies the analysis output hashes and writes a final development-results summary that preserves both gains and failed retention checks. It cannot label an incomplete primary grid or changed artifacts as a completed result.
+
+Local outputs under `/home/linjiw/lucid-sonic/experiments/quality_frontier_campaign_20260905/monitor_a/`:
+
+- `live.md` and `status.json`: current schedule and health.
+- `history.jsonl`: one-minute progress history.
+- `results.md`: generated only after successful verification of the completed pilot analysis.
+- `monitor_error.json`: written if the monitor itself fails or its time budget expires.
+
+The full analysis destination is `/home/linjiw/lucid-sonic/analysis/quality_frontier_pilot_20260905_a/`. These are local background jobs and local reports; no external message or publication is scheduled. Source receipts remain authoritative if monitoring expires before the campaign completes.
