@@ -183,7 +183,9 @@ def canonical_key(key: str) -> str:
     return KEY_MAP.get(key, key)
 
 
-def parse_log(path: Path) -> list[dict[str, float]]:
+def parse_log(
+    path: Path, *, allow_compatible_consecutive_duplicates: bool = False
+) -> list[dict[str, float]]:
     rows: list[dict[str, float]] = []
     row: dict[str, float] | None = None
     pending_compute = ""
@@ -225,6 +227,28 @@ def parse_log(path: Path) -> list[dict[str, float]]:
         rows.append(row)
     if not rows:
         raise ValueError(f"no iteration blocks parsed from {path}")
+    if allow_compatible_consecutive_duplicates:
+        # Some launcher logs mirror one Rich table as two adjacent fragments:
+        # their shared fields agree and the second fragment supplies the remaining
+        # columns. Merge only that compatible case; a conflicting repeat remains a
+        # hard error so presentation can never choose silently between samples.
+        canonical_rows: list[dict[str, float]] = []
+        for row in rows:
+            if canonical_rows and row["iteration"] == canonical_rows[-1]["iteration"]:
+                conflicts = {
+                    key: (canonical_rows[-1][key], value)
+                    for key, value in row.items()
+                    if key in canonical_rows[-1] and canonical_rows[-1][key] != value
+                }
+                if conflicts:
+                    raise ValueError(
+                        f"conflicting duplicate iteration {int(row['iteration'])} "
+                        f"in {path}: {conflicts}"
+                    )
+                canonical_rows[-1].update(row)
+                continue
+            canonical_rows.append(row)
+        rows = canonical_rows
     iterations = [int(row["iteration"]) for row in rows]
     if iterations != sorted(set(iterations)):
         raise ValueError(f"non-monotone or duplicated iteration blocks in {path}")
@@ -236,7 +260,11 @@ def at_or_before(rows: list[dict[str, float]], horizon: int) -> list[dict[str, f
 
 
 def series(rows: list[dict[str, float]], key: str) -> tuple[np.ndarray, np.ndarray]:
-    pairs = [(row["iteration"], row[key]) for row in rows if key in row and math.isfinite(row[key])]
+    pairs = [
+        (row["iteration"], row[key])
+        for row in rows
+        if key in row and math.isfinite(row[key])
+    ]
     if not pairs:
         return np.array([]), np.array([])
     return np.asarray([p[0] for p in pairs]), np.asarray([p[1] for p in pairs])
@@ -276,9 +304,15 @@ def plot_group(
     title: str,
     columns: int = 3,
 ) -> None:
-    keys = [key for key in keys if any(series(rows, key)[0].size for rows in rows_by_run.values())]
+    keys = [
+        key
+        for key in keys
+        if any(series(rows, key)[0].size for rows in rows_by_run.values())
+    ]
     nrows = math.ceil(len(keys) / columns)
-    fig, axes = plt.subplots(nrows, columns, figsize=(5.0 * columns, 3.0 * nrows), squeeze=False)
+    fig, axes = plt.subplots(
+        nrows, columns, figsize=(5.0 * columns, 3.0 * nrows), squeeze=False
+    )
     for axis, key in zip(axes.flat, keys):
         for run_id, rows in rows_by_run.items():
             x, y = series(rows, key)
@@ -286,7 +320,13 @@ def plot_group(
                 continue
             meta = RUNS[run_id]
             axis.plot(x, y, color=meta["color"], alpha=0.08, linewidth=0.55)
-            axis.plot(x, rolling_mean(y), color=meta["color"], linewidth=1.65, label=meta["label"])
+            axis.plot(
+                x,
+                rolling_mean(y),
+                color=meta["color"],
+                linewidth=1.65,
+                label=meta["label"],
+            )
         axis.set_title(short_title(key), fontsize=10)
         axis.set_xlim(0, 6000)
         axis.grid(alpha=0.22, linewidth=0.6)
@@ -301,7 +341,12 @@ def plot_group(
         fontsize=13,
     )
     fig.legend(
-        handles, labels, loc="upper center", ncol=3, frameon=False, bbox_to_anchor=(0.5, 0.915)
+        handles,
+        labels,
+        loc="upper center",
+        ncol=3,
+        frameon=False,
+        bbox_to_anchor=(0.5, 0.915),
     )
     fig.supxlabel("PPO iteration")
     fig.tight_layout(rect=(0, 0, 1, 0.865))
@@ -310,21 +355,29 @@ def plot_group(
     plt.close(fig)
 
 
-def metric_value(rows: list[dict[str, float]], iteration: int, key: str) -> float | None:
+def metric_value(
+    rows: list[dict[str, float]], iteration: int, key: str
+) -> float | None:
     for row in rows:
         if int(row["iteration"]) == iteration:
             return row.get(key)
     return None
 
 
-def trailing(rows: list[dict[str, float]], horizon: int, key: str, window: int = 50) -> float:
-    values = [row[key] for row in rows if row["iteration"] <= horizon and key in row][-window:]
+def trailing(
+    rows: list[dict[str, float]], horizon: int, key: str, window: int = 50
+) -> float:
+    values = [row[key] for row in rows if row["iteration"] <= horizon and key in row][
+        -window:
+    ]
     if len(values) != window:
         raise ValueError(f"only {len(values)} values for {key} at h{horizon}")
     return float(np.mean(values))
 
 
-def first_crossing(rows: list[dict[str, float]], key: str, threshold: float) -> int | None:
+def first_crossing(
+    rows: list[dict[str, float]], key: str, threshold: float
+) -> int | None:
     for row in rows:
         if row.get(key, -math.inf) >= threshold:
             return int(row["iteration"])
@@ -520,7 +573,13 @@ def publish_wandb(
             name=f"{meta['label']} · direct · s8600 · h6000",
             group="effort-point-barrier-h6000",
             job_type="from-scratch-direct",
-            tags=["lucid", "barrier-study", "effort-point", "matched-h6000", "seed-8600"],
+            tags=[
+                "lucid",
+                "barrier-study",
+                "effort-point",
+                "matched-h6000",
+                "seed-8600",
+            ],
             config={
                 **receipt["comparison_contract"],
                 "effort_scale": meta["effort_scale"],
@@ -544,7 +603,9 @@ def publish_wandb(
             if not isinstance(value, (dict, list)):
                 run.summary[key] = value
         run.summary["barrier_C1_at_iter1500"] = (
-            receipt["runs"][run_id]["summary"]["iteration_1500"]["Env/Episode_Termination/time_out"]
+            receipt["runs"][run_id]["summary"]["iteration_1500"][
+                "Env/Episode_Termination/time_out"
+            ]
             < 0.30
         )
         run.summary["directly_learned"] = True
@@ -557,13 +618,16 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--horizon", type=int, default=6000)
     parser.add_argument(
-        "--figure-dir", type=Path, default=Path("/home/linjiw/lucid/site/img/effort_barrier")
+        "--figure-dir",
+        type=Path,
+        default=Path("/home/linjiw/lucid/site/img/effort_barrier"),
     )
     parser.add_argument(
         "--receipt",
         type=Path,
         default=Path(
-            "/home/linjiw/lucid/receipts/analysis/" "effort_barrier_learning_curves_20260904.json"
+            "/home/linjiw/lucid/receipts/analysis/"
+            "effort_barrier_learning_curves_20260904.json"
         ),
     )
     parser.add_argument("--publish", action="store_true")
@@ -572,10 +636,13 @@ def main() -> int:
     args = parser.parse_args()
 
     rows_by_run = {
-        run_id: at_or_before(parse_log(meta["log"]), args.horizon) for run_id, meta in RUNS.items()
+        run_id: at_or_before(parse_log(meta["log"]), args.horizon)
+        for run_id, meta in RUNS.items()
     }
     parsed_keys = {key for rows in rows_by_run.values() for row in rows for key in row}
-    declared_keys = {key for keys in PLOT_GROUPS.values() for key in keys} | {"iteration"}
+    declared_keys = {key for keys in PLOT_GROUPS.values() for key in keys} | {
+        "iteration"
+    }
     missing_from_plots = sorted(parsed_keys - declared_keys)
     missing_from_logs = sorted(declared_keys - parsed_keys)
     if missing_from_plots or missing_from_logs:

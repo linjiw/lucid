@@ -1,0 +1,221 @@
+{
+  "kind": "lucid_practice_allocation_wandb_publication",
+  "schema_version": 1,
+  "created_at": "2026-09-05T02:23:44.206269-04:00",
+  "analysis": "/home/linjiw/lucid/receipts/analysis/lucid_practice_allocation_confirmation_20260905.json",
+  "analysis_sha256": "bf781e3f6125845c59aa0c5f2ad8029805aec85df1e75e46051cb8403a507b43",
+  "training_source_audit": {
+    "mirrored_rich_blocks_canonicalized": "compatible adjacent fragments are merged; conflicting repeats are rejected",
+    "all_logged_scalars_published": true,
+    "scalar_keys": [
+      "Counters/total_episodes",
+      "Counters/total_timesteps",
+      "Env/Episode_Reward/action_rate_l2",
+      "Env/Episode_Reward/anti_shake_ang_vel",
+      "Env/Episode_Reward/feet_acc",
+      "Env/Episode_Reward/joint_limit",
+      "Env/Episode_Reward/tracking_anchor_ori",
+      "Env/Episode_Reward/tracking_anchor_pos",
+      "Env/Episode_Reward/tracking_body_angvel",
+      "Env/Episode_Reward/tracking_body_linvel",
+      "Env/Episode_Reward/tracking_relative_body_ori",
+      "Env/Episode_Reward/tracking_relative_body_pos",
+      "Env/Episode_Reward/tracking_vr_5point_local",
+      "Env/Episode_Reward/undesired_contacts",
+      "Env/Episode_Termination/anchor_ori_full",
+      "Env/Episode_Termination/anchor_pos",
+      "Env/Episode_Termination/ee_body_pos",
+      "Env/Episode_Termination/foot_pos_xyz",
+      "Env/Episode_Termination/time_out",
+      "Env/Metrics/motion/error_anchor_ang_vel",
+      "Env/Metrics/motion/error_anchor_lin_vel",
+      "Env/Metrics/motion/error_anchor_pos",
+      "Env/Metrics/motion/error_anchor_rot",
+      "Env/Metrics/motion/error_body_ang_vel",
+      "Env/Metrics/motion/error_body_lin_vel",
+      "Env/Metrics/motion/error_body_pos",
+      "Env/Metrics/motion/error_body_rot",
+      "Env/Metrics/motion/error_joint_pos",
+      "Env/Metrics/motion/error_joint_vel",
+      "Env/adp_samp/effective_num_bins",
+      "Env/adp_samp/episodes_max_over_mean",
+      "Env/adp_samp/failure_rate_max",
+      "Env/adp_samp/failure_rate_mean",
+      "Env/adp_samp/failure_rate_min",
+      "Env/adp_samp/num_concentrated_bins",
+      "Env/adp_samp/num_episodes_max",
+      "Env/adp_samp/num_episodes_mean",
+      "Env/adp_samp/num_episodes_min",
+      "Env/adp_samp/num_failures_max",
+      "Env/adp_samp/num_failures_mean",
+      "Env/adp_samp/num_failures_min",
+      "Env/adp_samp/prob_max",
+      "Env/adp_samp/prob_max_over_uniform",
+      "Env/adp_samp/prob_mean",
+      "Env/adp_samp/prob_min",
+      "Perf/collection_time_s",
+      "Perf/eta_s",
+      "Perf/iteration_time_s",
+      "Perf/learning_time_s",
+      "Perf/steps_per_second",
+      "Perf/total_time_s",
+      "Train/mean_action_noise_std",
+      "Train/mean_entropy",
+      "Train/mean_length",
+      "Train/mean_rewards"
+    ],
+    "runs": {
+      "8600/prac_null": {
+        "source_log": "/home/linjiw/lucid-sonic/outputs/lucid_practice_allocation_ne1024_20260903_052617/curriculum_comparison_ne1024_20260903_052619_s8600_prac_null.log",
+        "source_log_sha256": "c4bfd0a98cc523e3f80aa51968dadc19f4662c35dfe50099140264a1e110daec",
+        "canonical_iteration_rows": 1500,
+        "first_iteration": 1,
+        "last_iteration": 1500,
+        "scalar_count": 55,
+        "trailing50_at_h1500": {
+          "Env/Episode_Termination/time_out": 0.965602,
+          "Train/mean_rewards": 12.4709132,
+          "Train/mean_length": 189.43959999999998
+        }
+      },
+      "8600/prac_push": {
+        "source_log": "/home/linjiw/lucid-sonic/outputs/lucid_practice_allocation_ne1024_20260903_052617/curriculum_comparison_ne1024_20260903_052619_s8600_prac_push.log",
+        "source_log_sha256": "220977afd8236e1fc8051dd59a3e7fd09de1b263c388b4413cadce7dab692ca4",
+        "canonical_iteration_rows": 1500,
+        "first_iteration": 1,
+        "last_iteration": 1500,
+        "scalar_count": 55,
+        "trailing50_at_h1500": {
+          "Env/Episode_Termination/time_out": 0.904314,
+          "Train/mean_rewards": 9.5312862,
+          "Train/mean_length": 185.6408
+        }
+      },
+      "8600/prac_easy": {
+        "source_log": "/home/linjiw/lucid-sonic/outputs/lucid_practice_allocation_ne1024_20260903_052617/curriculum_comparison_ne1024_20260903_052619_s8600_prac_easy.log",
+        "source_log_sha256": "0d05941f0af676249acfe6f0755b7d957ebec0f87d2cf38e8f051710a92ed7e8",
+        "canonical_iteration_rows": 1500,
+        "first_iteration": 1,
+        "last_iteration": 1500,
+        "scalar_count": 55,
+        "trailing50_at_h1500": {
+          "Env/Episode_Termination/time_out": 0.954026,
+          "Train/mean_rewards": 11.0268706,
+          "Train/mean_length": 188.33939999999998
+        }
+      },
+      "8601/prac_null": {
+        "source_log": "/home/linjiw/lucid-sonic/outputs/practice_allocation_confirmation_20260904/s8601/curriculum_comparison_ne1024_20260904_152713_s8601_prac_null.log",
+        "source_log_sha256": "26b93df1f66c06f21b559598938e4926bcd918918d8e968b96dd12b575fdab51",
+        "canonical_iteration_rows": 1500,
+        "first_iteration": 1,
+        "last_iteration": 1500,
+        "scalar_count": 55,
+        "trailing50_at_h1500": {
+          "Env/Episode_Termination/time_out": 0.9664400000000001,
+          "Train/mean_rewards": 12.1524186,
+          "Train/mean_length": 189.5232
+        }
+      },
+      "8601/prac_push": {
+        "source_log": "/home/linjiw/lucid-sonic/outputs/practice_allocation_confirmation_20260904/s8601/curriculum_comparison_ne1024_20260904_152713_s8601_prac_push.log",
+        "source_log_sha256": "a8e40629104c1f9429e67666739b11c4710566794f2a074507ca59946b66c397",
+        "canonical_iteration_rows": 1500,
+        "first_iteration": 1,
+        "last_iteration": 1500,
+        "scalar_count": 55,
+        "trailing50_at_h1500": {
+          "Env/Episode_Termination/time_out": 0.8796980000000001,
+          "Train/mean_rewards": 9.22258,
+          "Train/mean_length": 184.4514
+        }
+      },
+      "8601/prac_easy": {
+        "source_log": "/home/linjiw/lucid-sonic/outputs/practice_allocation_confirmation_20260904/s8601/curriculum_comparison_ne1024_20260904_152713_s8601_prac_easy.log",
+        "source_log_sha256": "130d9f3a89b7af4874a25e6cca23c9718c97071fa509960b9b7671bdca365f31",
+        "canonical_iteration_rows": 1500,
+        "first_iteration": 1,
+        "last_iteration": 1500,
+        "scalar_count": 55,
+        "trailing50_at_h1500": {
+          "Env/Episode_Termination/time_out": 0.943478,
+          "Train/mean_rewards": 10.5259412,
+          "Train/mean_length": 187.3418
+        }
+      },
+      "8602/prac_null": {
+        "source_log": "/home/linjiw/lucid-sonic/outputs/practice_allocation_confirmation_20260904/s8602/curriculum_comparison_ne1024_20260904_184159_s8602_prac_null.log",
+        "source_log_sha256": "4607e371da170091c11b00513fb0cf6440e24f3c74fde966483c7a87f9275c49",
+        "canonical_iteration_rows": 1500,
+        "first_iteration": 1,
+        "last_iteration": 1500,
+        "scalar_count": 55,
+        "trailing50_at_h1500": {
+          "Env/Episode_Termination/time_out": 0.966498,
+          "Train/mean_rewards": 12.370188599999999,
+          "Train/mean_length": 189.2838
+        }
+      },
+      "8602/prac_push": {
+        "source_log": "/home/linjiw/lucid-sonic/outputs/practice_allocation_confirmation_20260904/s8602/curriculum_comparison_ne1024_20260904_184159_s8602_prac_push.log",
+        "source_log_sha256": "d6ce512ef5239388d5d3bcce7b60f54f52c6cf57817fb173e55e74fd18b8e05a",
+        "canonical_iteration_rows": 1500,
+        "first_iteration": 1,
+        "last_iteration": 1500,
+        "scalar_count": 55,
+        "trailing50_at_h1500": {
+          "Env/Episode_Termination/time_out": 0.9096899999999999,
+          "Train/mean_rewards": 9.398594000000001,
+          "Train/mean_length": 185.403
+        }
+      },
+      "8602/prac_easy": {
+        "source_log": "/home/linjiw/lucid-sonic/outputs/practice_allocation_confirmation_20260904/s8602/curriculum_comparison_ne1024_20260904_184159_s8602_prac_easy.log",
+        "source_log_sha256": "5292cff5d6e9e33b9bbed3d33d8b202123184e4a3aa96549f07a0fca3c154017",
+        "canonical_iteration_rows": 1500,
+        "first_iteration": 1,
+        "last_iteration": 1500,
+        "scalar_count": 55,
+        "trailing50_at_h1500": {
+          "Env/Episode_Termination/time_out": 0.9570839999999999,
+          "Train/mean_rewards": 10.9881624,
+          "Train/mean_length": 188.03220000000002
+        }
+      }
+    }
+  },
+  "figures": {
+    "training_overview": {
+      "path": "/home/linjiw/lucid/site/img/practice_confirmation/training_overview.webp",
+      "sha256": "b69d20edc71417c52c85bb0d0a629245d09a4570d7b0b679fe9059f80f0a71ba"
+    },
+    "frozen_summary": {
+      "path": "/home/linjiw/lucid/site/img/practice_confirmation/frozen_summary.webp",
+      "sha256": "8cf795d6217760d1c6931f8a612412d02f8be4ed30f2a1e2812b4325a4fd913f"
+    }
+  },
+  "training_run_urls": {
+    "8600/prac_null": "https://wandb.ai/16726/lucid-campaign/runs/prac-train-s8600-null-h1500-v1",
+    "8600/prac_push": "https://wandb.ai/16726/lucid-campaign/runs/prac-train-s8600-push-h1500-v1",
+    "8600/prac_easy": "https://wandb.ai/16726/lucid-campaign/runs/prac-train-s8600-easy-h1500-v1",
+    "8601/prac_null": "https://wandb.ai/16726/lucid-campaign/runs/prac-train-s8601-null-h1500-v1",
+    "8601/prac_push": "https://wandb.ai/16726/lucid-campaign/runs/prac-train-s8601-push-h1500-v1",
+    "8601/prac_easy": "https://wandb.ai/16726/lucid-campaign/runs/prac-train-s8601-easy-h1500-v1",
+    "8602/prac_null": "https://wandb.ai/16726/lucid-campaign/runs/prac-train-s8602-null-h1500-v1",
+    "8602/prac_push": "https://wandb.ai/16726/lucid-campaign/runs/prac-train-s8602-push-h1500-v1",
+    "8602/prac_easy": "https://wandb.ai/16726/lucid-campaign/runs/prac-train-s8602-easy-h1500-v1"
+  },
+  "evaluation_run_urls": {
+    "8600/prac_null": "https://wandb.ai/16726/lucid-campaign/runs/prac-eval-s8600-null-13cell-v1",
+    "8600/prac_push": "https://wandb.ai/16726/lucid-campaign/runs/prac-eval-s8600-push-13cell-v1",
+    "8600/prac_easy": "https://wandb.ai/16726/lucid-campaign/runs/prac-eval-s8600-easy-13cell-v1",
+    "8601/prac_null": "https://wandb.ai/16726/lucid-campaign/runs/prac-eval-s8601-null-13cell-v1",
+    "8601/prac_push": "https://wandb.ai/16726/lucid-campaign/runs/prac-eval-s8601-push-13cell-v1",
+    "8601/prac_easy": "https://wandb.ai/16726/lucid-campaign/runs/prac-eval-s8601-easy-13cell-v1",
+    "8602/prac_null": "https://wandb.ai/16726/lucid-campaign/runs/prac-eval-s8602-null-13cell-v1",
+    "8602/prac_push": "https://wandb.ai/16726/lucid-campaign/runs/prac-eval-s8602-push-13cell-v1",
+    "8602/prac_easy": "https://wandb.ai/16726/lucid-campaign/runs/prac-eval-s8602-easy-13cell-v1"
+  },
+  "report_url": "https://wandb.ai/16726/lucid-campaign/reports/LUCID-Practice-Allocation-\u2014-Three-Seed-Push-Confirmation--VmlldzoxNzg3NDM0Mw==",
+  "telemetry_note": "Training runs are lossless normalized replays from durable console logs; evaluation runs are lossless replays from the complete analysis receipt."
+}
