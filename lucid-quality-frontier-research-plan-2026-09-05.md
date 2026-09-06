@@ -50,6 +50,8 @@ Build isolated fixed-condition clean probes and the quality-veto state machine o
 
 The cheapest first question is whether quality loss is detectable early enough to change an expansion decision. If affordable windows cannot resolve it, do not build a more complex online score. Consider longer scheduled blocks or a frozen conservative preset and price that alternative.
 
+September 5 measurement update: the [completed subset-budget analysis](lucid-probe-budget-findings-2026-09-05.md) shows broad observed variation at mildly degraded and near-margin policy stages. Keep an explicit unresolved state and evaluate staged probe budgets prospectively. The existing 5th/95th subset quantiles are not confidence bounds or evidence for a calibrated sequential decision rule. A 512-alias census eliminates subset-selection variation only. Actual probe-start and simulation costs still require measurement. This informs the later quality instrument; it does not activate a veto while the optimizer-retention diagnostic runs.
+
 ## E3: recovery and uncertainty
 
 Gather action-aligned histories with motion phase, disturbance timestamps, per-episode identities, and actual dispatch versions. First compare raw pose error and phase/contact-conditioned features for prediction of recovery and future quality failure. Fit simple temporal predictors before a learned latent. Splits exclude held-out motions, origin seeds, policy stages, and temporal DR processes from fitting and tuning. Compare calibration and incremental prediction, not only training loss.

@@ -4,6 +4,8 @@ Date: September 5 EDT / September 6 UTC. Companion [continuation audit](lucid-co
 
 **Execution update:** the fixed-initial diagnostic has finished with a tracking-retention breach. The [completed-results and launch memo](lucid-initial-hold-results-2026-09-05.md) records the implemented runtime/binding work, 1,940 passing CPU tests, and the newly started smoke-gated paired campaign. The preparation sections below preserve their earlier state; the simulator gate is pending, and source parameter names are reconstructed with an explicit provenance limitation.
 
+**Later update, 02:30 UTC:** all 10 smoke cells and exact fresh-arm checkpoint parity passed; the long paired run is training. The restored arm's 16-iteration clean global error is worse than fresh (140.76 versus 124.61 mm). This is a reported short-horizon outcome, not a reason to redefine the frozen long-run endpoint. Source parameter names remain a verified reconstruction under the documented grouping contract rather than original historical metadata.
+
 ## Question and scope
 
 Does resetting AdamW history contribute to the clean-tracking loss observed during solved-policy training? The completed frontier pilot establishes tracking drift, and the loader audit establishes fresh optimizer state in its arms. Neither establishes a causal connection. The running fixed-initial-DR diagnostic first asks whether expansion is necessary for that drift.
