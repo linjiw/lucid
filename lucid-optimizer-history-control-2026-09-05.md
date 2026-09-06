@@ -2,6 +2,8 @@
 
 Date: September 5 EDT / September 6 UTC. Companion [continuation audit](lucid-continuation-contract-audit-2026-09-05.md) and [research plan](lucid-quality-frontier-research-plan-2026-09-05.md).
 
+**Execution update:** the fixed-initial diagnostic has finished with a tracking-retention breach. The [completed-results and launch memo](lucid-initial-hold-results-2026-09-05.md) records the implemented runtime/binding work, 1,940 passing CPU tests, and the newly started smoke-gated paired campaign. The preparation sections below preserve their earlier state; the simulator gate is pending, and source parameter names are reconstructed with an explicit provenance limitation.
+
 ## Question and scope
 
 Does resetting AdamW history contribute to the clean-tracking loss observed during solved-policy training? The completed frontier pilot establishes tracking drift, and the loader audit establishes fresh optimizer state in its arms. Neither establishes a causal connection. The running fixed-initial-DR diagnostic first asks whether expansion is necessary for that drift.
