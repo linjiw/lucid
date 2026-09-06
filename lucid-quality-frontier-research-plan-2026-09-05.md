@@ -54,6 +54,8 @@ September 5 measurement update: the [completed subset-budget analysis](lucid-pro
 
 ## E3: recovery and uncertainty
 
+September 5 diagnostic refinement: [geometric bounds from completed pose records](lucid-root-feedback-findings-2026-09-05.md) require increased clean pelvis translation error in the earlier replay and gate policies. They leave the smaller fixed-initial change unresolved. Future recovery instrumentation should measure translation, heading, and root-relative pose separately, with explicit frames and pre-reset episode masks. The current local metric removes translation only; it does not isolate articulation. These bounds identify an error component, not a responsible DR channel or a practice-utility signal.
+
 Gather action-aligned histories with motion phase, disturbance timestamps, per-episode identities, and actual dispatch versions. First compare raw pose error and phase/contact-conditioned features for prediction of recovery and future quality failure. Fit simple temporal predictors before a learned latent. Splits exclude held-out motions, origin seeds, policy stages, and temporal DR processes from fitting and tuning. Compare calibration and incremental prediction, not only training loss.
 
 If the observer is useful, test its marginal scheduling value with the policy fixed. Only then consider an architecture factorial: existing/history-conditioned policy × fixed/curriculum training. Privileged dynamics is diagnostic training information. Learned utility selection and residual allocation remain subject to the original gates.
