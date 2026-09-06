@@ -77,4 +77,8 @@ Any import-path mismatch, schedule mismatch, wrong checkpoint config, invalid de
 
 ## Execution ledger
 
+September 5 evening decision preparation: the completed E0 pilot fails origin-relative clean tracking retention in all arms, so the fixed-initial-cohort diagnostic precedes E1/E2. Its supplemental report will assess the frozen 2-point completion and 10% global/local pose margins at every saved clean checkpoint. Endpoint recovery cannot erase an earlier sampled breach. Undefined ratios or missing evidence cannot certify retention. This is a development diagnostic, with no statistical non-inferiority claim and no inference about unobserved intervals.
+
+If the initial distribution retains quality throughout the evaluated grid, proceed toward a measured origin-relative expansion veto. If a breach occurs without expansion, isolate the restart/training-retention mechanism before claiming that a richer difficulty signal solves the problem. The [continuation audit](lucid-continuation-contract-audit-2026-09-05.md) specifies the candidate optimizer-history control. No contingent GPU experiment is automatically launched from this classification. Recovery history and dynamics uncertainty remain subsequent prediction-gated signals; original utility-selector gates remain unchanged.
+
 Initial implementation and test results, immutable pilot paths, launch identifiers, and completion status are recorded in `lucid-quality-frontier-status-2026-09-05.md`. Generated experimental material remains outside Git. The original practice-allocation confirmation memo and its frozen decisions remain authoritative for that experiment.
