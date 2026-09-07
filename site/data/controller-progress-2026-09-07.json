@@ -1,0 +1,389 @@
+{
+  "training_iteration": 128,
+  "snapshot_utc": "2026-09-07T04:27:59.720173+00:00",
+  "released_cells": {
+    "control_release_native_s8730_phys_000": {
+      "state": "complete",
+      "wandb_url": "https://wandb.ai/16726/lucid-sonic/runs/paths-7570c657d2-control_release_native_s8730_phys_000",
+      "summary": {
+        "completion_rate": 1.0,
+        "tracking_success_rate": 1.0,
+        "global_mpjpe_mm": 90.68040498958459,
+        "local_mpjpe_mm": 28.608865886993687,
+        "legacy_global_mpjpe_mm": 91.13607082654484,
+        "legacy_local_mpjpe_mm": 28.752614434126546
+      }
+    },
+    "control_release_lucid_s8730_phys_000": {
+      "state": "complete",
+      "wandb_url": "https://wandb.ai/16726/lucid-sonic/runs/paths-7570c657d2-control_release_lucid_s8730_phys_000",
+      "summary": {
+        "completion_rate": 1.0,
+        "tracking_success_rate": 1.0,
+        "global_mpjpe_mm": 87.2157351300857,
+        "local_mpjpe_mm": 28.51606134498341,
+        "legacy_global_mpjpe_mm": 87.65399031902678,
+        "legacy_local_mpjpe_mm": 28.659343492188906
+      }
+    },
+    "arc_release_native_s8730_phys_000": {
+      "state": "complete",
+      "wandb_url": "https://wandb.ai/16726/lucid-sonic/runs/paths-7570c657d2-arc_release_native_s8730_phys_000",
+      "summary": {
+        "completion_rate": 1.0,
+        "tracking_success_rate": 1.0,
+        "global_mpjpe_mm": 101.25128489128544,
+        "local_mpjpe_mm": 19.953209193072066,
+        "legacy_global_mpjpe_mm": 101.44267834594628,
+        "legacy_local_mpjpe_mm": 19.99092016753203
+      }
+    },
+    "arc_release_lucid_s8730_phys_000": {
+      "state": "complete",
+      "wandb_url": "https://wandb.ai/16726/lucid-sonic/runs/paths-7570c657d2-arc_release_lucid_s8730_phys_000",
+      "summary": {
+        "completion_rate": 1.0,
+        "tracking_success_rate": 1.0,
+        "global_mpjpe_mm": 99.57271200251195,
+        "local_mpjpe_mm": 19.85253662100023,
+        "legacy_global_mpjpe_mm": 99.76093210029242,
+        "legacy_local_mpjpe_mm": 19.890057371398612
+      }
+    },
+    "sideways_release_native_s8730_phys_000": {
+      "state": "complete",
+      "wandb_url": "https://wandb.ai/16726/lucid-sonic/runs/paths-7570c657d2-sideways_release_native_s8730_phys_000",
+      "summary": {
+        "completion_rate": 1.0,
+        "tracking_success_rate": 1.0,
+        "global_mpjpe_mm": 114.32526611425577,
+        "local_mpjpe_mm": 21.895018255405045,
+        "legacy_global_mpjpe_mm": 114.52977894822746,
+        "legacy_local_mpjpe_mm": 21.934180642100454
+      }
+    },
+    "sideways_release_lucid_s8730_phys_000": {
+      "state": "complete",
+      "wandb_url": "https://wandb.ai/16726/lucid-sonic/runs/paths-7570c657d2-sideways_release_lucid_s8730_phys_000",
+      "summary": {
+        "completion_rate": 1.0,
+        "tracking_success_rate": 1.0,
+        "global_mpjpe_mm": 112.98629627143157,
+        "local_mpjpe_mm": 21.865085127262127,
+        "legacy_global_mpjpe_mm": 113.1884122361559,
+        "legacy_local_mpjpe_mm": 21.90419402148088
+      }
+    },
+    "stoop_release_native_s8730_phys_000": {
+      "state": "complete",
+      "wandb_url": "https://wandb.ai/16726/lucid-sonic/runs/paths-7570c657d2-stoop_release_native_s8730_phys_000",
+      "summary": {
+        "completion_rate": 1.0,
+        "tracking_success_rate": 1.0,
+        "global_mpjpe_mm": 107.92657806224544,
+        "local_mpjpe_mm": 24.338513570437744,
+        "legacy_global_mpjpe_mm": 108.1923985330258,
+        "legacy_local_mpjpe_mm": 24.398452125243285
+      }
+    },
+    "stoop_release_lucid_s8730_phys_000": {
+      "state": "complete",
+      "wandb_url": "https://wandb.ai/16726/lucid-sonic/runs/paths-7570c657d2-stoop_release_lucid_s8730_phys_000",
+      "summary": {
+        "completion_rate": 1.0,
+        "tracking_success_rate": 1.0,
+        "global_mpjpe_mm": 110.52764801668877,
+        "local_mpjpe_mm": 24.365482161487897,
+        "legacy_global_mpjpe_mm": 110.79987478558235,
+        "legacy_local_mpjpe_mm": 24.425487274019588
+      }
+    }
+  },
+  "shadow_state": "complete",
+  "shadow_gate": {
+    "kind": "same_state_v2",
+    "pairs": {
+      "control": {
+        "passed": true,
+        "shadow": {
+          "complete": true,
+          "max_action_abs": 0.0,
+          "calls": 201,
+          "samples": 25728,
+          "matched_all_policy_forwards": true,
+          "tolerance": 1e-05
+        },
+        "summary": {
+          "completion_rate": 1.0,
+          "tracking_success_rate": 1.0,
+          "global_mpjpe_mm": 82.57629575169447,
+          "local_mpjpe_mm": 28.76749743261268,
+          "legacy_global_mpjpe_mm": 82.99123720496316,
+          "legacy_local_mpjpe_mm": 28.912042775260232
+        }
+      },
+      "arc": {
+        "passed": true,
+        "shadow": {
+          "complete": true,
+          "max_action_abs": 0.0,
+          "calls": 531,
+          "samples": 67968,
+          "matched_all_policy_forwards": true,
+          "tolerance": 1e-05
+        },
+        "summary": {
+          "completion_rate": 1.0,
+          "tracking_success_rate": 1.0,
+          "global_mpjpe_mm": 101.14315238697755,
+          "local_mpjpe_mm": 19.824260342916425,
+          "legacy_global_mpjpe_mm": 101.33434125677238,
+          "legacy_local_mpjpe_mm": 19.861727433046262
+        }
+      },
+      "sideways": {
+        "passed": true,
+        "shadow": {
+          "complete": true,
+          "max_action_abs": 0.0,
+          "calls": 561,
+          "samples": 71808,
+          "matched_all_policy_forwards": true,
+          "tolerance": 1e-05
+        },
+        "summary": {
+          "completion_rate": 1.0,
+          "tracking_success_rate": 1.0,
+          "global_mpjpe_mm": 112.38495869727689,
+          "local_mpjpe_mm": 21.894264599045968,
+          "legacy_global_mpjpe_mm": 112.58599839477384,
+          "legacy_local_mpjpe_mm": 21.933425462675498
+        }
+      },
+      "stoop": {
+        "passed": true,
+        "shadow": {
+          "complete": true,
+          "max_action_abs": 0.0,
+          "calls": 408,
+          "samples": 52224,
+          "matched_all_policy_forwards": true,
+          "tolerance": 1e-05
+        },
+        "summary": {
+          "completion_rate": 1.0,
+          "tracking_success_rate": 1.0,
+          "global_mpjpe_mm": 112.53161718061376,
+          "local_mpjpe_mm": 24.391144172914466,
+          "legacy_global_mpjpe_mm": 112.80877999098344,
+          "legacy_local_mpjpe_mm": 24.45121216421644
+        }
+      }
+    },
+    "passed": true
+  },
+  "failed_cross_process_gates": {
+    "a": {
+      "pairs": {
+        "control": {
+          "passed": true,
+          "differences": {
+            "completion_rate": 0.0,
+            "tracking_success_rate": 0.0,
+            "global_mpjpe_mm": 0.3821537208927879,
+            "local_mpjpe_mm": 0.0023649651831796348
+          }
+        },
+        "arc": {
+          "passed": false,
+          "differences": {
+            "completion_rate": 0.0,
+            "tracking_success_rate": 0.0,
+            "global_mpjpe_mm": -1.4926332083775833,
+            "local_mpjpe_mm": -0.017265719694222526
+          }
+        },
+        "sideways": {
+          "passed": true,
+          "differences": {
+            "completion_rate": 0.0,
+            "tracking_success_rate": 0.0,
+            "global_mpjpe_mm": -0.27200418726089026,
+            "local_mpjpe_mm": -0.013103485346697141
+          }
+        },
+        "stoop": {
+          "passed": true,
+          "differences": {
+            "completion_rate": 0.0,
+            "tracking_success_rate": 0.0,
+            "global_mpjpe_mm": 0.2475840638596054,
+            "local_mpjpe_mm": -0.030997473140267573
+          }
+        }
+      },
+      "passed": false
+    },
+    "b": {
+      "pairs": {
+        "control": {
+          "passed": true,
+          "differences": {
+            "completion_rate": 0.0,
+            "tracking_success_rate": 0.0,
+            "global_mpjpe_mm": 0.19879198584104074,
+            "local_mpjpe_mm": 0.006830677187231515
+          }
+        },
+        "arc": {
+          "passed": true,
+          "differences": {
+            "completion_rate": 0.0,
+            "tracking_success_rate": 0.0,
+            "global_mpjpe_mm": -0.5553142329879392,
+            "local_mpjpe_mm": -0.009420943489313771
+          }
+        },
+        "sideways": {
+          "passed": false,
+          "differences": {
+            "completion_rate": 0.0,
+            "tracking_success_rate": 0.0,
+            "global_mpjpe_mm": 1.18232241468003,
+            "local_mpjpe_mm": 0.009631346647545058
+          }
+        },
+        "stoop": {
+          "passed": true,
+          "differences": {
+            "completion_rate": 0.0,
+            "tracking_success_rate": 0.0,
+            "global_mpjpe_mm": 0.4827553081262437,
+            "local_mpjpe_mm": -0.02655042017917353
+          }
+        }
+      },
+      "passed": false
+    }
+  },
+  "gpu_diagnostic": {
+    "complete": true,
+    "results": [
+      {
+        "tf32": true,
+        "batch": 16,
+        "action_max_abs": 0.0,
+        "layer_deltas": {
+          "actor_module.encoders.g1": 0.0,
+          "actor_module.decoders.g1_dyn.module.0": 0.0,
+          "actor_module.decoders.g1_dyn.module.1": 0.0,
+          "actor_module.decoders.g1_dyn.module.2": 0.0,
+          "actor_module.decoders.g1_dyn.module.4": 0.0,
+          "actor_module.decoders.g1_dyn.module.6": 0.0,
+          "actor_module.decoders.g1_dyn.module.8": 0.0,
+          "actor_module.decoders.g1_dyn.module.10": 0.0,
+          "actor_module.decoders.g1_dyn.module.12": 0.0,
+          "actor_module.decoders.g1_dyn.module": 0.0
+        }
+      },
+      {
+        "tf32": true,
+        "batch": 128,
+        "action_max_abs": 0.0,
+        "layer_deltas": {
+          "actor_module.encoders.g1": 0.0,
+          "actor_module.decoders.g1_dyn.module.0": 0.0,
+          "actor_module.decoders.g1_dyn.module.1": 0.0,
+          "actor_module.decoders.g1_dyn.module.2": 0.0,
+          "actor_module.decoders.g1_dyn.module.4": 0.0,
+          "actor_module.decoders.g1_dyn.module.6": 0.0,
+          "actor_module.decoders.g1_dyn.module.8": 0.0,
+          "actor_module.decoders.g1_dyn.module.10": 0.0,
+          "actor_module.decoders.g1_dyn.module.12": 0.0,
+          "actor_module.decoders.g1_dyn.module": 0.0
+        }
+      },
+      {
+        "tf32": false,
+        "batch": 16,
+        "action_max_abs": 0.0,
+        "layer_deltas": {
+          "actor_module.encoders.g1": 0.0,
+          "actor_module.decoders.g1_dyn.module.0": 0.0,
+          "actor_module.decoders.g1_dyn.module.1": 0.0,
+          "actor_module.decoders.g1_dyn.module.2": 0.0,
+          "actor_module.decoders.g1_dyn.module.4": 0.0,
+          "actor_module.decoders.g1_dyn.module.6": 0.0,
+          "actor_module.decoders.g1_dyn.module.8": 0.0,
+          "actor_module.decoders.g1_dyn.module.10": 0.0,
+          "actor_module.decoders.g1_dyn.module.12": 0.0,
+          "actor_module.decoders.g1_dyn.module": 0.0
+        }
+      },
+      {
+        "tf32": false,
+        "batch": 128,
+        "action_max_abs": 0.0,
+        "layer_deltas": {
+          "actor_module.encoders.g1": 0.0,
+          "actor_module.decoders.g1_dyn.module.0": 0.0,
+          "actor_module.decoders.g1_dyn.module.1": 0.0,
+          "actor_module.decoders.g1_dyn.module.2": 0.0,
+          "actor_module.decoders.g1_dyn.module.4": 0.0,
+          "actor_module.decoders.g1_dyn.module.6": 0.0,
+          "actor_module.decoders.g1_dyn.module.8": 0.0,
+          "actor_module.decoders.g1_dyn.module.10": 0.0,
+          "actor_module.decoders.g1_dyn.module.12": 0.0,
+          "actor_module.decoders.g1_dyn.module": 0.0
+        }
+      }
+    ],
+    "wall_seconds": 0.12483774599968456,
+    "wandb_url": "https://wandb.ai/16726/lucid-sonic/runs/path-gpu-d87a190cb4b36659",
+    "plan_sha256": "d87a190cb4b36659f6e77334f64d08e62926840602dc7a8bc8af1d0334ff52a8"
+  },
+  "pilot": {
+    "state": "complete",
+    "plan_sha256": "59ac46c63026773c1978296f90b9598a68e18eab20c4ac9618562e38d3e336c1",
+    "runtime": {
+      "exit_code": 0,
+      "wall_seconds": 316.6822618939914,
+      "gpu": {
+        "samples": 156,
+        "start_free_mib": 11857.0,
+        "min_free_mib": 3489.0,
+        "max_used_mib": 12320.0,
+        "max_gpu_util_pct": 99.0
+      }
+    },
+    "result": {
+      "complete": true,
+      "global_step": 128,
+      "checkpoint_sha256": "b33a22ae6ec5f938c9a647274ca7d51065184c2620b6af9ed80d1ec353bc11cd",
+      "wall_seconds": 295.06713999598287,
+      "anchor_samples": 655616,
+      "anchor_forwards": 5122,
+      "anchor_forward_wall_seconds": 17.529039548739092,
+      "new_weight_norm": 0.28982603549957275,
+      "original_actor_parameters_exact": true,
+      "native_std_clamp_changes": {
+        "std": 1.0609626770019531e-05
+      }
+    }
+  },
+  "pilot_initialization": {
+    "fresh_optimizer": true,
+    "wandb_url": "https://wandb.ai/16726/lucid-sonic/runs/wnb1cavy",
+    "trainable_actor_coordinates": 4096,
+    "initial_anchor_loss": 0.0,
+    "anchor_samples": 256,
+    "exact_loaded_origin": true,
+    "plan_sha256": "59ac46c63026773c1978296f90b9598a68e18eab20c4ac9618562e38d3e336c1"
+  },
+  "limits": [
+    "Development motions and one shared origin; no curriculum advantage demonstrated.",
+    "Broad qualification thresholds are not high-quality competence or recovery guarantees.",
+    "Original cross-process gates remain failed; same-state gate is a documented amendment.",
+    "Path position is privileged simulation input until deployment measurement is established."
+  ]
+}

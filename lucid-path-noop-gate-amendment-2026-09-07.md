@@ -1,0 +1,11 @@
+# Same-state migration gate amendment
+
+Frozen before live shadow-policy outcomes, September 7 UTC.
+
+The original two native campaigns remain failed under their unchanged cross-process rollout agreement limits. They show up to 1.49 mm global-error differences while all four motion qualification/completion rates remain 100%. Split-policy same-input GPU comparisons now show exact action and layer equality at batches 16 and 128 with TF32 on/off. Initial saved native observations/actions also match exactly. The source of later cross-process trajectory divergence remains unresolved; do not assert it is exclusively PhysX noise.
+
+For accepting a **bounded common-input learning pilot**, replace the cross-process MPJPE agreement requirement with a direct, stronger test of the claimed no-op policy function on every live observation. This amendment changes the decision procedure, not the original gate outcomes or numerical tolerance. It is a response to the measurement's inability to isolate policy computation from independently evolving simulator trajectories.
+
+Run the expanded, zero-initialized controller on all four original development motions, 128 environments each, seed 8761. At every policy forward, also evaluate a separately instantiated native 994-input actor with the released weights on the identical raw observations, history and attention-mask arguments. Restore RNG state after shadow-model construction. Shadow actions never control the simulator. Compare all action coordinates; require maximum absolute difference at most 1e-5 (the original migration forward tolerance), finite values, full forward coverage, and 100% empirical completion/broad qualification in each motion. This validates behavior preservation only on sampled live states and retains the ordinary rollout measurements descriptively; it is not a statistical retention guarantee.
+
+Retain the already completed physical-information test for the identical migrated checkpoint, with its unchanged artifact hashes and passing controls. Build the four-motion nominal anchor only after all new live checks pass. Keep the original campaigns' costs and failures in the ledger. No learned curriculum or final-paper efficacy claim is authorized by this amendment. Future training requires fresh per-motion quality evaluation and recovery calibration.

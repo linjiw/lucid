@@ -3,27 +3,45 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>LUCID · Recovery-Aware Curricula for Quality-Preserving Humanoid Robustness</title>
-<meta name="description" content="LUCID studies how humanoids can become more robust without losing motion quality. Latest: anchoring retains one motion; a completed longer-motion screen reveals the need for a solved multi-motion origin.">
+<meta name="description" content="LUCID studies how humanoids can become more robust without losing motion quality. Latest: released SONIC solves four development motions; a common path-error input passes live action checks and protected multi-motion training is complete and initial/final evaluation is running.">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Source+Sans+3:wght@400;600;700&display=swap">
 <link rel="stylesheet" href="recovery.css"><script src="recovery.js" defer></script>
 </head>
 <body>
 <a href="#main" class="skip">Skip to research overview</a>
-<div class="wrap"><header class="top"><a class="brand" href="./" aria-label="LUCID home">LUCID</a><nav aria-label="Primary"><a href="#quality-frontier">Results</a><a href="#motion-screen">Latest experiment</a><a href="#method">Method goal</a><a href="#plan">Roadmap</a><a href="#evidence">Evidence</a></nav></header></div>
+<div class="wrap"><header class="top"><a class="brand" href="./" aria-label="LUCID home">LUCID</a><nav aria-label="Primary"><a href="#quality-frontier">Results</a><a href="#controller-foundation">Latest experiment</a><a href="#method">Method goal</a><a href="#plan">Roadmap</a><a href="#evidence">Evidence</a></nav></header></div>
 <main id="main">
 <div class="wrap hero">
 <p class="eyebrow">Research in progress · SONIC / Unitree G1 · September 7, 2026 UTC</p>
 <h1>More robust.<br>Still faithful to the motion.</h1>
 <p class="lede"><strong>LUCID: Recovery-Aware Curricula for Quality-Preserving Humanoid Robustness.</strong> We study how a capable motion-tracking policy can learn to withstand harder conditions, recover after a disturbance, and continue the requested task without losing its original quality.</p>
 <blockquote>“Robustness should expand what the robot can execute faithfully—not merely what it can survive.”</blockquote>
-<p class="caption measure">This is the target paper direction. Current evidence supports a bounded retention result and exposes a multi-motion capability gap. Recovery-feedback superiority and real-robot transfer remain research questions.</p>
-<div class="links"><a href="#motion-screen">Read the newest result ↓</a><a href="https://wandb.ai/16726/lucid-sonic/runs/motion-cb05d12074a0278415">Experiment on W&amp;B ↗</a><a href="https://github.com/linjiw/lucid">Research repository ↗</a></div>
+<p class="caption measure">This is the target paper direction. Current evidence supports a bounded retention result and identifies released SONIC as a capable shared-origin candidate. Recovery-feedback superiority and real-robot transfer remain research questions.</p>
+<div class="links"><a href="#controller-foundation">Read the newest result ↓</a><a href="https://wandb.ai/16726/lucid-sonic/runs/path-shadow-5e6c2551ee23e83e">Experiment on W&amp;B ↗</a><a href="https://github.com/linjiw/lucid">Research repository ↗</a></div>
 <div class="grid three">
 <div class="card stat"><span class="pill done">Demonstrated in development</span><strong class="big">+4.33%</strong><p>Nominal global error with the selected anchor recipe, versus +76.56% without anchoring. One origin, one motion.</p></div>
-<div class="card stat"><span class="pill done">Newest screen · complete</span><strong class="big">8 / 8 cells</strong><p>Origin and R1 evaluated on four motions. Both score 0% qualified execution on all three longer candidates.</p></div>
-<div class="card stat"><span class="pill open">Next research gate</span><strong class="big">Shared skills</strong><p>Establish a high-quality multi-motion origin before calibrating recovery and testing feedback curricula.</p></div>
+<div class="card stat"><span class="pill done">Shared-origin screen · complete</span><strong class="big">4 / 4 motions</strong><p>Released SONIC completes and qualifies every development rollout in both official and LUCID evaluation paths.</p></div>
+<div class="card stat"><span class="pill open">Next research gate</span><strong class="big">Path feedback</strong><p>Validate a common path-error input, then test protected learning across the solved repertoire.</p></div>
 </div>
 </div>
+
+<section id="controller-foundation"><div class="wrap">
+<p class="kicker">Latest / Shared controller and observable path error</p>
+<h2>A capable shared origin exists. The next step is preserving it while learning path correction.</h2>
+<p>The local origin and R1 failed qualification on the three longer candidates below. Released SONIC passes all four motions in both the official and compatible LUCID paths: eight cells, 128 evaluation aliases per cell. This selects a stronger shared-origin candidate; the broad development limits still require tighter per-motion calibration.</p>
+<div class="table-wrap"><table><caption>Released SONIC through LUCID · nominal development evaluation · seed 8730</caption><thead><tr><th>Motion</th><th>Global MPJPE (mm)</th><th>Local MPJPE (mm)</th><th>Completion / qualification</th></tr></thead><tbody>
+<tr><td>Original walking control</td><td>87.22</td><td>28.52</td><td>100% / 100%</td></tr>
+<tr><td>Curved walking</td><td>99.57</td><td>19.85</td><td>100% / 100%</td></tr>
+<tr><td>Sideways walking</td><td>112.99</td><td>21.87</td><td>100% / 100%</td></tr>
+<tr><td>Neutral stooping</td><td>110.53</td><td>24.37</td><td>100% / 100%</td></tr>
+</tbody></table></div>
+<p>A physical-state diagnostic found that 6,144 otherwise matched horizontal displacements changed task/critic error while leaving the active actor inputs and actions unchanged. This is conditional evidence about the current input contract, not a claim that the controller can never recover from a push.</p>
+<p>The common-controller repair adds two heading-frame path-error coordinates to the decoder through 4,096 zero-initialized weights. CPU migration and same-input GPU checks preserve tested original actions exactly. Two separate-process rollout agreement gates failed and remain reported. A documented amendment now compares native and expanded actions on every live observation, retaining the original 10<sup>−5</sup> action tolerance and requiring all four motions to qualify.</p>
+<div class="callout" id="controller-live-status"><p><strong>Pilot complete: 128/128 iterations. Initial/final evaluation is running.</strong> All four live shadow-policy checks passed with zero action difference across 217,728 comparisons. The pilot used 786,432 PPO transitions and 655,616 anchor presentations; original actor weights remained exactly unchanged, with the native action-noise clamp recorded separately. The added path-input weights learned nonzero values. Actual retention and disturbed-tracking outcomes remain pending. <a href="https://wandb.ai/16726/lucid-sonic/runs/wnb1cavy">Training on W&amp;B ↗</a> · <a href="https://wandb.ai/16726/lucid-sonic/runs/path-eval-45c38aed42ba0eb1">Follow-up evaluation ↗</a></p></div>
+<p>The pilot uses one shared controller, 256 environments, 128 iterations, a fixed nominal/push mixture and a 2,048-history motion/phase-balanced nominal anchor. Only the new path-input weights and critic learn. Its budget is 786,432 PPO transitions plus explicitly counted anchor overhead. This tests controller repair; learned recovery feedback and curriculum comparisons come later.</p>
+<p class="caption">Exact simulation position is currently a privileged input. Deployment requires a compatible position measurement. These four motions are now development/adaptation data, and broad tracking qualification is not a calibrated recovery label.</p>
+<div class="links"><a href="data/controller-progress-2026-09-07.json">Numerical snapshot</a><a href="https://github.com/linjiw/lucid/blob/main/lucid-common-path-input-status-2026-09-07.md">Experiment ledger</a><a href="https://github.com/linjiw/lucid/blob/main/lucid-path-noop-gate-amendment-2026-09-07.md">Gate amendment</a></div>
+</div></section>
 
 <section id="quality-frontier"><div class="wrap">
 <p class="kicker">01 / Completed retention experiment</p>
@@ -37,7 +55,7 @@
 </div></section>
 
 <section id="motion-screen"><div class="wrap">
-<p class="kicker">02 / Latest experiment · completed September 7 at 01:57 UTC</p>
+<p class="kicker">02 / Earlier local-origin screen · completed September 7 at 01:57 UTC</p>
 <h2>The longer motions expose a capability gap in the origin</h2>
 <div class="measure"><p>The original four-second clip often ends before a recovery window can be observed. We therefore screened longer development motions before collecting recovery labels. The candidates were chosen from metadata and duration before seeing outcomes: curved walking, sideways walking and neutral stooping, plus the original motion as a control.</p></div>
 <div class="grid three">
@@ -78,8 +96,8 @@
 <p class="kicker">04 / Evidence-led roadmap</p>
 <h2>What must be true before the full paper claim is warranted?</h2>
 <ol class="roadmap">
-<li><div><h3>Establish a solved shared multi-motion origin <span class="pill open">Next</span></h3><p>Audit an appropriate origin on intact motion-source splits and train or adapt a shared policy where necessary. Freeze an explicit per-motion capability contract before robustness continuation. The latest screen makes this a prerequisite, not an assumed property.</p></div></li>
-<li><div><h3>Protect the retained motion set <span class="pill open">Pending</span></h3><p>Collect origin behavior across that solved set and test a shared multi-motion preservation recipe. Replicate learning seeds, then independently trained origins; distinguish those two kinds of replication.</p></div></li>
+<li><div><h3>Validate the common controller <span class="pill done">Candidate established</span></h3><p>Released SONIC solves the four development candidates. The common path-input extension passes same-state live action checks. A protected input-learning pilot is complete; tighter per-motion competence and recovery criteria remain to be calibrated.</p></div></li>
+<li><div><h3>Protect the retained motion set <span class="pill open">Evaluating pilot</span></h3><p>A balanced four-motion nominal buffer now protects the input-learning pilot. Evaluate actual retention before extending protection to the original dynamics envelope. Replicate learning seeds, then independently trained origins; distinguish those two kinds of replication.</p></div></li>
 <li><div><h3>Calibrate recovery with observable windows <span class="pill open">Pending</span></h3><p>Use separate origin calibration and validation episodes. Freeze translation, heading and articulation bands, phase handling, dwell and recovery horizon. Isolated event timing must leave enough uninterrupted observation; reset and reference-resampling frames cannot manufacture recovery.</p></div></li>
 <li><div><h3>Test whether history adds useful information <span class="pill open">Pending</span></h3><p>Split full episodes, motions and origins before forming windows. Match instantaneous error and phase across different recovery outcomes. Measure held-out discrimination, calibration and lead time; then test whether the signal improves decisions.</p></div></li>
 <li><div><h3>Compare the complete training loop <span class="pill open">Pending</span></h3><p>Use common preservation, controller and resource contracts. Include fixed practice, a frozen schedule, quality-aware and history-based curricula, and LUCID. The fixed/feedback × unanchored/anchored comparison separates preservation from scheduling.</p></div></li>
@@ -87,7 +105,7 @@
 </ol>
 <details><summary>Ideal-paper verification matrix — proposed scale, not completed evidence</summary>
 <div class="table-wrap"><table><thead><tr><th>Evidence track</th><th>Target design</th><th>Current status</th></tr></thead><tbody>
-<tr><td>Shared multi-motion policies</td><td>Suggested 24 training / 8 development / 16 final test motions, split by complete source</td><td>Not established; current origin fails the three longer development candidates</td></tr>
+<tr><td>Shared multi-motion policies</td><td>Suggested 24 training / 8 development / 16 final test motions, split by complete source</td><td>Released candidate solves all four development motions; protected shared extension remains under study</td></tr>
 <tr><td>Independent origins</td><td>5 origins branching into 6 matched methods: 30 continuation runs</td><td>Proposed; latest retention result uses one origin</td></tr>
 <tr><td>Observer mechanism</td><td>Direct features, matched history predictor, causal information ablations and downstream decisions</td><td>Recovery measurement calibration remains open</td></tr>
 <tr><td>Probe uncertainty and cost</td><td>Small fixed, large fixed and staged probes with prespecified sequential control</td><td>Budget diagnostics motivate it; final loop untested</td></tr>
@@ -102,10 +120,10 @@
 <section id="evidence"><div class="wrap evidence">
 <p class="kicker">05 / Evidence, lineage and earlier work</p>
 <h2>A current account with a traceable history</h2>
-<p class="measure">This page is a dated, verified snapshot—not a live training dashboard. The latest motion campaign completed at 01:57 UTC on September 7. No new continuation run is claimed here. W&amp;B holds the experiment records; the public JSON below contains compact summaries and source, checkpoint and metric hashes.</p>
+<p class="measure">This page is a dated, verified snapshot—not a live training dashboard. The common-controller repair pilot has completed; its initial/final development evaluation is running. W&amp;B holds the experiment records; the public JSON below contains compact summaries and source, checkpoint and metric hashes.</p>
 <div class="grid two">
 <div class="card"><h3>Current evidence</h3><ul>
-<li><a href="https://wandb.ai/16726/lucid-sonic/runs/ret-46911b8054776113fe91">83-cell retention campaign</a></li>
+<li><a href="https://wandb.ai/16726/lucid-sonic/runs/wnb1cavy">Protected four-motion controller-repair training</a></li><li><a href="https://wandb.ai/16726/lucid-sonic/runs/path-shadow-5e6c2551ee23e83e">Completed live same-state migration gate</a></li><li><a href="data/controller-progress-2026-09-07.json">Controller-foundation snapshot</a></li><li><a href="https://wandb.ai/16726/lucid-sonic/runs/ret-46911b8054776113fe91">83-cell retention campaign</a></li>
 <li><a href="https://wandb.ai/16726/lucid-sonic/runs/ret-decision-20260907-a">R1 recipe decision and analysis</a></li>
 <li><a href="https://wandb.ai/16726/lucid-sonic/runs/motion-cb05d12074a0278415">Completed eight-cell longer-motion screen</a></li>
 <li><a href="https://wandb.ai/16726/lucid-sonic/runs/rec-execution-analysis-20260907-a">Recorder execution analysis</a></li>

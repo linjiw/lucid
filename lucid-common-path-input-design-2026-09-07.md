@@ -1,6 +1,6 @@
 # Common path-error input: bounded controller repair before LUCID comparisons
 
-September 7, 2026 UTC. Prospective implementation brief following the completed [physical observability experiment](lucid-translation-observability-2026-09-07.md). This is a common-controller change, not a LUCID curriculum contribution. It is not yet implemented or evaluated.
+September 7, 2026 UTC. Prospective implementation brief following the completed [physical observability experiment](lucid-translation-observability-2026-09-07.md). This is a common-controller change, not a LUCID curriculum contribution. The input and bounded pilot are implemented. Two cross-process rollout gates failed; the documented same-state live gate subsequently passed, and protected PPO has started. See the [current implementation and experiment status](lucid-common-path-input-status-2026-09-07.md).
 
 ## Evidence and scope
 
