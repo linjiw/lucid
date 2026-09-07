@@ -1,12 +1,12 @@
-# LUCID — Recovery-Aware Curricula for Quality-Preserving Humanoid Robustness
+# LUCID — When Training Gets Easier
 
-**[Project page](https://linjiw.github.io/lucid/)** · **[Latest verified data](site/data/recovery-progress-2026-09-07.json)** · **[Historical research ledger](https://linjiw.github.io/lucid/research-archive.html)**
+**[Project page](https://linjiw.github.io/lucid/)** · **[Working manuscript](paper/when-training-gets-easier.md)** · **[September 7 science freeze](lucid-icra-freeze-2026-09-07.md)**
 
-We study how a pretrained humanoid can learn stronger disturbance recovery while retaining the motions it already executes well. The target contribution is the value of recovery feedback beyond equally protected fixed training and frozen schedules.
+We are preparing a diagnostic ICRA paper on training-range collapse and tracking-quality drift in humanoid robustness training, following `fable.md` and `fable.html`. The completed evidence supports safeguards and bounded development findings, not adaptive-curriculum superiority.
 
-**September 7, 2026:** R1 preserves the original development motion and improves hard-condition tracking-qualified execution by 5.18 percentage points versus origin. This is one origin and one motion, not curriculum confirmation. The completed eight-cell longer-motion screen finds 0% tracking-qualified execution for both origin and R1 on all three longer candidates. The next prerequisite is a high-quality shared multi-motion origin, followed by retention coverage and recovery calibration. See the project page for the full design, results and limitations.
+**Current experiment:** second continuation seed of R0 versus reference-anchored R1, from the same local origin. Two 2,000-iteration runs and 55 fixed-policy evaluation cells; online [W&B logging](https://wandb.ai/16726/lucid-sonic/runs/5zucanmo). Results are pending. The completed first seed gives R1 +4.33% nominal global error and +5.18 percentage points hard-condition qualification versus origin, within the empirical retention checks.
 
-The [existing manuscript](paper/when-training-gets-easier.md) and its [rendered version](https://linjiw.github.io/lucid/paper.html) are historical drafts; they do not represent completed evidence for the target recovery-aware framework.
+The recovery-aware multi-motion programme is future work. Its path-input pilot and sixteen evaluations are complete; the sideways push endpoint includes two failures in 128 trials. It does not provide calibrated recovery evidence for this manuscript.
 
 Workspace repo for the LUCID research program. Code lives in two submodules; the
 claim-bearing work is in `GR00T-WholeBodyControl` on branch `research/practice-utility`.
@@ -18,7 +18,8 @@ everything needed to *re-run* them is in the submodule plus the data root descri
 | path | what |
 |---|---|
 | `site/index.html` | **Current public overview:** research objective, completed results, latest experiment and next gates |
-| `fable.md` | Historical guidance and dated execution log |
+| `fable.md` / `fable.html` | **Current guidance (2026-09-07): minimal path to the ICRA 2027 submission** |
+| `fable-archive-2026-09-02.md` | Historical guidance and dated execution log (Aug 26 – Sep 2) |
 | `lucid-design-implementation-plan.md` | long-form design doc, §0–25 (gates, estimands, results through 2026-08-21) |
 | `lucid-handoff-2026-08-20.md` | agent handoff: environment, rules of engagement, measured results ledger |
 | `docs/` | TACE design, LUCID-MC/IROS plan, cross-domain curriculum-learning review, **machine setup** |

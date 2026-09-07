@@ -1,138 +1,20 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>When Training Gets Easier</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<style>
-:root{--bg:#F6F7F5;--ink:#1C2128;--muted:#5F6B7A;--accent:#2E5A87;--bad:#A8432B;--rule:#D4D9DE;--tint:#E9EEF3;--code:#EEF1F4;color-scheme:light}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15191E;--ink:#E4E8EC;--muted:#9AA6B4;--accent:#86B0DB;--bad:#E0836A;--rule:#2C343D;--tint:#1E252D;--code:#1B2129;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#15191E;--ink:#E4E8EC;--muted:#9AA6B4;--accent:#86B0DB;--bad:#E0836A;--rule:#2C343D;--tint:#1E252D;--code:#1B2129;color-scheme:dark}
-body{background:var(--bg);color:var(--ink);font-family:"Source Sans 3",system-ui,sans-serif;font-size:17px;line-height:1.55;margin:0}
-main{max-width:70ch;margin:0 auto;padding:48px 24px 96px}
-header{border-bottom:1px solid var(--rule);padding-bottom:20px;margin-bottom:32px}
-.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
-h1{font-family:Newsreader,Georgia,serif;font-weight:600;font-size:38px;line-height:1.12;margin:0 0 10px;text-wrap:balance}
-h1 span{display:block;font-weight:400;font-style:italic;font-size:26px;color:var(--muted);margin-top:6px}
-h2{font-family:Newsreader,Georgia,serif;font-weight:600;font-size:26px;margin:44px 0 12px;text-wrap:balance;color:var(--accent)}
-h3{font-family:Newsreader,Georgia,serif;font-weight:600;font-size:20px;margin:28px 0 8px;text-wrap:balance}
-p{margin:0 0 14px}
-#abstract+p, h2:first-of-type+p{font-family:Newsreader,Georgia,serif;font-size:18px;line-height:1.55}
-blockquote{margin:18px 0;padding:14px 20px;border-left:3px solid var(--accent);background:var(--tint);font-family:Newsreader,Georgia,serif;font-size:21px;font-style:italic}
-blockquote p{margin:0}
-ul,ol{padding-left:22px;margin:0 0 14px}li{margin-bottom:6px}
-.tbl{overflow-x:auto;margin:16px 0 22px}
-table{border-collapse:collapse;font-size:14.5px;min-width:100%;font-variant-numeric:tabular-nums}
-th{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);text-align:left;font-weight:600;border-bottom:1px solid var(--ink);padding:8px 10px;white-space:nowrap}
-td{padding:7px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
-td[align=right],th[align=right]{text-align:right;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:13.5px}
-tr.bad td, td.bad{color:var(--bad)}
-code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.88em;background:var(--code);padding:1px 5px;border-radius:3px}
-strong{font-weight:600}
-.status{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:14px}
-.status b{color:var(--ink);font-weight:600}
-a{color:var(--accent)}
-</style></head><body><aside style="padding:18px 24px;background:#fff3d6;color:#302b21;border-bottom:2px solid #b38942;font:16px/1.5 system-ui,sans-serif"><strong>Historical manuscript draft.</strong> This draft predates the recovery-aware, quality-preserving project direction. <a style="color:#174c76" href="index.html">Current goals, evidence and experiment plan →</a></aside>
-<main>
-<header>
-<p class="eyebrow">Working paper draft · reframed 2026-09-02 · measured results only</p>
-<h1>When Training Gets Easier<span>Training-range collapse in humanoid control</span></h1>
-<div class="status"><span><b>Testbed</b> SONIC · Unitree G1 · Isaac Lab</span><span><b>Runs</b> 12 arm–seed pairs · 8,000 iterations</span><span><b>Proposal</b> confined to Section 10</span></div>
-</header>
-<p><strong>Working draft, reframed 2026-09-02.</strong> Every number in this draft is measured and traceable
-to a receipt listed in Appendix B. Proposed work is confined to Section 10 and is labelled as
-such. Project title for the ongoing work: <em>Expanding Training Ranges for Humanoid Control</em>.</p>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>When Training Gets Easier — working manuscript</title><style>body{max-width:960px;margin:3rem auto;padding:0 1.5rem;font:18px/1.6 Georgia,serif;color:#202c32}table{border-collapse:collapse;font:14px/1.4 sans-serif;width:100%}td,th{border:1px solid #ccd5d8;padding:.5rem}h1,h2,h3{line-height:1.2}pre{overflow:auto}a{color:#176b7b}</style></head><body><nav><a href="./">Project overview</a></nav><h1>When Training Gets Easier: Range Collapse and Tracking Drift in Humanoid Robustness Training</h1>
+<p><strong>Working manuscript, September 7, 2026.</strong> Diagnostic paper scope is frozen. The second R0/R1 continuation-seed replication is pending and contributes no result below. Evidence provenance is maintained separately in <code>paper/evidence-ledger.md</code>; this working notice and identifying links must be excluded from the anonymous submission.</p>
 <h2>Abstract</h2>
-<p>Domain randomization exposes a robot to varied physical conditions during training. When an
-adaptive curriculum is allowed to narrow those conditions, a higher training reward can
-reflect easier training rather than a better policy. We study this problem in simulated
-humanoid motion tracking on a Unitree G1, training on a single motion for 8,000 iterations.
-Two of six runs of a curriculum that could expand or shrink its ranges ended with nearly
-collapsed ranges. These runs earned the highest training returns of the twelve runs we
-scored, and the lowest robustness on a physics ladder that the curriculum did not control;
-across all twelve runs, terminal return and robustness are inversely ranked (Spearman
-−0.73). One collapsed run scores 14.2 success-AUC points below fixed domain randomization
-on the same seed. To prevent shrinkage we test a rule that allows training ranges to expand
-or stay fixed but never shrink. Across three seeds it blocked all 2,033 requested reductions,
-and its robustness satisfied a preregistered tolerance rule against fixed domain randomization
-(mean difference +0.60 points, sample standard deviation 2.25). Three seeds do not establish
-equivalence: the one-sided 95% lower bound on that difference is −3.19 points, outside the
-2-point margin, so the rule passing is a decision, not a demonstration that the two are
-equally robust. An audit of five candidate readiness signals shows that time-out
-survival tracks competence while the learned mismatch signal used by the collapsing
-curriculum does not. Replaying the exported policies in MuJoCo with independently
-implemented randomization preserves the ordering: beyond the training envelope, both
-never-shrink and fixed policies survive 38% of physics draws where the collapsed policy
-survives 16% and an unrandomized policy 3%. We then explain why the never-shrink rule
-matches fixed randomization rather than beating it, and why nothing else we tried beat it
-either. The scaling is affine about each parameter's nominal value and every environment
-redraws at each episode reset, so a draw at full intensity lands inside the intensity-s range
-with probability exactly s and is then distributed exactly as that stage. Fixed randomization
-therefore supplies every earlier stage of any ramp toward it in every gradient batch: 182 of
-1024 environments per iteration are already no harder than a 0.75 stage on all six channels
-at once. A curriculum can change how often a difficulty is seen, but it cannot withhold what
-fixed randomization keeps supplying. This is a property of the sampling scheme rather than of
-any controller, it is checkable in any implementation from its own sampling code, and it
-predicts where a curriculum could still matter: when the target distribution is concentrated
-rather than a range about the nominal. That comparison is specified here and has not been run.</p>
+<p>Robustness training can improve its dashboard while weakening the behavior it is intended to protect. We characterize two such failures in simulated humanoid motion tracking. First, an adaptive domain-randomization curriculum can increase return by narrowing its own training distribution. All six adaptive runs shrink their ranges; two nearly collapse. Across twelve evaluated runs, terminal return and independently measured robustness are inversely ranked (Spearman −0.73). A never-shrink projection blocks all 2,033 requested reductions across three seeds and satisfies a preregistered empirical tolerance rule against fixed randomization, without establishing statistical equivalence. Second, continued hard-condition training can retain 100% nominal completion while degrading motion fidelity. In a one-origin, one-motion continuation study, nominal global pose error rises from 127.93 to 225.87 mm without anchoring. Reference-policy anchoring limits the endpoint increase to 4.33%, passes the empirical retention checks at five sampled checkpoints, and improves hard-condition tracking-qualified execution by 5.18 percentage points over the origin. These are diagnostic and development findings, not evidence of curriculum superiority. Together they motivate evaluating training-distribution coverage and origin-relative tracking quality independently of return and survival.</p>
 <h2>1. Introduction</h2>
-<p>A humanoid policy trained in simulation must work on a robot whose mass, friction, actuator
-delay, and disturbances differ from the simulator's nominal values. Domain randomization
-handles this by training on ranges of those parameters instead of single values. The width
-of the ranges matters: ranges that are too wide can stall learning, and ranges that are too
-narrow leave the policy brittle. Adaptive curricula try to resolve this by widening or
-narrowing the ranges as the policy improves.</p>
-<p>This paper asks one question about such curricula:</p>
-<blockquote>
-<p><strong>Is the robot getting better, or is its training getting easier?</strong></p>
-</blockquote>
-<p>The two are hard to tell apart from inside training. A curriculum that measures the policy
-on its own training distribution and is allowed to narrow that distribution can raise its
-score by narrowing. Training return goes up, the dashboard looks healthy, and the policy has
-seen less of the physics it will face at deployment. We call the end state
-<strong>training-range collapse</strong>.</p>
-<p>We measured this directly. In a 29-DoF humanoid motion-tracking task, an adaptive
-curriculum driven by a learned mismatch signal shrank its ranges in every one of six runs and
-collapsed them in two. The collapsed runs had the highest terminal training returns and the
-lowest robustness on an evaluation ladder the curriculum did not control. The cost is not
-cosmetic: one collapse loses 14.2 success-AUC points against fixed randomization trained on
-the same seed.</p>
-<p>The fix we test is deliberately small. A range may expand or stay where it is, but it may
-not shrink. This rule blocks the mechanism of collapse without adding a new signal, a new
-network, or a new hyperparameter. Across three seeds it refused every one of 2,033
-requested reductions and ended within a preregistered margin of fixed domain randomization.
-It does not train a better policy than fixed randomization; on our evidence it trains an
-equivalent one, which is the point. Whatever an adaptive curriculum adds must be shown
-against that baseline with the collapse pathway closed.</p>
-<p><strong>Contributions.</strong> All four are measured on the same testbed.</p>
+<p>A humanoid can appear to improve for two different reasons that do not imply better task execution. Its training conditions can become easier, or its behavior can become more conservative while drifting away from the requested motion. Both changes can improve commonly monitored scores. Neither is visible from those scores alone.</p>
+<p>We study these problems on a 29-DoF Unitree G1 motion-tracking task using SONIC. The first question is whether increasing training return reflects increasing robustness. In six long runs, a mismatch-driven adaptive randomization curriculum shrinks its physical ranges in every run and nearly collapses them in two. The collapsed runs have the highest terminal returns. On an independently fixed physics ladder, one loses 14.19 success-AUC points against fixed randomization on the same seed.</p>
+<p>A monotonic projection closes this route to easier training: accept an expansion or hold the current range, but reject a reduction. It blocks every requested shrinkage across three seeds. The resulting policies pass a predefined empirical tolerance rule against fixed randomization. Their mean frontier difference is +0.60 points with sample standard deviation 2.25; the one-sided 95% lower bound is −3.19 points, outside the 2-point margin. The evidence supports the recorded tolerance decision, not equivalence or a robustness advantage.</p>
+<p>The second question is whether survival implies faithful motion execution. Starting from a solved local policy, hard-practice continuation preserves nominal completion while substantially increasing global pose error. Holding the practice mixture fixed does not prevent this loss. A reference-action penalty on cached origin states provides a useful protected baseline: at 2,000 iterations, its nominal global error is 133.47 mm against the origin's 127.93 mm, while an unanchored continuation reaches 225.87 mm. All three complete the nominal panel. Survival therefore cannot substitute for an independent retention measurement.</p>
+<p>We make four bounded contributions:</p>
 <ol>
-<li><strong>A measured failure mode.</strong> We show that an adaptive curriculum that can narrow its own
-   training ranges collapses them in two of six long runs, and that terminal training
-   return and held-out robustness are inversely ranked across twelve runs (Section 4).</li>
-<li><strong>A rule that prevents it, at no measured cost.</strong> Training ranges that never shrink block
-   all 2,033 requested reductions over three seeds and satisfy a tolerance rule against fixed
-   randomization that was fixed before the data existed. Three seeds cannot establish
-   equivalence, and we do not claim it (Section 5).</li>
-<li><strong>Which signals can be trusted.</strong> An audit at fixed difficulty shows that time-out
-   survival tracks competence (rank correlation +0.99 with training progress) and the
-   learned mismatch signal does not (−0.04), which explains why the collapsing curriculum
-   collapsed (Section 6).</li>
-<li><strong>Robustness is per-parameter and interactive.</strong> A 55-cell sweep shows that pushes limit
-   healthy policies while mass, center-of-mass, and joint offsets can be widened to three
-   times their range at little cost, and that widening all channels together costs about six
-   success points more than the sum of the individual costs (Section 7).</li>
-<li><strong>An explanation, not just a null.</strong> Because ranges scale affinely about their nominal and
-   every environment redraws each episode, the full-intensity distribution contains every
-   earlier stage of any ramp toward it, exactly and in every batch. That accounts for all of
-   the above in one fact, and it says what would have to change for a curriculum to have
-   anything to contribute (Section 9).</li>
+<li>Measure training-range collapse and return–robustness inversion in a controlled humanoid curriculum study.</li>
+<li>Test a never-shrink rule that removes the observed range-contraction mechanism, with three-seed uncertainty and a strong fixed-randomization comparison.</li>
+<li>Demonstrate completion–fidelity decoupling during continuation and show that optimizer-history restoration alone does not explain it.</li>
+<li>Establish a reference-anchored fixed-practice development baseline that retains the tested motion within empirical budgets while improving hard-condition tracking qualification over its origin.</li>
 </ol>
-<p>We claim no improvement in robustness from any curriculum. The paper is about a
-failure of adaptive curricula and the independent measurement that exposes it. A
-contribution about adaptive performance belongs here only once the comparison in
-Section 9 against a schedule reaching the same ranges supports one, and that
-comparison has not been run.</p>
-<p>We also replay the exported policies in a second simulator with independently implemented
-randomization (Section 8). The ordering survives. Finally we describe the range-expansion
-curriculum this evidence motivates, report a scalar prototype that expanded ranges in four
-evidence-triggered steps, and state the test it must pass before we credit it (Section 10).</p>
+<p>Monotonic projection and behavior regularization are established ideas, not stand-alone algorithmic novelty. The contribution is the measured failure chain, its controls, and the distinction between scores that appear favorable and the behaviors they fail to certify. Recovery-aware curricula remain future work and must outperform equally protected fixed training before receiving credit.</p>
 <h2>2. Background and Related Work</h2>
 <p><strong>Domain randomization</strong> trains on a distribution of physical parameters so that the
 deployed system falls inside or near the training distribution [1–4]. <strong>Adaptive
@@ -144,14 +26,15 @@ informative levels [14,15]. Several of these methods are allowed to make trainin
 when the policy struggles. That freedom is the subject of this paper.</p>
 <p>The never-shrink rule we test is close to the boundary rule in Automatic Domain
 Randomization. We do not claim it as new. Our contribution is the measurement of what goes
-wrong without it in long humanoid runs, the demonstration that the rule alone recovers fixed
-randomization's robustness, and the audit of which signals could safely drive expansion.</p>
+wrong without it in long humanoid runs, the empirical comparison against fixed randomization, and the limits of the
+readiness signals used to drive expansion.</p>
 <p><strong>Humanoid motion tracking.</strong> DeepMimic, adversarial motion priors, BeyondMimic, and SONIC
 learn reference-conditioned whole-body control [10–13]. We use SONIC as the sole testbed. It
 provides a 29-DoF Unitree G1 model, a 50 Hz policy, Isaac Lab training, and a MuJoCo model.</p>
 <p><strong>Evaluation beyond reward.</strong> Training return depends on the distribution it is measured
 on. We therefore score every policy on a frozen physics ladder that the curriculum never
-sees, and report success and restricted-mean progress rather than reward [17].</p>
+sees, and report success and restricted-mean progress rather than reward [19].</p>
+<p>Reference behavior can also be protected during fine-tuning. PPF regularizes toward a model-based controller where its assumptions remain reliable [20]; our cached-origin action penalty is a different implementation of behavior preservation, not a claim to invent it. DORAEMON [7] already constrains randomization expansion by performance. A future quality-aware curriculum must therefore establish an advantage beyond a protected fixed baseline, rather than attributing anchoring or a stricter success definition to curriculum feedback.</p>
 <h2>3. Setup</h2>
 <p><strong>Task.</strong> A policy tracks one reference clip (<code>walk_hands_on_back_loop_002</code>, 4 s) on a
 29-DoF G1 in Isaac Lab, 1,024 parallel environments, 8,000 PPO iterations, trained from
@@ -162,7 +45,7 @@ default offset, ground friction, action delay, and external pushes. A scale λ m
 every channel's configured deviation; λ = 1 is the training envelope and λ = 0 is nominal
 physics. Friction is clipped at a physical floor, which binds at λ ≥ 1.5.</p>
 <p><strong>Compared training arms.</strong></p>
-<div class="tbl"><table>
+<table>
 <thead>
 <tr>
 <th>Arm</th>
@@ -187,15 +70,15 @@ physics. Friction is clipped at a physical floor, which binds at λ ≥ 1.5.</p>
 <td>same controller, but a requested decrease is refused</td>
 </tr>
 </tbody>
-</table></div>
+</table>
 <p>Two variants of the adaptive controller and three seeds give the six adaptive runs.</p>
 <p><strong>Evaluation.</strong> Each final policy is scored on a frozen ladder of physics scales
-{0, 0.5, 1, 1.25, 1.5, 2} with 512 episodes per cell. The primary outcome is the area under
+{0, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2} with 512 episodes per cell. The primary outcome is the area under
 the success-versus-scale curve over the beyond-envelope cells (<strong>frontier AUC</strong>, reported in
 points, 0–100) and over the in-envelope cells. Restricted-mean progress is a secondary
 outcome. The ladder is never visible to any curriculum.</p>
 <h2>4. The Problem: Training-Range Collapse</h2>
-<h3>4.1 Why a curriculum that can shrink will shrink</h3>
+<h3>4.1 A conditional contraction mechanism</h3>
 <p>Let the curriculum observe a score $\bar Y(\theta,\lambda)$ on its own training
 distribution and move λ toward a set point $Y^<em>$ with an integral rule
 $\dot\lambda = K(\bar Y - Y^</em>)$. Wider ranges lower the score,
@@ -210,7 +93,7 @@ interrupt it. It says where to look.</p>
 <p>Every one of the six adaptive runs applied at least one reduction. Two ended near λ = 0
 after having reached the full envelope earlier in training.</p>
 <p><strong>Table 1. Collapsed runs against the runs that held their ranges.</strong></p>
-<div class="tbl"><table>
+<table>
 <thead>
 <tr>
 <th>Outcome</th>
@@ -239,7 +122,7 @@ after having reached the full envelope earlier in training.</p>
 <td style="text-align: right;">61.20–91.31</td>
 </tr>
 </tbody>
-</table></div>
+</table>
 <p>The collapsed runs have the two highest terminal returns among the twelve arm–seed pairs we
 scored. Across the twelve, terminal return and frontier AUC have Spearman rank correlation
 −0.73: the runs that look best from inside training are the ones that retreated furthest
@@ -253,7 +136,7 @@ skill. Collapse means the curriculum removes the conditions that would reveal th
 then grades itself on the easier replacement.</p>
 <h2>5. A Rule That Prevents Shrinkage</h2>
 <p>We keep the same controller and refuse every requested decrease. The range may expand or
-hold; it may not shrink.</p>
+hold; it may not shrink: $\lambda_{n+1}=\max(\lambda_n,\widetilde\lambda_{n+1})$, where the tilde denotes the unchanged controller proposal.</p>
 <p><strong>Mechanism.</strong> Across three seeds the rule refused 453, 951, and 629 requested reductions,
 2,033 in total, and applied none. All three runs ended at the full envelope. These requests
 are correlated controller events, not independent samples; their role is to show sustained
@@ -263,7 +146,7 @@ comparison is three seeds.</p>
 components the never-shrink arm must be within 2 points (frontier) or 1 point (in-envelope)
 of fixed randomization on at least two of three paired seeds.</p>
 <p><strong>Table 2. Never-shrink versus fixed randomization, frontier success AUC (points).</strong></p>
-<div class="tbl"><table>
+<table>
 <thead>
 <tr>
 <th style="text-align: right;">Seed</th>
@@ -298,7 +181,7 @@ of fixed randomization on at least two of three paired seeds.</p>
 <td style="text-align: right;"><strong>+0.60</strong> (SD 2.25)</td>
 </tr>
 </tbody>
-</table></div>
+</table>
 <p>All four components pass on all three seeds (frontier success +0.60, in-envelope success
 +0.07, frontier progress +0.50, in-envelope progress +0.01). Two seeds favour fixed
 randomization slightly.</p>
@@ -307,15 +190,14 @@ that is the decision it was written to make. It is not a demonstration of equiva
 three seeds and a paired standard deviation of 2.25 points, the one-sided 95% lower bound on
 the frontier-success difference is −3.19 points, which lies outside the 2-point margin. A
 proper equivalence claim needs enough seeds for the interval to sit inside the margin, and we
-do not have them. The supported statement is narrower: removing shrinkage did not cost
-measurable robustness in this experiment, and it did not add any. Retaining the ranges also
-does not by itself guarantee that the policy retains its skills; that is what Table 2
-measures.</p>
-<p><strong>Why it ties.</strong> Training telemetry records how many episodes each training
+do not have them. The supported statement is narrower: the predefined empirical tolerance rule passed, while an advantage or a
+statistical noninferiority claim remains unsupported. Retaining the ranges also
+does not by itself guarantee that the policy retains its skills; Table 2 measures robustness, while Section 8 separately tests tracking retention.</p>
+<p><strong>Realized exposure.</strong> Training telemetry records how many episodes each training
 cohort ran and at what intensity, so realized practice can be counted rather than
 assumed. The never-shrink arm spent 99.2 percent of its training exposure at the
-envelope, against 100 percent for fixed randomization. In realized practice the
-two arms are the same experiment, which is what the outcome says.</p>
+envelope, against 100 percent for fixed randomization. Their realized intensity exposure is very similar. This is consistent with
+their similar outcomes, but does not establish identical trajectories or a causal explanation.</p>
 <p><strong>Seed effect.</strong> Between-seed offsets in frontier AUC reach 7.8 points on the same arm.
 Any claimed advantage of a curriculum over fixed randomization must be paired by seed and
 must clear this before it is believed.</p>
@@ -324,7 +206,7 @@ must clear this before it is believed.</p>
 fixed, and must respond to difficulty in the right direction. We audited five signals on
 five runs at pinned difficulty and on the two collapses.</p>
 <p><strong>Table 3. Readiness-signal audit.</strong></p>
-<div class="tbl"><table>
+<table>
 <thead>
 <tr>
 <th>Signal</th>
@@ -371,18 +253,13 @@ five runs at pinned difficulty and on the two collapses.</p>
 <td>cost, not a gate</td>
 </tr>
 </tbody>
-</table></div>
-<p>The learned mismatch signal that drove the collapsing curriculum is neither anchored to
-competence nor consistently controlled by difficulty; its direction is set by the arm rather
-than the policy. That is why the controller in Section 4 had nothing to hold it at the
-envelope. Survival is well anchored but is exactly the signal a shrinking controller can
-inflate. It becomes usable only when measured on the proposed harder conditions rather than
-the current ones, and when a failed test can hold but never shrink the ranges.</p>
+</table>
+<p>The learned mismatch signal fails these empirical competence and difficulty checks. That is consistent with its poor suitability for the tested controller, but does not isolate a causal explanation for collapse. Survival is a stronger competence correlate in this audit; evaluating it only on a shrinking training distribution can still inflate it. Even an independent survival probe cannot certify fidelity, as Section 8 demonstrates.</p>
 <h2>7. Robustness Is Per-Parameter and Interactive</h2>
 <p>We widened one channel at a time on frozen policies, holding the others at the envelope,
 512 episodes per cell, one seed.</p>
 <p><strong>Table 4. Success when one channel is widened beyond its training range.</strong></p>
-<div class="tbl"><table>
+<table>
 <thead>
 <tr>
 <th>Policy</th>
@@ -422,7 +299,7 @@ the current ones, and when a failed test can hold but never shrink the ranges.</
 <td style="text-align: right;"><strong>0.910 / 0.705</strong></td>
 <td>push</td>
 </tr>
-<tr class="bad">
+<tr>
 <td>Adaptive, collapsed</td>
 <td style="text-align: right;">0.518</td>
 <td style="text-align: right;">0.873 / 0.682</td>
@@ -441,7 +318,7 @@ the current ones, and when a failed test can hold but never shrink the ranges.</
 <td>center of mass</td>
 </tr>
 </tbody>
-</table></div>
+</table>
 <p>For the three healthy policies, pushes at twice the range cost 6–8 points while mass, center
 of mass, and joint offsets cost at most 1.4 points and stay above 0.938 at three times the
 range. The unrandomized policy fails first under center-of-mass shift instead. Which
@@ -451,14 +328,69 @@ rather than assumed from the simulator.</p>
 2× losses sum to 0.111 while the joint 2× cell loses 0.174, about six points that no sum of
 single-channel losses predicts. The joint cell widens five channels at once, so we do not
 attribute the residual to any pair; a pairwise sweep is the test.</p>
-<h2>8. Does the Ordering Survive a Change of Simulator and Motion?</h2>
+<h2>8. Survival Is Not Fidelity</h2>
+<h3>8.1 Origin-relative measurement</h3>
+<p>Range preservation and behavior preservation are separate requirements. In an earlier quality-frontier pilot, a survival-feedback gate retains 100% nominal completion while the legacy evaluation panel's global MPJPE rises from 128.57 to 324.50 mm (+152.39%). At the shared Push 3.5× condition, completion increases from 64.84% to 71.09%, but tracking-qualified execution decreases from 49.02% to 45.70%. The latter requires completion and episode-mean global/local errors below 600/50 mm. These deliberately broad development thresholds do not certify high-quality imitation or return-to-path recovery.</p>
+<p>The initial gate passed checks relative to other continued policies, yet all continued policies had degraded. Comparisons among degraded controls cannot establish preservation of the starting skill. We therefore evaluate retained conditions against the same frozen origin. The later retention screen uses masked first-episode measurements and its own origin evaluation (127.93 mm); we do not combine that denominator with the earlier legacy panel.</p>
+<p>Global and local pose errors are reported separately. Global MPJPE can reflect persistent root displacement as well as articulation and heading error; these scalar norms do not admit a simple additive translation-plus-local-error identity. The present data demonstrates tracking drift without identifying a unique physical compensation or proving intentional “cheating.”</p>
+<h3>8.2 Continuation controls</h3>
+<p>Drift persists when the initial hard-practice mixture is held fixed. A separate fresh-versus-restored optimizer-history experiment also finds degradation in both branches. Thus neither expansion nor restoration of optimizer buffers is necessary for the observed loss. These controls do not identify the PPO objective as its unique cause: reward weighting, optimization dynamics, and changed visitation remain possible contributors.</p>
+<p>We retain the selected fresh-optimizer recipe and compare three continuations from the same solved local origin. R0 uses unanchored fixed practice. R1 adds reference-action anchoring. R2 reduces the initial learning rate and keeps it fixed. R0/R1 start at $2\times10^{-5}$ with adaptive inner PPO learning-rate bounds $[10^{-5},2\times10^{-4}]$; R2 stays at $10^{-5}$. R2 changes the learning-rate schedule as well as its starting value, so it is not a pure learning-rate-magnitude ablation.</p>
+<h3>8.3 A protected fixed-practice baseline</h3>
+<p>All three arms use 1,024 environments, 2,000 PPO iterations, and the same 3:1 mixture of original-envelope and Push 3× practice. R1 adds a squared action-mean penalty on cached actor inputs and teacher targets from the origin, with coefficient 1 and batches of 256. The original observation and normalization contract is preserved. The penalty averages the summed squared differences over the batch, $\mathcal L_{\rm anchor}=B^{-1}\sum_{b=1}^{B}|\mu_\theta(h_b)-\mu_0(h_b)|_2^2$, in native pre-actuator action units (identity coordinate scaling); it is not averaged over action coordinates. Hard recovery states are not added to this nominal anchor buffer.</p>
+<p>Retention requires global and local episode-mean errors to increase by at most 10%, and completion to fall by at most two percentage points, separately under nominal and original-envelope conditions. We check iterations 250, 500, 1,000, 1,500, and 2,000 using 512 evaluation aliases per cell. These are empirical development gates, not simultaneous confidence guarantees.</p>
+<p><strong>Table 5. Continuation endpoints. Hard qualification equally averages Push 3.5× and Push 3.5× plus friction 1.5×.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Policy</th>
+<th style="text-align: right;">Nominal global / local MPJPE (mm)</th>
+<th style="text-align: right;">Global increase</th>
+<th style="text-align: right;">Hard qualification</th>
+<th>All five retention gates</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Origin</td>
+<td style="text-align: right;">127.93 / 28.19</td>
+<td style="text-align: right;">Reference</td>
+<td style="text-align: right;">42.77%</td>
+<td>Reference</td>
+</tr>
+<tr>
+<td>R0</td>
+<td style="text-align: right;">225.87 / 30.21</td>
+<td style="text-align: right;">+76.56%</td>
+<td style="text-align: right;">49.02%</td>
+<td>Fail</td>
+</tr>
+<tr>
+<td>R1</td>
+<td style="text-align: right;">133.47 / 27.96</td>
+<td style="text-align: right;">+4.33%</td>
+<td style="text-align: right;">47.95%</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>R2</td>
+<td style="text-align: right;">163.53 / 28.31</td>
+<td style="text-align: right;">+27.83%</td>
+<td style="text-align: right;">53.42%</td>
+<td>Fail</td>
+</tr>
+</tbody>
+</table>
+<p>Every endpoint completes the nominal panel at 100%. R1 alone satisfies all sampled retention gates. Its hard-qualified score improves by 5.18 percentage points over origin, while R0 and R2 obtain larger unconstrained gains but violate retention. The 4.33% increase is R1's endpoint value, not its value at every checkpoint. R1 provides a feasible development tradeoff, not dominance on every metric or evidence that feedback schedules work.</p>
+<p>Each arm receives 49,152,000 simulator transitions. R1 additionally uses 40,000 anchor updates, 10,240,000 anchor sample presentations, and 80,000 student forwards, with 207.37 seconds measured inside those forwards. Transitions are matched; total computation is not. One origin, one motion, and one continuation seed support this result. Hundreds of rollout aliases do not create independent training replicates.</p>
+<h2>9. Does the Ordering Survive a Change of Simulator and Motion?</h2>
 <p><strong>Second simulator.</strong> We exported the final policies to ONNX and replayed them in MuJoCo
 with our own implementation of the six channels, scaled by the same λ. This is a sim-to-sim
 check of the exported policy, not the hardware deployment path, and MuJoCo's randomization is
 a labelled approximation of Isaac's. A run passes if the pelvis stays within 0.5 m of the
 reference to the end of the clip. Seeds are shared across arms, 32 per cell.</p>
-<p><strong>Table 5. MuJoCo survival of exported policies (pass rate over 32 physics draws).</strong></p>
-<div class="tbl"><table>
+<p><strong>Table 6. MuJoCo survival of exported policies (pass rate over 32 physics draws).</strong></p>
+<table>
 <thead>
 <tr>
 <th>Policy</th>
@@ -472,7 +404,7 @@ reference to the end of the clip. Seeds are shared across arms, 32 per cell.</p>
 <td style="text-align: right;">31 / 12 / 0 %</td>
 <td style="text-align: right;">59 / 16 / 3 %</td>
 </tr>
-<tr class="bad">
+<tr>
 <td>Adaptive, collapsed (seed 8601)</td>
 <td style="text-align: right;">56 / 19 / 9 %</td>
 <td style="text-align: right;">84 / 31 / 16 %</td>
@@ -493,442 +425,26 @@ reference to the end of the clip. Seeds are shared across arms, 32 per cell.</p>
 <td style="text-align: right;">94 / 56 / 31 %</td>
 </tr>
 </tbody>
-</table></div>
+</table>
 <p>Pushes are the binding channel in MuJoCo as in Isaac, and absolute survival is far below the
 Isaac scores because the randomization differs; the gap is reported, not tuned. The
 ordering is what transfers. Beyond the training envelope without pushes, the never-shrink
 and paired fixed policies tie at 38%, the collapsed policy reaches 16%, and the
 unrandomized policy 3%. Between the two seeds of fixed randomization the difference is as
-large as between methods, which repeats the seed effect of Section 5. Videos with every
-draw marked pass or fall accompany the paper.</p>
+large as between methods, which repeats the seed effect of Section 5. These replays evaluate the historical range-control policies, not R1 or the
+future recovery-aware controller.</p>
 <p><strong>Second motion.</strong> On an untrained clip of the same family (<code>walk_hands_on_back_loop_003</code>,
 128 episodes per cell), success at λ 1.5 is 0.80 for fixed, 0.73 for the range-holding
 adaptive run, 0.40 for the collapsed run, and 0.18 without randomization. Rank correlation
 of the arm ordering with the trained clip is 0.8 and 1.0 across the two cells. This is one
 nearby clip, not motion generalization.</p>
-<h2>9. Why None of This Helps: The Target Already Contains Every Stage</h2>
-<p>Sections 4 to 8 report a curriculum that ties fixed randomization on three seeds,
-an expansion gate that reaches a wider range without beating it, and a signal that
-cannot be read online. Each was treated as its own result. They have one
-explanation, and it is a property of how the randomization is sampled rather than
-of any controller.</p>
-<h3>9.1 The nesting argument</h3>
-<p>A curriculum here scales each channel's range by an intensity. The scaling is
-affine about that channel's nominal value, so the range at intensity <em>s</em> is</p>
-<pre><code>[nominal − s·dev_low,  nominal + s·dev_high]
-</code></pre>
-<p>which lies inside the full range and has exactly <em>s</em> times its width. Every
-randomization term is applied at episode reset, and every one of the 1,024
-environments draws independently. Two consequences follow, and both are exact
-rather than statistical.</p>
-<p>First, a draw at full intensity lands inside the intensity-<em>s</em> range with
-probability exactly <em>s</em>, for every channel, whatever its units or asymmetry.
-Second, conditioned on landing there, it is uniform on that range, which is the
-intensity-<em>s</em> distribution itself. The easy sub-population of a full-intensity
-batch is therefore not merely easier. It is distributionally identical to the
-stage a curriculum would have ramped through.</p>
-<h3>9.2 What that costs, in environments</h3>
-<div class="tbl"><table>
-<thead>
-<tr>
-<th>Stage a curriculum would pass through</th>
-<th style="text-align: right;">Environments per iteration already no harder, on all six channels</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0.50</td>
-<td style="text-align: right;">16 of 1024</td>
-</tr>
-<tr>
-<td>0.75</td>
-<td style="text-align: right;">182 of 1024</td>
-</tr>
-<tr>
-<td>0.90</td>
-<td style="text-align: right;">544 of 1024</td>
-</tr>
-</tbody>
-</table></div>
-<p>Half of all draws on every individual channel are already inside the
-half-intensity range. Fixed randomization supplies every earlier stage of any
-ramp toward it, in every gradient batch, without being asked to. A curriculum can
-change how often each difficulty is seen. It cannot show the policy anything
-fixed randomization withholds, and it cannot withhold what fixed randomization
-supplies.</p>
-<p>This is why the never-shrink rule matches fixed randomization rather than beating
-it, why the gate's wider range bought nothing, and why the arms are hard to tell
-apart. It is one fact, not a series of unlucky designs.</p>
-<h3>9.3 Scope, and what would break it</h3>
-<p>The argument applies to a curriculum that widens a range about a nominal value,
-with the parameter redrawn per episode. That covers every channel in this work and,
-we believe, most implementations of adaptive domain randomization, but it is a
-claim about a sampling scheme rather than about curricula in general, and it is
-checkable in any implementation from its own sampling code.</p>
-<p>Three things break it, and they say where a curriculum could still matter.</p>
-<ul>
-<li><strong>A concentrated target.</strong> If the target is a point, or a narrow band away from
-  the nominal, it has no easy sub-population and direct training has no automatic
-  curriculum to fall back on.</li>
-<li><strong>A draw held fixed for longer than an episode.</strong> If a parameter is drawn once
-  per run, a batch is homogeneous and staging changes what a batch contains.</li>
-<li><strong>A schedule that moves the range rather than widening it.</strong> Earlier stages are
-  then not nested inside the target.</li>
-</ul>
-<p>The first is testable at the cost of a configuration line, and Section 10
-describes that comparison. We report it as the experiment this argument implies,
-not as a result: it has not been run.</p>
-<h3>9.4 What we did not find</h3>
-<p>We looked for a randomization channel whose difficulty might break direct
-training, on the reasoning that the six existing ones are smooth perturbations of
-a task the policy already solves. Four actuator properties that Isaac Lab exposes
-and this robot holds fixed were added and screened on frozen policies: peak
-torque, joint friction, reflected inertia, and the joint speed ceiling.</p>
-<p>Two are live. Reducing peak torque costs the healthy policies 19 to 22 success
-points at the deepest setting and the weaker ones 44 to 46. Adding gearbox
-friction, which the robot's own asset declares none of, costs 12 to 19 against 39
-to 58. Reflected inertia does nothing, which we predicted. The speed ceiling also
-does nothing, which we did not: at the deepest setting a fifth of environments
-are limited below the reference motion's own measured demand and none was
-affected, and we cannot yet separate a physically inert channel from a write the
-engine does not enforce.</p>
-<p>Neither live channel measures a new axis of capability. Ranking the five policies
-by how much each loses, friction reproduces the ordering of the existing
-difficulty ladder at a rank correlation of +0.90 and torque at +0.50. They are
-harder, and one of them is a real gap between this simulator and the robot, but
-they are not a different kind of difficulty. Under the nesting argument that is
-what should have been expected: a harder range is still a range.</p>
-<h2>10. Where Should the Extra Training Go?</h2>
-<p>Sections 4 to 7 fix what a curriculum may do and what it may listen to. They do
-not show that any curriculum improves the policy. The question that decides that
-comes first, and we have not answered it:</p>
-<blockquote>
-<p>Can we improve humanoid control by spending more training on difficult but
-learnable physical conditions, while preserving performance on conditions
-already learned?</p>
-</blockquote>
-<h3>10.1 Difficult is not the same as learnable</h3>
-<p>Section 7 says pushes bind and mass, center of mass, and joint offsets are
-nearly free. It does not say that practising pushes would help. A condition can
-be hard because the policy lacks practice at it, because the observation cannot
-support the required response, or because the reference motion is incompatible
-with that disturbance. Only the first is repaired by any curriculum, and every
-component of an expansion curriculum silently assumes the first. Nothing we have
-measured separates them.</p>
-<h3>10.2 The screen that separates them</h3>
-<p>Five branches leave the same competent policy with the same architecture,
-reward, motion, environment count, iteration budget, and seed. The only
-difference is what a fixed quarter of the same 1,024 environments practises, and
-that share is taken out of the standard mixture rather than added to it, so no
-branch trains on more episodes than another.</p>
-<div class="tbl"><table>
-<thead>
-<tr>
-<th>Branch</th>
-<th>What the 256-environment share practises</th>
-<th style="text-align: right;">Origin success there</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Plain continuation</td>
-<td>nothing; every environment at the envelope</td>
-<td style="text-align: right;">—</td>
-</tr>
-<tr>
-<td>Matched control</td>
-<td>the envelope, like every other environment</td>
-<td style="text-align: right;">—</td>
-</tr>
-<tr>
-<td>Manageable channels</td>
-<td>mass, center of mass, joint offset at 3×</td>
-<td style="text-align: right;">0.949 / 0.988 / 0.990</td>
-</tr>
-<tr>
-<td>The bottleneck</td>
-<td>pushes at 3×</td>
-<td style="text-align: right;">0.746</td>
-</tr>
-<tr>
-<td>The second factor</td>
-<td>friction at 1.5×</td>
-<td style="text-align: right;">0.973</td>
-</tr>
-<tr>
-<td>Both factors</td>
-<td>pushes at 3× with friction at 1.5×</td>
-<td style="text-align: right;">—</td>
-</tr>
-</tbody>
-</table></div>
-<p>The last three branches share their levels exactly, so the four branches without
-the manageable-channel placebo form a two-by-two on push practice and friction
-practice. That makes the interaction estimable: whether practising the pair buys
-more than practising each part is a difference of differences, not a comparison
-between two different recipes.</p>
-<p>The practised levels are read off Section 7 rather than chosen, so "difficult"
-means a measured success level. Every branch is scored on one frozen thirteen
-cell suite that includes ordinary conditions the policy already handles, the
-practised cells, and two cells above every level any branch practises. The
-starting policy is scored on the same suite, so improvement is measured against
-the starting point as well as against the matched control. Each cell is labelled
-in support or held out for each branch from that branch's own realized training
-vectors, and a cell inside a branch's support may not carry a generalization
-claim for it.</p>
-<p>The margins and rules were frozen before any branch trained. A gain of five
-points or more is meaningful; a difference under two points is a tie; a branch
-that gains on its target while losing more than two points on an
-already-learned cell is reported as a trade-off, not an improvement.</p>
-<p><strong>Every outcome ends something.</strong> If dedicated practice at the failing push
-level does not move push, then push failure is not a practice deficit, no
-allocation scheduler can repair it by exposure, and the expansion direction
-loses its justification. If practising the manageable channels helps as much as
-practising the bottleneck, then extra exposure helps wherever it is aimed and
-choosing channels buys nothing. If the pair is additive within the margin above the practised
-corner, a component that exists to protect combinations has nothing to add here.</p>
-<p>A negative result is bounded. It rejects this allocation at this starting policy,
-this budget, and this practised dose. It does not establish that some other
-scheduler, dose, or origin would also fail, and we do not report it as though it
-did.</p>
-<h3>10.3 What a curriculum would have to ask, and what that costs — Measured</h3>
-<p>Our gate asks whether the policy can already handle a harder condition, and
-expands when success is high. A curriculum that improves the policy has to ask a
-different question: would practising this help? That is a question about
-improvement, and it has to be estimated by repeatedly evaluating conditions that
-do not change, because a score that rose after the test got easier is the failure
-this paper is about.</p>
-<p>We measured whether that estimate is available. Training runs record survival per
-iteration for each training cohort, and each cohort sits at a fixed condition for
-as long as the curriculum does not move, so the longest window in which the range
-never moved gives per-condition series at genuinely fixed difficulty. Against a
-null that keeps the same values and destroys their time order, we asked how wide
-a window must be before the sign of the local trend can be trusted.</p>
-<p>The answer depends entirely on whether the policy is still learning the task.
-From scratch, survival at every cohort climbs about 120 points over 3,362
-iterations and the sign of the local trend is reliable once the window reaches
-200 to 400 iterations. Warm-started from a policy that has already solved the
-envelope, which is the state any expansion curriculum operates in, the whole
-1,590-iteration window moves each cohort by between −1.2 and +3.6 points, and the
-local trend sits between 0.01 and 0.08 times its own noise floor at a 100
-iteration window. Sign agreement runs from 0.42 to 0.63 at a 100-iteration window
-and from 0.42 to 0.83 at 400 iterations, so widening the window does recover some
-agreement. It does not make the estimate usable: our reliability criterion asks
-for agreement of at least 0.80 together with a trend above the noise floor on at
-least half the windows, and no cohort meets both at any width, the best clearing
-the floor on 42 percent of its windows. On the largest cohort, closing that gap
-would take roughly 170 times the episodes per window: about 14,000 episodes per
-iteration, or a window of about 17,000 iterations at present cohort sizes.</p>
-<p>This is not an estimator defect. A competent policy's episode-end survival at a
-fixed condition is flat within noise, so there is little left to detect, and one
-bit per episode is too coarse to resolve it. The consequence for design is
-concrete. An online allocator driven by episode-end survival or by reward
-progress cannot make trustworthy per-condition decisions at this budget, so the
-effect of practice has to be measured end to end against frozen evaluation cells,
-as Section 10.2 does. We audited the obvious candidate for a
-finer signal. Per-step foot slip yields hundreds of samples per episode instead
-of one bit, and Section 6 found it the only body-grounded signal with a
-consistent difficulty response. It does have the resolution: in the eight cells
-where success separates the three healthy policies by at most twice its own
-cell-to-cell reproducibility, slip separates them by two to three times its own.
-It does not have the validity. Reading slip at an easy cell to predict success at
-a harder one ranks the three healthy policies in exactly the wrong order, in all
-four pairs of cells we tried, putting the least robust first every time. Low slip
-is a conservative gait rather than a robust one, which is consistent with slip
-improving whenever difficulty is cut. Three policies and one seed do not settle
-it, but they remove the reason to build on it.</p>
-<p>So no online per-condition progress signal is available to us at present. That is
-the case for measuring the effect of practice end to end, against frozen
-evaluation cells, as Section 10.2 does.</p>
-<h3>10.4 Stated support is not practice — Measured</h3>
-<p>There is a second reason to measure the effect of practice end to end. Widening a
-uniform range lowers the density everywhere inside it, so a condition can remain
-formally inside the training support while being practised much less than
-before. Counting the episodes each cohort actually ran, at the intensity it ran
-them, separates the two.</p>
-<p>Exposure is counted in environment-iterations: each iteration, every environment
-in a cohort trains for the same rollout length at that cohort's intensity. That
-unit is available for every arm and does not depend on episode length. Counting
-episodes instead is not comparable, because a harder cohort ends more and shorter
-episodes and an incompetent policy ends far more of them than a competent one, so
-an episode share is driven by episode length as much as by practice.</p>
-<div class="tbl"><table>
-<thead>
-<tr>
-<th>Run</th>
-<th style="text-align: right;">At the envelope</th>
-<th style="text-align: right;">Above 1.4</th>
-<th style="text-align: right;">At or below the envelope</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Fixed randomization</td>
-<td style="text-align: right;">100.0%</td>
-<td style="text-align: right;">0.0%</td>
-<td style="text-align: right;">100.0%</td>
-</tr>
-<tr>
-<td>Never-shrink</td>
-<td style="text-align: right;">99.2%</td>
-<td style="text-align: right;">0.0%</td>
-<td style="text-align: right;">100.0%</td>
-</tr>
-<tr>
-<td>Probe gate that reached 1.5</td>
-<td style="text-align: right;">28.6%</td>
-<td style="text-align: right;">21.5%</td>
-<td style="text-align: right;">49.6%</td>
-</tr>
-</tbody>
-</table></div>
-<p>The gate reports a final range of 1.5 and spent 21.5 percent of its training
-exposure above 1.4. It also spent 28.6 percent at the envelope, where fixed
-randomization spends 100 percent. The frontier practice was bought with envelope
-practice rather than added to it, which is a direct explanation for expansion
-arms tying fixed randomization rather than beating it: with the environment count
-held constant, widening a range is a reallocation, and the reallocation is the
-treatment. That is the design the screen in Section 10.2 makes explicit and
-controls, and it is why any comparison here reports realized exposure per band
-rather than the range a curriculum claims.</p>
-<h3>10.5 The hurdle any such curriculum must clear</h3>
-<p>Beating the narrow fixed baseline of Section 5 would establish nothing. The
-comparators are fixed randomization over the wider target range, a preset
-expansion schedule reaching the same final ranges, and a preset per-parameter
-schedule with the same practice mixture. Preset schedules are built from
-development runs and frozen before the confirmation seeds are trained; a
-schedule may never be derived from the run it is compared against. Resources are
-matched including any probe cost, and realized exposure is reported per branch.
-The primary claim is chosen in advance: better robustness at equal cost, or a
-fixed robustness target reached at lower cost.</p>
-<p>If such a curriculum works, the components then have to be separated: choosing
-which parameter to emphasize, choosing when to change the emphasis, checking
-combinations, and maintaining earlier practice. Each is kept only if an
-experiment could show it is unnecessary.</p>
-<h2>11. Limitations</h2>
-<p>All capability results come from one training motion and one primary simulator, with one
-nearby untrained clip and one sim-to-sim replay. The channel sweep uses one seed; the
-ordering is informative, exact gaps are not. Three seeds bound the never-shrink comparison
-to a noninferiority statement, and the number of seeds a claim needs depends on
-the variability and the size of the effect claimed rather than on a convention
-[19]. The MuJoCo replay uses our own randomization and the ONNX
-policy, not the deployment binary. The proposed curriculum has a scalar prototype only.
-Nothing here has been run on hardware.</p>
-<h2>12. Conclusion</h2>
-<p>An adaptive curriculum should not be allowed to pass its own test by making the test
-easier. In long humanoid training runs, the curriculum that could do so did: it earned the
-highest training returns while losing the physics its policy would need. Refusing to shrink
-training ranges removes that path and recovers the robustness of fixed randomization, no
-more and no less. Survival measured on proposed conditions is the one signal in our audit
-that can drive expansion safely, and robustness is anisotropic and interactive.</p>
-<p>What none of this shows is that any curriculum makes the policy better, and we can
-now say why rather than only that. The randomization is drawn per episode from
-ranges that scale about their nominal, so the distribution a curriculum ramps
-toward already contains every stage it would ramp through, in every batch.
-Staging changes how often a difficulty appears; it cannot change which
-difficulties exist. A curriculum has something to contribute here only where that
-stops being true, and the clearest such case is a target that is concentrated
-rather than a range about the nominal. That is a configuration line, not a new
-method, and it is the next thing to measure.</p>
-<h2>Appendix A. Vocabulary</h2>
-<p>Terms used in earlier drafts and their replacements in this one.</p>
-<div class="tbl"><table>
-<thead>
-<tr>
-<th>Earlier</th>
-<th>Here</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Difficulty evacuation</td>
-<td>Training-range collapse</td>
-</tr>
-<tr>
-<td>Endogenous exam trap</td>
-<td>Scores can improve because training gets easier</td>
-</tr>
-<tr>
-<td>Monotone support / ratchet</td>
-<td>Training ranges that never shrink</td>
-</tr>
-<tr>
-<td>Mechanism inoculation</td>
-<td>Preventing range shrinkage</td>
-</tr>
-<tr>
-<td>Anisotropic frontiers</td>
-<td>A separate range for each physical parameter</td>
-</tr>
-<tr>
-<td>Candidate-level population probes</td>
-<td>Testing the proposed expansion</td>
-</tr>
-<tr>
-<td>Joint-corner sentinel</td>
-<td>A test of combined parameter changes</td>
-</tr>
-<tr>
-<td>Retained rehearsal tail</td>
-<td>Continued practice on earlier conditions</td>
-</tr>
-<tr>
-<td>Open-loop ramp</td>
-<td>A preset expansion schedule</td>
-</tr>
-<tr>
-<td>Safety receipt</td>
-<td>A record of blocked range reductions</td>
-</tr>
-<tr>
-<td>MAnD-Ex</td>
-<td>The range-expansion curriculum</td>
-</tr>
-</tbody>
-</table></div>
-<h2>Appendix B. Evidence ledger (remove before submission)</h2>
-<div class="tbl"><table>
-<thead>
-<tr>
-<th>Section</th>
-<th>Receipt</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>4</td>
-<td><code>receipts/analysis/lucid_return_inversion_20260901.json</code>, <code>lucid_p3_readout_20260901.json</code></td>
-</tr>
-<tr>
-<td>5</td>
-<td><code>receipts/analysis/lucid_phase0_analysis_20260901.json</code> (H_R2 decision), ratchet guard logs</td>
-</tr>
-<tr>
-<td>6</td>
-<td><code>receipts/analysis/lucid_signal_audit_20260901.json</code>, <code>lucid_physical_signal_audit_20260902.json</code></td>
-</tr>
-<tr>
-<td>7</td>
-<td><code>receipts/analysis/lucid_channel_attribution_20260902.json</code></td>
-</tr>
-<tr>
-<td>8</td>
-<td><code>receipts/analysis/mujoco_sim2sim_20260902/</code>, <code>lucid_heldout_motion_20260901.json</code></td>
-</tr>
-<tr>
-<td>all</td>
-<td><code>receipts/analysis/lucid_draft_number_verification_20260902.json</code> — every number above re-checked against its receipt or the raw training trace</td>
-</tr>
-<tr>
-<td>9</td>
-<td><code>receipts/analysis/lucid_why_no_curriculum_wins_20260903.json</code>, <code>lucid_nesting_calculus_20260903.json</code>, <code>lucid_actuator_screen_readout.json</code></td>
-</tr>
-<tr>
-<td>10</td>
-<td><code>receipts/analysis/lucid_progress_signal_audit_20260902.json</code> and <code>..._warmstart_20260902.json</code>; preregistration <code>lucid_practice_allocation_screen_preregistration_20260902.json</code>; training trace <code>artifacts/.../curriculum_comparison_ne1024_20260901_232720/seed_8600/gate_150/curriculum_*.jsonl</code> (the gate run itself; <code>lucid_gate_feasibility_20260901.json</code> is a replay proxy, not this run), preregistration <code>lucid_support_expansion_screen_preregistration_20260901.json</code></td>
-</tr>
-</tbody>
-</table></div>
+<h2>10. Interpretation and Limits</h2>
+<p>For a continuously uniform scalar parameter whose range scales affinely around its nominal value, the interval at intensity s has s times the width of the full interval. A full-intensity draw lands inside it with probability s and, conditional on doing so, has the same scalar distribution. Fixed randomization therefore withholds no marginal parameter values that an earlier nested stage would introduce. This is a support statement, not proof that fixed practice samples equally easy whole episodes or makes scheduling unnecessary. Discrete, clamped, and event-time implementations require their own treatment; joint difficulty and realized exposure are distinct from marginal support.</p>
+<p>The historical practice-allocation, effort, and thermal-barrier screens did not establish an adaptive advantage. A progress-signal audit also found insufficient reliable online signal at the tested sampling budget. These null results bound the present evidence; neither nesting nor a negative audit proves that all curricula must fail. The same total budget can still be allocated differently in time, across motions, or across combinations. Any future feedback claim requires comparison with fixed and frozen schedules that share the same retention mechanism, allowed conditions, and resource accounting.</p>
+<p>The range-control comparison has three seeds. Its empirical tolerance decision is weaker than demonstrated noninferiority, and the channel sweep has one seed. The continuation study has one local origin and one solved walking motion. Three longer development candidates were not qualified by that origin, so preserving a broader repertoire cannot be inferred. A nearby clip and an independently implemented MuJoCo replay provide limited transfer evidence for the historical policies only. Nothing here has been tested on hardware.</p>
+<p>Global MPJPE does not identify a recovery process. A robot can finish a clip while displaced from its path; local articulation can remain good in that state. Recovery would require calibrated component thresholds, event timing, a dwell interval, and a sufficiently long observation window, together with controller inputs that identify the required correction. A separate released-controller and path-input programme addresses these prerequisites, but contributes no recovery efficacy claim here.</p>
+<h2>11. Conclusion</h2>
+<p>A robustness-training dashboard can hide two losses: the curriculum can narrow the conditions being practiced, and the policy can retain survival while losing motion fidelity. Independent evaluation exposes both in this humanoid testbed. A never-shrink projection blocks the observed contraction requests and passes a predefined empirical tolerance rule against fixed randomization. Reference anchoring provides a protected fixed-practice development result, limiting nominal drift while improving hard-condition tracking qualification over the origin. These findings motivate separate coverage and retention checks. They do not establish adaptive curriculum superiority, multi-motion preservation, or recovery after disturbance.</p>
 <h2>References</h2>
 <p>[1] J. Tobin et al., "Domain Randomization for Transferring Deep Neural Networks from Simulation to the Real World," IROS, 2017.
 [2] X. B. Peng et al., "Sim-to-Real Transfer of Robotic Control with Dynamics Randomization," ICRA, 2018.
@@ -941,11 +457,10 @@ method, and it is the next thing to measure.</p>
 [9] R. Portelas et al., "Teacher Algorithms for Curriculum Learning of Deep RL in Continuously Parameterized Environments," CoRL, 2020.
 [10] X. B. Peng et al., "DeepMimic," 2018.
 [11] X. B. Peng et al., "AMP: Adversarial Motion Priors," 2021.
-[12] Z. Luo et al., "SONIC: Supersizing Motion Tracking for Natural Humanoid Whole-Body Control," 2025.
-[13] Q. Liao et al., "BeyondMimic," 2025.
+[12] Z. Luo et al., "SONIC: Supersizing Motion Tracking for Natural Humanoid Whole-Body Control," arXiv:2511.07820v1, 2025.
+[13] T. E. Truong et al., "BeyondMimic: From Motion Tracking to Versatile Humanoid Control via Guided Diffusion," arXiv:2508.08241v1, 2025.
 [14] M. Dennis et al., "Emergent Complexity and Zero-Shot Transfer via Unsupervised Environment Design," NeurIPS, 2020.
 [15] M. Jiang et al., "Prioritized Level Replay," ICML, 2021.
 [17] G. Christmann et al., "Benchmarking Smoothness and Reducing High-Frequency Oscillations in Continuous Control Policies," IROS, 2024.
-[18] TransCurriculum: history-informed curriculum scheduling across task dimensions, arXiv:2603.14156.
-[19] R. Agarwal et al., "Deep Reinforcement Learning at the Edge of the Statistical Precipice," NeurIPS, 2021.</p></main>
-</body></html>
+[19] R. Agarwal et al., "Deep Reinforcement Learning at the Edge of the Statistical Precipice," NeurIPS, 2021.</p>
+<p>[20] H. Jung, Z. Gu, Y. Zhao, H.-W. Park, and S. Ha, "PPF: Pre-training and Preservative Fine-tuning of Humanoid Locomotion via Model-Assumption-based Regularization," IEEE Robotics and Automation Letters, vol. 10, no. 11, 2025. doi:10.1109/LRA.2025.3608637.</p></body></html>
