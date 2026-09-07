@@ -56,3 +56,11 @@ Evidence:
 - Passing live gate: `/home/linjiw/lucid-sonic/experiments/path_input_shadow_gates_20260907_a`, source `9fe87e6`, plan `5e6c2551ee23e83e723d8b98e65266156d94db0b53ac353eb9ad4dd8d7e3cacf`, [W&B](https://wandb.ai/16726/lucid-sonic/runs/path-shadow-5e6c2551ee23e83e).
 - Training: `/home/linjiw/lucid-sonic/experiments/path_repair_pilot_s8762_20260907_b`, plan `59ac46c63026773c1978296f90b9598a68e18eab20c4ac9618562e38d3e336c1`. `train/initialization.json`, `practice_initialization.json`, `exposure.jsonl` and `push_events.jsonl` are live receipts.
 - Evaluation: `/home/linjiw/lucid-sonic/experiments/path_repair_pilot_evaluation_20260907_a/plan.json`, source `4f667e2`. Final results pending.
+
+## Independent final-checkpoint and delivered-exposure audit
+
+The read-only audit passed. Every old decoder column is exact; all 4,096 new coordinates are nonzero, and the only other changed actor-state entry is the recorded native `std` clamp. Verified training allocation is 196,608 transitions per motion. The simulator received 2,047 nonzero push events: control 480, arc 549, sideways 527, stoop 491. Direction counts are 512/512/512/511; actual event counts vary with episode timing despite fixed environment allocation. Velocity-write roundoff is at most 5.96e-8 m/s, and no event targets the nominal cohort. [Online audit](https://wandb.ai/16726/lucid-sonic/runs/path-training-audit-6642e03c6a5c); receipt `/home/linjiw/lucid-sonic/analysis/path_repair_training_audit_20260907_a/receipt.json`.
+
+The initial/final evaluator is active under plan SHA `45c38aed42ba0eb188f078db07a9bb107607434fc3516285ae4951b4d31b6087`. Its complete CPU suite passed 2,148 tests before launch. First completed nominal pairs show control global MPJPE 89.77 → 83.82 mm (−6.62%) and arc 103.78 → 92.87 mm (−10.51%), with 100% completion/qualification in both arms. These are partial development outcomes, not a completed four-motion retention or disturbance-recovery result. The serial supervisor will run all 16 cells and produce per-motion analysis automatically; a failed cell prevents a complete result.
+
+Public page deployment of `8f76147` succeeded and its served HTML was checked for the completed-pilot status. The public page remains a dated snapshot, not an automatically refreshed dashboard.
