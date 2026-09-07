@@ -4,7 +4,7 @@
 
 We are preparing a diagnostic ICRA paper on training-range collapse and tracking-quality drift in humanoid robustness training, following `fable.md` and `fable.html`. The completed evidence supports safeguards and bounded development findings, not adaptive-curriculum superiority.
 
-**Current experiment:** second continuation seed of R0 versus reference-anchored R1, from the same local origin. Two 2,000-iteration runs and 55 fixed-policy evaluation cells; online [W&B logging](https://wandb.ai/16726/lucid-sonic/runs/5zucanmo). Results are pending. The completed first seed gives R1 +4.33% nominal global error and +5.18 percentage points hard-condition qualification versus origin, within the empirical retention checks.
+**Current experiment:** second continuation seed of R0 versus reference-anchored R1, from the same local origin. Two 2,000-iteration runs and 55 fixed-policy evaluation cells; online [W&B logging](https://wandb.ai/16726/lucid-sonic/runs/p4rvttfe). R0 training is complete; R1 is running after a logging-only repair with verified R0 reuse. Results are pending. The completed first seed gives R1 +4.33% nominal global error and +5.18 percentage points hard-condition qualification versus origin, within the empirical retention checks.
 
 The recovery-aware multi-motion programme is future work. Its path-input pilot and sixteen evaluations are complete; the sideways push endpoint includes two failures in 128 trials. It does not provide calibrated recovery evidence for this manuscript.
 

@@ -47,9 +47,9 @@ provides a 29-DoF Unitree G1 model, a 50 Hz policy, Isaac Lab training, and a Mu
 
 **Evaluation beyond reward.** Training return depends on the distribution it is measured
 on. We therefore score every policy on a frozen physics ladder that the curriculum never
-sees, and report success and restricted-mean progress rather than reward [19].
+sees, and report success and restricted-mean progress rather than reward [16].
 
-Reference behavior can also be protected during fine-tuning. PPF regularizes toward a model-based controller where its assumptions remain reliable [20]; our cached-origin action penalty is a different implementation of behavior preservation, not a claim to invent it. DORAEMON [7] already constrains randomization expansion by performance. A future quality-aware curriculum must therefore establish an advantage beyond a protected fixed baseline, rather than attributing anchoring or a stricter success definition to curriculum feedback.
+Reference behavior can also be protected during fine-tuning. PPF regularizes toward a model-based controller where its assumptions remain reliable [17]; our cached-origin action penalty is a different implementation of behavior preservation, not a claim to invent it. DORAEMON [7] already constrains randomization expansion by performance. A future quality-aware curriculum must therefore establish an advantage beyond a protected fixed baseline, rather than attributing anchoring or a stricter success definition to curriculum feedback.
 
 ## 3. Setup
 
@@ -299,19 +299,18 @@ A robustness-training dashboard can hide two losses: the curriculum can narrow t
 [1] J. Tobin et al., "Domain Randomization for Transferring Deep Neural Networks from Simulation to the Real World," IROS, 2017.
 [2] X. B. Peng et al., "Sim-to-Real Transfer of Robotic Control with Dynamics Randomization," ICRA, 2018.
 [3] J. Tan et al., "Sim-to-Real: Learning Agile Locomotion for Quadruped Robots," RSS, 2018.
-[4] A. Rajeswaran et al., "EPOpt: Learning Robust Neural Network Policies Using Model Ensembles," 2016.
+[4] A. Rajeswaran et al., "EPOpt: Learning Robust Neural Network Policies Using Model Ensembles," ICLR, 2017.
 [5] OpenAI et al., "Solving Rubik's Cube with a Robot Hand," 2019.
-[6] B. Mehta et al., "Active Domain Randomization," CoRL, 2019.
+[6] B. Mehta et al., "Active Domain Randomization," Proceedings of the Conference on Robot Learning, PMLR 100:1162–1176, 2020.
 [7] G. Tiboni et al., "Domain Randomization via Entropy Maximization," ICLR, 2024.
 [8] P. Klink et al., "Self-Paced Contextual Reinforcement Learning," CoRL, 2020.
 [9] R. Portelas et al., "Teacher Algorithms for Curriculum Learning of Deep RL in Continuously Parameterized Environments," CoRL, 2020.
-[10] X. B. Peng et al., "DeepMimic," 2018.
-[11] X. B. Peng et al., "AMP: Adversarial Motion Priors," 2021.
+[10] X. B. Peng et al., "DeepMimic: Example-Guided Deep Reinforcement Learning of Physics-Based Character Skills," arXiv:1804.02717, 2018.
+[11] X. B. Peng et al., "AMP: Adversarial Motion Priors for Stylized Physics-Based Character Control," arXiv:2104.02180, 2021.
 [12] Z. Luo et al., "SONIC: Supersizing Motion Tracking for Natural Humanoid Whole-Body Control," arXiv:2511.07820v1, 2025.
 [13] T. E. Truong et al., "BeyondMimic: From Motion Tracking to Versatile Humanoid Control via Guided Diffusion," arXiv:2508.08241v1, 2025.
 [14] M. Dennis et al., "Emergent Complexity and Zero-Shot Transfer via Unsupervised Environment Design," NeurIPS, 2020.
 [15] M. Jiang et al., "Prioritized Level Replay," ICML, 2021.
-[17] G. Christmann et al., "Benchmarking Smoothness and Reducing High-Frequency Oscillations in Continuous Control Policies," IROS, 2024.
-[19] R. Agarwal et al., "Deep Reinforcement Learning at the Edge of the Statistical Precipice," NeurIPS, 2021.
+[16] R. Agarwal et al., "Deep Reinforcement Learning at the Edge of the Statistical Precipice," NeurIPS, 2021.
 
-[20] H. Jung, Z. Gu, Y. Zhao, H.-W. Park, and S. Ha, "PPF: Pre-training and Preservative Fine-tuning of Humanoid Locomotion via Model-Assumption-based Regularization," IEEE Robotics and Automation Letters, vol. 10, no. 11, 2025. doi:10.1109/LRA.2025.3608637.
+[17] H. Jung, Z. Gu, Y. Zhao, H.-W. Park, and S. Ha, "PPF: Pre-training and Preservative Fine-tuning of Humanoid Locomotion via Model-Assumption-based Regularization," IEEE Robotics and Automation Letters, vol. 10, no. 11, 2025. doi:10.1109/LRA.2025.3608637.

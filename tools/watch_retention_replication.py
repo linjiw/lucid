@@ -63,6 +63,12 @@ def summarize():
     return payload
 
 if __name__=='__main__':
+    import argparse
+    parser=argparse.ArgumentParser()
+    parser.add_argument('--campaign',type=Path,default=ROOT)
+    parser.add_argument('--plan-sha256',default=PLAN_SHA)
+    args=parser.parse_args()
+    ROOT=args.campaign;PLAN_SHA=args.plan_sha256
     deadline=datetime(2026,9,10,tzinfo=timezone.utc)
     while datetime.now(timezone.utc)<deadline:
         path=ROOT/'pilot/receipt.json'
