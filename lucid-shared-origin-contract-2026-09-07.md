@@ -1,5 +1,7 @@
 # LUCID shared-controller foundation: next-stage research contract
 
+**Physical observability result, September 7 UTC:** The four-motion/three-phase physical-state experiment completed. All 6,144 horizontal translations changed measured task/critic displacement while active actor inputs, encoder outputs and action means remained exactly unchanged; instrument controls passed. The next step is a common path-error input, no-op validation and a bounded controller-repair pilot before multi-motion R1/curriculum training. See the [completed experiment](lucid-translation-observability-2026-09-07.md) and [common-input design](lucid-common-path-input-design-2026-09-07.md).
+
 **Completed September 7, 03:14 UTC:** All eight released-controller cells finished. Every motion in both paths achieved 100% completion and tracking qualification (128 aliases per cell). Select the released checkpoint as the shared-origin candidate; no nominal retraining is warranted by this screen. Tight competence validation and paired-state path-error observability still precede R1 continuation. [Verified W&B analysis](https://wandb.ai/16726/lucid-sonic/runs/path-analysis-7570c657d2dfbb94).
 
 ## Completed path-screen results
