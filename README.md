@@ -1,6 +1,12 @@
-# LUCID — practice utility & target-anchored curricula on SONIC (ICRA 2027 push)
+# LUCID — Recovery-Aware Curricula for Quality-Preserving Humanoid Robustness
 
-**Project site:** https://linjiw.github.io/lucid/ — the research story, findings, evidence, videos, and plan. **Paper draft:** [`paper/when-training-gets-easier.md`](paper/when-training-gets-easier.md) (rendered at [site/paper.html](https://linjiw.github.io/lucid/paper.html)).
+**[Project page](https://linjiw.github.io/lucid/)** · **[Latest verified data](site/data/recovery-progress-2026-09-07.json)** · **[Historical research ledger](https://linjiw.github.io/lucid/research-archive.html)**
+
+We study how a pretrained humanoid can learn stronger disturbance recovery while retaining the motions it already executes well. The target contribution is the value of recovery feedback beyond equally protected fixed training and frozen schedules.
+
+**September 7, 2026:** R1 preserves the original development motion and improves hard-condition tracking-qualified execution by 5.18 percentage points versus origin. This is one origin and one motion, not curriculum confirmation. The completed eight-cell longer-motion screen finds 0% tracking-qualified execution for both origin and R1 on all three longer candidates. The next prerequisite is a high-quality shared multi-motion origin, followed by retention coverage and recovery calibration. See the project page for the full design, results and limitations.
+
+The [existing manuscript](paper/when-training-gets-easier.md) and its [rendered version](https://linjiw.github.io/lucid/paper.html) are historical drafts; they do not represent completed evidence for the target recovery-aware framework.
 
 Workspace repo for the LUCID research program. Code lives in two submodules; the
 claim-bearing work is in `GR00T-WholeBodyControl` on branch `research/practice-utility`.
@@ -11,7 +17,8 @@ everything needed to *re-run* them is in the submodule plus the data root descri
 
 | path | what |
 |---|---|
-| `fable.md` | **Start here.** Fable's guidance + dated execution log (results, decisions, next steps) |
+| `site/index.html` | **Current public overview:** research objective, completed results, latest experiment and next gates |
+| `fable.md` | Historical guidance and dated execution log |
 | `lucid-design-implementation-plan.md` | long-form design doc, §0–25 (gates, estimands, results through 2026-08-21) |
 | `lucid-handoff-2026-08-20.md` | agent handoff: environment, rules of engagement, measured results ledger |
 | `docs/` | TACE design, LUCID-MC/IROS plan, cross-domain curriculum-learning review, **machine setup** |

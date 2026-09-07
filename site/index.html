@@ -1,398 +1,131 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>LUCID · Expanding robustness while retaining tracking quality</title>
-<meta name="description" content="LUCID research progress: quality-constrained curricula for humanoid training, completed tracking-retention experiments, optimizer-history controls, probe uncertainty, and the path toward sim-to-real.">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400;1,6..72,600&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<style>
-:root{--bg:#F6F7F5;--ink:#1C2128;--muted:#5F6B7A;--accent:#2E5A87;--bad:#A8432B;--good:#2E7D5B;--rule:#D4D9DE;--tint:#E9EEF3;--card:#FFFFFF;color-scheme:light}
-@media (prefers-color-scheme:dark){:root{--bg:#15191E;--ink:#E4E8EC;--muted:#9AA6B4;--accent:#86B0DB;--bad:#E0836A;--good:#6FC29A;--rule:#2C343D;--tint:#1E252D;--card:#1B2129;color-scheme:dark}}
-*{box-sizing:border-box}
-body{background:var(--bg);color:var(--ink);font-family:"Source Sans 3",system-ui,sans-serif;font-size:17px;line-height:1.55;margin:0}
-.wrap{max-width:1040px;margin:0 auto;padding:0 24px}
-.measure{max-width:70ch}
-header.hero{padding:56px 0 36px;border-bottom:1px solid var(--rule)}
-.eyebrow{font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:0 0 14px}
-h1{font-family:Newsreader,Georgia,serif;font-weight:600;font-size:clamp(34px,5vw,54px);line-height:1.08;margin:0 0 18px;text-wrap:balance;max-width:20ch}
-.lede{font-family:Newsreader,Georgia,serif;font-size:21px;line-height:1.45;max-width:62ch;margin:0 0 22px}
-nav.toc{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:14px;margin-top:10px}
-nav.toc a{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent}nav.toc a:hover{border-color:var(--accent)}
-section{padding:44px 0;border-bottom:1px solid var(--rule)}
-h2{font-family:Newsreader,Georgia,serif;font-weight:600;font-size:32px;line-height:1.15;margin:0 0 6px;text-wrap:balance}
-.kicker{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0 0 8px;font-weight:600}
-h3{font-family:Newsreader,Georgia,serif;font-weight:600;font-size:22px;margin:30px 0 8px;text-wrap:balance}
-p{margin:0 0 14px}
-.grid{display:grid;gap:18px}
-.g3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
-.g2{grid-template-columns:repeat(auto-fit,minmax(min(340px,100%),1fr))}
-.stat{background:var(--card);border:1px solid var(--rule);padding:18px 20px}
-.stat .n{font-family:Newsreader,Georgia,serif;font-size:40px;line-height:1;font-weight:600;font-variant-numeric:tabular-nums}
-.stat .n.bad{color:var(--bad)}.stat .n.good{color:var(--good)}
-.stat .l{font-size:14px;color:var(--muted);margin-top:8px}
-.tbl{overflow-x:auto;margin:14px 0 20px}
-table{border-collapse:collapse;font-size:14.5px;min-width:100%;font-variant-numeric:tabular-nums}
-th{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);text-align:left;font-weight:600;border-bottom:1px solid var(--ink);padding:8px 10px;white-space:nowrap}
-td{padding:7px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
-td.num,th.num{text-align:right;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:13.5px}
-tr.bad td{color:var(--bad)}tr.ours td:first-child{font-weight:600}
-blockquote{margin:18px 0;padding:14px 20px;border-left:3px solid var(--accent);background:var(--tint);font-family:Newsreader,Georgia,serif;font-size:21px;font-style:italic}blockquote p{margin:0}
-figure{margin:20px 0}
-figure video,figure img{width:100%;height:auto;display:block;background:var(--card);border:1px solid var(--rule)}
-figcaption{font-size:14px;color:var(--muted);margin-top:8px;line-height:1.45}
-figcaption b{color:var(--ink)}
-.callout{background:var(--tint);border:1px solid var(--rule);padding:16px 20px;margin:16px 0}
-.callout.warn{border-left:4px solid var(--bad)}
-ul,ol{padding-left:22px;margin:0 0 14px}li{margin-bottom:7px}
-code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.86em;background:var(--tint);padding:1px 5px;border-radius:3px;overflow-wrap:anywhere}
-a{color:var(--accent)}
-.tag{display:inline-block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border:1px solid var(--rule);border-radius:3px;color:var(--muted);margin-left:6px;vertical-align:middle}
-.tag.done{color:var(--good);border-color:var(--good)}.tag.live{color:var(--accent);border-color:var(--accent)}.tag.next{color:var(--bad);border-color:var(--bad)}
-footer{padding:36px 0 60px;font-size:14px;color:var(--muted)}
-.timeline td:first-child{white-space:nowrap}
-</style></head><body>
-<header class="hero"><div class="wrap">
-<p class="eyebrow">LUCID · feedback-driven domain randomization for humanoid motion tracking · Unitree G1 · SONIC / Isaac Lab · updated 2026-09-06 UTC</p>
-<h1>Can we expand robustness without losing tracking quality?</h1>
-<p class="lede">Hard-push practice improves humanoid survival, but the policy can keep completing a motion while its tracking deteriorates. Our latest experiments test that tradeoff directly. The research now focuses on retaining the starting policy’s quality, measuring uncertainty at the learning frontier, and finding feedback that can guide harder practice reliably.</p>
-<nav class="toc"><a href="#quality-frontier">Latest results</a><a href="#optimizer-history">Running experiment</a><a href="#plan">Research plan</a><a href="#problem">Original problem</a><a href="#findings">Earlier findings</a><a href="#videos">Videos</a><a href="#method">Curriculum</a><a href="#effort-barrier">Effort study</a><a href="#practice-confirmation">Practice confirmation</a><a href="#status">Study ledger</a><a href="#evidence">Evidence</a><a href="paper.html">Historical paper draft →</a></nav>
-</div></header>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LUCID · Recovery-Aware Curricula for Quality-Preserving Humanoid Robustness</title>
+<meta name="description" content="LUCID studies how humanoids can become more robust without losing motion quality. Latest: anchoring retains one motion; a completed longer-motion screen reveals the need for a solved multi-motion origin.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Source+Sans+3:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="recovery.css"><script src="recovery.js" defer></script>
+</head>
+<body>
+<a href="#main" class="skip">Skip to research overview</a>
+<div class="wrap"><header class="top"><a class="brand" href="./" aria-label="LUCID home">LUCID</a><nav aria-label="Primary"><a href="#quality-frontier">Results</a><a href="#motion-screen">Latest experiment</a><a href="#method">Method goal</a><a href="#plan">Roadmap</a><a href="#evidence">Evidence</a></nav></header></div>
+<main id="main">
+<div class="wrap hero">
+<p class="eyebrow">Research in progress · SONIC / Unitree G1 · September 7, 2026 UTC</p>
+<h1>More robust.<br>Still faithful to the motion.</h1>
+<p class="lede"><strong>LUCID: Recovery-Aware Curricula for Quality-Preserving Humanoid Robustness.</strong> We study how a capable motion-tracking policy can learn to withstand harder conditions, recover after a disturbance, and continue the requested task without losing its original quality.</p>
+<blockquote>“Robustness should expand what the robot can execute faithfully—not merely what it can survive.”</blockquote>
+<p class="caption measure">This is the target paper direction. Current evidence supports a bounded retention result and exposes a multi-motion capability gap. Recovery-feedback superiority and real-robot transfer remain research questions.</p>
+<div class="links"><a href="#motion-screen">Read the newest result ↓</a><a href="https://wandb.ai/16726/lucid-sonic/runs/motion-cb05d12074a0278415">Experiment on W&amp;B ↗</a><a href="https://github.com/linjiw/lucid">Research repository ↗</a></div>
+<div class="grid three">
+<div class="card stat"><span class="pill done">Demonstrated in development</span><strong class="big">+4.33%</strong><p>Nominal global error with the selected anchor recipe, versus +76.56% without anchoring. One origin, one motion.</p></div>
+<div class="card stat"><span class="pill done">Newest screen · complete</span><strong class="big">8 / 8 cells</strong><p>Origin and R1 evaluated on four motions. Both score 0% qualified execution on all three longer candidates.</p></div>
+<div class="card stat"><span class="pill open">Next research gate</span><strong class="big">Shared skills</strong><p>Establish a high-quality multi-motion origin before calibrating recovery and testing feedback curricula.</p></div>
+</div>
+</div>
 
 <section id="quality-frontier"><div class="wrap">
-<p class="kicker">Latest research · completed diagnostics + active control</p>
-<h2>Completion alone misses the loss we need to prevent</h2>
-<div class="measure"><p>The three-seed practice confirmation established a useful practice effect: <b>+12.11 ± 3.81 percentage points</b> of held-out Push 3.5× completion (mean ± sample SD). It also exposed increased nominal pose error and energy. Selecting Push over the equal-density placebo gained only <b>+3.08 points</b> on the two confirmation seeds, below the preregistered +5 gate. That result does not authorize a utility selector.</p>
-<p>The follow-up compares a static mixture, a frozen replay schedule, and an adaptive frontier gate. All three retain nearly perfect clean completion, yet all lose substantial global tracking quality relative to the solved origin. A separate diagnostic then holds the initial DR mixture fixed: tracking still deteriorates. <b>Expansion is therefore not necessary for the observed loss.</b> The optimizer-history control below tests one possible contributor.</p></div>
-<div class="grid g3" style="margin:22px 0">
-<div class="stat"><div class="n bad">3 / 3</div><div class="l">frontier pilot arms fail clean pose retention against their common solved origin</div></div>
-<div class="stat"><div class="n bad">+28.2%</div><div class="l">clean global pose error after 2,000 iterations with the initial DR mixture held fixed</div></div>
-<div class="stat"><div class="n">100%</div><div class="l">clean completion at that fixed-mixture endpoint; completion hides the drift</div></div>
-</div>
-<h3>Completed · quality-frontier pilot</h3>
-<p class="measure">One development seed (8600), one motion, 2,000 training iterations per arm, and 512 evaluation aliases per cell. The held-out macro averages quality-qualified success on Push 3.5× and Push 3.5× + Friction 1.5×.</p>
-<div class="tbl"><table>
-<tr><th>Arm</th><th class="num">Clean completion</th><th class="num">Clean qualified</th><th class="num">Clean global MPJPE</th><th class="num">Held-out qualified macro</th></tr>
-<tr><td>Solved origin</td><td class="num">100.00%</td><td class="num">100.00%</td><td class="num">128.57 mm</td><td class="num">not measured</td></tr>
-<tr><td>Static mixture</td><td class="num">99.80%</td><td class="num">98.05%</td><td class="num">357.97 mm</td><td class="num">39.16%</td></tr>
-<tr><td>Frozen replay</td><td class="num">100.00%</td><td class="num">98.44%</td><td class="num">373.92 mm</td><td class="num">37.01%</td></tr>
-<tr><td>Adaptive gate</td><td class="num">100.00%</td><td class="num">99.22%</td><td class="num">324.50 mm</td><td class="num">40.33%</td></tr>
-</table></div>
-<div class="measure"><p>The gate’s descriptive held-out differences are +1.17 points versus static and +3.32 versus replay. Its clean global error is nevertheless <b>152.4% above the origin</b>. Comparing only the trained arms would miss this shared degradation. The origin audit supplements the original endpoint readout; it does not rewrite its primary comparison. The static arm can also sample combinations of marginal extremes absent from replay, so this is not an exact joint-exposure match.</p></div>
-<details><summary>What “qualified” and “retained” mean</summary><div class="callout">
-<p><b>Quality-qualified success</b> requires completion plus episode-mean global MPJPE ≤600 mm and local MPJPE ≤50 mm, measured before the environment step over the first episode. These are loose engineering screens, not hardware safety criteria. <b>Retention</b> separately permits at most a 2-point loss in clean completion and a 10% increase in clean global or local pose error against the reference policy.</p>
-<p>The tables and trajectory use the archived legacy MPJPE aggregation. The geometric diagnostic below uses first-episode masked means; these aggregations are not interchangeable. Clean means no randomized physics (<code>phys_000</code>); push cells retain the other baseline DR channels. Evaluation aliases are not independent motions or training seeds.</p>
-</div></details>
-<h3>Completed · hold the initial DR mixture fixed</h3>
-<p class="measure">This 12-cell diagnostic holds the frontier pilot’s initial cohort distribution fixed for 2,000 iterations. It does not recreate the origin’s original training distribution. Clean global error first exceeds the +10% margin at the <b>observed 500-iteration checkpoint</b>, returns just inside at 1,000, and exceeds it again later. The trajectory is nonmonotone.</p>
-<figure><img src="img/quality_frontier/initial_retention.svg" width="1000" height="390" alt="Clean global pose error at iterations 0, 250, 500, 1000, 1500, and 2000: 128.57, 118.25, 146.72, 141.17, 183.99, and 164.83 millimeters. The retention threshold is 141.43 millimeters.">
-<figcaption><b>Fixed support does not prevent tracking drift.</b> Dashed connectors guide the eye; the intervals between scored checkpoints are unmeasured. Clean completion is 100% at every plotted checkpoint except iteration 250 (511/512). The final held-out qualified macro is 43.65%, a one-seed diagnostic rather than an established improvement over the pilot. <a href="img/quality_frontier/initial_retention.png">Download PNG</a> · <a href="https://github.com/linjiw/lucid/blob/main/lucid-initial-hold-results-2026-09-05.md">Full diagnostic memo</a></figcaption></figure>
-
-<h3 id="optimizer-history">Running · does optimizer history affect retention?</h3>
-<div class="callout"><p><b>Dated snapshot: <time datetime="2026-09-06T03:37:06.284249+00:00">2026-09-06 03:37 UTC</time>.</b> The fresh-optimizer arm is at <b>460 / 2,000 iterations</b>; the restored-history arm is queued. Both origin evaluations are complete. The supervisor reports no warnings. This is a static publication snapshot, not a live feed.</p>
-<p>All 10 smoke-test cells completed. The longer campaign contains 22 cells: two origin evaluations, two 2,000-iteration training arms, and nine checkpoint/endpoint evaluations per arm. The existing supervisor checks status every 60 seconds, stops on failure without automatic retry, and runs analysis after all cells complete.</p></div>
-<div class="measure"><p>The pair starts with identical policy and value weights, learning rate, seed, and fixed DR mixture. Only Adam history is fresh versus restored from the origin checkpoint. All 55 policy tensors and 17 value tensors match exactly before training; 69 optimizer states are restored. The frozen runtime passed <b>1,940 CPU tests</b>.</p>
-<p>The 16-iteration smoke is an integration result, not evidence of benefit: clean global error was <b>124.61 mm fresh versus 140.76 mm restored</b>. Restoration was worse on this short diagnostic. The full comparison remains pending. Historical optimizer names were reconstructed and checked against the pinned parameter order; scheduler and environment state are not restored. This tests optimizer history under a specified continuation contract, not exact historical resumption.</p>
-<p><a href="https://github.com/linjiw/lucid/blob/main/lucid-optimizer-history-control-2026-09-05.md">Optimizer-history design and controls</a> · <a href="https://github.com/linjiw/lucid/blob/main/lucid-continuation-contract-audit-2026-09-05.md">Continuation audit</a></p></div>
-
-<h3>What to add to the feedback signal</h3>
-<div class="grid g2">
-<div class="stat"><p><b>Uncertainty with an explicit unresolved state.</b> At iteration 1,000, the full clean panel is only +9.80% above the origin. Across repeated 256-alias subsets, the 5th–95th percentile range is +6.79% to +13.08%, crossing the 10% retention limit. A small probe should not force a binary expand/hold decision when it cannot resolve the margin.</p><p>These are 1,000 resamples of an existing finite panel, not confidence intervals, new-seed detection rates, or a tested online probing budget. Prospective calibration and measured probe cost come next.</p><a href="https://github.com/linjiw/lucid/blob/main/lucid-probe-budget-findings-2026-09-05.md">Probe-budget analysis</a></div>
-<div class="stat"><p><b>Separate translation, heading, and pose.</b> Existing global and root-relative errors imply a mean pelvis-translation bound of 99.74–156.12 mm at the origin and 288.28–357.49 mm for the gate endpoint. Those intervals force a translation increase of at least 132.16 mm. For the fixed-mixture endpoint, the change interval still crosses zero.</p><p>These are geometric bounds, not confidence intervals or causal attribution to a DR channel. Direct translation, heading, root-relative pose, and recovery-time measurements would make the next feedback diagnosis more specific.</p><a href="https://github.com/linjiw/lucid/blob/main/lucid-root-feedback-findings-2026-09-05.md">Translation-bound analysis</a></div>
-</div>
-<div class="callout warn"><b>Current claim boundary.</b> These follow-ups use one development seed and one motion in simulation. They identify a retention problem and useful measurement requirements; they do not establish adaptive-curriculum superiority, a robot’s physical learning limit, or sim-to-real improvement. The utility estimator and residual allocator remain gated. The proposed uncertainty and component signals are not yet an online controller.</div>
-<p><a href="data/research-progress-2026-09-06.json" download>Download the numerical summaries and source hashes (JSON)</a> · <a href="https://github.com/linjiw/lucid/blob/main/lucid-quality-frontier-pilot-results-2026-09-05.md">Pilot results</a> · <a href="https://github.com/linjiw/lucid/blob/main/lucid-quality-frontier-research-plan-2026-09-05.md">Full research plan</a></p>
+<p class="kicker">01 / Completed retention experiment</p>
+<h2>Preserving the original motion is possible in this setting</h2>
+<div class="measure"><p>Continuing robustness training can preserve completion while changing the motion substantially. We compared three continuation recipes from the same origin. <strong>R1, the reference-policy anchor recipe, is the only arm within the empirical retention budgets at every sampled checkpoint.</strong></p>
+<p>The comparison covers nominal and original-envelope conditions at 250, 500, 1,000, 1,500 and 2,000 iterations. Each global/local error mean must remain within +10% of origin, with completion falling by at most two percentage points. These are frozen development budgets, not physical safety limits or simultaneous confidence guarantees.</p></div>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Retention comparison, scroll horizontally on narrow screens"><table><caption>Final endpoint · one origin and one motion · first-episode mean MPJPE</caption><thead><tr><th scope="col">Policy</th><th scope="col" class="num">Nominal global (mm)</th><th scope="col" class="num">Nominal local (mm)</th><th scope="col" class="num">Global change</th><th scope="col" class="num">Hard qualified</th><th scope="col">Retention</th></tr></thead><tbody><tr><th scope="row">Frozen origin</th><td class="num">127.93</td><td class="num">28.19</td><td class="num">Reference</td><td class="num">42.77%</td><td>Reference</td></tr><tr><th scope="row">R0 · unanchored continuation</th><td class="num">225.87</td><td class="num">30.21</td><td class="num">+76.56%</td><td class="num">49.02%</td><td>Fail</td></tr><tr class="selected"><th scope="row">R1 · reference-policy anchor</th><td class="num">133.47</td><td class="num">27.96</td><td class="num">+4.33%</td><td class="num">47.95%</td><td>Pass · all five</td></tr><tr><th scope="row">R2 · lower fixed learning rate</th><td class="num">163.53</td><td class="num">28.31</td><td class="num">+27.83%</td><td class="num">53.42%</td><td>Fail</td></tr></tbody></table></div>
+<figure class="figure-card"><img src="img/recovery/retention_tradeoff.svg" width="1000" height="460" alt="Nominal global-error increase versus hard-condition tracking-qualified execution: origin 0 percent and 42.77 percent; R1 4.33 and 47.95; R2 27.83 and 53.42; R0 76.56 and 49.02."><figcaption>The horizontal axis measures one retention component. The shaded region is its +10% development budget; the full retention decision also checks local error and completion in two conditions. Hard-condition qualification averages Push 3.5× and Push 3.5× + Friction 1.5× equally. <a href="img/recovery/retention_tradeoff.pdf">Download figure (PDF)</a>.</figcaption></figure>
+<div class="callout"><p><strong>What this establishes:</strong> on the original development motion, R1 gains <strong>5.18 percentage points over the frozen origin</strong> in hard-condition tracking-qualified execution while retaining quality at all five checkpoints.</p><p><strong>What remains open:</strong> whether a feedback curriculum improves on an equally anchored fixed-training baseline. R1 is now that protected baseline; its improvement over origin is not evidence for a curriculum contribution.</p></div>
+<p class="caption">83 completed long-stage cells: three training runs and 80 evaluations, with 512 aliases per evaluation. All arms use 49,152,000 training transitions. R1 additionally uses 10,240,000 anchor sample presentations and 80,000 student forwards; matched transitions do not imply matched total computation. All rows above use first-episode mean errors, not legacy time-weighted metrics. <a href="https://wandb.ai/16726/lucid-sonic/runs/ret-46911b8054776113fe91">Completed campaign ↗</a></p>
 </div></section>
 
-<section id="problem"><div class="wrap">
-<p class="kicker">The problem</p>
-<h2>A curriculum that grades its own exam</h2>
-<div class="measure">
-<p>Domain randomization trains a policy on ranges of mass, friction, center of mass, joint offsets, actuator delay, and pushes, so that the real robot lands inside the training distribution. The width of the ranges is a genuine tension: too wide and learning stalls, too narrow and the policy is brittle. Adaptive curricula resolve it by moving the ranges during training, usually driven by some score measured on the current training batch.</p>
-<p>The catch is that the score is measured on a distribution the curriculum controls. If the score falls and the curriculum is allowed to make training easier, the score recovers with no change to the policy. Repeat, and the training ranges drift away from deployment while every monitor improves. We call the end state <b>training-range collapse</b>.</p>
-<blockquote><p>Return went up in exactly the runs that had stopped training on the physics that mattered.</p></blockquote>
-<p>Our testbed is SONIC whole-body motion tracking on a 29-DoF Unitree G1 in Isaac Lab: 1,024 environments, 8,000 PPO iterations from scratch, one training clip, six randomized channels scaled by one number λ where λ = 1 is the training envelope. Every policy is scored afterwards on a frozen physics ladder (λ from 0 to 2, 512 episodes per cell) that no curriculum ever sees.</p>
-</div></div></section>
-
-<section id="findings"><div class="wrap">
-<p class="kicker">What we found</p>
-<h2>Four measured results, in the order they happened</h2>
-<div class="grid g3" style="margin:18px 0 28px">
-<div class="stat"><div class="n bad">2 of 6</div><div class="l">long adaptive runs collapsed their ranges to λ ≈ 0.06 and 0.01 after reaching the full envelope</div></div>
-<div class="stat"><div class="n bad">−0.73</div><div class="l">Spearman correlation between terminal training return and held-out robustness across twelve scored runs</div></div>
-<div class="stat"><div class="n bad">−14.2 pts</div><div class="l">held-out success AUC lost by one collapsed run against fixed randomization on the same seed</div></div>
-<div class="stat"><div class="n good">0 / 2,033</div><div class="l">requested range reductions applied once the never-shrink rule was in place, three seeds</div></div>
+<section id="motion-screen"><div class="wrap">
+<p class="kicker">02 / Latest experiment · completed September 7 at 01:57 UTC</p>
+<h2>The longer motions expose a capability gap in the origin</h2>
+<div class="measure"><p>The original four-second clip often ends before a recovery window can be observed. We therefore screened longer development motions before collecting recovery labels. The candidates were chosen from metadata and duration before seeing outcomes: curved walking, sideways walking and neutral stooping, plus the original motion as a control.</p></div>
+<div class="grid three">
+<div class="card"><h3>Frozen design</h3><p>4 motions × 2 checkpoints × 128 aliases = <strong>1,024 evaluation episodes</strong>. Nominal conditions; shared evaluation seed 8730; R1 fixed at its preselected 2,000-iteration endpoint.</p></div>
+<div class="card"><h3>Independent questions</h3><p>Can the origin execute this motion faithfully? Does R1 retain its quality? Absolute task qualification and origin-relative retention are both reported.</p></div>
+<div class="card"><h3>Measurement boundary</h3><p>The recorder captures translation, heading and articulation separately. This nominal screen has no disturbance-recovery endpoint. Zero-increment interval events are not pushes.</p></div>
 </div>
-
-<h3>1 · The collapse is real, and the training curve hides it</h3>
-<div class="measure"><p>Six 8,000-iteration runs of a feedback curriculum driven by a learned mismatch signal all applied at least one range reduction. Two ended near λ = 0. Those two had the highest terminal returns of all twelve runs we scored and among the lowest robustness on the frozen ladder.</p></div>
-<div class="tbl"><table><tr><th>Outcome</th><th class="num">Collapsed run A</th><th class="num">Collapsed run B</th><th class="num">Runs that held their ranges</th></tr>
-<tr class="bad"><td>Final range scale λ</td><td class="num">0.062</td><td class="num">0.012</td><td class="num">1.000</td></tr>
-<tr><td>Mean return, last 500 iterations</td><td class="num">15.29</td><td class="num">14.40</td><td class="num">10.98 – 12.28</td></tr>
-<tr><td>Frontier success AUC (points)</td><td class="num">73.99</td><td class="num">69.73</td><td class="num">61.20 – 91.31</td></tr></table></div>
-
-<h3>2 · A one-line rule removes the failure</h3>
-<div class="measure"><p>Keep the same controller, refuse every requested decrease. Across three seeds the rule blocked 453, 951, and 629 reductions and applied none. Under a comparison rule frozen before the data existed, the resulting policies are within margin of fixed domain randomization on all four outcome components and all three seeds. They are not better. Three seeds do not establish equivalence either: the one-sided 95% lower bound on the difference is −3.19 points, outside the 2-point margin. The rule passing is a decision, not a demonstration that the two are equally robust.</p></div>
-<div class="tbl"><table><tr><th>Seed</th><th class="num">Never-shrink AUC</th><th class="num">Fixed DR AUC</th><th class="num">Difference</th></tr>
-<tr><td>8600</td><td class="num">90.30</td><td class="num">90.46</td><td class="num">−0.16</td></tr>
-<tr><td>8601</td><td class="num">91.31</td><td class="num">88.18</td><td class="num">+3.13</td></tr>
-<tr><td>8602</td><td class="num">82.03</td><td class="num">83.20</td><td class="num">−1.17</td></tr>
-<tr><td><b>Mean</b></td><td class="num"></td><td class="num"></td><td class="num"><b>+0.60</b> (SD 2.25)</td></tr></table></div>
-
-<h3>3 · The signal was the culprit, not the gain</h3>
-<div class="measure"><p>At fixed difficulty, a usable readiness signal must move with competence. Time-out survival does (rank correlation +0.99 with training progress). The learned mismatch signal that drove the collapsing curriculum does not (−0.04, nineteen direction reversals), and its direction was set by the arm rather than the policy. No tuning of the controller could have saved it. Survival is usable, but only if measured on the <i>proposed harder</i> conditions rather than the current ones, and only if a failed test can hold but never shrink the ranges.</p></div>
-
-<h3>4 · Robustness is per-parameter, and combinations bite</h3>
-<div class="measure"><p>Widening one channel at a time on frozen policies (512 episodes per cell) shows that pushes are the binding channel for every randomized policy, while mass, center of mass, and joint offsets can be tripled at under 1.4 points of cost. The unrandomized policy fails first under center-of-mass shift instead. Widening everything together costs about six points more than the sum of the parts. Both facts argue for expanding channels separately and testing corners.</p></div>
-<div class="tbl"><table><tr><th>Policy</th><th class="num">All 2×</th><th class="num">Mass 3×</th><th class="num">CoM 3×</th><th class="num">Joint 3×</th><th class="num">Push 2× / 3×</th><th>First to fail</th></tr>
-<tr><td>Fixed DR</td><td class="num">0.820</td><td class="num">0.949</td><td class="num">0.988</td><td class="num">0.990</td><td class="num">0.912 / 0.746</td><td>push</td></tr>
-<tr class="ours"><td>Never-shrink</td><td class="num">0.842</td><td class="num">0.938</td><td class="num">0.982</td><td class="num">0.986</td><td class="num">0.928 / 0.770</td><td>push</td></tr>
-<tr class="bad"><td>Adaptive, collapsed</td><td class="num">0.518</td><td class="num">0.682</td><td class="num">0.818</td><td class="num">0.955</td><td class="num">0.811 / 0.570</td><td>push</td></tr>
-<tr><td>No randomization</td><td class="num">0.334</td><td class="num">0.643</td><td class="num">0.393</td><td class="num">0.891</td><td class="num">0.736 / 0.443</td><td>center of mass</td></tr></table></div>
-</div></section>
-
-<section id="videos"><div class="wrap">
-<p class="kicker">Watch it happen</p>
-<h2>The same policies, replayed in MuJoCo</h2>
-<div class="measure"><p>We exported the final Isaac Lab policies to ONNX and replayed them in MuJoCo with an independent implementation of the six randomized channels, scaled by the same λ. Every grid below shows <b>all eight physics draws</b> for a policy; a tile is marked green <b>PASS</b> if the robot tracks the clip to the end, or red <b>FELL at t s</b> the moment the pelvis leaves 0.5 m of the reference, and then freezes on the fall so it stays on screen. Headers carry the MuJoCo pass rate over those eight draws and the Isaac Lab 512-episode score for the same checkpoint. The two simulators randomize differently and are never pooled.</p></div>
-
-<figure><video controls preload="metadata" poster="img/explainer_story.jpg" src="videos/explainer_story.mp4"></video>
-<figcaption><b>Why randomization matters.</b> No randomization, fixed DR, and the never-shrink curriculum side by side at nominal physics, the training envelope, heavy, and extreme randomization. Without randomization the policy tracks nominal physics perfectly and falls as soon as physics moves.</figcaption></figure>
-
-<figure><video controls preload="metadata" poster="img/ladder_story.jpg" src="videos/ladder_story.mp4"></video>
-<figcaption><b>The full ladder, all channels including pushes, every draw marked.</b> Nominal physics (λ 0), the training envelope (λ 1), heavy randomization (λ 1.5). At λ 1: no randomization 2/8, collapsed curriculum 4/8, fixed DR 6/8, never-shrink 4/8. Pushes dominate this ladder and, as the 32-seed table shows, the never-shrink policy and fixed DR on the same seed are indistinguishable.</figcaption></figure>
-
-<figure><video controls preload="metadata" poster="img/frontier_lam2.jpg" src="videos/frontier_story.mp4"></video>
-<figcaption><b>Beyond the training envelope, physics only.</b> Friction, mass, center of mass, joint offset, and delay widened to 1.5× and 2× with no pushes, so the physics channels are visible on their own. At λ 2: no randomization 0/8, collapsed curriculum 1/8, fixed DR on the paired seed 2/8, never-shrink 4/8. On 32 draws the never-shrink and paired fixed policies tie at 38%; the ordering against the collapsed run (16%) and no randomization (3%) is the result.</figcaption></figure>
-
-<div class="tbl"><table><tr><th>Policy</th><th class="num">All channels · λ 1 / 1.5 / 2</th><th class="num">Physics only · λ 1 / 1.5 / 2</th></tr>
-<tr><td>No randomization</td><td class="num">31 / 12 / 0 %</td><td class="num">59 / 16 / 3 %</td></tr>
-<tr class="bad"><td>Adaptive, collapsed (seed 8601)</td><td class="num">56 / 19 / 9 %</td><td class="num">84 / 31 / 16 %</td></tr>
-<tr class="ours"><td>Never-shrink (seed 8601)</td><td class="num">47 / 22 / 16 %</td><td class="num">66 / 50 / 38 %</td></tr>
-<tr><td>Fixed DR (seed 8601, paired)</td><td class="num">47 / 25 / 12 %</td><td class="num">75 / 47 / 38 %</td></tr>
-<tr><td>Fixed DR (seed 8600)</td><td class="num">78 / 34 / 16 %</td><td class="num">94 / 56 / 31 %</td></tr></table></div>
-<p style="font-size:14px;color:var(--muted)">MuJoCo survival over 32 shared physics draws per cell. Per-difficulty cuts: <a href="videos/ladder_lam0.mp4">λ 0</a> · <a href="videos/ladder_lam1.mp4">λ 1</a> · <a href="videos/ladder_lam1.5.mp4">λ 1.5</a> · physics-only <a href="videos/frontier_lam1.5.mp4">λ 1.5</a> · <a href="videos/frontier_lam2.mp4">λ 2</a> · <a href="videos/explainer_grid.mp4">3 × 4 explainer grid</a>.</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Longer motion results, scroll horizontally on narrow screens"><table><caption>Each pair is origin / R1. Completed nominal screen, not a recovery test.</caption><thead><tr><th scope="col">Motion</th><th scope="col" class="num">Completion</th><th scope="col" class="num">Qualified</th><th scope="col" class="num">Global MPJPE (mm)</th><th scope="col" class="num">Local MPJPE (mm)</th></tr></thead><tbody><tr><th scope="row">Original control · 4.00 s</th><td class="num">100.00% / 100.00%</td><td class="num">100% / 100%</td><td class="num">117.64 / 127.98</td><td class="num">28.06 / 27.79</td></tr><tr><th scope="row">Curved walking · 10.63 s</th><td class="num">99.22% / 98.44%</td><td class="num">0% / 0%</td><td class="num">793.02 / 1185.15</td><td class="num">115.47 / 118.45</td></tr><tr><th scope="row">Sideways walking · 11.23 s</th><td class="num">97.66% / 96.88%</td><td class="num">0% / 0%</td><td class="num">1673.02 / 1233.59</td><td class="num">95.49 / 97.95</td></tr><tr><th scope="row">Neutral stooping · 8.17 s</th><td class="num">0.00% / 0.00%</td><td class="num">0% / 0%</td><td class="num">478.89 / 459.66</td><td class="num">97.06 / 101.06</td></tr></tbody></table></div>
+<p class="caption">Each cell reports 128 aliases. Qualification requires completion plus episode-mean global MPJPE ≤600 mm and local MPJPE ≤50 mm. These broad development limits still reject every longer-motion rollout. Aliases are evaluation replicates, not independent training seeds. The three new clips belong to the development split; base-model pretraining exposure is unknown.</p>
+<div id="motion-explorer" hidden>
+<h3>Inspect each motion</h3><div class="motion-buttons" role="group" aria-label="Choose a motion for detailed results">
+<button type="button" data-motion="control" aria-pressed="true">Original control</button><button type="button" data-motion="arc" aria-pressed="false">Curved walking</button><button type="button" data-motion="sideways" aria-pressed="false">Sideways walking</button><button type="button" data-motion="stoop" aria-pressed="false">Neutral stooping</button>
+</div><div id="motion-detail" class="motion-detail" aria-live="polite" aria-atomic="true"></div>
+</div>
+<div class="callout warn"><p><strong>Decision: establish the shared multi-motion origin first.</strong> Curved and sideways walking often survive but fail tracking qualification; stooping never completes. Relative retention can pass even when both policies fail the task. These candidates cannot yet support a claim that LUCID preserves a set of previously solved motions.</p><p>R1 also increases curved-walking global error by 49.45%, failing that motion’s relative retention budget. All eight outcomes remain reported. We will not turn a favorable relative change on an unsolved motion into a capability-preservation claim.</p></div>
+<p class="caption">The original control retains quality in this new seed: +8.79% global error, −0.97% local error, and 100% completion for both policies. Its +8.79% differs from the earlier +4.33% because the evaluation seed and panel size differ. It does not replace the earlier frozen endpoint.</p>
+<details><summary>What the recorder checks established</summary><p>A separate eight-cell recorder experiment passed all four revised execution/retention parity comparisons and captured 380 aligned nonzero velocity-increment events. The first, stricter all-metric comparison failed because contact telemetry differed. Off/off repeats also showed contact-input differences; the underlying simulator cause is unresolved.</p><p>The revised protocol was frozen before new runs. It requires exact native execution audits and non-contact metrics while retaining five excluded contact-derived diagnostics in the report. The original gate remains failed. This validates execution measurement under that protocol; it does not validate physical safety, recovery thresholds or feedback efficacy.</p><p><a href="https://wandb.ai/16726/lucid-sonic/runs/rec-f60769da7efb7f7431e1">Recorder campaign ↗</a> · <a href="https://wandb.ai/16726/lucid-sonic/runs/contact-4ea486de9cb8a553">Contact repeatability diagnostic ↗</a></p></details>
 </div></section>
 
 <section id="method"><div class="wrap">
-<p class="kicker">How the curriculum works</p>
-<h2>Expand on evidence, never shrink</h2>
-<div class="grid g2">
-<div class="measure">
-<h3 style="margin-top:0">What the collapsing version did</h3>
-<p>A PI controller read a learned mismatch statistic on the current training batch and moved the single scale λ up or down toward a set point. When learning stalled, lowering λ restored the statistic faster than learning could, so the controller lowered it, and lowered it again.</p>
-<h3>What the never-shrink version does</h3>
-<p>Same controller, same signal, one projection: a requested decrease is refused and logged. The range may expand or hold. Across three seeds this alone recovered the robustness of fixed randomization.</p>
+<p class="kicker">03 / Target method · hypotheses to test</p>
+<h2>Understand recovery. Protect quality. Allocate practice.</h2>
+<p class="measure">Temporary deviation may be a useful recovery step. Persistent displacement, heading error or motion deformation is a failure to return to the task. LUCID’s proposed loop must distinguish those cases and use the distinction to improve training decisions.</p>
+<div class="grid three flow">
+<article class="card"><span class="stepnum">01 → Observe recovery</span><h3>Reference, command, execution</h3><p>Combine motion intent and phase with strictly causal command and observation histories to estimate future recovery and persistent-mismatch risk.</p><p class="caption">Must outperform current errors, derivatives, simple history statistics and a strong predictor with the same history inputs.</p></article>
+<article class="card"><span class="stepnum">02 → Preserve capability</span><h3>Anchor what already works</h3><p>Maintain retained-condition practice and reference behavior on states the origin handles well. Allow new recovery behavior where the origin cannot succeed.</p><p class="caption">The strongest fixed DR and curriculum baselines receive the same preservation mechanism.</p></article>
+<article class="card"><span class="stepnum">03 → Allocate practice</span><h3>Expand, hold, or gather evidence</h3><p>Accept harder conditions only when observed capability and retained quality pass conservative checks. Give candidates a bounded practice budget before admission.</p><p class="caption">Unresolved decisions trigger bounded additional probes with prespecified sequential error control.</p></article>
 </div>
-<div class="measure">
-<h3 style="margin-top:0">What the range-expansion curriculum adds</h3>
-<ul>
-<li><b>Test proposed conditions before expanding.</b> A probe set of 128 environments trains one step beyond the active range; the range steps up only when probe survival clears a threshold over a window.</li>
-<li><b>Let each physical parameter expand on its own clock.</b> Pushes may stall at 1× while mass and center of mass go to 3×.</li>
-<li><b>Check combined changes.</b> A periodic probe at the corner of all proposed ranges can hold an expansion that passes channel by channel but fails together.</li>
-<li><b>Keep practicing earlier conditions.</b> A quarter of environments rehearse earlier ranges; admitted ranges never shrink.</li>
-</ul>
-<p>A scalar version of the probe gate, trained from scratch, expanded λ from 1.0 to 1.5 in four evidence-triggered steps at iterations 3,362, 4,103, 4,790, and 5,891 with no decrease. It also exposed a defect: a stale global return guard froze expansion 914 times after the ceiling. The final design uses probe-relative evidence.</p>
-</div></div>
-</div></section>
-
-<section id="effort-barrier"><div class="wrap">
-<p class="kicker">Latest experiment · 2026-09-04 <span class="tag done">training + frozen benchmark published</span></p>
-<h2>What would count as an RL curriculum barrier?</h2>
-<div class="measure">
-<p>The actuator study asks a narrower question than the broad domain-randomization work above. We multiply all 29 joint effort limits by one common scale <i>s</i>, leaving every other event and actuator randomization channel at nominal and latency at zero. A low <i>s</i> removes the near-nominal samples that make ordinary fixed randomization an implicit curriculum. The scientific question is not merely whether a nominal policy fails there; it is whether a policy trained from scratch at that exact plant also fails while a policy staged into the same endpoint succeeds.</p>
-<blockquote><p>Frozen-policy failure locates a stress point. Only matched direct failure plus staged success can identify a curriculum barrier.</p></blockquote>
+<p class="equation">Retained skills + current frontier + limited candidate practice → updated policy → measured recovery and retention → next practice allocation</p>
+<div class="grid two" style="margin-top:28px">
+<div><h3>The objective</h3><p>Increase tracking-and-recovery-qualified execution on a predeclared evaluation distribution, subject to per-motion quality and completion constraints. A larger randomization range or better survival alone is insufficient.</p></div>
+<div><h3>The decisive comparison</h3><p>At a common total resource budget, compare full feedback with strong fixed allocation and a development-frozen schedule. Count probes, anchor collection and updates, observer training, and simulator transitions.</p></div>
 </div>
-
-<div class="grid g3" style="margin:18px 0 28px">
-<div class="stat"><div class="n">0.30</div><div class="l">directly learned from scratch: C1 rejected at 1,500; no recovery curriculum was eligible to run</div></div>
-<div class="stat"><div class="n good">512 / 512</div><div class="l">point-0.30 h6000 policy completion when frozen and evaluated at its training plant</div></div>
-<div class="stat"><div class="n good">508 / 512</div><div class="l">the same frozen policy at point 0.25; the torque channel remains dynamically feasible below training</div></div>
-</div>
-
-<h3>What we vary—and what each comparison can tell us</h3>
-<div class="tbl"><table>
-<tr><th>Parameter or arm</th><th>Values</th><th>Held fixed</th><th>Question isolated</th></tr>
-<tr><td>Frozen common-point ladder</td><td><i>s</i> = 1.00, 0.75, 0.50, 0.40, 0.35, 0.30, 0.25</td><td>Checkpoint, motion, evaluation seed; all other DR nominal</td><td>Where torque capacity becomes consequential for an already-trained policy</td></tr>
-<tr><td>Arm A · direct point</td><td>One <i>s</i> for every joint throughout training</td><td>From-scratch initialization, seed, 1,024 environments, PPO budget, reward, motion</td><td>Whether random exploration can learn directly at the endpoint</td></tr>
-<tr><td>Arm C · open-loop ramp</td><td><i>s</i>: 1.00 → target, then held at target</td><td>Same endpoint and training contract as Arm A</td><td>Whether staged access to the endpoint crosses a barrier that direct training cannot</td></tr>
-<tr><td>Arm B · mean-matched range</td><td>At target 0.30: independent per-joint draws from U[0.25, 0.35]</td><td>Mean effort scale 0.30 and the same training budget</td><td>Whether distribution shape and jointwise compensation—not curriculum—change learnability</td></tr>
-</table></div>
-
-<h3>The complete frozen h6000 benchmark</h3>
-<div class="measure"><p>At equal horizon 6,000 and seed 8600, we froze the nominal-trained, point-0.40-trained, and point-0.30-trained checkpoints. Each cell below contains 512 fresh physics/noise replicates of the same hands-on-back walking clip. The checkpoint, motion panel, evaluation seed, and every non-effort DR channel are matched; only the shared all-joint effort scale changes. The 512 replicates tighten each checkpoint estimate—they are not independent motions or training seeds.</p>
-<p><a href="https://wandb.ai/16726/lucid-campaign/reports/LUCID-Effort-Barrier-%E2%80%94-Frozen-h6000-Benchmark--VmlldzoxNzg3MjAxNQ=="><b>Open the W&amp;B frozen-policy benchmark: all 64 outcome and quality curves →</b></a><br><span style="font-size:14px;color:var(--muted)">Runs: <a href="https://wandb.ai/16726/lucid-campaign/runs/effort-eval-nominal-s8600-h6000-20260904">nominal-trained</a> · <a href="https://wandb.ai/16726/lucid-campaign/runs/effort-eval-p040-s8600-h6000-20260904">point-0.40-trained</a> · <a href="https://wandb.ai/16726/lucid-campaign/runs/effort-eval-p030-s8600-h6000-20260904">point-0.30-trained</a>. Every run has seven rows and uses effort scale as its W&amp;B step axis.</span></p></div>
-<div class="tbl"><table>
-<tr><th>Effort scale <i>s</i></th><th class="num">Nominal-trained</th><th class="num">0.40-trained</th><th class="num">0.30-trained</th></tr>
-<tr><td>1.00</td><td class="num">512/512</td><td class="num">512/512</td><td class="num">512/512</td></tr>
-<tr><td>0.75</td><td class="num">511/512</td><td class="num">512/512</td><td class="num">512/512</td></tr>
-<tr><td>0.50</td><td class="num">506/512</td><td class="num">512/512</td><td class="num">512/512</td></tr>
-<tr><td>0.40</td><td class="num">379/512</td><td class="num">512/512</td><td class="num">512/512</td></tr>
-<tr><td>0.35</td><td class="num">187/512</td><td class="num">512/512</td><td class="num">512/512</td></tr>
-<tr><td>0.30</td><td class="num">27/512</td><td class="num">511/512</td><td class="num">512/512</td></tr>
-<tr><td>0.25</td><td class="num">0/512</td><td class="num">192/512</td><td class="num">508/512</td></tr>
-</table></div>
-<figure><a href="img/effort_barrier/frozen_completion.webp"><img loading="lazy" src="img/effort_barrier/frozen_completion.webp" alt="Frozen h6000 completion and progress curves for nominal, point 0.40, and point 0.30 training across seven effort scales"></a>
-<figcaption><b>Completion is plant-specific.</b> Direct point training moves the robustness knee left. The 0.30 policy is perfect through its training point and loses four of 512 episodes at 0.25; that is evidence of successful direct adaptation, not curriculum recovery.</figcaption></figure>
-
-<h3>At the common point-0.30 plant: outcomes and behavior</h3>
-<div class="tbl"><table>
-<tr><th>All-episode metric at <i>s</i> = 0.30</th><th class="num">Nominal-trained</th><th class="num">0.40-trained</th><th class="num">0.30-trained</th></tr>
-<tr><td>Completion</td><td class="num">27/512</td><td class="num">511/512</td><td class="num">512/512</td></tr>
-<tr><td>Mean progress</td><td class="num">51.20%</td><td class="num">99.996%</td><td class="num">100.00%</td></tr>
-<tr><td>Global / local MPJPE</td><td class="num">233.9 / 65.2 mm</td><td class="num">182.9 / 33.4 mm</td><td class="num">132.1 / 28.8 mm</td></tr>
-<tr><td>Velocity / acceleration distance</td><td class="num">13.19 / 9.03</td><td class="num">5.54 / 1.45</td><td class="num">5.21 / 1.51</td></tr>
-<tr><td>Foot slip per step</td><td class="num">5.61 mm</td><td class="num">1.59 mm</td><td class="num">2.05 mm</td></tr>
-<tr><td>Torque-saturation fraction</td><td class="num">11.75%</td><td class="num">23.25%</td><td class="num">16.47%</td></tr>
-<tr><td>Energy proxy</td><td class="num">338.6</td><td class="num">154.1</td><td class="num">155.7</td></tr>
-</table></div>
-<div class="measure">
-<p>The point-0.30 policy improves all-episode global MPJPE at every tested effort point relative to point-0.40 training and improves local MPJPE through <i>s</i> = 0.50; its local error is slightly worse at 0.75 and 1.00. Both point-trained policies dramatically suppress the nominal policy's low-effort velocity and acceleration blow-up. But specialization has a cost: at nominal torque the point-0.30 policy's global MPJPE is 239.1 mm versus 91.4 mm for nominal training, local MPJPE is 37.2 versus 22.7 mm, and energy is 242.1 versus 107.9. Completion therefore cannot stand in for imitation quality.</p>
-<p>The contact-quality signals are shown but remain diagnostic: the current evaluator aggregates contact activity over all steps rather than episode-masking it, and the high absolute undesired-contact rates for the point policies need a dedicated contact audit. Success-conditioned curves are also selection-biased where the nominal policy rarely completes. The all-episode pose, dynamics, and completion panels carry the primary comparison.</p>
-<p style="font-size:14px">Full frozen panels: <a href="img/effort_barrier/frozen_all_episode_pose.webp">15 all-episode pose curves</a> · <a href="img/effort_barrier/frozen_all_episode_dynamics.webp">10 all-episode dynamics curves</a> · <a href="img/effort_barrier/frozen_quality.webp">12 quality curves</a> · <a href="img/effort_barrier/frozen_success_conditioned.webp">25 success-conditioned curves</a>.</p>
-</div>
-<figure><a href="img/effort_barrier/frozen_quality.webp"><img loading="lazy" src="img/effort_barrier/frozen_quality.webp" alt="Frozen h6000 action, contact, torque saturation, energy, slip, and joint-limit quality curves for three training conditions"></a>
-<figcaption><b>Quality curves prevent a survival-only conclusion.</b> Low-effort training is robust at low torque but changes action, contact, saturation, and energy profiles. Absolute contact rates are retained for transparency and flagged for metric-specific validation.</figcaption></figure>
-
-<h3>How lowering the training plant from 0.40 to 0.30 changed learning</h3>
-<div class="measure">
-<p>This is the clean learning-curve comparison: both point arms start from scratch at seed 8600 with 1,024 environments, the same clip, PPO configuration, rewards, termination rules, zero latency, and every non-target DR channel at nominal. The learning parameter changes from the common all-joint effort point <code>[0.40, 0.40]</code> to <code>[0.30, 0.30]</code>. Timestamped paths and checkpoint-save bookkeeping differ but do not change the optimizer or environment. The nominal-effort curve reports the same contract and h6000 horizon, but comes from the earlier 2026-08-29 code snapshot; it is a scale benchmark, not the claim-bearing randomized third arm.</p>
-<p><a href="https://wandb.ai/16726/lucid-campaign/reports/LUCID-Effort-Barrier-%E2%80%94-Point-0.30-vs-0.40--VmlldzoxNzg3MTQ2NA=="><b>Open the W&amp;B comparison report: all 55 logged scalars, 59 panels →</b></a><br><span style="font-size:14px;color:var(--muted)">Individual provenance: <a href="https://wandb.ai/16726/lucid-campaign/runs/effort-nominal-s8600-h6000-historical-20260829">Nominal historical benchmark</a> · <a href="https://wandb.ai/16726/lucid-campaign/runs/effort-p040-s8600-h6000-20260904">Point 0.40</a> · <a href="https://wandb.ai/16726/lucid-campaign/runs/effort-p030-s8600-h6000-20260904">Point 0.30</a>. All W&amp;B traces are lossless normalized replays of durable SONIC scalar logs and stop at h6000.</span></p>
-</div>
-<figure><a href="img/effort_barrier/training_overview.webp"><img loading="lazy" src="img/effort_barrier/training_overview.webp" alt="Historical nominal, point 0.30, and point 0.40 training curves through iteration 6000: completion, reward, episode length, body position error, joint position error, and body angular velocity error"></a>
-<figcaption><b>Matched training curves.</b> Faint lines are raw per-iteration values; solid lines are causal trailing-50 means. The harder 0.30 plant takes off later but never enters the preregistered signal-dead barrier state.</figcaption></figure>
-<div class="tbl"><table>
-<tr><th>Training readout</th><th class="num">Nominal historical</th><th class="num">Point 0.40</th><th class="num">Point 0.30</th><th class="num">0.30 − 0.40</th></tr>
-<tr><td><code>time_out</code> at iteration 1,500</td><td class="num">0.7738</td><td class="num">0.5997</td><td class="num">0.5235</td><td class="num">−7.62 pts</td></tr>
-<tr><td>First single iteration with <code>time_out ≥ 0.70</code></td><td class="num">1,306</td><td class="num">1,766</td><td class="num">1,991</td><td class="num">+225 iter</td></tr>
-<tr><td>First trailing-50 mean with <code>time_out ≥ 0.70</code></td><td class="num">1,373</td><td class="num">1,837</td><td class="num">2,221</td><td class="num">+384 iter</td></tr>
-<tr><td><code>time_out</code>, trailing 50 at h6000</td><td class="num">0.983008</td><td class="num">0.952524</td><td class="num">0.930768</td><td class="num">−2.18 pts</td></tr>
-<tr><td>Mean reward, trailing 50 at h6000</td><td class="num">16.3419</td><td class="num">12.8946</td><td class="num">12.5074</td><td class="num">−0.3873</td></tr>
-<tr><td>Mean episode length, trailing 50 at h6000</td><td class="num">185.5242</td><td class="num">181.4704</td><td class="num">179.1866</td><td class="num">−2.2838</td></tr>
-</table></div>
-<div class="measure">
-<p>For this seed and clip in closed-loop simulation, the 0.30 change is measurably harder, not qualitatively unlearnable. Its mean completion over iterations 1–6,000 is 0.6441 versus 0.6903 at point 0.40, and reaching a sustained 0.90 takes 1,101 additional iterations (4,574 versus 3,473). At h6000 its completion gap has narrowed to 2.18 points. Its trailing-50 joint-position error is actually lower by 0.0187, while body position, anchor pose/velocity, and body angular-velocity errors are worse; no single training aggregate supports “same tracking quality.” The extra termination mass is concentrated in foot-position failures (+1.40 points) and anchor-orientation failures (+0.79 points).</p>
-<p style="font-size:14px">Full local panels: <a href="img/effort_barrier/training_rewards.webp">12 reward terms</a> · <a href="img/effort_barrier/training_tracking.webp">10 tracking errors</a> · <a href="img/effort_barrier/training_terminations.webp">5 termination causes</a> · <a href="img/effort_barrier/training_sampler.webp">16 sampler diagnostics</a> · <a href="img/effort_barrier/training_optimization.webp">10 optimization and throughput metrics</a>.</p>
-</div>
-
-<h3>The decision protocol</h3>
-<div class="tbl"><table>
-<tr><th>Stage</th><th>Predeclared observation</th><th>Decision</th></tr>
-<tr><td>1 · Feasibility screen</td><td>An adapted frozen policy succeeds at the target while the nominal policy largely fails</td><td>The point is severe and has an empirical solution; it is eligible for a training-barrier test</td></tr>
-<tr><td>2 · Direct-learning tripwire</td><td>At iteration 1,500, Arm A has <code>time_out &lt; 0.30</code>, <code>0.30–0.70</code>, or <code>≥ 0.70</code></td><td>Candidate C1; gray zone continues unchanged to iteration 2,000; or direct takeoff</td></tr>
-<tr><td>3 · Matched endpoint contrast</td><td>If C1 fires at the tripwire, launch the open-loop ramp to the identical target and hold it there; keep Arm A running</td><td>Compare Arm A and Arm C at equal seed, compute, motion, endpoint, and frozen evaluation cells</td></tr>
-<tr><td>4 · Confirmation</td><td>Repeat the surviving contrast on seeds 8600, 8601, and 8602; report spread at the checkpoint-seed level</td><td>Separate a repeatable curriculum effect from seed variance</td></tr>
-</table></div>
-
-<div class="tbl"><table>
-<tr><th>Direct Arm A</th><th>Ramp Arm C</th><th>What we may conclude</th></tr>
-<tr><td>Succeeds</td><td>Either outcome</td><td><b>Directly learnable.</b> No curriculum barrier at the tested budget.</td></tr>
-<tr><td>Fails</td><td>Succeeds</td><td><b>Barrier candidate at one seed.</b> The curriculum claim waits for paired multi-seed confirmation.</td></tr>
-<tr><td>Fails</td><td>Fails</td><td><b>Unresolved.</b> The tested curriculum did not cross the condition; this does not by itself prove physical infeasibility.</td></tr>
-<tr><td>Fails</td><td>Mean-matched Arm B succeeds</td><td><b>Sampling-shape effect.</b> Jointwise variation enables compensation, but it is not evidence for a staged curriculum.</td></tr>
-</table></div>
-
-<div class="callout"><b>Effort-barrier direction closed for this seed and clip.</b> The point-0.30 arm rejected C1 at iteration 1,500 (<code>time_out = 0.5235</code> versus the barrier threshold below 0.30), first crossed 0.70 at iteration 1,991, and reached a sustained trailing-50 crossing at 2,221. Training then completed cleanly through iteration 8,000; the matched h6000 checkpoint used above was never modified by evaluation. Its 512/512 result at 0.30 and 508/512 at 0.25 leave no evidence-bounded reason to spend GPU time on an effort recovery ramp. The next claim-bearing work returns to the measured, practice-responsive push frontier.</div>
-
-<div class="callout warn"><b>Scope.</b> This is closed-loop simulation on one motion clip and currently one checkpoint seed. PhysX max-force readback matches the requested effort limits exactly, but no result here establishes hardware transfer, unseen-motion generalization, physical infeasibility, or a specific stepping strategy.</div>
-</div></section>
-
-<section id="practice-confirmation"><div class="wrap">
-<p class="kicker">Practice-allocation confirmation · 2026-09-05</p>
-<h2>Push can be practised—but targeting it has not earned an adaptive selector</h2>
-<div class="measure"><p>We reallocated 25% of the same 1,024 environments for 1,500 continuation iterations: either ordinary λ=1 training, Push alone at 3×, or a difficulty-matched placebo on Mass + CoM + joint offset at 3×. Seed 8600 discovered the effect; two independently trained solved origins, seeds 8601 and 8602, graded the frozen confirmation. Every arm then faced the same 13 cells and 512 matched replicates per cell.</p>
-<p><b>The practice-deficit gate passed.</b> Push 3× practice improved Push 3× success by +3.91 and +6.64 points on the untouched confirmation seeds, giving a +5.27-point mean against the frozen +5 rule. The gain transferred above the practised dose: +12.11 ± 3.81 points at Push 3.5× and +10.16 ± 3.53 at Push 3.5× + Friction 1.5× across all three seeds.</p></div>
-<div class="tbl"><table>
-<tr><th>Frozen decision</th><th class="num">Seed 8600</th><th class="num">Seed 8601</th><th class="num">Seed 8602</th><th>Reading</th></tr>
-<tr class="ours"><td>Push 3× · Push minus Null</td><td class="num">+9.18</td><td class="num">+3.91</td><td class="num">+6.64</td><td>D1 confirmed; new-seed mean +5.27</td></tr>
-<tr><td>13-cell macro · Push minus Placebo</td><td class="num">−0.08</td><td class="num">+1.70</td><td class="num">+4.46</td><td>D2 did not clear +5; no selector claim</td></tr>
-<tr><td>Nominal success · Push minus Null</td><td class="num">0.00</td><td class="num">−0.39</td><td class="num">0.00</td><td>No &gt;2-point completion loss</td></tr>
-</table></div>
-<figure><a href="img/practice_confirmation/training_overview.webp"><img loading="lazy" src="img/practice_confirmation/training_overview.webp" alt="Three-seed continuation-training curves for null allocation, Push 3x practice, and manageable-channel placebo: time-out, reward, length, and three tracking errors"></a>
-<figcaption><b>Training diagnostics, not the exam.</b> The Push arm stays lower on training completion and reward because one quarter of its batch is deliberately harder. Faint curves are individual seeds; solid curves are three-seed trailing-50 means. Frozen evaluation below grades the claim.</figcaption></figure>
-<figure><a href="img/practice_confirmation/frozen_summary.webp"><img loading="lazy" src="img/practice_confirmation/frozen_summary.webp" alt="Three-seed frozen 13-cell success, progress, MPJPE, foot slip, contact proxy, torque saturation, and energy curves"></a>
-<figcaption><b>Frozen outcome and quality summary.</b> Cell order is nominal/no-DR, λ1, λ1.5, λ2, Push2, Push3, Mass3, CoM3, Joint3, Friction1.5, Push3+Friction1.5, Push3.5, Push3.5+Friction1.5. Push practice lifts the hard Push tail, but its success-conditioned nominal local MPJPE is +4.05 ± 0.98 mm and its power proxy +10.76 ± 1.73 versus Null. This is survival with a measurable pose/energy cost, not a free robustness gain.</figcaption></figure>
-<div class="callout"><b>All curves are public.</b> The <a href="https://wandb.ai/16726/lucid-campaign/reports/LUCID-Practice-Allocation-%E2%80%94-Three-Seed-Push-Confirmation--VmlldzoxNzg3NDM0Mw==">W&amp;B report</a> contains all 55 logged training scalars for nine runs and all 79 frozen evaluation scalars for nine runs, split into all-episode, success-conditioned, quality, delay, and protocol panels. The matching <a href="https://github.com/linjiw/lucid/blob/main/receipts/analysis/lucid_practice_allocation_wandb_20260905.json">publication receipt</a> hashes every source log and figure.</div>
-<div class="callout warn"><b>Metric caveat.</b> The non-allowed-contact series is published for completeness but does not grade a decision. Its net-contact source has not yet been validated as ground-only for this hands-on-back clip. Scope remains one motion, one simulator, three solved origins; n=3 supports a bounded replication claim, not population significance.</div>
-</div></section>
-
-<section id="status"><div class="wrap">
-<p class="kicker">Where we are</p>
-<h2>Current standing of every track</h2>
-<div class="tbl"><table>
-<tr><th>Track</th><th>State</th><th>What it established</th></tr>
-<tr><td>Collapse and return inversion <span class="tag done">measured</span></td><td>12 arm–seed pairs scored on the frozen ladder</td><td>Two collapses; Spearman −0.73; cost 14.2 / 17.3 points on the same seed</td></tr>
-<tr><td>Never-shrink rule, three seeds <span class="tag done">measured</span></td><td>Preregistered noninferiority passed</td><td>0 of 2,033 reductions applied; +0.60 ± 2.25 points vs fixed DR; superiority not claimed</td></tr>
-<tr><td>Readiness-signal audit <span class="tag done">measured</span></td><td>Five pinned-difficulty runs, two collapses</td><td>Survival anchored (+0.99); learned mismatch not (−0.04); foot slip the only body signal with a consistent difficulty response</td></tr>
-<tr><td>Per-channel attribution <span class="tag done">measured</span></td><td>55 cells, one seed</td><td>Push binds; mass / CoM / joint free to 3×; joint corner costs 6 points beyond the marginals</td></tr>
-<tr><td>From-scratch probe gate <span class="tag done">measured</span></td><td>One seed, 8,000 iterations</td><td>Four expansions to 1.5, zero decreases; return-guard defect found</td></tr>
-<tr><td>Warm-start expansion screen <span class="tag done">measured</span></td><td>13 arms from a solved λ 1 policy, 2,000 iterations, one seed</td><td>The asymmetric feedback box and its matched open-loop ramp differed by −0.39 points on the primary aggregate. A scalar gate beat blind width by 9.38 points at the unsafe wide corner, supporting frontier protection but not adaptive-training superiority</td></tr>
-<tr><td>MuJoCo sim-to-sim replay <span class="tag done">measured</span></td><td>5 policies × 6 λ × 32 draws, two channel sets</td><td>Ordering transfers; push binds in both simulators; ratchet ≡ paired fixed</td></tr>
-<tr><td>Held-out motion <span class="tag live">1 of 3 clips</span></td><td>Nearby untrained clip, 128 episodes per cell</td><td>Ordering preserved (Spearman 0.8, 1.0); collapsed run 0.40 vs fixed 0.80 at λ 1.5</td></tr>
-<tr><td>Can a curriculum read learning progress? <span class="tag done">measured</span></td><td>Per-condition survival from the windows where the range never moved, against a time-shuffled null</td><td>From scratch the signal is clear. On a competent policy it sits at 0.01 to 0.08 of its own noise floor and no cohort meets the reliability criterion at any affordable window, so an online progress-driven allocator cannot be built on episode-end survival at this budget</td></tr>
-<tr><td>Is a finer signal available? <span class="tag done">measured</span></td><td>Per-step foot slip against success, five policies, sixteen cells</td><td>Slip has the resolution where success saturates but ranks the three healthy policies backwards in all four tests. Low slip is a conservative gait, not a robust one. Demoted</td></tr>
-<tr><td>Effort point 0.40 <span class="tag done">measured</span></td><td>From-scratch seed 8600; equal-step frozen ladder, 512 replicates per cell</td><td>Directly learnable, not a barrier. At point 0.40 the trained policy completes 512/512 versus 379/512 for nominal training; the adaptation effect is real but plant-specific</td></tr>
-<tr><td>Effort point 0.30 <span class="tag done">closed</span></td><td>Direct from scratch through h8000, seed 8600, 1,024 environments; matched h6000 learning and seven-point frozen curves published</td><td>C1 rejected. At h6000 the trailing-50 training completion is 0.930768; frozen completion is 512/512 at point 0.30 and 508/512 at point 0.25. Directly learnable; no recovery ramp and no further effort-channel GPU allocation</td></tr>
-<tr><td>Practice-allocation confirmation <span class="tag done">3 seeds</span></td><td>9 matched branches, 3 solved origins, 1,500 iterations; 25% of 1,024 environments reallocated, not added; 117 frozen arm–seed–cell evaluations</td><td>D1 confirmed: new-seed Push 3× gain +5.27 points and all-seed held-out Push 3.5× gain +12.11 ± 3.81. D2 did not pass: selecting Push beat the equal-density placebo by +3.08 points on the two confirmation seeds, below the +5 gate. Nominal completion was retained, but pose error and energy rose</td></tr>
-<tr><td>Matched preset schedule vs adaptive gate <span class="tag done">screened</span></td><td>One development seed</td><td>No asymmetric feedback advantage at 2,000 iterations. Any follow-up must add confirmation seeds, longer frontier exposure, or a stricter exposure-matched comparator rather than repeat the same controller</td></tr>
-<tr><td>Quality-frontier pilot <span class="tag done">complete</span></td><td>Three 2,000-iteration arms, one development seed; origin audit</td><td>Gate held-out qualified macro 40.33%, static 39.16%, replay 37.01%; all arms fail clean pose retention against the origin</td></tr>
-<tr><td>Fixed initial-mixture diagnostic <span class="tag done">complete</span></td><td>12 cells including the checkpoint trajectory</td><td>100% clean endpoint completion with +28.2% global pose error; first observed +10% breach at iteration 500</td></tr>
-<tr><td>Optimizer-history control <span class="tag live">running at snapshot</span></td><td>10 smoke cells complete; 22-cell long comparison under supervision</td><td>Exact initial policy/value parity verified. Short smoke favors fresh history on clean pose error; long endpoint conclusions pending</td></tr>
-<tr><td>Probe uncertainty and translation <span class="tag done">offline analysis</span></td><td>Finite-panel subsampling and geometric bounds from archived episodes</td><td>Near-margin decisions remain unresolved with small probes; translation must increase in the replay and gate endpoints. Direct component telemetry is planned</td></tr>
-<tr><td>Hardware <span class="tag next">not run</span></td><td>—</td><td>Nothing has run on the robot</td></tr>
-</table></div>
-<div class="callout warn"><b>One structural challenge for a curriculum.</b> Fixed DR already supplies a range of difficulties: its distribution includes near-nominal draws as well as harder cases. Staging therefore changes exposure rather than simply supplying otherwise absent easy cases. This motivates matched allocation and schedule controls. It does not prove that a curriculum can help only when easy cases are absent; the latest experiments additionally expose continuation and tracking-retention problems.</div>
-<div class="callout warn"><b>What we do not claim.</b> Targeted Push practice improves frozen Push survival under this bounded contract; no result yet shows that an adaptive curriculum or online channel selector makes the policy better than a matched fixed allocation or frozen preset. No feedback method has beaten fixed randomization on our evidence. The never-shrink rule is essentially the boundary rule of Automatic Domain Randomization, and a published multi-dimensional curriculum already combines several randomization parameters, learning history, progress-driven allocation and expansion-only support, so we claim none of those; our contribution is the measurement of what goes wrong without the rule, the audit of which signals can drive it, and the per-channel structure of humanoid robustness. All capability results come from one training clip. Between-seed offsets reach 7.8 points, so single-seed screens rank designs and do not decide.</div>
+<p class="caption">This is the proposed training-side framework. A learned recovery observer and a demonstrated closed-loop curriculum contribution are not completed results. The SONIC actor/critic interface remains the common controller foundation. The utility estimator and residual allocator remain gated.</p>
 </div></section>
 
 <section id="plan"><div class="wrap">
-<p class="kicker">Research plan</p>
-<h2>Retain quality, then test whether feedback earns its cost</h2>
-<div class="measure"><p>The working hypothesis is that a useful curriculum expands a <b>quality-constrained capability frontier</b>: conditions the policy can track and recover from, with an explicit uncertainty estimate and a record of whether practice actually improves them. A frontier is specific to the policy, motion, training budget, and measurement contract. Failure under one budget does not identify a physical limit of the robot.</p>
-<p>The completed pilot and fixed-mixture diagnostic make continuation quality the first question. The current optimizer control runs before another adaptive allocator. The full <a href="https://github.com/linjiw/lucid/blob/main/lucid-feedback-frontier-research-2026-09-05.md">research programme</a> and <a href="https://github.com/linjiw/lucid/blob/main/lucid-quality-frontier-design-2026-09-05.md">design contract</a> retain the hypotheses, comparators, and decision gates.</p></div>
-<div class="tbl"><table class="timeline">
-<tr><th>Stage</th><th>Experiment or implementation</th><th>Decision</th></tr>
-<tr><td>Completed · practice confirmation</td><td>Three origins; matched Null, Push, and equal-density placebo branches</td><td>Push practice helps survival. Choosing Push does not clear the +5-point utility gate; quality must be a separate endpoint</td></tr>
-<tr><td>Completed · quality-frontier pilot</td><td>Static mixture, frozen replay, and adaptive gate; one development seed</td><td>All three lose clean pose quality against the solved origin. The trained-arm comparison alone cannot establish retention</td></tr>
-<tr><td>Completed · initial-mixture hold</td><td>2,000 iterations at fixed initial DR support; clean checkpoint trajectory and frozen endpoint ladder</td><td>Expansion is not necessary for the observed drift. Holding support alone is insufficient</td></tr>
-<tr><td>Running · optimizer history</td><td>Fresh versus restored Adam history, identical initial weights and DR mixture; 2,000 iterations each</td><td>Whether continuation state contributes to retention loss. Report both favorable and unfavorable results before choosing a repair</td></tr>
-<tr><td>Next · calibrated quality feedback</td><td>Measure translation, heading, root-relative pose, and disturbance recovery; calibrate staged probes prospectively with expand / hold / unresolved outcomes</td><td>Whether each measurement adds reliable predictive information at an affordable probe cost. Offline subset variation is not sufficient validation</td></tr>
-<tr><td>Conditional · curriculum comparison</td><td>Retained origin anchors, hard-condition practice, and bounded exploration; compare against fixed allocation and a frozen schedule, accounting for realized exposure and all probe costs</td><td>Better held-out qualified tracking or lower total cost while retaining nominal quality. Hold uncertain or unproductive channels; test interactions explicitly</td></tr>
-<tr><td>Later · generalization and deployment</td><td>Confirmation seeds, distinct held-out motions, unseen DR combinations and temporal disturbances; deployment-path and MuJoCo checks before a robot protocol</td><td>Whether gains transfer beyond the development panel and simulator. Hardware performance has not been measured</td></tr>
-</table></div>
-<div class="measure"><p>A candidate history or latent signal should summarize observable tracking and recovery over time, with episode boundaries and the current DR version preserved. It must predict held-out outcomes beyond simple pose and completion baselines before influencing sampling. Simulator-only parameter labels can support training and analysis; a deployment-facing signal must be computable from the robot’s available observations.</p>
-<p>Measured wall time for the completed fixed-mixture diagnostic was about 2 hours 49 minutes, including evaluation. Shared-machine load varies, so this is not a dedicated GPU-cost estimate or an ETA for the active pair. The comparison will account for training, probe episodes, evaluation, and total elapsed time. Neither a utility estimator nor a residual allocator is implemented without its documented gate.</p></div>
+<p class="kicker">04 / Evidence-led roadmap</p>
+<h2>What must be true before the full paper claim is warranted?</h2>
+<ol class="roadmap">
+<li><div><h3>Establish a solved shared multi-motion origin <span class="pill open">Next</span></h3><p>Audit an appropriate origin on intact motion-source splits and train or adapt a shared policy where necessary. Freeze an explicit per-motion capability contract before robustness continuation. The latest screen makes this a prerequisite, not an assumed property.</p></div></li>
+<li><div><h3>Protect the retained motion set <span class="pill open">Pending</span></h3><p>Collect origin behavior across that solved set and test a shared multi-motion preservation recipe. Replicate learning seeds, then independently trained origins; distinguish those two kinds of replication.</p></div></li>
+<li><div><h3>Calibrate recovery with observable windows <span class="pill open">Pending</span></h3><p>Use separate origin calibration and validation episodes. Freeze translation, heading and articulation bands, phase handling, dwell and recovery horizon. Isolated event timing must leave enough uninterrupted observation; reset and reference-resampling frames cannot manufacture recovery.</p></div></li>
+<li><div><h3>Test whether history adds useful information <span class="pill open">Pending</span></h3><p>Split full episodes, motions and origins before forming windows. Match instantaneous error and phase across different recovery outcomes. Measure held-out discrimination, calibration and lead time; then test whether the signal improves decisions.</p></div></li>
+<li><div><h3>Compare the complete training loop <span class="pill open">Pending</span></h3><p>Use common preservation, controller and resource contracts. Include fixed practice, a frozen schedule, quality-aware and history-based curricula, and LUCID. The fixed/feedback × unanchored/anchored comparison separates preservation from scheduling.</p></div></li>
+<li><div><h3>Verify recovery beyond the training scripts <span class="pill open">Pending</span></h3><p>Test unseen event phases, directions, repeated disturbances, correlated delays and combinations; then update independent-simulator comparisons. Hardware trials must measure nominal retention and actual return to task across short motions and long sequences.</p></div></li>
+</ol>
+<details><summary>Ideal-paper verification matrix — proposed scale, not completed evidence</summary>
+<div class="table-wrap"><table><thead><tr><th>Evidence track</th><th>Target design</th><th>Current status</th></tr></thead><tbody>
+<tr><td>Shared multi-motion policies</td><td>Suggested 24 training / 8 development / 16 final test motions, split by complete source</td><td>Not established; current origin fails the three longer development candidates</td></tr>
+<tr><td>Independent origins</td><td>5 origins branching into 6 matched methods: 30 continuation runs</td><td>Proposed; latest retention result uses one origin</td></tr>
+<tr><td>Observer mechanism</td><td>Direct features, matched history predictor, causal information ablations and downstream decisions</td><td>Recovery measurement calibration remains open</td></tr>
+<tr><td>Probe uncertainty and cost</td><td>Small fixed, large fixed and staged probes with prespecified sequential control</td><td>Budget diagnostics motivate it; final loop untested</td></tr>
+<tr><td>Independent simulator</td><td>Origin / protected fixed / final LUCID on common perturbation draws</td><td>Historical MuJoCo setup exists; final policies not verified</td></tr>
+<tr><td>Real Unitree G1</td><td>4 short motions, 2 long sequences; measured impulses and external pose; 3 checkpoints per method</td><td>Planned; no final-policy hardware result</td></tr>
+</tbody></table></div>
+<p>The ideal hardware design totals 960 formal episodes including a key feedback ablation. This is a proposed study scale, not an ICRA requirement or a guarantee of statistical power. Final tolerances, safety procedures and sample size must be fixed before confirmation.</p>
+</details>
+<div class="callout"><p><strong>The paper succeeds only if the evidence connects the loop:</strong> the feedback distinguishes recovery, the preservation mechanism retains solved skills, and the resulting practice decisions add value beyond equally protected fixed training. If all benefits come from anchoring, we will attribute them to anchoring.</p></div>
 </div></section>
 
-<section id="evidence"><div class="wrap">
-<p class="kicker">Evidence</p>
-<h2>Results, contracts, and reproducibility records</h2>
-<p class="measure">For the latest studies: <a href="data/research-progress-2026-09-06.json">public numerical summaries with source hashes</a>, <a href="https://github.com/linjiw/lucid/blob/main/lucid-quality-frontier-status-2026-09-05.md">dated experiment log</a>, and the study-specific memos linked above. The W&amp;B report below covers the earlier practice confirmation; the newer diagnostics are published here and in their research memos.</p>
-<div class="grid g2">
-<div class="measure"><ul>
-<li><a href="https://github.com/linjiw/lucid/blob/main/receipts/analysis/lucid_return_inversion_20260901.json">Return–robustness inversion</a>, twelve arm–seed pairs</li>
-<li><a href="https://github.com/linjiw/lucid/blob/main/receipts/analysis/lucid_p3_readout.json">Predeclared collapse readout</a>, 0.7399 against frozen bands</li>
-<li><a href="https://github.com/linjiw/lucid/blob/main/receipts/analysis/lucid_phase0_analysis_20260901.json">Three-seed never-shrink decision</a></li>
-<li><a href="https://github.com/linjiw/lucid/blob/main/receipts/analysis/lucid_signal_audit_20260901.json">Readiness-signal audit</a> and <a href="https://github.com/linjiw/lucid/blob/main/receipts/analysis/lucid_physical_signal_audit_20260902.json">physical-signal audit</a></li>
-<li><a href="https://github.com/linjiw/lucid/blob/main/receipts/analysis/lucid_channel_attribution_20260902.json">Per-channel attribution sweep</a></li>
-<li><a href="https://github.com/linjiw/lucid/blob/main/lucid-effort-point-status-2026-09-04.md">Effort-point study: corrected 0.40 result, isolated ladder, mechanism bounds, and point-0.30 preregistration</a></li>
-<li><a href="https://github.com/linjiw/lucid/blob/main/lucid-next-stage-decision-2026-09-04.md">Next-stage decision memo: corrected claims, completed practice gate, and serial decision tree</a></li>
-<li><a href="https://github.com/linjiw/lucid/blob/main/receipts/manifests/effort_point030_iter1500_milestone_20260904.json">Point-0.30 iteration-1,500 milestone</a>: exact gray-zone metrics and capsule hash</li>
-<li><a href="https://github.com/linjiw/lucid/blob/main/receipts/manifests/effort_point030_iter2000_milestone_20260904.json">Point-0.30 iteration-2,000 milestone</a>: direct-learning trajectory, trailing-window metrics, and capsule hash</li>
-<li><a href="https://github.com/linjiw/lucid/blob/main/receipts/manifests/effort_point030_direct_takeoff_20260904.json">Point-0.30 direct-takeoff receipt</a>: first strict and sustained threshold crossings</li>
-<li><a href="https://github.com/linjiw/lucid/blob/main/receipts/analysis/effort_barrier_learning_curves_20260904.json">Point-0.30 versus point-0.40 learning-curve audit</a>: matched contract, all 55 scalar keys, hashes, milestone and trailing-window readouts</li>
-<li><a href="https://github.com/linjiw/lucid/blob/main/receipts/analysis/effort_barrier_frozen_ladder_curves_20260904.json">Complete h6000 frozen effort ladder</a>: three policies × seven points, 512 replicates per cell, all 64 outcome and quality metrics, source-manifest hashes, and bounded interpretation</li>
+<section id="evidence"><div class="wrap evidence">
+<p class="kicker">05 / Evidence, lineage and earlier work</p>
+<h2>A current account with a traceable history</h2>
+<p class="measure">This page is a dated, verified snapshot—not a live training dashboard. The latest motion campaign completed at 01:57 UTC on September 7. No new continuation run is claimed here. W&amp;B holds the experiment records; the public JSON below contains compact summaries and source, checkpoint and metric hashes.</p>
+<div class="grid two">
+<div class="card"><h3>Current evidence</h3><ul>
+<li><a href="https://wandb.ai/16726/lucid-sonic/runs/ret-46911b8054776113fe91">83-cell retention campaign</a></li>
+<li><a href="https://wandb.ai/16726/lucid-sonic/runs/ret-decision-20260907-a">R1 recipe decision and analysis</a></li>
+<li><a href="https://wandb.ai/16726/lucid-sonic/runs/motion-cb05d12074a0278415">Completed eight-cell longer-motion screen</a></li>
+<li><a href="https://wandb.ai/16726/lucid-sonic/runs/rec-execution-analysis-20260907-a">Recorder execution analysis</a></li>
+<li><a href="data/recovery-progress-2026-09-07.json">Verified public data snapshot (JSON)</a></li>
 </ul></div>
-<div class="measure"><ul>
-<li><a href="https://github.com/linjiw/lucid/blob/main/receipts/analysis/lucid_gate_feasibility_20260901.json">From-scratch probe gate</a> and <a href="https://github.com/linjiw/lucid/blob/main/receipts/analysis/lucid_expansion_prototype_batch1_20260902.json">warm-start screen, batch 1</a></li>
-<li><a href="https://github.com/linjiw/lucid/blob/main/receipts/analysis/lucid_practice_allocation_readout.json">Practice-allocation readout</a>: productive push practice, broad targeting tie, and interaction test</li>
-<li><a href="https://github.com/linjiw/lucid/blob/main/lucid-practice-allocation-confirmation-2026-09-05.md">Three-seed practice-allocation confirmation</a>: bounded conclusion, quality tradeoff, and next-stage decision</li>
-<li><a href="https://github.com/linjiw/lucid/blob/main/receipts/manifests/lucid_practice_allocation_confirmation_preregistration_20260904.json">Frozen confirmation preregistration</a> and <a href="https://github.com/linjiw/lucid/blob/main/receipts/analysis/lucid_practice_allocation_confirmation_20260905.json">117-cell seed-aware readout</a></li>
-<li><a href="https://github.com/linjiw/lucid/blob/main/receipts/analysis/lucid_practice_allocation_wandb_20260905.json">W&amp;B publication receipt</a>: source hashes, 55 training metrics, and 79 evaluation metrics; <a href="https://wandb.ai/16726/lucid-campaign/reports/LUCID-Practice-Allocation-%E2%80%94-Three-Seed-Push-Confirmation--VmlldzoxNzg3NDM0Mw==">open the interactive report</a></li>
-<li><a href="https://github.com/linjiw/lucid/blob/main/receipts/analysis/lucid_expansion_prototype_20260902.json">Completed expansion prototype</a>: preset, scalar gate, and asymmetric box comparisons</li>
-<li><a href="https://github.com/linjiw/lucid/tree/main/receipts/analysis/mujoco_sim2sim_20260902">MuJoCo sim-to-sim sweeps and video manifests</a></li>
-<li><a href="https://github.com/linjiw/lucid/blob/main/receipts/analysis/lucid_heldout_motion_20260901.json">Held-out motion readout</a></li>
-<li><a href="https://github.com/linjiw/lucid/tree/main/receipts/manifests">Every training and evaluation manifest</a> (git SHA, seeds, checkpoint hashes, verified / not-verified split)</li>
-<li>Tools: <a href="https://github.com/linjiw/lucid/blob/main/tools/mujoco_player.py">MuJoCo player</a>, <a href="https://github.com/linjiw/lucid/blob/main/tools/mujoco_sweep.py">sweep</a>, <a href="https://github.com/linjiw/lucid/blob/main/tools/mujoco_story.py">story builder</a>; curriculum code in the <code>GR00T-WholeBodyControl</code> submodule under <code>gear_sonic/research/practice_utility/</code></li>
-</ul></div></div>
-<p style="margin-top:10px"><a href="paper.html"><b>Read the paper draft →</b></a> &nbsp;·&nbsp; <a href="lucid-paper.html">earlier draft (difficulty-evacuation framing)</a> &nbsp;·&nbsp; <a href="https://github.com/linjiw/lucid">repository</a></p>
+<div class="card"><h3>Historical studies</h3><p>Curriculum collapse, return inversion, optimizer controls and channel diagnostics explain how the research reached this question. Their results remain available with their original scope.</p><ul>
+<li><a href="research-archive.html">Earlier research ledger and tables</a></li>
+<li><a href="research-archive.html#videos">Historical MuJoCo videos and 32-draw comparisons</a></li>
+<li><a href="paper.html">Historical manuscript draft</a></li>
+</ul><p class="caption">Those videos predate the current R1 and recovery-aware framework. They are not demonstrations of the proposed final method.</p></div>
+</div>
+<details><summary>Scope and reproducibility notes</summary><ul>
+<li>SONIC / Isaac Lab carries the research claims. BeyondMimic is a separate sandbox; its outcomes are not pooled into these results.</li>
+<li>Global translation, heading, root-relative pose and heading-aligned articulation are measured separately. Scalar MPJPE components do not add to global MPJPE.</li>
+<li>Tracking-qualified execution uses broad development limits. Recovery-qualified execution still requires calibrated event outcomes; physical safety is not certified.</li>
+<li>Training origin and motion are statistical grouping factors. Hundreds of evaluation aliases do not become hundreds of independent trained-policy samples.</li>
+<li>Shared-GPU wall times do not establish an efficiency ranking. Extra preservation, measurement and feedback computation must be counted.</li>
+<li>The new motion screen uses source commit <code>a1b8816</code> and plan SHA-256 <code>cb05d12074a0278415c156bfc04bcec435ce938791939cf922c1599e04847368</code>. Full hashes appear in the public snapshot.</li>
+</ul></details>
 </div></section>
-
-<footer><div class="wrap">LUCID research workspace. SONIC and Isaac Lab are used as the testbed; the SONIC fork keeps upstream files untouched with all research code under a separate package. MuJoCo survival and Isaac Lab ledger scores are shown side by side and never pooled. Videos and numbers on this page are generated by the tools in the repository from the receipts linked above.</div></footer>
+</main>
+<footer><div class="wrap"><strong>LUCID · Research in progress.</strong> Target: recovery-aware curricula for quality-preserving humanoid robustness.<br>Updated September 7, 2026 UTC · <a href="https://github.com/linjiw/lucid">Repository</a> · <a href="#main">Back to top ↑</a></div></footer>
 </body></html>
