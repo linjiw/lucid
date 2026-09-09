@@ -543,10 +543,11 @@ class Player:
             return True
         return False
 
-    def run(self, max_time: float | None = None) -> dict:
+    def run(self, max_time: float | None = None, full_clip: bool = False) -> dict:
         max_time = self.clip.duration if max_time is None else min(max_time, self.clip.duration)
         self.reset()
         fell = False
+        t_drift: float | None = None
         n_ctrl = 0
         while self.t < max_time:
             target = self.step_policy()
@@ -568,8 +569,32 @@ class Player:
             self.log.append({"t": round(self.t, 3), "k": self.k, "pelvis_z": round(pelvis_z, 3), "anchor_err": round(err, 3)})
             if err > 0.5:  # anchor_pos termination threshold used in every scored cell
                 fell = True
-                break
+                if t_drift is None:
+                    t_drift = self.t
+                # Breaking here is right for SCORING: it is the same event the
+                # Isaac anchor_pos termination fires on. It is wrong for
+                # LOOKING -- a policy that drifts at 1.3 s yields a 1.3 s video
+                # in which nothing can be seen. full_clip keeps stepping so the
+                # whole motion is on screen with the drift moment recorded.
+                # `fell` is set either way, so the scored number is identical.
+                if not full_clip:
+                    break
+        # `fell` is a TRACKING criterion -- pelvis-to-reference distance past
+        # 0.5 m -- and not a fall. A policy that walks steadily but drifts off
+        # the reference path trips it while fully upright, which is exactly what
+        # a policy trained under heavy push randomization does. Record the
+        # pelvis height against the reference's own height at the same frame so
+        # a reader (and any caption) can tell the two events apart instead of
+        # calling every termination a fall.
+        pelvis_z = float(self.data.xpos[self.pelvis][2])
+        ref_z = float(self.clip.root_pos50[self.clip.frame(self.k)][2])
+        upright = pelvis_z > 0.6 * ref_z
         return {"fell": fell, "t_end": round(self.t, 3), "duration": round(max_time, 3),
+                "pelvis_z_end": round(pelvis_z, 3), "ref_z_end": round(ref_z, 3),
+                "upright_at_end": bool(upright),
+                "outcome": ("completed" if not fell else ("drifted" if upright else "fell")),
+                "t_drift": (round(t_drift, 3) if t_drift is not None else None),
+                "full_clip": bool(full_clip),
                 "dr": self.dr_sample, "lam": self.dr.lam}
 
     def save_video(self, out: Path, fps: float = 1 / (SIM_DT * DECIMATION)):
@@ -584,6 +609,9 @@ class Player:
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--onnx", type=Path, required=True)
+    p.add_argument("--full-clip", action="store_true",
+                   help="keep stepping past the 0.5 m drift threshold so the whole motion is "
+                        "rendered; the scored 'fell' flag and t_drift are unchanged")
     p.add_argument("--clip", type=Path, required=True)
     p.add_argument("--out", type=Path, required=True)
     p.add_argument("--lam", type=float, default=0.0)
@@ -601,7 +629,7 @@ def main(argv: list[str] | None = None) -> int:
     channels = tuple(c.strip() for c in a.channels.split(',')) if a.channels else None
     player = Player(a.onnx, clip, DRConfig(lam=a.lam, seed=a.seed, channels=channels), width=a.width, height=a.height,
                     video=not a.no_video)
-    result = player.run(a.max_time)
+    result = player.run(a.max_time, full_clip=a.full_clip)
     if not a.no_video:
         player.save_video(a.out)
         result["video"] = str(a.out)

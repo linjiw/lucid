@@ -25,7 +25,7 @@ import subprocess
 import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from mujoco_sweep import ARMS, CLIP, LABEL, PLAYER, PY  # noqa: E402
+from mujoco_sweep import ARMS, CLIP, LABEL, PLAYER, PY, resolve_arms  # noqa: E402
 
 FONT = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
 TILE_W, TILE_H = 480, 270
@@ -50,14 +50,18 @@ def ff(cmd: list[str]) -> None:
         raise RuntimeError("ffmpeg: " + (bad[0] if bad else p.stderr[-400:]) + "\n  cmd: " + " ".join(cmd[:8]))
 
 
-def render(arm: str, lam: str, seed: int, out: Path, channels: str | None = None) -> dict:
+def render(arm: str, lam: str, seed: int, out: Path, channels: str | None = None,
+           onnx: Path | None = None, clip: str = CLIP, full_clip: bool = False) -> dict:
     d = out / "tiles" / arm / f"lam{lam}"
     d.mkdir(parents=True, exist_ok=True)
     mp4, js = d / f"seed{seed}.mp4", d / f"seed{seed}.json"
+    if onnx is None:
+        onnx = ARMS[arm]
     if not (mp4.is_file() and js.is_file()):
         env = dict(os.environ, MUJOCO_GL="egl", PYOPENGL_PLATFORM="egl")
-        subprocess.run([PY, str(PLAYER), "--onnx", str(ARMS[arm]), "--clip", CLIP, "--out", str(mp4), "--lam", lam,
+        subprocess.run([PY, str(PLAYER), "--onnx", str(onnx), "--clip", clip, "--out", str(mp4), "--lam", lam,
                         "--seed", str(seed), "--width", str(TILE_W), "--height", str(TILE_H)]
+                       + (["--full-clip"] if full_clip else [])
                        + (["--channels", channels] if channels else []),
                        env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
     return json.loads(js.read_text())["result"]
@@ -68,8 +72,19 @@ def tile(arm: str, lam: str, seed: int, res: dict, out: Path, total: float) -> P
     dst = out / "tiles" / arm / f"lam{lam}" / f"seed{seed}_marked.mp4"
     dst.unlink(missing_ok=True)
     fell = bool(res["fell"])
-    text = f"seed {seed}  ·  FELL at {res['t_end']:.1f} s" if fell else f"seed {seed}  ·  PASS"
-    color = "0xE0483A" if fell else "0x3FB950"
+    # "fell" is pelvis-to-reference distance past 0.5 m, which a policy trips
+    # while walking perfectly well if it has drifted off the reference path.
+    # Caption the event that actually happened; older receipts without the
+    # field fall back to the original wording.
+    outcome = res.get("outcome", "fell" if fell else "completed")
+    if outcome == "completed":
+        text = f"seed {seed}  ·  TRACKED to end"
+    elif outcome == "drifted":
+        when = res.get("t_drift") or res["t_end"]
+        text = f"seed {seed}  ·  left path >0.5 m at {when:.1f} s  ·  upright"
+    else:
+        text = f"seed {seed}  ·  FELL at {res['t_end']:.1f} s"
+    color = {"completed": "0x3FB950", "drifted": "0xE3A008"}.get(outcome, "0xE0483A")
     # A failed run stops at its fall and HOLDS that frame for the rest of the
     # grid (tpad clones the last frame to the common length), so an early fall
     # stays on screen with its label instead of going black. Passing runs end
@@ -90,6 +105,8 @@ def grid(arm: str, lam: str, tiles: list[Path], results: list[dict], out: Path, 
     n = len(tiles)
     rows = (n + cols - 1) // cols
     passed = sum(1 for r in results if not r["fell"])
+    drifted = sum(1 for r in results if r.get("outcome") == "drifted")
+    toppled = sum(1 for r in results if r.get("outcome") == "fell")
     dst = out / "grids" / f"{arm}_lam{lam}.mp4"
     dst.parent.mkdir(parents=True, exist_ok=True)
     inputs = []
@@ -99,9 +116,10 @@ def grid(arm: str, lam: str, tiles: list[Path], results: list[dict], out: Path, 
         c, r = i % cols, i // cols
         layout.append(f"{'+'.join(['w0'] * c) or '0'}_{'+'.join(['h0'] * r) or '0'}")
     header = 74
-    hdr1 = LABEL[arm]
+    hdr1 = LABEL.get(arm, arm)
     chan = "" if not channels else f"  [{channels.replace(',', ' + ')} only, no pushes]"
-    hdr2 = f"{LAM_LABEL.get(lam, 'λ ' + lam)}{chan}   ·   MuJoCo pass rate {passed}/{n}"
+    hdr2 = (f"{LAM_LABEL.get(lam, 'λ ' + lam)}{chan}   ·   tracked to end {passed}/{n}"
+            f"   ·   drifted {drifted}   ·   fell {toppled}")
     if isaac is not None:
         hdr2 += f"   ·   Isaac 512-episode score {100 * isaac:.1f}%"
     fc = f"{''.join(f'[{i}:v]' for i in range(n))}xstack=inputs={n}:layout={'|'.join(layout)}:fill=black[g];" \
@@ -121,13 +139,35 @@ def main(argv=None) -> int:
     ap.add_argument("--arms", nargs="+", default=["off_s8600", "lucid_collapsed_s8601", "fixed_s8600", "ratchet_s8601"])
     ap.add_argument("--jobs", type=int, default=4)
     ap.add_argument("--channels", type=str, default=None, help="comma list of enabled DR channels; shown in headers")
+    ap.add_argument("--arms-json", type=str, default=None,
+                    help='JSON file mapping {"arm name": "/abs/path/..._g1.onnx"}')
+    ap.add_argument("--arm", action="append", default=None, metavar="NAME=PATH",
+                    help="repeatable; overrides/extends --arms-json")
+    ap.add_argument("--clip", type=str, default=CLIP, help="reference clip .pkl to track")
+    ap.add_argument("--full-clip", action="store_true",
+                    help="render the whole motion instead of stopping at the 0.5 m drift "
+                         "threshold; the scored verdict and the drift time are unchanged")
+    ap.add_argument("--labels-json", type=str, default=None,
+                    help='JSON file mapping {"arm name": "caption"} for the grid header')
     a = ap.parse_args(argv)
     a.out.mkdir(parents=True, exist_ok=True)
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     from stitch_dr_explainer import ledger_success  # noqa: E402
 
     seeds = list(range(1, a.seeds + 1))
-    total = 4.0
+    # Resolve arms the same way mujoco_sweep does; --arms still selects from the
+    # historical table when no new arms are given.
+    resolved = resolve_arms(a)
+    if a.labels_json:
+        LABEL.update(json.loads(Path(a.labels_json).read_text()))
+    a.arms = list(resolved)
+    # The clip length sets the common tile duration; a 4 s default is only right
+    # for the original hob002 testbed.
+    import joblib as _joblib
+
+    _c = _joblib.load(a.clip)
+    _inner = _c[next(iter(_c))]
+    total = len(_inner["dof"]) / float(_inner["fps"])
     story_inputs = []
     manifest: dict = {}
     for lam in a.lams:
@@ -135,12 +175,22 @@ def main(argv=None) -> int:
         per_arm = []
         for arm in a.arms:
             with ThreadPoolExecutor(max_workers=a.jobs) as ex:
-                results = list(ex.map(lambda s: render(arm, lam, s, a.out, a.channels), seeds))
+                results = list(ex.map(
+                    lambda s: render(arm, lam, s, a.out, a.channels, resolved[arm], a.clip,
+                                     a.full_clip), seeds))
             tiles = [tile(arm, lam, s, r, a.out, total) for s, r in zip(seeds, results)]
-            arm_seed, mode = {"off_s8600": (8600, "off"), "fixed_s8600": (8600, "fixed"),
-                              "ratchet_s8601": (8601, "lucid_ratchet_rg"), "fixed_s8601": (8601, "fixed"),
-                              "lucid_collapsed_s8601": (8601, "lucid_rg")}[arm]
-            isaac = ledger_success(arm_seed, mode, ISAAC_PRESET.get(lam, ""))
+            # An arm outside the historical five has no entry in the Isaac ledger,
+            # so it gets no cross-reference overlay rather than a bare KeyError.
+            # Skipping the overlay is the honest outcome: inventing a ledger row
+            # for a new arm would caption it with another policy's Isaac number.
+            arm_ledger = {"off_s8600": (8600, "off"), "fixed_s8600": (8600, "fixed"),
+                          "ratchet_s8601": (8601, "lucid_ratchet_rg"), "fixed_s8601": (8601, "fixed"),
+                          "lucid_collapsed_s8601": (8601, "lucid_rg")}.get(arm)
+            isaac = (
+                ledger_success(arm_ledger[0], arm_ledger[1], ISAAC_PRESET.get(lam, ""))
+                if arm_ledger is not None
+                else None
+            )
             g = grid(arm, lam, tiles, results, a.out, a.cols, isaac, a.channels)
             per_arm.append(g)
             manifest[lam][arm] = {"pass": sum(1 for r in results if not r["fell"]), "n": len(results),
