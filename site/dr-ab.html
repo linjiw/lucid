@@ -21,12 +21,12 @@ td.ok{color:#176a64;font-weight:600}
 <main id="main"><div class="wrap hero">
 <p class="eyebrow">Simulator-to-simulator comparison · SONIC / Unitree G1 · MuJoCo · September 9, 2026</p>
 <h1>What domain randomization<br>buys, and what it costs.</h1>
-<p class="lede">Two policies, trained from scratch on the same three motions, the same 8,000 iterations, the same 1,024 environments and the same seed. The <em>only</em> difference between them is the randomization they trained under. One of them stays on its feet when the world moves. Neither of them follows the path.</p>
+<p class="lede">Two policies, trained from scratch on the same three motions, the same 8,000 iterations, the same 1,024 environments and the same seed. The <em>only</em> difference between them is the randomization they trained under. One of them stays on its feet when the world moves. Neither demonstrates reliable full-clip path tracking.</p>
 <blockquote>Randomization did not make the policy better at the task. It changed which way it fails.</blockquote>
 <div class="grid three">
-<div class="card stat"><strong class="big">14 → 5</strong><p>Falls out of 16 at extreme perturbation, without randomization and with it.</p></div>
+<div class="card stat"><strong class="big">14 → 5</strong><p>Final-height failures out of 16 at extreme perturbation, without randomization and with it.</p></div>
 <div class="card stat"><strong class="big">5.5 → 1.3 s</strong><p>Time on the reference path at <em>zero</em> perturbation. Randomization costs path accuracy even when nothing is pushing.</p></div>
-<div class="card stat"><strong class="big">0 / 16</strong><p>Rollouts, in any condition, in which either policy tracked a full 8.6-second clip.</p></div>
+<div class="card stat"><strong class="big">0 / 16</strong><p>Full-clip tracking by the deployment-DR arm in every evaluated cell. The control has some completions under perturbation.</p></div>
 </div>
 <p class="caption measure">One training seed. This is a screening comparison, not a superiority test: the measured between-seed effect on absolute capability in this project is 7.8 points. Simulation only; no hardware result.</p>
 </div>
@@ -44,7 +44,7 @@ td.ok{color:#176a64;font-weight:600}
 <tr class="selected"><td>actuation latency</td><td>none</td><td><strong>0–60 ms</strong></td><td>delay between action and torque</td></tr>
 <tr class="selected"><td>push</td><td>none</td><td><strong>±1.5 m/s</strong> planar, every 1–3 s</td><td>root velocity increment</td></tr>
 </tbody></table></div>
-<p>The deployment arm is not simply "more randomization everywhere". Its four physics channels sit at the standard envelope; only the two channels a real deployment actually varies were widened. That is deliberate: this project's own channel sweep found mass, centre of mass and joint offset nearly free to widen, and friction physically clamped, so a uniform increase would have bought little and confounded the result. Pushing the scalar to 3× on <em>push alone</em> means a difference between the arms cannot be blamed on a wider mass or friction envelope.</p>
+<p>The deployment arm is not simply "more randomization everywhere". Its four physics channels sit at the standard envelope; push and actuation-delay ranges were widened beyond the standard physics envelope. That is deliberate: this project's own channel sweep found mass, centre of mass and joint offset nearly free to widen, and friction physically clamped, so a uniform increase would have bought little and confounded the result. Pushing the scalar to 3× on <em>push alone</em> means the treatment is a bundle of physics randomization, push exposure and delay; this A/B cannot isolate the contribution of any single channel.</p>
 <p class="caption">Realized values read back from the running simulator rather than asserted: the deployment arm held λ 3.0 with an empty physical-clamp list, so the full push envelope was applied; the control held λ 0.0 with all six channels present but collapsed to their nominal points.</p>
 </div></section>
 
@@ -52,38 +52,38 @@ td.ok{color:#176a64;font-weight:600}
 <h2>What the MuJoCo stage is doing.</h2>
 <p class="measure">The policies were trained in Isaac Lab. The comparison below runs them in <strong>MuJoCo</strong>, a different physics engine, from an exported single-file ONNX policy. This is the standard simulator-to-simulator check before hardware, and its value is precisely that it shares no code with training: the 1,570-float observation is rebuilt from MuJoCo state and the reference clip, so a wrong term shows up as a broken policy rather than as agreement by construction.</p>
 <div class="grid two">
-<div class="card"><h3>What is randomized</h3><p>A severity λ scales every channel around its nominal: friction, per-body mass, torso centre of mass, per-joint offsets, pushes and actuation delay. λ 0 is the nominal robot; λ 1 is the envelope the deployment arm trained under; λ 1.5 and λ 2 are past it, so both arms are extrapolating. Draws are made from one seeded stream in fixed order, so at a given (λ, seed) both policies face the <em>identical</em> physics and the identical pushes.</p></div>
-<div class="card"><h3>What ends a rollout</h3><p>A run stops when the pelvis is more than 0.5 m from where the reference motion says it should be. That is the same numeric threshold the Isaac termination uses — but it is a <strong>tracking</strong> criterion, not a falling one, and the distinction turns out to matter more than anything else on this page.</p></div>
+<div class="card"><h3>What is randomized</h3><p>A severity λ scales every channel around its nominal: friction, per-body mass, torso centre of mass, per-joint offsets, pushes and actuation delay. λ 0 is the nominal robot; λ is the MuJoCo evaluation scale. It is not the deployment training envelope, which uses physics 1×, push 3× and delay 1.5×. Transfer also changes the physics implementation. Draws are made from one seeded stream in fixed order, so at a given (λ, seed) both policies face the same seeded exogenous draws in this runner; state-dependent consequences can still differ.</p></div>
+<div class="card"><h3>What ends a rollout</h3><p>A run stops when the pelvis is more than 0.5 m from where the reference motion says it should be. This is the MuJoCo tracking criterion. The Isaac evaluator has additional and different termination terms; sharing a 0.5 m number does not make the criteria equivalent.</p></div>
 </div>
 <div class="callout"><p><strong>Why the video runs past the stopping point.</strong> Scoring stops the rollout at 0.5 m of path error, typically around 1.4 seconds. For <em>looking</em> at behaviour that is useless — you get a 1.4-second clip in which nothing has happened yet. Every rollout on this page therefore runs to the end of the 8.6-second motion, with the moment the policy left the path recorded separately. The scored verdict is unchanged by this; only the window you observe is longer.</p></div>
 </div></section>
 
 <section id="video"><div class="wrap"><p class="kicker">Demonstration</p>
 <h2>The same physics, the same pushes, two policies.</h2>
-<p class="measure">Six seeds per condition, shown side by side: no randomization on the left, deployment randomization on the right. Each tile is captioned with what actually happened to that seed. A <strong>red</strong> border means the robot fell over. An <strong>amber</strong> border means it was still upright and walking, but more than half a metre off the path it was supposed to follow.</p>
+<p class="measure">Six seeds per condition, shown side by side: no randomization on the left, deployment randomization on the right. Each tile is captioned with what actually happened to that seed. A <strong>red</strong> border marks a final-height failure. An <strong>amber</strong> border means it was still upright and walking, but more than half a metre off the path it was supposed to follow.</p>
 <figure><video controls preload="metadata" poster="img/dr_ab/story.jpg" src="videos/dr_ab_story.mp4"></video>
-<figcaption><b>All three conditions in sequence.</b> No perturbation (λ 0), light (λ 0.5), heavy (λ 1.5). At no perturbation both policies stay up and both wander off the reference; the control simply wanders later. By heavy randomization the control is on the floor in four of six seeds while the deployment policy is still walking in five of six — in a visibly wider, more braced stance.</figcaption></figure>
+<figcaption><b>All three conditions in sequence.</b> No perturbation (λ 0), light (λ 0.5), heavy (λ 1.5). At no perturbation both policies end upright and both leave the reference band; the control simply wanders later. By heavy randomization the control is on the floor in four of six seeds while the deployment policy is still walking in five of six — in a visibly wider, more braced stance.</figcaption></figure>
 <div class="vgrid">
 <figure><video controls preload="metadata" poster="img/dr_ab/none.jpg" src="videos/dr_ab_none.mp4"></video>
-<figcaption><b>No perturbation.</b> The nominal robot, nothing randomized. Both policies stay upright for the full clip. Neither tracks: every seed leaves the path. The control holds it about four times longer.</figcaption></figure>
+<figcaption><b>No perturbation.</b> The nominal robot, nothing randomized. Both policies are upright at the end of the clip. Neither tracks: every seed leaves the path. The control holds it about four times longer.</figcaption></figure>
 <figure><video controls preload="metadata" poster="img/dr_ab/light.jpg" src="videos/dr_ab_light.mp4"></video>
-<figcaption><b>Light randomization (λ 0.5).</b> Half the training envelope. Still no falls on either side. The control's path-holding has already halved; the deployment policy's is unchanged, as it will be at every level.</figcaption></figure>
+<figcaption><b>Light randomization (λ 0.5).</b> A mixed MuJoCo evaluation severity. Still no falls on either side. The control's path-holding has already halved; the deployment policy's is unchanged, as it will be at every level.</figcaption></figure>
 <figure><video controls preload="metadata" poster="img/dr_ab/heavy.jpg" src="videos/dr_ab_heavy.mp4"></video>
-<figcaption><b>Heavy randomization (λ 1.5).</b> Beyond the training envelope for both. This is where the two policies separate: the control topples, the deployment policy braces and keeps walking.</figcaption></figure>
+<figcaption><b>Heavy randomization (λ 1.5).</b> A higher mixed MuJoCo evaluation severity. This is where the two policies separate: the control topples, the deployment policy braces and keeps walking.</figcaption></figure>
 </div>
 </div></section>
 
 <section id="stats"><div class="wrap"><p class="kicker">Statistics</p>
-<h2>Randomization converts falls into drift.</h2>
+<h2>Fewer final-height failures, persistent path drift.</h2><div class="callout"><p><strong>Metric clarification, September 10:</strong> “falls” in the existing plots/video means tracking failure plus final pelvis height at or below 60% of reference height. This is an endpoint-height proxy, not an event-based fall detector. A recovered fall can be missed. The Boolean named <code>fell</code> in raw output instead records path departure. These metrics are distinct; neither measures sustained recovery.</p></div>
 <p class="measure">Sixteen seeds per cell, on <code>walk_arc_cw_stop_001__A047</code>, each rollout run to the end of the 8.6-second motion. Two different events are counted separately, because collapsing them hides the entire result.</p>
-<figure><img src="img/dr_ab/falls.svg" alt="Two line charts of falls out of sixteen seeds. Left: against randomization severity, the no-DR policy rises from zero to fourteen while the deployment-DR policy rises only to five, and stays at zero through the training envelope. Right: against actuation latency, the no-DR policy rises to eleven while the deployment-DR policy stays at zero through 0 to 80 milliseconds and reaches six only at 0 to 120 milliseconds.">
-<figcaption><b>Falls, out of 16 seeds.</b> Left, all randomization channels scaled together. Right, actuation delay swept alone with physics nominal. The deployment policy holds zero falls through the plain training envelope on the left, and through 0–80 ms on the right — past its own 0–60 ms training ceiling.</figcaption></figure>
+<figure><img src="img/dr_ab/falls.svg" alt="Two line charts of falls out of sixteen seeds. Left: against randomization severity, the no-DR policy rises from zero to fourteen while the deployment-DR policy rises only to five, and stays at zero through MuJoCo λ 1. Right: against actuation latency, the no-DR policy rises to eleven while the deployment-DR policy stays at zero through 0 to 80 milliseconds and reaches six only at 0 to 120 milliseconds.">
+<figcaption><b>Falls, out of 16 seeds.</b> Left, all randomization channels scaled together. Right, actuation delay swept alone with physics nominal. The deployment policy holds zero falls through MuJoCo λ 1 on the left, and through 0–80 ms on the right — past its own 0–60 ms training ceiling.</figcaption></figure>
 <div class="table-wrap"><table><caption>Falls, and time on the reference path · 16 seeds · full 8.6 s motion</caption>
 <thead><tr><th>Randomization</th><th class="num"><span class="swatch s-nodr"></span>no DR falls</th><th class="num"><span class="swatch s-dr"></span>deployment DR falls</th><th class="num">no DR on path</th><th class="num">deployment DR on path</th></tr></thead>
 <tbody>
 <tr><td>none · λ 0</td><td class="num ok">0 / 16</td><td class="num ok">0 / 16</td><td class="num">5.5 s</td><td class="num">1.3 s</td></tr>
 <tr><td>light · λ 0.5</td><td class="num ok">0 / 16</td><td class="num ok">0 / 16</td><td class="num">3.4 s</td><td class="num">1.3 s</td></tr>
-<tr class="selected"><td>training envelope · λ 1</td><td class="num fell">7 / 16</td><td class="num ok">0 / 16</td><td class="num">3.1 s</td><td class="num">1.4 s</td></tr>
+<tr class="selected"><td>MuJoCo scale · λ 1</td><td class="num fell">7 / 16</td><td class="num ok">0 / 16</td><td class="num">3.1 s</td><td class="num">1.4 s</td></tr>
 <tr><td>heavy · λ 1.5</td><td class="num fell">11 / 16</td><td class="num fell">3 / 16</td><td class="num">2.2 s</td><td class="num">1.4 s</td></tr>
 <tr><td>extreme · λ 2</td><td class="num fell">14 / 16</td><td class="num fell">5 / 16</td><td class="num">1.7 s</td><td class="num">1.5 s</td></tr>
 </tbody></table></div>
@@ -99,18 +99,18 @@ td.ok{color:#176a64;font-weight:600}
 </tbody></table></div>
 <h3>Reading the tables</h3>
 <ul>
-<li><strong>Randomization is what keeps the robot standing.</strong> At the plain training envelope the control is already on the floor in 7 of 16 runs and the deployment policy in none. On latency the deployment policy is perfect through 0–80 ms, past its own training ceiling, where the control is at 10 of 16.</li>
+<li><strong>Deployment DR has fewer final-height failures in the harder tested cells.</strong> At MuJoCo λ 1 the control is already on the floor in 7 of 16 runs and the deployment policy in none. On latency the deployment policy has zero endpoint-height failures through 0–80 ms, past its own training ceiling, where the control is at 10 of 16.</li>
 <li><strong>It costs path accuracy, and charges even when nothing perturbs it.</strong> At λ 0 — the nominal robot, nothing randomized — the control holds the reference path 5.5 s against the deployment policy's 1.3 s.</li>
-<li><strong>Its drift is flat.</strong> 1.3 to 1.5 seconds across every perturbation level and every latency level. The deployment policy has traded path-following for a robustness that no longer depends on how hard you push it.</li>
-<li><strong>Neither policy tracked a full clip in any condition.</strong> The only three completions on record are the control at light perturbation and mild latency, which at 16 seeds is not a real effect.</li>
+<li><strong>Its drift is flat.</strong> 1.3 to 1.5 seconds across every perturbation level and every latency level. This near-flat time to first path departure does not establish disturbance-independent robustness.</li>
+<li><strong>The DR policy tracked no full clip.</strong> The control tracked 3/16 at mixed λ 0.5, 2/16 at 0–40 ms, 1/16 at 0–60 ms and 1/16 at 0–120 ms. These small counts do not establish reliable tracking.</li>
 </ul>
 <div class="callout warn"><p><strong>An earlier version of these tables was wrong, and the correction is instructive.</strong> The first counts came from the <em>scored</em> window, which ends a rollout the moment the pelvis passes 0.5 m — often at about 1.4 seconds. A run that has already ended cannot then fall over, so that window undercounted falls badly: 3 of 16 at λ 1.5 against the 11 of 16 above. Both windows are kept in the repository. The tables here are the full-clip window, which is the one that answers whether the robot stays on its feet.</p></div>
 </div></section>
 
 <section id="deploy"><div class="wrap"><p class="kicker">Consequence</p>
 <h2>Which policy for which environment.</h2>
-<p class="measure">If the robot must stay upright under contact, disturbance or real actuation delay, the deployment policy is the only defensible choice, and the margin is large. If it must follow a path accurately in a controlled space, neither policy is adequate and the control is merely less bad.</p>
-<div class="callout warn"><p><strong>The drift is not a randomization problem, and more randomization will not fix it.</strong> The deployed observation contains joint angles and velocities, base angular velocity, projected gravity, past actions and the reference motion — and <em>no term at all</em> for where the robot is relative to the path. In a paired-state experiment over 1,536 base states and 6,144 horizontal translations of ±0.25 m, every actor-side observation and every action mean changed by exactly 0.0. The policy cannot see that it has drifted. Both arms leave the path because neither can perceive that it is leaving it; randomization only changes how gracefully they do so.</p></div>
+<p class="measure">For this one-seed simulation screen, deployment DR reduces terminal-height failures in harder cells while reducing nominal time on path. Neither policy is validated for hardware deployment or reliable path tracking.</p>
+<div class="callout warn"><p><strong>Missing path feedback is a plausible contributor that needs a controlled ablation.</strong> The deployed observation contains joint angles and velocities, base angular velocity, projected gravity, past actions and the reference motion — and <em>no term at all</em> for where the robot is relative to the path. In a paired-state experiment over 1,536 base states and 6,144 horizontal translations of ±0.25 m, every actor-side observation and every action mean changed by exactly 0.0. The policy cannot see that it has drifted. The tested actor cannot distinguish these translated states. This does not establish that observability alone causes the A/B drift; actuation mismatch, optimization and training quality remain alternative contributors.</p></div>
 <p>A deployment bundle exists for both policies — exported ONNX, a validated 1,570-term observation configuration, joint order and impedance metadata checked against the deployment runner's own source, the three motions converted to the runner's CSV format, and golden observation/action traces for a value-level parity test. What does <em>not</em> exist is any evidence it runs: the vendored C++ runner has never been built or executed in this repository, no exported-versus-simulated action parity has ever been measured, and no hardware safety infrastructure is present.</p>
 </div></section>
 
@@ -118,7 +118,7 @@ td.ok{color:#176a64;font-weight:600}
 <h2>What this does not establish.</h2>
 <ol>
 <li><strong>One training seed.</strong> The measured between-seed effect on absolute capability in this project is 7.8 points, so this is a screening comparison. It is not licensed as a general claim about randomization until it replicates on further seeds.</li>
-<li><strong>One clip, one engine, one robot.</strong> All numbers above are a single 8.6-second curved-walk-and-stop motion in MuJoCo. The Isaac-side ladder across three motion panels and the held-out development partition is still running.</li>
+<li><strong>One clip, one engine, one robot.</strong> All numbers above are a single 8.6-second curved-walk-and-stop motion in MuJoCo. The Isaac-side ladder completed September 9: all 196 final cells exited successfully and have metric files. See the <a href="research-review.html">September 10 review</a>.</li>
 <li><strong>The pushes are not physical.</strong> They are root velocity increments in metres per second written into simulator state, with no mass, no duration and no contact point, so they name no impulse in newton-seconds and cannot be compared to a physical shove.</li>
 <li><strong>No recovery guarantee.</strong> No band, dwell or horizon has been frozen in this project, so no policy has passed or failed a calibrated recovery test. "Fell 0 of 16" is a measurement on one clip, not a safety property.</li>
 <li><strong>The MuJoCo robot is not exactly the trained robot.</strong> Its model re-clamps hip pitch and roll to ±88 N·m where training gave those joints 139 N·m, so four high-authority leg joints run at 63% of the training torque ceiling throughout.</li>

@@ -1,12 +1,14 @@
-# LUCID — When Training Gets Easier
+# LUCID — Robust humanoid tracking with retained motion quality
+
+**Updated September 10:** [Research review and proposed method](lucid-research-review-2026-09-10.md). The three-motion DR A/B evaluation has completed all 196 final Isaac cells. The public page now separates endpoint-height failures from path tracking and presents the remaining recovery, uncertainty and transfer gates.
 
 **[Project page](https://linjiw.github.io/lucid/)** · **[Working manuscript](paper/when-training-gets-easier.md)** · **[September 7 science freeze](lucid-icra-freeze-2026-09-07.md)**
 
 We are preparing a diagnostic ICRA paper on training-range collapse and tracking-quality drift in humanoid robustness training, following `fable.md` and `fable.html`. The completed evidence supports safeguards and bounded development findings, not adaptive-curriculum superiority.
 
-**Current experiment:** second continuation seed of R0 versus reference-anchored R1, from the same local origin. Two 2,000-iteration runs and 55 fixed-policy evaluation cells; online [W&B logging](https://wandb.ai/16726/lucid-sonic/runs/p4rvttfe). R0 training is complete; R1 is running after a logging-only repair with verified R0 reuse. Results are pending. The completed first seed gives R1 +4.33% nominal global error and +5.18 percentage points hard-condition qualification versus origin, within the empirical retention checks.
+**Completed 2026-09-07:** the preregistered second continuation seed finished, all 57 cells. Reference-anchored R1 passes the empirical retention gate at every sampled checkpoint on both seeds; unanchored R0 fails at every checkpoint on both. R1 gives +4.33% nominal global error and +5.18 points hard-condition qualification on seed 8600, and +6.46% and +7.72 points on seed 8601. Two continuations from one origin are two seeds, not two independent origins. See the [result and scope](lucid-retention-second-seed-results-2026-09-07.md).
 
-The recovery-aware multi-motion programme is future work. Its path-input pilot and sixteen evaluations are complete; the sideways push endpoint includes two failures in 128 trials. It does not provide calibrated recovery evidence for this manuscript.
+What real-world deployment would require is set out, with receipts and verified sources, in the [deployment roadmap](lucid-deployment-roadmap-2026-09-07.md). The recovery-aware multi-motion programme is future work. Its path-input pilot and sixteen evaluations are complete; the sideways push endpoint includes two failures in 128 trials. It does not provide calibrated recovery evidence for this manuscript.
 
 Workspace repo for the LUCID research program. Code lives in two submodules; the
 claim-bearing work is in `GR00T-WholeBodyControl` on branch `research/practice-utility`.

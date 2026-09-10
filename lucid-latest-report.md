@@ -1,4 +1,24 @@
+# Current review — September 10, 2026
+
+See [research, experiment and paper review](lucid-research-review-2026-09-10.md). The final three-motion A/B Isaac evaluation is complete (196/196 successful cells with metric files); the recovery method and hardware results remain unestablished. The dated entries below are historical and their running-state statements are superseded.
+
+**SCIENCE FREEZE 2026-09-07:** diagnostic ICRA paper; only the same-origin R0/R1 second-seed replication remains authorized GPU work. R0 completed; R1 is running after a logging-only repair. See [current execution update](lucid-retention-replication-repair-2026-09-07.md).
+
 # LUCID latest report — Tier 1–4 status and ratchet confirmation
+
+**Common-controller update, September 7 UTC:** Released SONIC solves the four development motions. The common path-input migration now passes a versioned live same-state gate with zero action difference across 217,728 comparisons; both earlier cross-process gates remain failed. The protected four-motion PPO pilot completed all 128 iterations. Initial/final nominal and push evaluation is now running. See the [experiment ledger and limitations](lucid-common-path-input-status-2026-09-07.md) and [live W&B run](https://wandb.ai/16726/lucid-sonic/runs/wnb1cavy).
+
+**Physical observability result, September 7 UTC:** The four-motion/three-phase physical-state experiment completed. All 6,144 horizontal translations changed measured task/critic displacement while active actor inputs, encoder outputs and action means remained exactly unchanged; instrument controls passed. The next step is a common path-error input, no-op validation and a bounded controller-repair pilot before multi-motion R1/curriculum training. See the [completed experiment](lucid-translation-observability-2026-09-07.md) and [common-input design](lucid-common-path-input-design-2026-09-07.md).
+
+**Controller-foundation result, September 7, 03:14 UTC:** All eight released-controller cells completed: 100% completion and tracking qualification on all four development motions in both native and LUCID paths. The local origin/R1 had qualified on none of the three longer candidates. Select the released weights as the shared-origin candidate; validate tighter competence and horizontal recovery-error observability before multi-motion R1 continuation. See the [complete comparison, next-stage contract and evidence](lucid-shared-origin-contract-2026-09-07.md).
+
+**Completed longer-motion screen, September 7, 01:57 UTC:** All eight cells finished. Both origin and R1 have 0% tracking-qualified execution on all three longer development motions. Curved walking and sideways walking largely survive but fail quality; stooping has 0% completion. The control passes retention (+8.79% global, -0.97% local). Establish a high-quality shared multi-motion origin before recovery calibration. The [current public page](https://linjiw.github.io/lucid/) reports all outcomes and the revised roadmap.
+
+**New experiment, September 7, 01:25 UTC:** The eight-cell origin/R1 nominal multi-motion screen is executing in the simulator, with online W&B logging and automatic capacity gating between cells. It tests the original control plus three longer development motions. See the [frozen protocol and live-status paths](lucid-long-motion-screen-2026-09-07.md).
+
+**Current September 6 research direction and execution:** [ideal-paper execution plan](lucid-ideal-paper-execution-plan-2026-09-06.md), [frozen quality-preserving robustness screen](lucid-retention-repair-plan-2026-09-06.md), and [retention-repair status](lucid-retention-repair-status-2026-09-06.md). The September 1 material below is the historical ledger.
+
+**Latest analysis, September 7, 01:06 UTC:** R1 remains the selected protected baseline from the completed 83-cell development screen. The four-cell contact diagnostic is complete. The separately preregistered eight-cell execution/retention parity campaign now passes all four pairs, covering 1,024 evaluation aliases and 380 aligned nonzero push events. Contact diagnostics remain unvalidated and the original all-metric gate remains failed. Recovery-band calibration and feedback efficacy are next. See the [research-direction update](lucid-research-direction-update-2026-09-07.md).
 
 Snapshot: 2026-09-01 14:45 EDT. This is the current result and handoff ledger.
 It supersedes the older live-process state in `lucid-handoff-2026-08-31.md`
