@@ -1,0 +1,261 @@
+{
+  "topic": "Line-by-line fact-check of paper/when-training-gets-easier.md against on-disk receipts",
+  "generated_utc": "2026-09-07",
+  "generated_by": "draft fact-check pass; every number resolved to a receipt path + key, derived values recomputed",
+  "draft_checked": "/home/linjiw/lucid/paper/when-training-gets-easier.md",
+  "prior_receipt_used_as_lead_not_authority": "/home/linjiw/lucid/receipts/analysis/lucid_draft_number_verification_20260902.json",
+  "prior_receipt_status": {
+    "verdict": "accurate for what it checked; nothing it confirmed was contradicted here",
+    "now_resolved": "its not_verified item 'MuJoCo sim-to-sim pass rates were not independently re-derived' is resolved: all 30 Table 6 cells were recomputed here from the per-seed run JSONs",
+    "now_moot": "its single recorded discrepancy (Appendix B citing lucid_gate_feasibility_20260901.json for the gate run) no longer applies: the current draft has no Appendix B and no gate-run section; that content moved to paper/evidence-ledger.md"
+  },
+
+  "confirmed": {
+    "section_3_setup": {
+      "1024_envs_8000_iters_from_scratch_4s_clip": {
+        "receipt": "/home/linjiw/lucid/receipts/manifests/lucid_monotone_ratchet_preregistration_20260831.json",
+        "pointer": "design.num_envs=1024, design.iterations=8000, design.from_scratch=true, design.task='walk_hands_on_back_loop_002__A066_M (4.03 s single walk)'"
+      },
+      "ten_step_history_and_ten_future_frames": {
+        "receipt": "/home/linjiw/lucid/GR00T-WholeBodyControl/logs_rl/lucid-campaign/manager/universal_token/all_modes/sonic_release_test-20260829_000251/config.yaml",
+        "pointer": "lines 949-950 actor_prop_history_length=10, actor_actions_history_length=10; line 358 num_future_frames=10; observations.policy terms = gravity_dir, base_ang_vel, joint_pos, joint_vel, actions"
+      },
+      "ladder_cells_and_512_per_cell": {
+        "receipt": "/home/linjiw/lucid/GR00T-WholeBodyControl/scripts/practice_utility/run_curriculum_robustness_eval.py",
+        "pointer": "PRESET_PHYSICS_ONLY phys_000..phys_200 in 0.25 steps; protocol.num_envs=512 in every evaluation receipt"
+      },
+      "50_hz_policy": {
+        "receipt": "/home/linjiw/lucid-sonic/experiments/quality_frontier_pilot_20260905_a/eval_origin_phys_000/metrics_eval.json",
+        "pointer": "eval/qualified/episodes[*].valid_samples = 200 over a 4.0 s clip"
+      }
+    },
+    "section_4_collapse": {
+      "final_lambda_0.062_0.012": "receipts/analysis/lucid_return_inversion_20260901.json pairs[0].final_lambda, pairs[1].final_lambda",
+      "returns_15.29_14.40_holding_10.98_12.28": "same file, terminal_return over the 12 pairs; holding min 10.9807 (ratchet@s8601), max 12.2843 (s4_rg@s8601), recomputed",
+      "auc_73.99_69.73_holding_61.20_91.31": "same file, frontier_success_auc; holding min 0.611979 (s4_rg@s8602), max 0.913086 (ratchet@s8601), recomputed",
+      "spearman_-0.73": "same file, spearman_return_vs_frontier = -0.7343, n_scored_pairs = 12 (Pearson is separately recorded as -0.6095 overall and -0.5977 controllers-only, and the draft correctly says Spearman)",
+      "grouped_means": "same file, evacuated_vs_held = {14.8435, 11.6017, 0.718588, 0.83304}",
+      "cost_14.19_and_17.32": "recomputed: 0.881836 (fixed@s8601) - 0.739909 (lucid_rg@s8601) = 0.141927; 0.913086 (ratchet@s8601) - 0.739909 = 0.173177",
+      "collapse_arm_predeclared_before_scoring": "receipts/manifests/lucid_frontier_exposure_law_preregistration_20260901.json (created_at 2026-09-01T13:20, written_before_data true) + receipts/analysis/lucid_p3_readout.json frozen_bands.status_today ('UNSCORED and UNSCHEDULED')",
+      "every_adaptive_run_requested_at_least_one_reduction": "receipts/manifests/lucid_monotone_ratchet_preregistration_20260831.json offline_replay.cells: ratchet_bind_rows 610/1978/2490/1273/242/432 on the six may-shrink cells, all > 0"
+    },
+    "section_5_never_shrink": {
+      "2033_blocked_453_951_629_zero_applied": "/home/linjiw/lucid-sonic/manifests/ratchet_confirmation_20260831/lucid_ratchet_confirmation_analysis.json mechanism.per_seed[*].pi_decrease_control.{blocked_pi_decrease_rows, actual_decrease_rows, guard_trip_rows}; 8600=453, 8601=951, 8602=629, applied 0, guard trips 0",
+      "all_three_end_at_full_envelope": "same file, mechanism.per_seed[*].terminal_1000_high_lambda_exposure.high_lambda_fraction = 1.0",
+      "table_2_per_seed": "same file, ratchet_vs_fixed.success_rate.frontier_auc.per_seed: 8600 0.902995/0.904622 (-0.1628), 8601 0.913086/0.881836 (+3.1250), 8602 0.820312/0.832031 (-1.1719)",
+      "mean_+0.60_sd_2.25": "recomputed from those three paired deltas: mean 0.5968 pts, sample SD 2.2469 pts",
+      "one_sided_95_lower_bound_-3.19": "recomputed: 0.5968 - t(0.95,2)*2.2469/sqrt(3) = -3.1911 pts",
+      "four_components_+0.60_+0.07_+0.50_+0.01_all_3of3": "same file, ratchet_vs_fixed mean_delta_pts: success frontier 0.5968, success in-envelope 0.0651, progress frontier 0.4947, progress in-envelope 0.0101; within_margin_seeds = 3 for each"
+    },
+    "section_6_signals": {
+      "survival_+0.987_4.6_return_+0.973_3.2_mismatch_-0.037_19.2": "receipts/analysis/lucid_signal_audit_20260901.json verdict_at_fixed_difficulty",
+      "foot_slip_-0.531_17.0_torque_-0.312_7.2": "receipts/analysis/lucid_physical_signal_audit_20260902.json verdict_anchoring.foot_slip_per_step_m.spearman_mean = -0.5305, reversals_mean 17.0; torque_saturation -0.312, 7.2",
+      "collapse_column_-0.03_+0.03_and_+0.75_+0.71": "same file, verdict_authority.latent_p90 pearson -0.0302 / +0.0349; verdict_authority.foot_slip_per_step_m pearson +0.7493 / +0.7074 (these are PEARSON, see problems)",
+      "torque_sign_flips": "same file, verdict_authority.torque_saturation pearson -0.4165 vs +0.6611"
+    },
+    "section_7_channels": {
+      "every_cell_of_table_4": "receipts/analysis/lucid_channel_attribution_20260902.json arms[*].cells.ch_*_{200,300}.success_rate and arms[*].scalar.phys_200.success_rate; all 25 printed values match to 3 dp; first-to-fail = push for the four randomized arms and center of mass for off@s8600",
+      "interaction_residual": "recomputed: fixed 2x single-channel drops {fric .0195, mass .002, com .0059, joint .002, push .082} sum 0.1114; phys_100 0.994141 - phys_200 0.820312 = 0.173828; residual 0.0624 ('about six points')",
+      "single_seed": "same file, caveats[0] 'single seed (8600)'"
+    },
+    "section_8_survival_is_not_fidelity": {
+      "pilot_128.57_to_324.50_plus_152.39pct": "/home/linjiw/lucid-sonic/experiments/quality_frontier_pilot_20260905_a/eval_origin_phys_000/metrics_eval.json eval/all/mpjpe_g = 128.57060948226064 and eval_gate_phys_000/metrics_eval.json eval/all/mpjpe_g = 324.5045450817144; ratio recomputed 2.52395 = +152.395%",
+      "pilot_gate_nominal_completion_100pct": "eval_gate_phys_000/metrics_eval.json eval/qualified/completion_rate = 1.0",
+      "push_3.5x_64.84_to_71.09_and_49.02_to_45.70": "eval_origin_ch_push_350 completion 0.6484375, tracking 0.490234375; eval_gate_ch_push_350 completion 0.7109375, tracking 0.45703125",
+      "600_50_mm_thresholds": "/home/linjiw/lucid-sonic/experiments/quality_frontier_pilot_20260905_a/tracking_thresholds.json thresholds_mm; identical file in retention screen _c",
+      "optimizer_history_control_both_branches_degrade": "/home/linjiw/lucid-sonic/experiments/optimizer_history_pilot_20260905_a eval_fresh_phys_000 164.828 mm and eval_restore_phys_000 164.244 mm against origin 128.571 mm",
+      "initial_hold_control_still_drifts": "/home/linjiw/lucid-sonic/experiments/initial_hold_pilot_20260905_a/eval_initial_phys_000/metrics_eval.json eval/all/mpjpe_g = 164.828 mm",
+      "table_5_endpoints": "/home/linjiw/lucid-sonic/experiments/retention_screen_campaign_20260906_c/analysis/analysis.json rows[] at preset phys_000, iteration 2000: origin 127.928/28.192, R0 225.869/30.212, R1 133.472/27.958, R2 163.534/28.312; completion 1.0 for all",
+      "increases_76.56_4.33_27.83": "recomputed from those rows against the origin's 127.92777 mm",
+      "hard_qualification_42.77_49.02_47.95_53.42": "recomputed as the equal average of tracking_success_rate at ch_push_350 and ch_push_fric_350_150; matches analysis.json origin_held_out_qualified = 0.427734375 and endpoints.*.held_out_delta_origin_pp = 6.25 / 5.17578125 / 10.64453125",
+      "retention_gates_R1_passes_all_five_R0_R2_fail_all_five": "recomputed from rows[] against tracking_thresholds.json (global and local <= +10%, completion >= -2 pp, at phys_000 and phys_100, at 250/500/1000/1500/2000); matches endpoints.*.retained_at_all_sampled_checkpoints",
+      "recipe": "/home/linjiw/lucid-sonic/experiments/retention_screen_campaign_20260906_c/pilot/plan.json num_envs=1024, iterations=2000, eval_replicates=512, stratum_sizes=[768,256] with practice_vectors [{},{push_robot:3.0}] (the 3:1 mixture), reference_anchor_beta 1.0 (R1) / 0.0 (R0,R2), reference_anchor_batch_size 256, actor_learning_rate 2e-05 (R0,R1) / 1e-05 (R2), R2 additionally schedule=fixed and desired_kl=null",
+      "adaptive_lr_bounds": "/home/linjiw/lucid-anchor-start-repair/gear_sonic/research/practice_utility/optimizer_history_callback.py:155 enforces 1e-5 <= rate <= 2e-4 under the adaptive policy",
+      "anchor_loss_form": "/home/linjiw/lucid-anchor-start-repair/gear_sonic/research/practice_utility/reference_anchor.py:183-188 total += ((mean-target)/scale).square().sum(); return total / batch_size (summed over the 29 action coordinates, averaged over the batch); action_scale in the buffer is all ones, so the units are native",
+      "costs": "analysis.json training_costs: 49,152,000 transitions for each arm; R1 anchor_cost {updates 40000, sample_presentations 10240000, student_forward_calls 80000, forward_wall_seconds 207.3690}"
+    },
+    "section_9_transfer": {
+      "table_6_all_30_cells": "recomputed from /home/linjiw/lucid-sonic/artifacts/mujoco_sweep_20260902/runs/<arm>/lam{1,1.5,2}/seed*.json and .../mujoco_sweep_nopush_20260902/runs/... (result.fell); all-channels off 31/12/0, collapsed 56/19/9, ratchet 47/22/16, fixed_s8601 47/25/12, fixed_s8600 78/34/16; physics-only off 59/16/3, collapsed 84/31/16, ratchet 66/50/38, fixed_s8601 75/47/38, fixed_s8600 94/56/31",
+      "fixed_s8601_row_also_in_versioned_receipt": "receipts/analysis/mujoco_sim2sim_20260902/sweep_full_channels.json and sweep_physics_only.json table.fixed_s8601 (the only arm in those files)",
+      "0.5_m_pass_rule": "/home/linjiw/lucid/tools/mujoco_player.py:567-569 err = ||pelvis xpos - ref_pos||; if err > 0.5 the run is a fall",
+      "second_motion_0.80_0.73_0.40_0.18_and_spearman_0.8_1.0": "receipts/analysis/lucid_heldout_motion_20260901.json clips['walk_hands_on_back_loop_003__A093'].cells.phys_150.success_by_arm and ordering_stability.spearman_values; episodes_per_cell 128"
+    },
+    "section_10_nesting": {
+      "affine_support_argument": "receipts/analysis/lucid_nesting_calculus_20260903.json what_survives_exactly / why_exact; the draft reproduces the receipt's caveat that this is a support statement about marginals, not about whole-episode difficulty"
+    }
+  },
+
+  "problems": [
+    {
+      "id": "P1",
+      "severity": "hygiene violation",
+      "section": "5, Realized exposure",
+      "draft": "\"Training telemetry records how many episodes each training cohort ran and at what intensity\"",
+      "receipt": "/home/linjiw/lucid/receipts/analysis/lucid_realized_exposure_20260903.json unit='env_iterations'; method field states episodes 'are NOT comparable across intensities, because a harder cohort ends more and shorter episodes'",
+      "why": "the 99.2 % figure is 7,940 of 8,000 environment-iterations at the pinned intensity, not episodes; the claim-hygiene rule forbids interchanging them",
+      "fix": "say environment-iterations (or 'iterations at the pinned intensity')"
+    },
+    {
+      "id": "P2",
+      "severity": "wrong value + scope overreach",
+      "section": "5, Realized exposure",
+      "draft": "\"The never-shrink arm spent 99.2 percent of its training exposure at the envelope\"",
+      "receipt": "same file, runs['lucid_ratchet_rg@seed_8600'].share_by_difficulty['at the envelope'] = 0.9925 (7940/8000)",
+      "why": "0.9925 is 99.25 %, not 99.2 %; and the receipt covers only seed 8600, so 'the never-shrink arm' is one of three runs",
+      "fix": "\"99.25 percent on seed 8600\""
+    },
+    {
+      "id": "P3",
+      "severity": "preregistration misstated + internal inconsistency",
+      "section": "5, Robustness",
+      "draft": "\"the never-shrink arm must be within 2 points (frontier) or 1 point (in-envelope) of fixed randomization on at least two of three paired seeds\" followed by \"All four components pass on all three seeds\"",
+      "receipt": "/home/linjiw/lucid-sonic/manifests/ratchet_confirmation_20260831/lucid_ratchet_confirmation_analysis.json ratchet_vs_fixed.*.criterion = 'at least two must have ratchet-minus-fixed >= -margin'; and lucid_monotone_ratchet_preregistration_20260831.json hypotheses.H_R1 states '>= -0.02'",
+      "why": "the frozen rule is ONE-SIDED (not worse than the margin). Read two-sidedly as the draft states it, seed 8601's +3.13 on frontier success is outside the 2-point band, which contradicts the very next sentence",
+      "fix": "\"must be no more than 2 points (frontier) / 1 point (in-envelope) BELOW fixed randomization on at least two of three paired seeds\""
+    },
+    {
+      "id": "P4",
+      "severity": "mislabeled measurement + internal inconsistency",
+      "section": "3 and 7 (Table 4 header)",
+      "draft": "Section 3 \"A scale λ multiplies every channel's configured deviation; λ = 1 is the training envelope\"; Table 4 column \"All channels 2×\"; Section 7 text \"The joint cell widens five channels at once\"",
+      "receipt": "/home/linjiw/lucid/GR00T-WholeBodyControl/scripts/practice_utility/run_curriculum_robustness_eval.py PRESET_PHYSICS_ONLY docstring: 'the five non-latency channels scaled, actuation latency pinned to ZERO'; every channel cell carries fixed_latency_steps=0 (see /home/linjiw/lucid-sonic/manifests/channel_sweep_20260902_001226/*.json protocol.presets)",
+      "why": "the sixth channel (action delay, 0-40 ms in training) is switched OFF on the whole evaluation ladder, so phys_100 is not the training envelope and phys_200 is not 'all channels 2x'. The table header and the section's own sentence disagree",
+      "fix": "call the ladder 'the five non-latency channels, latency pinned to zero'; retitle the column 'Five physics channels 2x'; state once in Section 3 that latency is evaluated separately and is not in the reported ladder"
+    },
+    {
+      "id": "P5",
+      "severity": "wrong value",
+      "section": "3",
+      "draft": "\"Friction is clipped at a physical floor, which binds at λ ≥ 1.5\"",
+      "receipt": "run_curriculum_robustness_eval.py comment 'the friction floor clamps at lambda ~1.385'; receipts/analysis/lucid_phase0_analysis_20260901.json ladder_shape_finding.mechanism ('the low bound falls 0.1375 -> 0.05 between phys_125 and phys_150'); recomputed from static_friction_range [0.3,1.6] about nominal 0.95: 0.9/0.65 = 1.3846",
+      "why": "the clamp binds at λ ≈ 1.385; phys_150 is only the first EVALUATED cell past it",
+      "fix": "\"binds at λ ≈ 1.385, so phys_150 is the first evaluated cell past the clamp\""
+    },
+    {
+      "id": "P6",
+      "severity": "summary range too narrow",
+      "section": "7",
+      "draft": "\"pushes at twice the range cost 6–8 points\"",
+      "receipt": "receipts/analysis/lucid_channel_attribution_20260902.json arms[*].anisotropy_at_2x.drops.push: fixed 0.082, never-shrink 0.0625, adaptive-held 0.084",
+      "why": "the observed range is 6.25 to 8.40 points; 8.4 is outside '6-8'",
+      "fix": "\"cost 6.3 to 8.4 points\""
+    },
+    {
+      "id": "P7",
+      "severity": "stated bound violated by the draft's own table",
+      "section": "7",
+      "draft": "\"stay above 0.938 at three times the range\"",
+      "receipt": "same file, lucid_ratchet_rg@s8600 ch_mass_300.success_rate = 0.9375 (printed as 0.938 in Table 4)",
+      "why": "0.9375 is below 0.938; the bound is contradicted by the rounded value in the same section",
+      "fix": "\"stay at or above 0.9375\""
+    },
+    {
+      "id": "P8",
+      "severity": "misdescribed statistic",
+      "section": "5, Seed effect",
+      "draft": "\"Between-seed offsets in frontier AUC reach 7.8 points on the same arm\"",
+      "receipt": "receipts/analysis/lucid_phase0_analysis_20260901.json seed_offset.value = -0.077637, definition 'mean (seed 8602 - seed 8600) frontier success AUC on arms that pin lambda' (n_arms 2, status POST-HOC)",
+      "why": "7.8 is a two-arm MEAN, not a single-arm offset; the largest same-arm offset is 8.27 points (never-shrink 90.30 -> 82.03), and fixed is 7.26",
+      "fix": "\"the 8600-to-8602 offset averages 7.8 points over the two lambda-pinning arms and reaches 8.3 points on one of them\""
+    },
+    {
+      "id": "P9",
+      "severity": "conclusion stronger than the draft's own table",
+      "section": "9",
+      "draft": "\"The ordering is what transfers.\"",
+      "receipt": "recomputed Table 6 cells (see confirmed.section_9_transfer): at λ=1 the collapsed policy scores 56 % (all channels) and 84 % (physics only) against never-shrink 47 %/66 % and paired fixed 47 %/75 %",
+      "why": "the ordering inverts inside the envelope; it holds only beyond it (λ ≥ 1.5)",
+      "fix": "\"beyond the training envelope, the ordering is what transfers\""
+    },
+    {
+      "id": "P10",
+      "severity": "protocol parity overstated",
+      "section": "9",
+      "draft": "\"replayed them in MuJoCo with our own implementation of the six channels, scaled by the same λ\"",
+      "receipt": "receipts/analysis/mujoco_sim2sim_20260902/sweep_physics_only.json channels='friction,mass,com,joint,delay' and table entries show dr.delay_steps 0 at λ=0 and 7 at λ=1; against run_curriculum_robustness_eval.py, where every Isaac phys_* cell pins latency to zero",
+      "why": "MuJoCo scales action delay with λ while the Isaac ladder switches it off, so 'the same λ' means different physics in the two simulators; part of the reported Isaac-MuJoCo gap is that channel",
+      "fix": "name the difference where the gap is discussed"
+    },
+    {
+      "id": "P11",
+      "severity": "receipt integrity",
+      "section": "9, Table 6",
+      "draft": "five policy rows",
+      "receipt": "receipts/analysis/mujoco_sim2sim_20260902/sweep_full_channels.json and sweep_physics_only.json contain arms = {fixed_s8601} only, although receipts/analysis/mujoco_sim2sim_20260902/README.md advertises '5 arms x 6 lambda x 32 seeds'",
+      "why": "four of the five Table 6 rows are supported only by unversioned artifacts under $LUCID_ROOT (log tails and per-seed run JSONs). Every value is correct (all 30 cells recomputed here), but the committed receipt does not contain them",
+      "fix": "regenerate the two sweep JSONs with all five arms, or commit the per-seed run files, before the supplement cites them"
+    },
+    {
+      "id": "P12",
+      "severity": "hygiene omission (selection disclosure)",
+      "section": "5 and 4.2",
+      "draft": "Table 2 presents seeds 8600/8601/8602 symmetrically; \"The comparison follows a rule fixed before the data\"; \"17.32 points below the never-shrink version of the same controller on the same seed\"",
+      "receipt": "receipts/manifests/lucid_monotone_ratchet_preregistration_20260831.json selection_disclosure: 'Seed 8601 is selected after observing that lucid_rg collapsed from lambda=1 to 0.062 there. This is a targeted mechanistic regression test, not a blinded efficacy seed.' with 8600/8602 as confirmatory_seeds_after_screen_pass",
+      "why": "the standing rule is that seeds 8600-8602 influenced development and are replication, never untouched confirmation. The draft never says the screening seed was chosen on the outcome, and the 17.32-point contrast is measured on exactly that seed",
+      "fix": "one sentence in Section 5: 8601 was the screening seed, chosen because a collapse had been observed there; 8600 and 8602 were added afterwards under the frozen rule; all three are replication, not independent confirmation"
+    },
+    {
+      "id": "P13",
+      "severity": "selective reporting not disclosed + inaccurate description",
+      "section": "6",
+      "draft": "\"We audited five signals on five runs at pinned difficulty and on the two collapses.\"",
+      "receipt": "receipts/analysis/lucid_physical_signal_audit_20260902.json verdict_anchoring lists TWELVE signals over the same five arms (latent_p90, time_out_rate, mean_return, foot_slip, torque_saturation, joint_limit_proximity, energy_proxy, undesired_contact_rate, contact_force_peak, contact_impulse_total, action_rate, action_acceleration); anchoring_at_fixed_difficulty includes ratchet@s8600 and ratchet@s8601 with lambda_min 0.0",
+      "why": "twelve candidates were audited and five are reported without saying so; and two of the five 'pinned difficulty' runs are never-shrink runs that start at λ=0 and only reach λ ≥ 0.95 at iteration 64 and 70 respectively",
+      "fix": "\"we audited twelve candidate signals and report five\"; describe the ratchet arms as reaching and then holding the envelope"
+    },
+    {
+      "id": "P14",
+      "severity": "correlation type unlabeled (Pearson/Spearman rule)",
+      "section": "6, Table 3",
+      "draft": "column 1 header is 'Rank correlation'; the collapse column carries -0.03 / +0.03 and +0.75 / +0.71 with no correlation type",
+      "receipt": "receipts/analysis/lucid_physical_signal_audit_20260902.json verdict_authority.*.pearson",
+      "why": "those collapse-column numbers are Pearson correlations against λ while the first column is Spearman; the table invites reading them as the same statistic",
+      "fix": "label the collapse column 'Pearson correlation with λ during the two collapses'"
+    },
+    {
+      "id": "P15",
+      "severity": "aliases described as episodes",
+      "section": "3 versus 8.3",
+      "draft": "Section 3 '512 episodes per cell'; Section 8.3 '512 evaluation aliases per cell'",
+      "receipt": "/home/linjiw/lucid-sonic/manifests/replicate_panel_panel_hob002_k512.json via any evaluation receipt's protocol.suite.replicate_panel: motion_key walk_hands_on_back_loop_002__A066_M, replicates 512",
+      "why": "every cell is 512 replicate aliases of the SINGLE trained clip, not 512 distinct motions; the two sections use different words for the same panel",
+      "fix": "use 'aliases' in both places and say once that they are replicates of one clip under fresh physics draws"
+    },
+    {
+      "id": "P16",
+      "severity": "ambiguous grouping",
+      "section": "4.2, Table 1",
+      "draft": "column 'Range-holding runs (min–max)'",
+      "receipt": "receipts/analysis/lucid_return_inversion_20260901.json pairs[]: the ten non-evacuated pairs include the three fixed and three never-shrink runs; the range endpoints are never-shrink@8601 (return 10.98, AUC 91.31) and s4_rg@8602 (AUC 61.20)",
+      "why": "a reader of Section 4 will take 'range-holding runs' to mean the adaptive runs that held; the column actually pools all ten non-collapsed arm-seed pairs, and both extremes come from non-adaptive or never-shrink arms",
+      "fix": "rename to 'the other ten arm-seed pairs (fixed, never-shrink, and the adaptive runs that held)'"
+    },
+    {
+      "id": "P17",
+      "severity": "collision of two different quantities at the same value",
+      "section": "8.1 versus Table 5",
+      "draft": "8.1 'tracking-qualified execution decreases from 49.02% to 45.70%' (pilot origin at Push 3.5x) and Table 5 'R0 hard qualification 49.02%'",
+      "receipt": "pilot eval_origin_ch_push_350 tracking_success_rate = 0.490234375; retention analysis R0@2000 hard qualification recomputed = 0.490234375",
+      "why": "both are verified and correct, but they are different quantities (one preset versus the two-preset average) that happen to be exactly equal; readers will assume a typo or a shared source",
+      "fix": "keep both, and add half a clause naming what each one averages"
+    },
+    {
+      "id": "P18",
+      "severity": "minor precision",
+      "section": "8.1",
+      "draft": "\"The later retention screen uses masked first-episode measurements and its own origin evaluation (127.93 mm)\"",
+      "receipt": "retention analysis.json origin row carries BOTH global_mpjpe_mm 127.92777 and legacy_global_mpjpe_mm 128.57060948226064, the latter bit-identical to the pilot's eval/all/mpjpe_g",
+      "why": "127.93 and 128.57 are two metrics computed on the same deterministic origin evaluation (same checkpoint, same seed 8700, same panel), not two separate origin evaluations; the pilot also masked to the first episode",
+      "fix": "\"the retention screen reports the masked first-episode metric (127.93 mm) where the pilot reported the legacy all-episode metric (128.57 mm) on the same origin evaluation\""
+    }
+  ],
+
+  "checked_and_found_clean": [
+    "Every number in the abstract, Section 1, Table 1, Table 2, Table 3, Table 4, Table 5, Table 6 and the second-motion paragraph resolves to a receipt and matches it to the printed precision, with the exceptions listed in problems.",
+    "Tolerance-not-equivalence hygiene is correct throughout: the abstract, Section 1 and Section 5 all carry the -3.19 one-sided lower bound and refuse the word equivalent.",
+    "Spearman is named as Spearman in the abstract and Section 4.2; Pearson is never claimed for -0.73.",
+    "The frozen R1 endpoint is 2,000 everywhere; the draft explicitly says '+4.33% is R1's endpoint value, not its value at every checkpoint'. R1's better intermediate scores (500-iteration hard qualification 50.10 %, 1,000-iteration nominal error 125.71 mm, both below the origin) are not used.",
+    "Section 8.3 states 'Hundreds of rollout aliases do not create independent training replicates' and 'One origin, one motion, and one continuation seed support this result'.",
+    "Section 10's nesting paragraph reproduces the nesting receipt's own limit (marginal support, not whole-episode difficulty) rather than the superseded schema-1 claim."
+  ]
+}

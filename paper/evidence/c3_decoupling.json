@@ -1,0 +1,458 @@
+{
+  "topic": "C3 - survival/quality decoupling (paper contribution 3)",
+  "generated_utc": "2026-09-07",
+  "generated_by": "evidence audit; every value below was reopened from the JSON receipt and recomputed from per-episode records where the receipt stores them",
+  "shared_experimental_identity": {
+    "note": "All C3 numbers rest on ONE origin policy, ONE motion clip, ONE evaluation seed, ONE training seed. There is no second training seed and no second motion anywhere in C3.",
+    "origin_checkpoint": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260829_000249/seed_8600/fixed/final_checkpoint.pt",
+    "origin_checkpoint_sha256": "e7fe72a0a48d6d4d534368ee9870b7a5e382bf2c51bb025d35eadee0818aaa8d",
+    "origin_description": "the seed-8600 'fixed' (non-adaptive fixed-DR) arm of curriculum_comparison_ne1024_20260829_000249; a solved policy, 100% clean completion",
+    "training_seed": 8600,
+    "evaluation_seed": 8700,
+    "training_envs": 1024,
+    "eval_envs_per_cell": 512,
+    "continuation_length_env_iterations": 2000,
+    "motion_key": "walk_hands_on_back_loop_002__A066_M",
+    "motion_clip": "/home/linjiw/lucid-sonic/pools/debug512/robot_filtered/walk_hands_on_back_loop_002__A066_M.pkl",
+    "motion_clip_sha256": "a7f10e7aa26e53cc4e346151d4ccd74e932e3aafa1cfaaac77dab8b8eec40929",
+    "eval_panel": "/home/linjiw/lucid-sonic/pools/panels/panel_hob002_k512/robot_filtered",
+    "eval_panel_manifest": "/home/linjiw/lucid-sonic/manifests/replicate_panel_panel_hob002_k512.json",
+    "eval_panel_nature": "512 symlink ALIASES of the one clip; they defeat the evaluator's num_unique_motions censoring and raise within-policy precision. They are NOT 512 motions and NOT independent policies.",
+    "identity_receipts": [
+      "/home/linjiw/lucid-sonic/experiments/quality_frontier_pilot_20260905_a/plan.json",
+      "/home/linjiw/lucid-sonic/experiments/initial_hold_pilot_20260905_a/plan.json",
+      "/home/linjiw/lucid-sonic/experiments/optimizer_history_pilot_20260905_a/plan.json",
+      "/home/linjiw/lucid-sonic/manifests/replicate_panel_panel_hob002_k512.json"
+    ]
+  },
+  "evaluation_presets": {
+    "receipt": "/home/linjiw/lucid-sonic/experiments/quality_frontier_pilot_20260905_a/eval_gate_*/metrics_eval.json",
+    "pointer": "eval/protocol/preset_id, eval/protocol/non_latency_dr_scale, eval/protocol/channel_dr_scales",
+    "phys_000": "clean / nominal: non_latency_dr_scale = 0.0, no channel scaling",
+    "phys_100": "original training envelope: non_latency_dr_scale = 1.0",
+    "ch_push_300": "scale 1.0 with push_robot x3.0",
+    "ch_push_350": "scale 1.0 with push_robot x3.5",
+    "ch_push_fric_350_150": "scale 1.0 with push_robot x3.5 and physics_material x1.5",
+    "primary_held_out_endpoint": "equal average of ch_push_350 and ch_push_fric_350_150"
+  },
+  "tracking_qualification_rule": {
+    "receipt": "/home/linjiw/lucid-sonic/experiments/quality_frontier_pilot_20260905_a/tracking_thresholds.json",
+    "pointer": "thresholds_mm",
+    "global_mpjpe_mm": 600.0,
+    "local_mpjpe_mm": 50.0,
+    "sha256": "3da7062ed8f03aa6a69a4e798e47df1a5dca9c926851078530c970be3f1ee232",
+    "definition": "an episode is tracking-qualified iff it COMPLETED and its episode-mean global MPJPE <= 600 mm and episode-mean local MPJPE <= 50 mm; failed episodes stay in the denominator",
+    "instrument": "/home/linjiw/lucid-quality-frontier/gear_sonic/research/practice_utility/qualified_pose.py (QualifiedPoseAccumulator, summarize_records)",
+    "sampling": "pre_env_step_first_episode_only - samples taken BEFORE env.step so an automatic reset cannot replace a terminal pose",
+    "IMPORTANT_two_denominators": "qualification uses the MASKED first-episode accumulator (eval/qualified/*). The headline 128.57 / 324.50 mm figures are the LEGACY panel means (eval/all/mpjpe_g). The masked means of the same cells are 127.93 and 322.88 mm. Never mix the two denominators in one sentence.",
+    "justification_field": "prospective engineering screen; not a hardware or physical-safety threshold"
+  },
+  "results": {
+    "R1_frontier_pilot_decoupling": {
+      "campaign": "/home/linjiw/lucid-sonic/experiments/quality_frontier_pilot_20260905_a",
+      "campaign_receipt": "/home/linjiw/lucid-sonic/experiments/quality_frontier_pilot_20260905_a/receipt.json",
+      "status": "complete; 20/20 cells",
+      "started_utc": "2026-09-05T16:14:53.142575+00:00",
+      "completed_utc": "2026-09-05T21:37:46.746477+00:00",
+      "training_subprocess_seconds": 18649.634872091003,
+      "evaluation_subprocess_seconds": 636.3565934450016,
+      "cost_pointer": "/home/linjiw/lucid-sonic/analysis/quality_frontier_origin_audit_20260905/analysis.json :: costs",
+      "arms": {
+        "static": "static hard allocation (mode=fixed, vector-yoke allocation 'static')",
+        "replay": "frozen replay of a recorded expansion schedule (mode=fixed, allocation 'replay')",
+        "gate": "survival-feedback per-channel box gate (mode=box)"
+      },
+      "what_got_harder": {
+        "receipt": "/home/linjiw/lucid-sonic/experiments/quality_frontier_pilot_20260905_a/train_gate/curriculum_state_train_gate.json",
+        "pointer": "box.gates.<channel>.frontier, box.expansions",
+        "final_frontier_vector": {
+          "add_joint_default_pos": 2.0,
+          "base_com": 1.875,
+          "physics_material": 1.875,
+          "push_robot": 1.625,
+          "randomize_action_delay": 1.5,
+          "randomize_rigid_body_mass": 1.875
+        },
+        "mean_frontier_lambda": 1.7916666666666667,
+        "note": "all three arms ended at the same accepted frontier vector; cross-check /home/linjiw/lucid-sonic/experiments/quality_frontier_pilot_20260905_a/schedule.json :: records[-1].frontier_vector"
+      },
+      "headline_clean_phys_000": {
+        "origin_completion_pct": 100.0,
+        "origin_legacy_global_mpjpe_mm": 128.57060948226064,
+        "origin_legacy_local_mpjpe_mm": 28.33349351958243,
+        "gate_completion_pct": 100.0,
+        "gate_legacy_global_mpjpe_mm": 324.5045450817144,
+        "gate_legacy_local_mpjpe_mm": 34.78070097387222,
+        "global_ratio_gate_over_origin": 2.5239403187747005,
+        "global_relative_increase_pct": 152.39403187747004,
+        "local_relative_increase_pct": 22.754721191842673,
+        "gate_tracking_qualified_pct_on_clean": 99.21875,
+        "gate_completed_but_unqualified_episodes_on_clean": 4,
+        "episodes_per_cell": 512,
+        "receipts": {
+          "origin": "/home/linjiw/lucid-sonic/experiments/quality_frontier_pilot_20260905_a/eval_origin_phys_000/metrics_eval.json",
+          "gate": "/home/linjiw/lucid-sonic/experiments/quality_frontier_pilot_20260905_a/eval_gate_phys_000/metrics_eval.json",
+          "rollup": "/home/linjiw/lucid-sonic/analysis/quality_frontier_origin_audit_20260905/analysis.json"
+        },
+        "pointers": {
+          "legacy_means": "eval/all/mpjpe_g, eval/all/mpjpe_l",
+          "completion_and_qualification": "eval/qualified/completion_rate, eval/qualified/tracking_success_rate",
+          "per_episode": "eval/qualified/episodes[] (512 records: completed, valid_samples, global_mpjpe_mm, local_mpjpe_mm, tracking_qualified)",
+          "rollup_relative_change": "origin_clean_diagnostics[arm=gate].global_relative_change = 1.5239403187747005"
+        },
+        "recomputed": true,
+        "recompute_note": "completion and qualification recounted from the 512 per-episode records; legacy means recomputed from eval/all_metrics_dict/mpjpe_g; all agree exactly with the stored summaries"
+      },
+      "other_arms_clean_phys_000": {
+        "static": {
+          "completion_pct": 99.8046875,
+          "legacy_global_mm": 357.97449468761926,
+          "legacy_local_mm": 35.907309269956436,
+          "global_increase_pct": 178.4263807484014,
+          "tracking_qualified_pct": 98.046875,
+          "caveat": "one failed clean episode; its paired probe-resolution and root-bound analyses are marked ineligible"
+        },
+        "replay": {
+          "completion_pct": 100.0,
+          "legacy_global_mm": 373.9241633582954,
+          "legacy_local_mm": 35.25739299283983,
+          "global_increase_pct": 190.83175763422594,
+          "tracking_qualified_pct": 98.4375
+        }
+      },
+      "push_350_shared_condition": {
+        "claim": "at the one hard condition where origin and gate were both evaluated, completion rises while tracking-qualified execution falls",
+        "origin_completion_pct": 64.84375,
+        "gate_completion_pct": 71.09375,
+        "completion_delta_pp": 6.25,
+        "origin_tracking_qualified_pct": 49.0234375,
+        "gate_tracking_qualified_pct": 45.703125,
+        "qualified_delta_pp": -3.3203125,
+        "episodes_per_cell": 512,
+        "receipts": {
+          "origin": "/home/linjiw/lucid-sonic/experiments/quality_frontier_pilot_20260905_a/eval_origin_ch_push_350/metrics_eval.json",
+          "gate": "/home/linjiw/lucid-sonic/experiments/quality_frontier_pilot_20260905_a/eval_gate_ch_push_350/metrics_eval.json",
+          "rollup": "/home/linjiw/lucid-sonic/analysis/quality_frontier_origin_audit_20260905/outcomes.csv"
+        },
+        "pointer": "eval/qualified/completion_rate and eval/qualified/tracking_success_rate; CSV rows eval_origin_ch_push_350 and eval_gate_ch_push_350",
+        "recomputed": true,
+        "recompute_note": "251/512 and 234/512 qualified recounted directly from eval/qualified/episodes[].tracking_qualified"
+      },
+      "primary_held_out_endpoint_two_cell_average": {
+        "static_pct": 39.16015625,
+        "replay_pct": 37.01171875,
+        "gate_pct": 40.33203125,
+        "gate_minus_static_pp": 1.171875,
+        "gate_minus_replay_pp": 3.3203125,
+        "receipt": "/home/linjiw/lucid-sonic/analysis/quality_frontier_origin_audit_20260905/analysis.json",
+        "pointer": "primary_tracking_success_by_arm; contrasts[].held_out_tracking_delta_pp",
+        "recomputed": true,
+        "caveat": "the ORIGIN has no two-cell primary: it was never evaluated on ch_push_fric_350_150. Do not state an origin-relative primary endpoint."
+      },
+      "the_measurement_trap": {
+        "claim": "the pilot's prespecified INTER-ARM retention checks all passed while every arm had degraded away from the origin",
+        "receipt": "/home/linjiw/lucid-sonic/analysis/quality_frontier_origin_audit_20260905/analysis.json",
+        "pointer": "contrasts[*].all_retention_checks_pass = true, vs origin_clean_diagnostics[*].both_pose_margins_pass = false for all three arms",
+        "retention_rule": "completion_margin_pp 2.0 and clean_pose_relative_margin 0.10 (10%)"
+      }
+    },
+    "R2_no_expansion_continuation_still_drifts": {
+      "campaign": "/home/linjiw/lucid-sonic/experiments/initial_hold_pilot_20260905_a",
+      "campaign_receipt": "/home/linjiw/lucid-sonic/experiments/initial_hold_pilot_20260905_a/receipt.json",
+      "status": "complete; 12/12 cells",
+      "started_utc": "2026-09-05T22:54:55.729779+00:00",
+      "completed_utc": "2026-09-06T01:43:50.150279+00:00",
+      "training_subprocess_seconds": 9686.063699539009,
+      "evaluation_subprocess_seconds": 431.2192610980128,
+      "design": "allocation=initial: the source's initial E0 cohort distribution and exact cohort membership are held fixed for the whole 2,000-iteration continuation; no expansion at all",
+      "design_receipt": "/home/linjiw/lucid-sonic/experiments/initial_hold_pilot_20260905_a/plan.json",
+      "design_repo": "/home/linjiw/lucid-origin-retention @ e5437b8e33a69f39f693fc249c07b471f1291cd7",
+      "endpoint_clean_drift": {
+        "origin_legacy_global_mm": 128.57060948226064,
+        "endpoint_legacy_global_mm": 164.8283538380203,
+        "global_relative_increase_pct": 28.20064748993998,
+        "local_relative_increase_pct": 4.417701269958507,
+        "endpoint_clean_completion_pct": 100.0,
+        "endpoint_clean_tracking_qualified_pct": 100.0,
+        "receipt": "/home/linjiw/lucid-sonic/experiments/initial_hold_pilot_20260905_a/eval_initial_phys_000/metrics_eval.json",
+        "rollup": "/home/linjiw/lucid-sonic/analysis/initial_hold_retention_20260905_a/analysis.json",
+        "pointer": "origin_clean_diagnostics[arm=initial].global_relative_change = 0.2820064748993998",
+        "recomputed": true
+      },
+      "checkpoint_trajectory_clean_phys_000": [
+        {
+          "env_iterations": 250,
+          "completion_pct": 99.8046875,
+          "legacy_global_mm": 118.24539979823783,
+          "legacy_local_mm": 28.952022089687766,
+          "global_change_pct": -8.030769804702077,
+          "both_pose_margins_pass": true
+        },
+        {
+          "env_iterations": 500,
+          "completion_pct": 100.0,
+          "legacy_global_mm": 146.72417733109606,
+          "legacy_local_mm": 29.438899142230404,
+          "global_change_pct": 14.119531611413993,
+          "both_pose_margins_pass": false
+        },
+        {
+          "env_iterations": 1000,
+          "completion_pct": 100.0,
+          "legacy_global_mm": 141.1712851705777,
+          "legacy_local_mm": 28.951982124366953,
+          "global_change_pct": 9.800587971900088,
+          "both_pose_margins_pass": true
+        },
+        {
+          "env_iterations": 1500,
+          "completion_pct": 100.0,
+          "legacy_global_mm": 183.98539711978913,
+          "legacy_local_mm": 30.26913638364815,
+          "global_change_pct": 43.10066496587175,
+          "both_pose_margins_pass": false
+        },
+        {
+          "env_iterations": 2000,
+          "completion_pct": 100.0,
+          "legacy_global_mm": 164.8283538380203,
+          "legacy_local_mm": 29.585182622620636,
+          "global_change_pct": 28.20064748993998,
+          "both_pose_margins_pass": false
+        }
+      ],
+      "trajectory_receipt": "/home/linjiw/lucid-sonic/analysis/initial_hold_retention_20260905_a/analysis.json",
+      "trajectory_pointer": "rows[] and origin_clean_diagnostics[]; initial_retention_timeline.first_observed_breach_iteration = 500",
+      "trajectory_caveat": "drift is NOT monotone: 1,000 iterations returns inside the margin between two breaches. The analyzer states 'sampled checkpoints only; no exact onset, monotonicity, or population inference'. Never call 500 the onset - it is the first OBSERVED breach on a 5-point grid.",
+      "endpoint_hard_conditions": {
+        "clean": {
+          "completion_pct": 100.0,
+          "qualified_pct": 100.0
+        },
+        "phys_100": {
+          "completion_pct": 98.828125,
+          "qualified_pct": 96.875
+        },
+        "ch_push_300": {
+          "completion_pct": 75.5859375,
+          "qualified_pct": 60.3515625
+        },
+        "ch_push_350": {
+          "completion_pct": 65.0390625,
+          "qualified_pct": 48.2421875
+        },
+        "ch_push_fric": {
+          "completion_pct": 55.46875,
+          "qualified_pct": 39.0625
+        },
+        "two_cell_average_qualified_pct": 43.65234375,
+        "receipt": "/home/linjiw/lucid-sonic/analysis/initial_hold_retention_20260905_a/outcomes.csv"
+      },
+      "conclusion_for_the_paper": "expansion of the training ranges is NOT NECESSARY for clean-tracking loss; a continuation that never widens anything still degrades 28.20% in clean global error while completion stays at 100%."
+    },
+    "R3_optimizer_history_control": {
+      "campaign": "/home/linjiw/lucid-sonic/experiments/optimizer_history_pilot_20260905_a",
+      "campaign_receipt": "/home/linjiw/lucid-sonic/experiments/optimizer_history_pilot_20260905_a/receipt.json",
+      "campaign_status": "/home/linjiw/lucid-sonic/experiments/optimizer_history_campaign_20260905/status.json",
+      "status": "complete; 22/22 cells",
+      "started_utc": "2026-09-06T02:26:06.882370+00:00",
+      "completed_utc": "2026-09-06T07:20:27.972276+00:00",
+      "training_subprocess_seconds": 16655.56170969599,
+      "evaluation_subprocess_seconds": 942.6494881399849,
+      "what_was_compared": {
+        "arm_fresh": "continuation with a fresh AdamW optimizer (the default) under the fixed initial E0 mixture",
+        "arm_restore": "identical continuation except the origin's AdamW history is restored",
+        "restored_quantities": [
+          "exp_avg",
+          "exp_avg_sq",
+          "per_parameter_step"
+        ],
+        "not_restored": "source learning rate, scheduler, environment, global training counter",
+        "parameter_count": 69,
+        "group_sizes": [
+          35,
+          34
+        ],
+        "source_step": 160000.0,
+        "learning_rates": [
+          2e-05,
+          2e-05
+        ],
+        "matched": "same origin, seed 8600, motion, 1,024 envs, PPO settings, initial DR assignments, scheduler initialization",
+        "binding_receipt": "/home/linjiw/lucid-sonic/experiments/optimizer_history_campaign_20260905/binding.json",
+        "binding_pointer": "restoration_validation",
+        "numerical_validation_receipt": "/home/linjiw/lucid-sonic/analysis/optimizer_history_numerical_20260905_a/validation.json",
+        "numerical_validation_pointer": "all_restored_history_tensors_equal = true, one_step_native_parity = true",
+        "parity_gate_receipt": "/home/linjiw/lucid-sonic/experiments/optimizer_history_campaign_20260905/smoke_noop_parity.json",
+        "parity_gate_pointer": "policy_state_dict.all_equal = true (55 tensors), value_state_dict.all_equal = true (17 tensors)"
+      },
+      "outcome": {
+        "claim": "restoring optimizer history does not remove the drift; it is worse on the clean trajectory and slightly worse on held-out hard tracking",
+        "fresh_endpoint_clean_global_increase_pct": 28.20064748993998,
+        "restore_endpoint_clean_global_increase_pct": 27.746387276267036,
+        "fresh_endpoint_clean_local_increase_pct": 4.417701269958507,
+        "restore_endpoint_clean_local_increase_pct": 7.654515918133198,
+        "mean_of_five_checkpoint_global_ratios_fresh": 1.1743813244688475,
+        "mean_of_five_checkpoint_global_ratios_restore": 1.3957556817840682,
+        "mean_of_five_checkpoint_local_ratios_fresh": 1.0390333423643638,
+        "mean_of_five_checkpoint_local_ratios_restore": 1.0427674095342252,
+        "restored_checkpoints_breaching_origin_global_margin": "5 of 5 (250, 500, 1000, 1500, 2000)",
+        "fresh_checkpoints_breaching_origin_global_margin": "3 of 5 (500, 1500, 2000)",
+        "two_cell_held_out_qualified_fresh_pct": 43.65234375,
+        "two_cell_held_out_qualified_restore_pct": 42.87109375,
+        "restore_minus_fresh_pp": -0.78125,
+        "restore_clean_completion_pct": 100.0,
+        "restore_clean_qualified_pct": 99.609375,
+        "receipts": {
+          "rollup": "/home/linjiw/lucid-sonic/analysis/optimizer_history_pilot_20260905_a/analysis.json",
+          "table": "/home/linjiw/lucid-sonic/analysis/optimizer_history_pilot_20260905_a/outcomes.csv",
+          "report": "/home/linjiw/lucid-sonic/analysis/optimizer_history_pilot_20260905_a/report.md",
+          "decision": "/home/linjiw/lucid-sonic/experiments/retention_screen_campaign_20260906_a/continuation_decision.json"
+        },
+        "pointers": {
+          "per_checkpoint": "origin_clean_diagnostics[]",
+          "held_out": "primary_tracking_success_by_arm; contrasts[0].held_out_tracking_delta_pp = -0.78125",
+          "ratio_means": "/home/linjiw/lucid-sonic/experiments/retention_screen_campaign_20260906_a/continuation_decision.json :: trajectories.<arm>.mean_clean_error_ratios"
+        },
+        "recomputed": true,
+        "recompute_note": "all five per-checkpoint ratios, both unweighted ratio means, and both two-cell averages recomputed from the stored legacy MPJPE values; all match"
+      },
+      "causal_scope_MUST_TRAVEL": {
+        "statement": "This control rules out ONE mechanism under ONE contract. It does not uniquely identify momentum/optimizer-state mismatch as the cause of the drift, and it does not identify any other cause. Exposure growth, reference-state coverage, and the training incentives (termination penalty vs pose reward) remain live alternatives, none of them tested here.",
+        "receipted_by": [
+          {
+            "file": "/home/linjiw/lucid-sonic/analysis/optimizer_history_numerical_20260905_a/validation.json",
+            "pointer": "causal_quality_claim = false; simulator_run = false; policy_parameter_binding_verified = false"
+          },
+          {
+            "file": "/home/linjiw/lucid-sonic/experiments/retention_screen_campaign_20260906_a/continuation_decision.json",
+            "pointer": "scope = 'one-origin development recipe choice; no population or larger-pilot causal inference'"
+          },
+          {
+            "file": "/home/linjiw/lucid-sonic/analysis/optimizer_history_pilot_20260905_a/analysis.json",
+            "pointer": "population_inference = false; independent_training_seeds = 1; interpretation = 'development description only; smoke differences are not efficacy evidence'"
+          },
+          {
+            "file": "/home/linjiw/lucid-sonic/experiments/optimizer_history_campaign_20260905/binding.json",
+            "pointer": "scope = 'reconstructed from training config/checkpoint order under pinned grouping code'; historical_named_metadata_available = false"
+          }
+        ],
+        "prose_only_note": "The explicit ENUMERATION of surviving alternatives (exposure, coverage, incentives) appears only in the status note /home/linjiw/lucid/lucid-optimizer-history-results-2026-09-06.md and in draft section 8.2. The JSON receipts assert 'no causal claim' but do not list the alternatives. Cite the receipts for the disclaimer; the enumeration is the authors' reasoning, not a measurement.",
+        "provenance_limitation": "The restored optimizer binding is a RECONSTRUCTION: the origin checkpoint carries no historical named-optimizer metadata (historical_named_metadata_available = false). Parameter correspondence was rebuilt from the original training config under a pinned grouping implementation. If that reconstruction were wrong, the 'restore' arm would not be restoring what it claims."
+      },
+      "restore_vs_fresh_retention_check_is_a_trap": {
+        "warning": "A_OH/analysis.json :: contrasts[0].all_retention_checks_pass = true. That comparator is the ALREADY DRIFTED fresh endpoint, not the origin. It does NOT mean either arm retained the origin's quality. Every origin-relative check fails for restore (5/5) and 3/5 for fresh.",
+        "receipt": "/home/linjiw/lucid-sonic/analysis/optimizer_history_pilot_20260905_a/analysis.json",
+        "pointer": "contrasts[0] vs origin_clean_diagnostics[]"
+      }
+    },
+    "R4_pelvis_translation_geometric_lower_bound": {
+      "analysis": "/home/linjiw/lucid-sonic/analysis/frontier_root_bounds_20260905_a",
+      "receipt": "/home/linjiw/lucid-sonic/analysis/frontier_root_bounds_20260905_a/analysis.json",
+      "report": "/home/linjiw/lucid-sonic/analysis/frontier_root_bounds_20260905_a/report.md",
+      "script_sha256": "c8c6a29f04a8ca2b4918b2c146940b026356f4eb5f5361eb0823c69a80d4f971",
+      "source_analysis": "/home/linjiw/lucid-sonic/analysis/quality_frontier_origin_audit_20260905/receipt.json",
+      "definition": "with r the pelvis (body 0) position error and d_j the pelvis-subtracted body errors, e_j = r + d_j, so the triangle inequality gives |g - l| <= ||r|| <= g + l per sample; averaging over an episode's samples and then over the panel bounds the panel mean pelvis translation error",
+      "headline": {
+        "arm": "gate (survival-feedback gate), clean phys_000, vs frozen origin",
+        "translation_change_lower_mm": 132.15561200127215,
+        "translation_change_upper_mm": 257.7529193751089,
+        "positive_increase_required_by_bounds": true,
+        "pointer": "comparisons.gate.translation_change_lower_mm"
+      },
+      "component_bounds": {
+        "origin": {
+          "mean_masked_global_mm": 127.92777118159754,
+          "mean_masked_local_mm": 28.19184110296979,
+          "translation_lower_mm": 99.73593007862759,
+          "translation_upper_mm": 156.11961228456724
+        },
+        "gate": {
+          "mean_masked_global_mm": 322.88203686978767,
+          "mean_masked_local_mm": 34.60681258394826,
+          "translation_lower_mm": 288.2752242858394,
+          "translation_upper_mm": 357.48884945373646
+        },
+        "replay": {
+          "mean_masked_global_mm": 372.0545586383503,
+          "mean_masked_local_mm": 35.08112114333106,
+          "translation_lower_mm": 336.97343749501925,
+          "translation_upper_mm": 407.1356797816813,
+          "translation_change_lower_mm": 180.85382521045202,
+          "translation_change_upper_mm": 307.3997497030537
+        }
+      },
+      "recomputed": true,
+      "recompute_note": "recomputed directly from the 512 per-episode masked records in /home/linjiw/lucid-sonic/experiments/quality_frontier_pilot_20260905_a/eval_{origin,gate,replay}_phys_000/metrics_eval.json :: eval/qualified/episodes[]; per-episode mean of |g-l| and of g+l, then lower = gate_lower - origin_upper. Reproduces 132.15561200127215 and 257.7529193751089 exactly. Zero of 512 episodes had g < l in any panel.",
+      "WHAT_THIS_IS_NOT": [
+        "NOT a measured absolute pelvis translation - it is a bound on the INCREASE relative to the origin",
+        "NOT a confidence interval - it is a deterministic geometric bound with no sampling distribution attached (analysis.json sets population_inference = false, causal_inference = false)",
+        "NOT an additive decomposition of MPJPE into translation plus local error",
+        "NOT a causal attribution - it does not say which intervention produced the increase",
+        "NOT orientation-invariant - root-relative position error still contains heading and articulation effects",
+        "It uses MASKED pre-step first-episode means (127.93 / 28.19 mm), NOT the legacy panel means (128.57 / 28.33 mm). Do not put the bound and the legacy headline in the same arithmetic."
+      ],
+      "arms_where_the_bound_is_UNRESOLVED": {
+        "receipt": "/home/linjiw/lucid-sonic/analysis/initial_hold_root_bounds_20260905_a/analysis.json",
+        "static": "ineligible - one failed clean episode, no full-motion bound",
+        "initial_250": "ineligible - one failed clean episode",
+        "initial_500": [
+          -39.42076033979505,
+          75.5463613287272
+        ],
+        "initial_1000": [
+          -44.46140657555128,
+          69.53675025972943
+        ],
+        "initial_1500": [
+          -3.171932702695301,
+          113.44736107234444
+        ],
+        "initial_2000": [
+          -21.552656672240516,
+          93.7055688286761
+        ],
+        "note": "every fixed-initial (no-expansion) interval STRADDLES ZERO, so positive_increase_required_by_bounds = false. The translation claim holds for the EXPANDING gate and replay arms only; for the no-expansion continuation the direction of translation change is unresolved even though its global-error retention check fails."
+      }
+    }
+  },
+  "hygiene_notes": [
+    "The optimizer-history 'fresh' arm is a BIT-EXACT reproduction of the initial-hold continuation, not a second observation. All 512 per-episode records match exactly in all nine shared evaluation cells (clean 250/500/1000/1500/2000 plus phys_100, ch_push_300, ch_push_350, ch_push_fric_350_150). Verified by comparing eval/qualified/episodes[] between OH/eval_fresh_* and IH/eval_initial_*; max |delta| on legacy per-episode mpjpe_g is 0.0. The two campaigns retrained independently (8,920.83 s and separate checkpoint files) and landed on identical behaviour. Report R2 and the R3 fresh arm as ONE continuation run, and treat this as a determinism receipt, not as n=2.",
+    "Never call the tracking-qualification thresholds a quality standard. tracking_thresholds.json says 'prospective engineering screen; not a hardware or physical-safety threshold'. A policy can be 100% tracking-qualified while its clean global error has grown 2.5x, which is exactly what the gate arm shows on Push 3.5x-adjacent cells and what the no-expansion arm shows on clean.",
+    "Two denominators exist for clean error. Legacy panel mean (eval/all/mpjpe_g): origin 128.57 mm. Masked first-episode mean (eval/qualified/episodes): origin 127.93 mm. The frontier headline and the retention screen use different ones; draft section 8.1 already flags this. Keep them apart.",
+    "512 evaluation replicates are ALIASES of one motion clip. They tighten the within-policy estimate; they are not 512 motions, not independent seeds, and not independent policies.",
+    "2,000 is env-iterations of continuation, not episodes.",
+    "Contribution 3 has ONE training seed (8600), ONE evaluation seed (8700), ONE motion, ONE origin, in simulation only. Every campaign analysis.json states independent_training_seeds = 1 and population_inference = false.",
+    "The origin was never evaluated on ch_push_fric_350_150, so there is no origin two-cell primary endpoint. The only origin-vs-continuation hard-condition comparison in the frontier pilot is the single Push 3.5x cell.",
+    "The frontier pilot's own inter-arm retention checks PASSED (contrasts[*].all_retention_checks_pass = true) while all three arms had degraded from the origin. This is the cleanest illustration of the contribution and should be reported as such, not buried."
+  ],
+  "receipt_index": {
+    "frontier_pilot_experiment": "/home/linjiw/lucid-sonic/experiments/quality_frontier_pilot_20260905_a",
+    "frontier_pilot_analysis_original": "/home/linjiw/lucid-sonic/analysis/quality_frontier_pilot_20260905_a",
+    "frontier_pilot_analysis_origin_audit": "/home/linjiw/lucid-sonic/analysis/quality_frontier_origin_audit_20260905",
+    "initial_hold_experiment": "/home/linjiw/lucid-sonic/experiments/initial_hold_pilot_20260905_a",
+    "initial_hold_analysis": "/home/linjiw/lucid-sonic/analysis/initial_hold_retention_20260905_a",
+    "optimizer_history_experiment": "/home/linjiw/lucid-sonic/experiments/optimizer_history_pilot_20260905_a",
+    "optimizer_history_analysis": "/home/linjiw/lucid-sonic/analysis/optimizer_history_pilot_20260905_a",
+    "optimizer_history_campaign": "/home/linjiw/lucid-sonic/experiments/optimizer_history_campaign_20260905",
+    "optimizer_history_numerical_validation": "/home/linjiw/lucid-sonic/analysis/optimizer_history_numerical_20260905_a",
+    "continuation_recipe_decision": "/home/linjiw/lucid-sonic/experiments/retention_screen_campaign_20260906_a/continuation_decision.json",
+    "root_bounds_frontier": "/home/linjiw/lucid-sonic/analysis/frontier_root_bounds_20260905_a",
+    "root_bounds_initial_hold": "/home/linjiw/lucid-sonic/analysis/initial_hold_root_bounds_20260905_a",
+    "qualification_instrument_source": "/home/linjiw/lucid-quality-frontier/gear_sonic/research/practice_utility/qualified_pose.py",
+    "leads_prose_not_receipts": [
+      "/home/linjiw/lucid/lucid-quality-frontier-pilot-results-2026-09-05.md",
+      "/home/linjiw/lucid/lucid-initial-hold-results-2026-09-05.md",
+      "/home/linjiw/lucid/lucid-optimizer-history-results-2026-09-06.md",
+      "/home/linjiw/lucid/lucid-root-feedback-findings-2026-09-05.md"
+    ]
+  },
+  "draft_status": {
+    "note": "C3 is NOT new to the draft. /home/linjiw/lucid/paper/when-training-gets-easier.md already carries it as section 8 ('Survival Is Not Fidelity'), lines ~216-232, with the 128.57 -> 324.50 mm headline, the +152.39%, and the 64.84->71.09 / 49.02->45.70 pair, all matching the receipts.",
+    "missing_from_draft": [
+      "the +28.20% no-expansion figure is described qualitatively ('drift persists when the initial hard-practice mixture is held fixed') but the number is not given",
+      "the pelvis-translation geometric lower bound (>= +132.16 mm) is not in the draft at all; section 8.1 currently only says the norms admit no additive identity",
+      "the optimizer-history comparison is one sentence with no numbers (no 1.174 vs 1.396 mean ratio, no -0.78 pp held-out delta, no 5/5 vs 3/5 breach count)"
+    ]
+  }
+}

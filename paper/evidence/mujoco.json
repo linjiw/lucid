@@ -1,0 +1,1791 @@
+{
+  "topic": "sim-to-sim transfer in MuJoCo, and the held-out-motion companion",
+  "written_by": "evidence audit, 2026-09-07",
+  "audit_note": "Every pass rate below was RECOMPUTED from the 1,440 per-rollout JSON files under $LUCID_ROOT/artifacts/mujoco_sweep_*/runs/<arm>/lam<L>/seed<N>.json, not read from a summary. receipts/analysis/lucid_draft_number_verification_20260902.json not_verified[0] explicitly says the MuJoCo rates had never been independently re-derived; they now have been, and they match the stdout logs and paper Table 6 exactly.",
+  "experiment": {
+    "question": "Does the ordering of the policy classes survive a change of simulator?",
+    "simulator": "MuJoCo, single process, no DDS, no C++ runner",
+    "player": "/home/linjiw/lucid/tools/mujoco_player.py",
+    "sweep_driver": "/home/linjiw/lucid/tools/mujoco_sweep.py",
+    "model_xml": "/home/linjiw/lucid/GR00T-WholeBodyControl/gear_sonic_deploy/g1/g1_29dof.xml (scene_empty.xml)",
+    "motion": {
+      "clip": "walk_hands_on_back_loop_002__A066_M",
+      "path": "/home/linjiw/lucid-sonic/pools/debug512/robot_filtered/walk_hands_on_back_loop_002__A066_M.pkl",
+      "duration_s": 4.0,
+      "note": "THIS IS THE TRAINED CLIP. The MuJoCo study changes the simulator ONLY; it does not change the motion. The motion change is the separate Isaac held-out-motion study below."
+    },
+    "policies_exported": {
+      "format": "fused *_g1.onnx, exported by gear_sonic/eval_agent_trl.py with +export_onnx_only=true from the pinned eval worktree /home/linjiw/lucid-phase0-eval",
+      "iteration": "env-iteration 8000 (model_step_008000_g1.onnx)",
+      "provenance_check": "export_onnx.log line 276 shows the export loaded final_checkpoint.pt; final_checkpoint.pt and model_step_008000.pt are byte-identical (sha256 227a1c2f9822e8968fd17810ae2a2ea87193d0f5c00d052c37bb7f212df26bb1, 484,829,781 bytes) for seed_8601/fixed, so the replayed policy is the same checkpoint Isaac scored.",
+      "arms": {
+        "off_s8600": {
+          "label": "no randomization",
+          "seed": 8600,
+          "mode": "off",
+          "final_lambda": null,
+          "onnx": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260829_000249/seed_8600/off/exported/model_step_008000_g1.onnx"
+        },
+        "lucid_collapsed_s8601": {
+          "label": "adaptive curriculum, unconstrained; COLLAPSED",
+          "seed": 8601,
+          "mode": "lucid_rg",
+          "final_lambda": 0.062,
+          "onnx": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260829_000249/seed_8601/lucid_rg/exported/model_step_008000_g1.onnx"
+        },
+        "fixed_s8600": {
+          "label": "fixed full DR",
+          "seed": 8600,
+          "mode": "fixed",
+          "final_lambda": 1.0,
+          "onnx": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260829_000249/seed_8600/fixed/exported/model_step_008000_g1.onnx"
+        },
+        "fixed_s8601": {
+          "label": "fixed full DR, seed paired with the collapsed and never-shrink arms",
+          "seed": 8601,
+          "mode": "fixed",
+          "final_lambda": 1.0,
+          "onnx": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260829_000249/seed_8601/fixed/exported/model_step_008000_g1.onnx"
+        },
+        "ratchet_s8601": {
+          "label": "adaptive curriculum + never-shrink (monotone ratchet)",
+          "seed": 8601,
+          "mode": "lucid_ratchet_rg",
+          "final_lambda": 1.0,
+          "onnx": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260831_144022/seed_8601/lucid_ratchet_rg/exported/model_step_008000_g1.onnx"
+        }
+      },
+      "final_lambda_receipt": "/home/linjiw/lucid/receipts/analysis/lucid_return_inversion_20260901.json -> pairs[*].final_lambda"
+    },
+    "independent_reimplementation": {
+      "what_is_independent": "The 1,570-float observation is rebuilt in the player from MuJoCo state and the reference clip using the training-side definitions; no code is shared with the Isaac observation pipeline. PD torque control at 200 Hz (sim_dt 5 ms) with a 20 ms policy step (decimation 4), 10-step proprioceptive history, 10 future reference frames at 0.1 s.",
+      "channels": "six, scaled by one scalar lambda, widened affinely about nominal (mujoco_player.py:145-207 DRConfig)",
+      "channel_ranges_at_lambda_1": {
+        "static_friction": [
+          0.3,
+          1.6
+        ],
+        "mass_scale_per_body": [
+          0.8,
+          1.2
+        ],
+        "com_offset_torso": [
+          [
+            -0.025,
+            0.025
+          ],
+          [
+            -0.05,
+            0.05
+          ],
+          [
+            -0.05,
+            0.05
+          ]
+        ],
+        "joint_default_bias": [
+          -0.01,
+          0.01
+        ],
+        "push_linear_xyz": [
+          0.5,
+          0.5,
+          0.2
+        ],
+        "push_angular_rpy": [
+          0.52,
+          0.52,
+          0.78
+        ],
+        "push_interval_s": [
+          1.0,
+          3.0
+        ],
+        "action_delay_steps": [
+          0.0,
+          8.0
+        ]
+      },
+      "known_approximation": "The mass channel mirrors the repo's GENERIC term config gear_sonic/config/manager_env/events/terms/randomize_rigid_body_mass.yaml (scale [0.8,1.2] over body_names '.*'), NOT the campaign's RESOLVED event, which was scale [0.8,1.5] over body_names '.*wrist_yaw.*|torso_link' (config.yaml:872-884 of sonic_release_test-20260830_002425). Friction is likewise a single geom_friction scalar clipped to [0.05,4.0], where Isaac draws static [0.3,1.6], dynamic [0.3,1.2] and restitution [0.0,0.5] into 64 buckets. This is why the replay is described as a labelled approximation and the absolute gap is reported, not tuned."
+    },
+    "survival_definition": {
+      "operational": "At every 20 ms control step the 3-D distance between the pelvis body position and the reference root position is computed; if it ever exceeds 0.5 m the run FAILS and t_end is the fall time. A run PASSES only if the distance stays under 0.5 m for the whole 4.0 s clip (mujoco_player.py:566-573).",
+      "threshold_provenance": "0.5 m is the anchor_pos termination threshold used in every Isaac scored cell",
+      "not": "This is a survival/anchoring criterion, not a tracking-quality criterion. It says nothing about MPJPE."
+    },
+    "draws": {
+      "per_cell": 32,
+      "seeds": "1..32, shared across arms at each lambda",
+      "shared_draw_check": "DRConfig.sample uses np.random.default_rng(seed), so for a given (lambda, seed, channel set) every arm faces the identical physics draw and the identical push schedule; comparisons are paired.",
+      "all_channels_rollouts": 960,
+      "physics_only_rollouts": 480,
+      "total_rollouts": 1440,
+      "caveat": "32 physics draws of ONE trained policy per arm. Draws are not independent trained policies."
+    },
+    "parity_gate": {
+      "rule": "the pipeline is wrong unless the policies track the clip at nominal physics in MuJoCo",
+      "result": "at lambda 0 (all channels) all five arms survive 32/32",
+      "history": "an earlier build of the pipeline failed the gate: artifacts/mujoco_parity/fixed_lam0.json fell at t=3.92 s with anchor_err 0.503; the fixed build artifacts/mujoco_parity/fixed_lam0_v2.json ends the clip at anchor_err 0.16. The sweeps were run with the passing build."
+    }
+  },
+  "results_mujoco": {
+    "all_channels_including_pushes": {
+      "receipt_dir": "/home/linjiw/lucid-sonic/artifacts/mujoco_sweep_20260902/runs",
+      "repo_copy_of_summary": "/home/linjiw/lucid/receipts/analysis/mujoco_sim2sim_20260902/sweep_full_channels.json (ONE ARM ONLY - see problems)",
+      "table": {
+        "fixed_s8600": {
+          "0": {
+            "survived": 32,
+            "draws": 32,
+            "pct": 100.0,
+            "survivor_seeds": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18,
+              19,
+              20,
+              21,
+              22,
+              23,
+              24,
+              25,
+              26,
+              27,
+              28,
+              29,
+              30,
+              31,
+              32
+            ]
+          },
+          "0.5": {
+            "survived": 31,
+            "draws": 32,
+            "pct": 96.875,
+            "survivor_seeds": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18,
+              19,
+              20,
+              21,
+              22,
+              23,
+              24,
+              25,
+              26,
+              27,
+              28,
+              29,
+              31,
+              32
+            ]
+          },
+          "1": {
+            "survived": 25,
+            "draws": 32,
+            "pct": 78.125,
+            "survivor_seeds": [
+              2,
+              4,
+              5,
+              6,
+              7,
+              8,
+              10,
+              11,
+              13,
+              14,
+              15,
+              17,
+              18,
+              19,
+              20,
+              21,
+              22,
+              23,
+              25,
+              26,
+              27,
+              28,
+              29,
+              31,
+              32
+            ]
+          },
+          "1.25": {
+            "survived": 13,
+            "draws": 32,
+            "pct": 40.625,
+            "survivor_seeds": [
+              5,
+              7,
+              8,
+              13,
+              14,
+              17,
+              20,
+              22,
+              26,
+              27,
+              29,
+              31,
+              32
+            ]
+          },
+          "1.5": {
+            "survived": 11,
+            "draws": 32,
+            "pct": 34.375,
+            "survivor_seeds": [
+              5,
+              7,
+              8,
+              14,
+              20,
+              22,
+              26,
+              27,
+              29,
+              31,
+              32
+            ]
+          },
+          "2": {
+            "survived": 5,
+            "draws": 32,
+            "pct": 15.625,
+            "survivor_seeds": [
+              5,
+              7,
+              14,
+              27,
+              32
+            ]
+          }
+        },
+        "fixed_s8601": {
+          "0": {
+            "survived": 32,
+            "draws": 32,
+            "pct": 100.0,
+            "survivor_seeds": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18,
+              19,
+              20,
+              21,
+              22,
+              23,
+              24,
+              25,
+              26,
+              27,
+              28,
+              29,
+              30,
+              31,
+              32
+            ]
+          },
+          "0.5": {
+            "survived": 26,
+            "draws": 32,
+            "pct": 81.25,
+            "survivor_seeds": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              7,
+              8,
+              9,
+              13,
+              14,
+              15,
+              16,
+              17,
+              19,
+              20,
+              21,
+              22,
+              24,
+              25,
+              26,
+              27,
+              28,
+              29,
+              30,
+              31,
+              32
+            ]
+          },
+          "1": {
+            "survived": 15,
+            "draws": 32,
+            "pct": 46.875,
+            "survivor_seeds": [
+              1,
+              5,
+              7,
+              8,
+              13,
+              15,
+              17,
+              19,
+              21,
+              22,
+              25,
+              26,
+              28,
+              29,
+              31
+            ]
+          },
+          "1.25": {
+            "survived": 10,
+            "draws": 32,
+            "pct": 31.25,
+            "survivor_seeds": [
+              1,
+              7,
+              8,
+              13,
+              17,
+              22,
+              26,
+              27,
+              29,
+              31
+            ]
+          },
+          "1.5": {
+            "survived": 8,
+            "draws": 32,
+            "pct": 25.0,
+            "survivor_seeds": [
+              8,
+              13,
+              17,
+              22,
+              26,
+              27,
+              29,
+              31
+            ]
+          },
+          "2": {
+            "survived": 4,
+            "draws": 32,
+            "pct": 12.5,
+            "survivor_seeds": [
+              5,
+              22,
+              26,
+              27
+            ]
+          }
+        },
+        "lucid_collapsed_s8601": {
+          "0": {
+            "survived": 32,
+            "draws": 32,
+            "pct": 100.0,
+            "survivor_seeds": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18,
+              19,
+              20,
+              21,
+              22,
+              23,
+              24,
+              25,
+              26,
+              27,
+              28,
+              29,
+              30,
+              31,
+              32
+            ]
+          },
+          "0.5": {
+            "survived": 32,
+            "draws": 32,
+            "pct": 100.0,
+            "survivor_seeds": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18,
+              19,
+              20,
+              21,
+              22,
+              23,
+              24,
+              25,
+              26,
+              27,
+              28,
+              29,
+              30,
+              31,
+              32
+            ]
+          },
+          "1": {
+            "survived": 18,
+            "draws": 32,
+            "pct": 56.25,
+            "survivor_seeds": [
+              1,
+              2,
+              5,
+              8,
+              10,
+              13,
+              14,
+              15,
+              17,
+              19,
+              20,
+              21,
+              22,
+              26,
+              27,
+              29,
+              31,
+              32
+            ]
+          },
+          "1.25": {
+            "survived": 10,
+            "draws": 32,
+            "pct": 31.25,
+            "survivor_seeds": [
+              1,
+              5,
+              8,
+              14,
+              20,
+              22,
+              26,
+              27,
+              29,
+              32
+            ]
+          },
+          "1.5": {
+            "survived": 6,
+            "draws": 32,
+            "pct": 18.75,
+            "survivor_seeds": [
+              5,
+              8,
+              14,
+              20,
+              26,
+              27
+            ]
+          },
+          "2": {
+            "survived": 3,
+            "draws": 32,
+            "pct": 9.375,
+            "survivor_seeds": [
+              5,
+              26,
+              27
+            ]
+          }
+        },
+        "off_s8600": {
+          "0": {
+            "survived": 32,
+            "draws": 32,
+            "pct": 100.0,
+            "survivor_seeds": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18,
+              19,
+              20,
+              21,
+              22,
+              23,
+              24,
+              25,
+              26,
+              27,
+              28,
+              29,
+              30,
+              31,
+              32
+            ]
+          },
+          "0.5": {
+            "survived": 31,
+            "draws": 32,
+            "pct": 96.875,
+            "survivor_seeds": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18,
+              19,
+              20,
+              21,
+              22,
+              23,
+              24,
+              25,
+              26,
+              27,
+              28,
+              29,
+              30,
+              31,
+              32
+            ]
+          },
+          "1": {
+            "survived": 10,
+            "draws": 32,
+            "pct": 31.25,
+            "survivor_seeds": [
+              5,
+              6,
+              14,
+              19,
+              20,
+              21,
+              26,
+              27,
+              29,
+              32
+            ]
+          },
+          "1.25": {
+            "survived": 7,
+            "draws": 32,
+            "pct": 21.875,
+            "survivor_seeds": [
+              5,
+              14,
+              20,
+              26,
+              27,
+              29,
+              32
+            ]
+          },
+          "1.5": {
+            "survived": 4,
+            "draws": 32,
+            "pct": 12.5,
+            "survivor_seeds": [
+              20,
+              26,
+              27,
+              29
+            ]
+          },
+          "2": {
+            "survived": 0,
+            "draws": 32,
+            "pct": 0.0,
+            "survivor_seeds": []
+          }
+        },
+        "ratchet_s8601": {
+          "0": {
+            "survived": 32,
+            "draws": 32,
+            "pct": 100.0,
+            "survivor_seeds": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18,
+              19,
+              20,
+              21,
+              22,
+              23,
+              24,
+              25,
+              26,
+              27,
+              28,
+              29,
+              30,
+              31,
+              32
+            ]
+          },
+          "0.5": {
+            "survived": 23,
+            "draws": 32,
+            "pct": 71.875,
+            "survivor_seeds": [
+              1,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              13,
+              14,
+              16,
+              17,
+              20,
+              22,
+              24,
+              25,
+              26,
+              27,
+              28,
+              29,
+              30,
+              31
+            ]
+          },
+          "1": {
+            "survived": 15,
+            "draws": 32,
+            "pct": 46.875,
+            "survivor_seeds": [
+              1,
+              5,
+              7,
+              8,
+              13,
+              15,
+              17,
+              20,
+              21,
+              22,
+              24,
+              26,
+              27,
+              29,
+              31
+            ]
+          },
+          "1.25": {
+            "survived": 10,
+            "draws": 32,
+            "pct": 31.25,
+            "survivor_seeds": [
+              1,
+              5,
+              8,
+              17,
+              20,
+              22,
+              26,
+              27,
+              29,
+              31
+            ]
+          },
+          "1.5": {
+            "survived": 7,
+            "draws": 32,
+            "pct": 21.875,
+            "survivor_seeds": [
+              1,
+              5,
+              22,
+              26,
+              27,
+              29,
+              31
+            ]
+          },
+          "2": {
+            "survived": 5,
+            "draws": 32,
+            "pct": 15.625,
+            "survivor_seeds": [
+              5,
+              20,
+              22,
+              26,
+              27
+            ]
+          }
+        }
+      }
+    },
+    "physics_only_no_pushes": {
+      "channels": "friction, mass, com, joint, delay (no push)",
+      "receipt_dir": "/home/linjiw/lucid-sonic/artifacts/mujoco_sweep_nopush_20260902/runs",
+      "repo_copy_of_summary": "/home/linjiw/lucid/receipts/analysis/mujoco_sim2sim_20260902/sweep_physics_only.json (ONE ARM ONLY - see problems)",
+      "table": {
+        "fixed_s8600": {
+          "1": {
+            "survived": 30,
+            "draws": 32,
+            "pct": 93.75,
+            "survivor_seeds": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              12,
+              13,
+              14,
+              16,
+              17,
+              18,
+              19,
+              20,
+              21,
+              22,
+              23,
+              24,
+              25,
+              26,
+              27,
+              28,
+              29,
+              30,
+              31,
+              32
+            ]
+          },
+          "1.5": {
+            "survived": 18,
+            "draws": 32,
+            "pct": 56.25,
+            "survivor_seeds": [
+              1,
+              3,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              12,
+              14,
+              16,
+              20,
+              22,
+              24,
+              26,
+              27,
+              29,
+              32
+            ]
+          },
+          "2": {
+            "survived": 10,
+            "draws": 32,
+            "pct": 31.25,
+            "survivor_seeds": [
+              5,
+              7,
+              8,
+              9,
+              16,
+              20,
+              26,
+              27,
+              29,
+              32
+            ]
+          }
+        },
+        "fixed_s8601": {
+          "1": {
+            "survived": 24,
+            "draws": 32,
+            "pct": 75.0,
+            "survivor_seeds": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              8,
+              9,
+              10,
+              13,
+              14,
+              15,
+              16,
+              17,
+              19,
+              20,
+              22,
+              24,
+              25,
+              26,
+              27,
+              30,
+              31,
+              32
+            ]
+          },
+          "1.5": {
+            "survived": 15,
+            "draws": 32,
+            "pct": 46.875,
+            "survivor_seeds": [
+              1,
+              6,
+              9,
+              14,
+              16,
+              17,
+              20,
+              22,
+              24,
+              26,
+              27,
+              29,
+              30,
+              31,
+              32
+            ]
+          },
+          "2": {
+            "survived": 12,
+            "draws": 32,
+            "pct": 37.5,
+            "survivor_seeds": [
+              5,
+              6,
+              9,
+              14,
+              16,
+              20,
+              22,
+              24,
+              26,
+              27,
+              29,
+              32
+            ]
+          }
+        },
+        "lucid_collapsed_s8601": {
+          "1": {
+            "survived": 27,
+            "draws": 32,
+            "pct": 84.375,
+            "survivor_seeds": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18,
+              20,
+              21,
+              22,
+              23,
+              24,
+              25,
+              26,
+              27,
+              29,
+              30,
+              32
+            ]
+          },
+          "1.5": {
+            "survived": 10,
+            "draws": 32,
+            "pct": 31.25,
+            "survivor_seeds": [
+              5,
+              6,
+              7,
+              9,
+              14,
+              20,
+              25,
+              26,
+              27,
+              32
+            ]
+          },
+          "2": {
+            "survived": 5,
+            "draws": 32,
+            "pct": 15.625,
+            "survivor_seeds": [
+              5,
+              14,
+              26,
+              27,
+              32
+            ]
+          }
+        },
+        "off_s8600": {
+          "1": {
+            "survived": 19,
+            "draws": 32,
+            "pct": 59.375,
+            "survivor_seeds": [
+              2,
+              3,
+              5,
+              6,
+              7,
+              9,
+              14,
+              16,
+              17,
+              18,
+              19,
+              20,
+              21,
+              23,
+              24,
+              26,
+              27,
+              29,
+              32
+            ]
+          },
+          "1.5": {
+            "survived": 5,
+            "draws": 32,
+            "pct": 15.625,
+            "survivor_seeds": [
+              14,
+              20,
+              26,
+              29,
+              32
+            ]
+          },
+          "2": {
+            "survived": 1,
+            "draws": 32,
+            "pct": 3.125,
+            "survivor_seeds": [
+              32
+            ]
+          }
+        },
+        "ratchet_s8601": {
+          "1": {
+            "survived": 21,
+            "draws": 32,
+            "pct": 65.625,
+            "survivor_seeds": [
+              1,
+              3,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              13,
+              14,
+              16,
+              17,
+              20,
+              22,
+              24,
+              26,
+              27,
+              29,
+              30,
+              31,
+              32
+            ]
+          },
+          "1.5": {
+            "survived": 16,
+            "draws": 32,
+            "pct": 50.0,
+            "survivor_seeds": [
+              1,
+              3,
+              6,
+              8,
+              9,
+              14,
+              16,
+              17,
+              20,
+              22,
+              24,
+              26,
+              27,
+              29,
+              31,
+              32
+            ]
+          },
+          "2": {
+            "survived": 12,
+            "draws": 32,
+            "pct": 37.5,
+            "survivor_seeds": [
+              5,
+              6,
+              7,
+              8,
+              9,
+              16,
+              20,
+              22,
+              26,
+              27,
+              29,
+              32
+            ]
+          }
+        }
+      }
+    },
+    "headline_cell_physics_only_lambda_2": {
+      "denominator": 32,
+      "values": {
+        "fixed_s8600": {
+          "survived": 10,
+          "pct": 31.25,
+          "wilson95_pct": [
+            17.95,
+            48.57
+          ]
+        },
+        "fixed_s8601": {
+          "survived": 12,
+          "pct": 37.5,
+          "wilson95_pct": [
+            22.93,
+            54.75
+          ]
+        },
+        "lucid_collapsed_s8601": {
+          "survived": 5,
+          "pct": 15.625,
+          "wilson95_pct": [
+            6.86,
+            31.75
+          ]
+        },
+        "off_s8600": {
+          "survived": 1,
+          "pct": 3.125,
+          "wilson95_pct": [
+            0.55,
+            15.74
+          ]
+        },
+        "ratchet_s8601": {
+          "survived": 12,
+          "pct": 37.5,
+          "wilson95_pct": [
+            22.93,
+            54.75
+          ]
+        }
+      },
+      "paired_mcnemar_exact_two_sided": {
+        "fixed_s8600 vs fixed_s8601": {
+          "b_only_first": 2,
+          "c_only_second": 4,
+          "exact_two_sided_p": 0.6875
+        },
+        "fixed_s8600 vs lucid_collapsed_s8601": {
+          "b_only_first": 6,
+          "c_only_second": 1,
+          "exact_two_sided_p": 0.125
+        },
+        "fixed_s8600 vs off_s8600": {
+          "b_only_first": 9,
+          "c_only_second": 0,
+          "exact_two_sided_p": 0.0039
+        },
+        "fixed_s8600 vs ratchet_s8601": {
+          "b_only_first": 0,
+          "c_only_second": 2,
+          "exact_two_sided_p": 0.5
+        },
+        "fixed_s8601 vs lucid_collapsed_s8601": {
+          "b_only_first": 7,
+          "c_only_second": 0,
+          "exact_two_sided_p": 0.0156
+        },
+        "fixed_s8601 vs off_s8600": {
+          "b_only_first": 11,
+          "c_only_second": 0,
+          "exact_two_sided_p": 0.001
+        },
+        "fixed_s8601 vs ratchet_s8601": {
+          "b_only_first": 2,
+          "c_only_second": 2,
+          "exact_two_sided_p": 1.0
+        },
+        "lucid_collapsed_s8601 vs off_s8600": {
+          "b_only_first": 4,
+          "c_only_second": 0,
+          "exact_two_sided_p": 0.125
+        },
+        "lucid_collapsed_s8601 vs ratchet_s8601": {
+          "b_only_first": 1,
+          "c_only_second": 8,
+          "exact_two_sided_p": 0.0391
+        },
+        "off_s8600 vs ratchet_s8601": {
+          "b_only_first": 0,
+          "c_only_second": 11,
+          "exact_two_sided_p": 0.001
+        }
+      },
+      "stats_note": "Wilson intervals and McNemar tests are computed here for the first time; they are not in any stored receipt. No multiple-comparison correction is applied to the ten pairwise tests."
+    },
+    "ordering_agreement_with_isaac": {
+      "isaac_reference": "k512 physics-only ladder on the trained clip, same five checkpoints; phys_100/150/200 = lambda 1/1.5/2 of the five non-latency channels with actuation latency pinned to ZERO (run_curriculum_robustness_eval.py:103-117 PRESET_PHYSICS_ONLY)",
+      "isaac_values": {
+        "off_s8600": {
+          "1": 0.910156,
+          "1.5": 0.511719,
+          "2": 0.333984
+        },
+        "fixed_s8600": {
+          "1": 0.994141,
+          "1.5": 0.923828,
+          "2": 0.820312
+        },
+        "fixed_s8601": {
+          "1": 0.986328,
+          "1.5": 0.904297,
+          "2": 0.796875
+        },
+        "lucid_collapsed_s8601": {
+          "1": 0.988281,
+          "1.5": 0.792969,
+          "2": 0.583984
+        },
+        "ratchet_s8601": {
+          "1": 0.996094,
+          "1.5": 0.941406,
+          "2": 0.832031
+        }
+      },
+      "isaac_receipts": {
+        "off_s8600 / fixed_s8600 / lucid_rg / lucid_s4_rg": "manifests/curriculum_robustness_ne512_20260829_214540.json, ..._20260830_013413.json",
+        "lucid_collapsed_s8601 (mode lucid_rg, seed 8601)": "manifests/curriculum_robustness_ne512_20260901_161202.json",
+        "fixed_s8601": "manifests/ratchet_screen_20260831/fixed/curriculum_robustness_ne512_20260831_202312.json",
+        "ratchet_s8601": "manifests/ratchet_screen_20260831/treatment/curriculum_robustness_ne512_20260831_201524.json"
+      },
+      "spearman_by_lambda": {
+        "all_channels": {
+          "lam_1": {
+            "spearman_mujoco_vs_isaac": 0.5643,
+            "mujoco_rank_best_first": [
+              "fixed_s8600",
+              "lucid_collapsed_s8601",
+              "fixed_s8601",
+              "ratchet_s8601",
+              "off_s8600"
+            ],
+            "isaac_rank_best_first": [
+              "ratchet_s8601",
+              "fixed_s8600",
+              "lucid_collapsed_s8601",
+              "fixed_s8601",
+              "off_s8600"
+            ]
+          },
+          "lam_1.5": {
+            "spearman_mujoco_vs_isaac": 0.7,
+            "mujoco_rank_best_first": [
+              "fixed_s8600",
+              "fixed_s8601",
+              "ratchet_s8601",
+              "lucid_collapsed_s8601",
+              "off_s8600"
+            ],
+            "isaac_rank_best_first": [
+              "ratchet_s8601",
+              "fixed_s8600",
+              "fixed_s8601",
+              "lucid_collapsed_s8601",
+              "off_s8600"
+            ]
+          },
+          "lam_2": {
+            "spearman_mujoco_vs_isaac": 0.9747,
+            "mujoco_rank_best_first": [
+              "fixed_s8600",
+              "ratchet_s8601",
+              "fixed_s8601",
+              "lucid_collapsed_s8601",
+              "off_s8600"
+            ],
+            "isaac_rank_best_first": [
+              "ratchet_s8601",
+              "fixed_s8600",
+              "fixed_s8601",
+              "lucid_collapsed_s8601",
+              "off_s8600"
+            ]
+          },
+          "mean_spearman": 0.7463
+        },
+        "physics_only": {
+          "lam_1": {
+            "spearman_mujoco_vs_isaac": 0.4,
+            "mujoco_rank_best_first": [
+              "fixed_s8600",
+              "lucid_collapsed_s8601",
+              "fixed_s8601",
+              "ratchet_s8601",
+              "off_s8600"
+            ],
+            "isaac_rank_best_first": [
+              "ratchet_s8601",
+              "fixed_s8600",
+              "lucid_collapsed_s8601",
+              "fixed_s8601",
+              "off_s8600"
+            ]
+          },
+          "lam_1.5": {
+            "spearman_mujoco_vs_isaac": 0.9,
+            "mujoco_rank_best_first": [
+              "fixed_s8600",
+              "ratchet_s8601",
+              "fixed_s8601",
+              "lucid_collapsed_s8601",
+              "off_s8600"
+            ],
+            "isaac_rank_best_first": [
+              "ratchet_s8601",
+              "fixed_s8600",
+              "fixed_s8601",
+              "lucid_collapsed_s8601",
+              "off_s8600"
+            ]
+          },
+          "lam_2": {
+            "spearman_mujoco_vs_isaac": 0.8208,
+            "mujoco_rank_best_first": [
+              "fixed_s8601",
+              "ratchet_s8601",
+              "fixed_s8600",
+              "lucid_collapsed_s8601",
+              "off_s8600"
+            ],
+            "isaac_rank_best_first": [
+              "ratchet_s8601",
+              "fixed_s8600",
+              "fixed_s8601",
+              "lucid_collapsed_s8601",
+              "off_s8600"
+            ]
+          },
+          "mean_spearman": 0.7069
+        }
+      },
+      "channel_set_caveat": "Neither MuJoCo sweep matches the Isaac ladder's channel set exactly. Isaac's phys_* ladder scales five channels INCLUDING push and pins latency to zero. MuJoCo 'all channels' adds a delay channel on top of those five; MuJoCo 'physics only' drops push and keeps delay."
+    },
+    "where_the_ordering_does_and_does_not_hold": {
+      "holds_beyond_the_envelope": "At lambda 1.5 and 2.0 the collapsed policy sits below never-shrink and both fixed arms in both sweeps, and no-DR is last everywhere at lambda >= 1.",
+      "fails_inside_the_envelope": "At lambda 1 the COLLAPSED policy outranks never-shrink and paired fixed in BOTH sweeps (physics-only 27/32 = 84.4% vs ratchet 21/32 = 65.6% and fixed_s8601 24/32 = 75.0%; all-channels 18/32 = 56.2% vs 15/32 = 46.9% for both). At lambda 1.25 (all channels) the three tie at 10/32. Isaac-vs-MuJoCo rank correlation at lambda 1 is only 0.40 (physics-only) / 0.56 (all channels), versus 0.90 and 0.97 beyond the envelope.",
+      "consequence_for_the_paper": "The transferable claim is 'the ordering transfers BEYOND the training envelope', not 'the ordering transfers'. The README's sentence 'the ordering ... holds from lambda 1 up' is contradicted by the data."
+    },
+    "sim2sim_gap": {
+      "statement": "Absolute MuJoCo survival is far below the Isaac ledger for the same checkpoints and the same nominal lambda; e.g. at lambda 2 physics-only ratchet_s8601 is 37.5% in MuJoCo against 83.2% in Isaac, and fixed_s8600 is 31.2% against 82.0%. The gap is reported, not tuned.",
+      "cause": "different randomization implementation (see known_approximation) plus a different physics engine and contact model"
+    },
+    "video_story_grids": {
+      "story_full_ladder_manifest": "/home/linjiw/lucid/receipts/analysis/mujoco_sim2sim_20260902/story_full_ladder_manifest.json",
+      "story_frontier_manifest": "/home/linjiw/lucid/receipts/analysis/mujoco_sim2sim_20260902/story_frontier_manifest.json",
+      "verified": "both are exactly the seed 1-8 subsets of the corresponding 32-seed sweep; every pass count and fall time matches"
+    }
+  },
+  "results_heldout_motion": {
+    "what_it_is": "A SEPARATE experiment, run in ISAAC, not MuJoCo. Same frozen seed-8600 checkpoints, scored on sibling walking clips none of them trained on. It changes the MOTION, not the simulator.",
+    "runner": "/home/linjiw/lucid/tools/run_heldout_motion_scoring.sh",
+    "analyzer": "/home/linjiw/lucid/tools/analyze_heldout_motion.py",
+    "checkpoint_index": "/home/linjiw/lucid-sonic/manifests/lucid_heldout_motion_index.json",
+    "arms": {
+      "off": "no randomization, seed 8600",
+      "fixed": "fixed full DR, seed 8600",
+      "lucid_rg": "adaptive, seed 8600, held its ranges (final lambda 1.0)",
+      "lucid_s4_rg": "adaptive, seed 8600, COLLAPSED (final lambda 0.012)",
+      "lucid_ratchet_rg": "never-shrink, seed 8600 (final lambda 1.0)"
+    },
+    "cells": "phys_100 / phys_150 / phys_200 = lambda 1.0 / 1.5 / 2.0; 128 episode aliases per cell (k128, not the main ladder's k512)",
+    "frozen_receipt_as_cited_by_the_paper": {
+      "path": "/home/linjiw/lucid/receipts/analysis/lucid_heldout_motion_20260901.json",
+      "content": "ONE clip (walk_hands_on_back_loop_003__A093), FOUR arms (no never-shrink), TWO cells (phys_200 empty)",
+      "phys_150_success": {
+        "fixed": 0.804688,
+        "lucid_rg": 0.726562,
+        "lucid_s4_rg": 0.398438,
+        "off": 0.179688
+      },
+      "phys_100_success": {
+        "fixed": 0.976562,
+        "lucid_rg": 0.953125,
+        "lucid_s4_rg": 0.828125,
+        "off": 0.585938
+      },
+      "spearman_values": [
+        0.8,
+        1.0
+      ],
+      "mean": 0.9,
+      "min": 0.8,
+      "status": "STALE MID-RUN SNAPSHOT and a CROSS-SEED comparison - see problems"
+    },
+    "full_recompute_all_data_on_disk": {
+      "source_manifests": [
+        "curriculum_robustness_ne128_20260901_204100.json",
+        "curriculum_robustness_ne128_20260901_204903.json",
+        "curriculum_robustness_ne128_20260901_205059.json",
+        "curriculum_robustness_ne128_20260901_205712.json",
+        "curriculum_robustness_ne128_20260901_205843.json",
+        "curriculum_robustness_ne128_20260901_210542.json"
+      ],
+      "coverage": "3 clips x 5 arms x 3 cells = 45 cells, every run exit_code 0",
+      "spearman_reference": "trained clip walk_hands_on_back_loop_002__A066_M, k512, SEED 8600 ONLY (seed-matched to the held-out arms)",
+      "reference_values": {
+        "off": {
+          "phys_100": 0.910156,
+          "phys_150": 0.511719,
+          "phys_200": 0.333984
+        },
+        "fixed": {
+          "phys_100": 0.994141,
+          "phys_150": 0.923828,
+          "phys_200": 0.820312
+        },
+        "lucid_rg": {
+          "phys_100": 0.994141,
+          "phys_150": 0.919922,
+          "phys_200": 0.794922
+        },
+        "lucid_s4_rg": {
+          "phys_100": 0.96875,
+          "phys_150": 0.732422,
+          "phys_200": 0.517578
+        },
+        "lucid_ratchet_rg": {
+          "phys_100": 0.990234,
+          "phys_150": 0.908203,
+          "phys_200": 0.841797
+        }
+      },
+      "clips": {
+        "walk_ff_loop_180_R_002__A148": {
+          "episodes_per_cell": 128,
+          "cells": {
+            "phys_100": {
+              "success_by_arm": {
+                "fixed": 1.0,
+                "lucid_ratchet_rg": 0.984375,
+                "lucid_rg": 1.0,
+                "lucid_s4_rg": 0.65625,
+                "off": 0.875
+              },
+              "arms_ranked_best_first": [
+                "fixed",
+                "lucid_rg",
+                "lucid_ratchet_rg",
+                "off",
+                "lucid_s4_rg"
+              ],
+              "spearman_vs_trained_clip_seed_matched_8600": 0.8947,
+              "arms_compared": [
+                "fixed",
+                "lucid_ratchet_rg",
+                "lucid_rg",
+                "lucid_s4_rg",
+                "off"
+              ]
+            },
+            "phys_150": {
+              "success_by_arm": {
+                "fixed": 0.921875,
+                "lucid_ratchet_rg": 0.867188,
+                "lucid_rg": 0.867188,
+                "lucid_s4_rg": 0.34375,
+                "off": 0.570312
+              },
+              "arms_ranked_best_first": [
+                "fixed",
+                "lucid_rg",
+                "lucid_ratchet_rg",
+                "off",
+                "lucid_s4_rg"
+              ],
+              "spearman_vs_trained_clip_seed_matched_8600": 0.8721,
+              "arms_compared": [
+                "fixed",
+                "lucid_ratchet_rg",
+                "lucid_rg",
+                "lucid_s4_rg",
+                "off"
+              ]
+            },
+            "phys_200": {
+              "success_by_arm": {
+                "fixed": 0.734375,
+                "lucid_ratchet_rg": 0.773438,
+                "lucid_rg": 0.765625,
+                "lucid_s4_rg": 0.242188,
+                "off": 0.328125
+              },
+              "arms_ranked_best_first": [
+                "lucid_ratchet_rg",
+                "lucid_rg",
+                "fixed",
+                "off",
+                "lucid_s4_rg"
+              ],
+              "spearman_vs_trained_clip_seed_matched_8600": 0.8,
+              "arms_compared": [
+                "fixed",
+                "lucid_ratchet_rg",
+                "lucid_rg",
+                "lucid_s4_rg",
+                "off"
+              ]
+            }
+          }
+        },
+        "walk_forward_start_003__A043_M": {
+          "episodes_per_cell": 128,
+          "cells": {
+            "phys_100": {
+              "success_by_arm": {
+                "fixed": 0.992188,
+                "lucid_ratchet_rg": 0.992188,
+                "lucid_rg": 1.0,
+                "lucid_s4_rg": 0.265625,
+                "off": 0.914062
+              },
+              "arms_ranked_best_first": [
+                "lucid_rg",
+                "fixed",
+                "lucid_ratchet_rg",
+                "off",
+                "lucid_s4_rg"
+              ],
+              "spearman_vs_trained_clip_seed_matched_8600": 0.8158,
+              "arms_compared": [
+                "fixed",
+                "lucid_ratchet_rg",
+                "lucid_rg",
+                "lucid_s4_rg",
+                "off"
+              ]
+            },
+            "phys_150": {
+              "success_by_arm": {
+                "fixed": 0.820312,
+                "lucid_ratchet_rg": 0.859375,
+                "lucid_rg": 0.820312,
+                "lucid_s4_rg": 0.195312,
+                "off": 0.515625
+              },
+              "arms_ranked_best_first": [
+                "lucid_ratchet_rg",
+                "fixed",
+                "lucid_rg",
+                "off",
+                "lucid_s4_rg"
+              ],
+              "spearman_vs_trained_clip_seed_matched_8600": 0.5643,
+              "arms_compared": [
+                "fixed",
+                "lucid_ratchet_rg",
+                "lucid_rg",
+                "lucid_s4_rg",
+                "off"
+              ]
+            },
+            "phys_200": {
+              "success_by_arm": {
+                "fixed": 0.640625,
+                "lucid_ratchet_rg": 0.671875,
+                "lucid_rg": 0.671875,
+                "lucid_s4_rg": 0.070312,
+                "off": 0.242188
+              },
+              "arms_ranked_best_first": [
+                "lucid_rg",
+                "lucid_ratchet_rg",
+                "fixed",
+                "off",
+                "lucid_s4_rg"
+              ],
+              "spearman_vs_trained_clip_seed_matched_8600": 0.7182,
+              "arms_compared": [
+                "fixed",
+                "lucid_ratchet_rg",
+                "lucid_rg",
+                "lucid_s4_rg",
+                "off"
+              ]
+            }
+          }
+        },
+        "walk_hands_on_back_loop_003__A093": {
+          "episodes_per_cell": 128,
+          "cells": {
+            "phys_100": {
+              "success_by_arm": {
+                "fixed": 0.976562,
+                "lucid_ratchet_rg": 0.96875,
+                "lucid_rg": 0.953125,
+                "lucid_s4_rg": 0.828125,
+                "off": 0.585938
+              },
+              "arms_ranked_best_first": [
+                "fixed",
+                "lucid_ratchet_rg",
+                "lucid_rg",
+                "lucid_s4_rg",
+                "off"
+              ],
+              "spearman_vs_trained_clip_seed_matched_8600": 0.8208,
+              "arms_compared": [
+                "fixed",
+                "lucid_ratchet_rg",
+                "lucid_rg",
+                "lucid_s4_rg",
+                "off"
+              ]
+            },
+            "phys_150": {
+              "success_by_arm": {
+                "fixed": 0.804688,
+                "lucid_ratchet_rg": 0.804688,
+                "lucid_rg": 0.726562,
+                "lucid_s4_rg": 0.398438,
+                "off": 0.179688
+              },
+              "arms_ranked_best_first": [
+                "fixed",
+                "lucid_ratchet_rg",
+                "lucid_rg",
+                "lucid_s4_rg",
+                "off"
+              ],
+              "spearman_vs_trained_clip_seed_matched_8600": 0.8208,
+              "arms_compared": [
+                "fixed",
+                "lucid_ratchet_rg",
+                "lucid_rg",
+                "lucid_s4_rg",
+                "off"
+              ]
+            },
+            "phys_200": {
+              "success_by_arm": {
+                "fixed": 0.59375,
+                "lucid_ratchet_rg": 0.632812,
+                "lucid_rg": 0.53125,
+                "lucid_s4_rg": 0.125,
+                "off": 0.078125
+              },
+              "arms_ranked_best_first": [
+                "lucid_ratchet_rg",
+                "fixed",
+                "lucid_rg",
+                "lucid_s4_rg",
+                "off"
+              ],
+              "spearman_vs_trained_clip_seed_matched_8600": 1.0,
+              "arms_compared": [
+                "fixed",
+                "lucid_ratchet_rg",
+                "lucid_rg",
+                "lucid_s4_rg",
+                "off"
+              ]
+            }
+          }
+        }
+      },
+      "ordering_stability": {
+        "n": 9,
+        "values": [
+          0.8947,
+          0.8721,
+          0.8,
+          0.8158,
+          0.5643,
+          0.7182,
+          0.8208,
+          0.8208,
+          1.0
+        ],
+        "mean": 0.8119,
+        "min": 0.5643,
+        "max": 1.0
+      }
+    }
+  },
+  "scope_limits": [
+    "ONE independent simulator. Not hardware. Nothing in this programme has been tested on a robot.",
+    "The MuJoCo randomization is a hand-built approximation of the six Isaac channels, labelled by the lambda it approximates; it is not the Isaac event set. The mass channel in particular uses the repo's generic [0.8,1.2]-over-all-bodies term rather than the campaign's resolved [0.8,1.5]-over-wrist_yaw-and-torso term.",
+    "32 physics draws per cell are 32 draws of ONE trained policy. They are not independent trained policies and carry no seed variance. Wilson 95% intervals on the headline cell are about 23-55 points wide.",
+    "One motion for the MuJoCo study, and it is the clip every arm trained on. MuJoCo changes the simulator only.",
+    "Survival here is anchor error under 0.5 m, i.e. the same completion-style criterion Section 8 shows is blind to tracking quality. It certifies nothing about fidelity.",
+    "Between the two seeds of fixed randomization the MuJoCo difference is as large as between methods (physics-only lambda 2: 31.2% for seed 8600 against 37.5% for seed 8601), which repeats the seed effect measured in Isaac.",
+    "The held-out-motion clips are all walking motions from the same adaptation partition as the training clip. Near neighbours, not a held-out distribution; no baseline was trained on them, so absolute success cannot separate 'generalizes' from 'these clips are easy'.",
+    "Held-out panels are k128; the main ladder is k512. The two are never pooled.",
+    "Many episode aliases improve within-policy precision; they do not create independent trained policies.",
+    "Seeds 8600-8602 influenced development. Anything measured on them is replication, never untouched confirmation."
+  ]
+}

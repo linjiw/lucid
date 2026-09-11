@@ -1,0 +1,644 @@
+{
+  "topic": "The nesting argument and every null result (paper Section 9 / explanatory spine)",
+  "generated": "2026-09-07",
+  "generated_by": "evidence audit subagent; every number below was opened from the named file and, where marked, recomputed",
+  "hygiene_rules_applied": [
+    "A preregistered tolerance/screen verdict is a DECISION, not equivalence.",
+    "Environment-iterations are not episodes.",
+    "Summarise by criterion, not by range.",
+    "Seeds 8600-8602 influenced development: replication, never untouched confirmation.",
+    "Prose .md notes are leads, not receipts; every claim below is bound to JSON or to source read in this session."
+  ],
+  "A_nesting_argument_what_is_exact": {
+    "claim": "Fixed randomization withholds no parameter VALUE that a curriculum would introduce.",
+    "mechanism": [
+      {
+        "step": "The DR range scaling is affine about each parameter's declared nominal.",
+        "formula": "scale_range([lo,hi], lam, c) = [c - lam*(c-lo), c + lam*(hi-c)]",
+        "receipt_path": "/home/linjiw/lucid/GR00T-WholeBodyControl/gear_sonic/research/practice_utility/dr_scaling.py",
+        "pointer": "def scale_range, lines 102-133; docstring lines 108-117; RANGE_NOMINALS lines 48-71",
+        "verified_in_session": true,
+        "note": "lam=1 returns the baseline exactly, 'so a curriculum that reaches full intensity is indistinguishable from fixed randomization at the configured maximum' (docstring)."
+      },
+      {
+        "step": "Therefore the stage-s interval has exactly s times the full width and sits inside it, for any nominal c in [lo,hi].",
+        "recomputed": "(c + s(hi-c)) - (c - s(c-lo)) = s(hi-lo), independent of where c sits",
+        "receipt_path": "/home/linjiw/lucid/receipts/analysis/lucid_nesting_calculus_20260903.json",
+        "pointer": "why_exact"
+      },
+      {
+        "step": "A uniform full-intensity draw lands in the stage-s interval with probability exactly s and, conditioned on landing there, is uniform on it, which IS the stage-s distribution.",
+        "receipt_path": "/home/linjiw/lucid/receipts/analysis/lucid_nesting_calculus_20260903.json",
+        "pointer": "what_survives_exactly, why_exact"
+      },
+      {
+        "step": "Every environment redraws at every episode reset; five of the six LUCID channels are mode 'reset', push_robot is mode 'interval' every 1-3 s.",
+        "receipt_path": "/home/linjiw/lucid/GR00T-WholeBodyControl/gear_sonic/config/manager_env/events/tracking/lucid_curriculum.yaml",
+        "pointer": "randomize_rigid_body_mass/base_com/add_joint_default_pos/physics_material mode: 'reset'; push mode in gear_sonic/config/manager_env/events/terms/push_robot.yaml line 'mode: \"interval\"', interval_range_s [1.0, 3.0]",
+        "verified_in_session": true,
+        "corroborating_receipt": "/home/linjiw/lucid/receipts/analysis/lucid_why_no_curriculum_wins_20260903.json :: verified_in_code[1]"
+      }
+    ],
+    "six_channels_lambda1_ranges_and_nominals": {
+      "randomize_rigid_body_mass": {
+        "range": [
+          0.8,
+          1.5
+        ],
+        "nominal": 1.0,
+        "units": "mass multiplier",
+        "stage_0.5_range": [
+          0.9,
+          1.25
+        ]
+      },
+      "add_joint_default_pos": {
+        "range": [
+          -0.01,
+          0.01
+        ],
+        "nominal": 0.0,
+        "units": "rad offset",
+        "stage_0.5_range": [
+          -0.005,
+          0.005
+        ]
+      },
+      "base_com": {
+        "range": [
+          -0.05,
+          0.05
+        ],
+        "nominal": 0.0,
+        "units": "m, the widest axis",
+        "stage_0.5_range": [
+          -0.025,
+          0.025
+        ]
+      },
+      "push_robot": {
+        "range": [
+          -0.5,
+          0.5
+        ],
+        "nominal": 0.0,
+        "units": "m/s, planar",
+        "stage_0.5_range": [
+          -0.25,
+          0.25
+        ]
+      },
+      "physics_material": {
+        "range": [
+          0.3,
+          1.6
+        ],
+        "nominal": 0.95,
+        "units": "static friction",
+        "stage_0.5_range": [
+          0.625,
+          1.275
+        ]
+      },
+      "randomize_action_delay": {
+        "range": [
+          0.0,
+          8.0
+        ],
+        "nominal": 0.0,
+        "units": "physics steps",
+        "stage_0.5_range": [
+          0.0,
+          4.0
+        ]
+      }
+    },
+    "environments_per_iteration": 1024,
+    "receipt_path": "/home/linjiw/lucid/receipts/analysis/lucid_nesting_calculus_20260903.json",
+    "pointer": "per_channel_ranges, environments"
+  },
+  "B_the_precise_limit_of_the_argument": {
+    "claim": "Whether fixed DR also supplies whole EPISODES as easy as an earlier stage is a DIFFERENT question: a joint event over the independent draws an episode makes, and its frequency was not measured.",
+    "channels_counted_per_episode": 45,
+    "frequency_law_recomputed": "environments per 1024-environment iteration no harder than stage s, with d effective dimensions = 1024 * s^d",
+    "recomputed_table": {
+      "1": {
+        "0.5": 512.0,
+        "0.75": 768.0,
+        "0.9": 921.6
+      },
+      "3": {
+        "0.5": 128.0,
+        "0.75": 432.0,
+        "0.9": 746.496
+      },
+      "6": {
+        "0.5": 16.0,
+        "0.75": 182.25,
+        "0.9": 544.195584
+      },
+      "10": {
+        "0.5": 1.0,
+        "0.75": 57.665039,
+        "0.9": 357.046723
+      },
+      "20": {
+        "0.5": 0.000977,
+        "0.75": 3.247321,
+        "0.9": 124.494494
+      },
+      "45": {
+        "0.5": 0.0,
+        "0.75": 0.002444,
+        "0.9": 8.937435
+      }
+    },
+    "receipt_table_matches_recomputation": true,
+    "key_values": {
+      "d=6, s=0.75": 182.25,
+      "d=45, s=0.75": 0.0024,
+      "d=6, s=0.5": 16.0,
+      "d=45, s=0.5 (receipt rounds to 0.0)": 2.9103830456733704e-11
+    },
+    "orders_of_magnitude_span_recomputed": {
+      "across effective dimensions 6 -> 45 at stage 0.5": 11.74,
+      "across effective dimensions 6 -> 45 at stage 0.75": 4.87,
+      "note": "the 'about eleven orders of magnitude' phrase corresponds to the 6->45 dimension span at stage 0.5 (11.74 orders). It is not a single row or column of the table."
+    },
+    "effective_dimensionality_was_not_measured": true,
+    "receipt_path": "/home/linjiw/lucid/receipts/analysis/lucid_nesting_calculus_20260903.json",
+    "pointer": "table, what_does_not_survive, reading[1]",
+    "what_the_argument_does_and_does_not_do": [
+      "Exact and unaffected by the correction: on EVERY individual parameter, a full-intensity draw is inside the half-intensity range half the time. Fixed randomization withholds no parameter value that a curriculum would introduce.",
+      "Not established: how often a whole episode is as easy as an earlier stage. Over the 45 independent draws the configs actually make it is essentially never; if difficulty is dominated by a handful of channels it is hundreds of environments per iteration. We did not measure which, so this cannot carry the weight the first version put on it.",
+      "The consequence for the project is therefore weaker than first written. Nesting alone does not explain why no curriculum has won here; it rules out one explanation, that a curriculum introduces parameter values fixed randomization never shows."
+    ],
+    "self_correction_on_record": {
+      "text": "schema 1 of this receipt, which reported 182 of 1024 environments as if it were a measurement. It raised the per-channel probability to the sixth power when the draws are per dimension and there are 45 of them, and the answer spans eleven orders of magnitude over the plausible range.",
+      "pointer": "supersedes",
+      "consequence": "any earlier text carrying '182 of 1024 environments' as a measurement is retracted by schema 2 of this receipt"
+    },
+    "receipt_stated_caveats": [
+      "This is a property of the sampling scheme, not a measurement of learning. It says a curriculum cannot change WHICH episodes exist, not that changing their frequency cannot matter at all.",
+      "Channels are treated as independent draws, which they are here, and the push channel fires on an interval rather than at every reset, so its share is an approximation."
+    ],
+    "what_would_break_nesting": [
+      "A target distribution that is CONCENTRATED rather than a range: a point target has no easy sub-population, which is why the point-versus-range arms exist.",
+      "A channel drawn once per RUN rather than per episode, so a batch is homogeneous.",
+      "A non-affine schedule that moves a range away from its nominal instead of widening it about it, so earlier stages are not nested inside the target."
+    ]
+  },
+  "C_what_nesting_predicts_and_whether_it_was_tested": {
+    "prediction": {
+      "text": "A curriculum can only help when the target is CONCENTRATED (a point, or a narrow band away from the nominal), because then easy examples are genuinely absent at the target and direct training has no automatic curriculum to fall back on.",
+      "receipt_path": "/home/linjiw/lucid/receipts/analysis/lucid_why_no_curriculum_wins_20260903.json",
+      "pointer": "what_it_predicts.a_curriculum_can_only_help_when_the_target_is_CONCENTRATED"
+    },
+    "self_correction_before_running": {
+      "text": "The four actuator channels were configured as RANGES and would therefore NOT produce a barrier either; recorded as a correction to the project's own preregistration, made before any of it ran.",
+      "pointer": "what_it_predicts.consequence_for_our_own_actuator_design"
+    },
+    "the_specified_test": {
+      "text": "fixed-at-a-point versus fixed-at-a-range versus staged-to-the-point, at the same final severity and budget",
+      "pointer": "what_it_predicts.the_test"
+    },
+    "IT_WAS_RUN_ON_ONE_CHANNEL": {
+      "channel": "joint effort limit, common point on all 29 joints, from scratch, seed 8600, 1024 envs, one clip walk_hands_on_back_loop_002__A066_M",
+      "preregistered_barrier_condition_C1": {
+        "definition": "act_point ends at least 10 points below act_off on the frozen held-out band; operationalised for the from-scratch run as time_out < 0.30 at iteration 1500",
+        "receipt_path": "/home/linjiw/lucid/receipts/manifests/lucid_actuator_barrier_preregistration_20260903.json",
+        "pointer": "frozen_decision_rules.C1_direct_training_fails"
+      },
+      "outcome_point_0.30": {
+        "iteration_1500_time_out": 0.5235,
+        "c1_satisfied": false,
+        "first_single_iteration_time_out_ge_0.70": 1991,
+        "first_trailing_50_ge_0.70": 2221,
+        "decision": "DIRECT_TAKEOFF_CONFIRMED_NO_BARRIER_RECOVERY_RAMP",
+        "receipt_path": "/home/linjiw/lucid/receipts/manifests/effort_point030_direct_takeoff_20260904.json",
+        "pointer": "predeclared_barrier_readout, strict_direct_takeoff, sustained_direct_takeoff, decision"
+      },
+      "outcome_point_0.40": {
+        "iteration_1500_time_out": 0.5997,
+        "iteration_2000_time_out": 0.7743,
+        "iteration_6000_trailing_50_time_out": 0.952524,
+        "is_a_curriculum_barrier": false,
+        "receipt_path": "/home/linjiw/lucid/receipts/manifests/effort_point040_isolated_ladder_analysis_20260904.json",
+        "pointer": "training_progress, decisions.point_040_is_a_curriculum_barrier"
+      },
+      "frozen_ladder_512_replicates_eval_seed_8700": {
+        "nominal_trained_success": {
+          "0.25": 0.0,
+          "0.30": 0.052734375,
+          "0.35": 0.365234375,
+          "0.40": 0.740234375,
+          "0.50": 0.98828125,
+          "1.00": 1.0
+        },
+        "point_040_trained_success": {
+          "0.25": 0.375,
+          "0.30": 0.998046875,
+          "0.35": 1.0,
+          "0.40": 1.0,
+          "0.50": 1.0,
+          "1.00": 1.0
+        },
+        "point_030_trained_success": {
+          "0.25": 0.9921875,
+          "0.30": 1.0,
+          "0.35": 1.0,
+          "0.40": 1.0,
+          "0.50": 1.0,
+          "1.00": 1.0
+        },
+        "receipt_path": "/home/linjiw/lucid/receipts/analysis/effort_barrier_frozen_ladder_curves_20260904.json",
+        "pointer": "policies.nominal.ladder, policies.point_040.ladder, policies.point_030.ladder"
+      },
+      "the_cost_of_the_point_target": {
+        "act_off_at_nominal_mpjpe_g_mm": 91.4412221641568,
+        "point_040_at_nominal_mpjpe_g_mm": 262.73713389422,
+        "point_040_at_its_own_plant_mpjpe_g_mm": 153.10497883661822,
+        "reading": "completion transfers to nominal torque; nominal-torque tracking does not. The point-trained policy is plant-specific.",
+        "receipt_path": "/home/linjiw/lucid/receipts/manifests/effort_point040_isolated_ladder_analysis_20260904.json",
+        "pointer": "frozen_ladder.tracking_specificity"
+      },
+      "instrument_check": {
+        "text": "every effort cell matched the PhysX max-force readback with zero maximum absolute gap",
+        "pointer": "verified[2]"
+      },
+      "conclusion": "On the one channel where the concentrated-target prediction was tested, direct training reached the target and the preregistered barrier condition was FALSE. Nesting's positive half was not confirmed here; it was falsified on this channel."
+    },
+    "WHAT_WAS_NOT_RUN": [
+      {
+        "arm": "act_ramp / act_gate (staged to the same point)",
+        "status": "explicitly not launched, because C1 failed first so C2 ('the target is reachable another way') was moot",
+        "receipt_path": "/home/linjiw/lucid/receipts/manifests/effort_point030_direct_takeoff_20260904.json",
+        "pointer": "next_action"
+      },
+      {
+        "arm": "act_range_matched (mean-matched per-joint range against the point, e.g. U[0.25,0.35] vs point 0.30)",
+        "status": "never run; the only design that isolates the SHAPE of the target from its mean",
+        "receipt_path": "/home/linjiw/lucid/receipts/manifests/effort_point040_isolated_ladder_analysis_20260904.json",
+        "pointer": "next_experiment_preregistration.if_candidate_barrier",
+        "why_it_matters": "as coded, run_curriculum_comparison.py builds act_range as [0.40, 1.0], mean 0.70, against the point's 0.40, so the existing point-vs-range contrast confounds shape with mean"
+      },
+      {
+        "arm": "the concentrated-target test on any channel other than joint effort limit",
+        "status": "never run"
+      }
+    ]
+  },
+  "D_null_practice_allocation_screen": {
+    "question": "Where is extra practice productive? Five matched branches reallocating 25% of environments; equal budget, environments, optimizer, motion and practice share.",
+    "design": {
+      "origins": "independently trained fixed-lambda=1 finals, one per continuation seed; 1024 envs; 1500-iteration warm start; frozen 512-replicate evaluation panel; 13-cell broad macro",
+      "preregistration": "/home/linjiw/lucid/receipts/manifests/lucid_practice_allocation_confirmation_preregistration_20260904.json",
+      "margins_frozen_2026_09_02": {
+        "meaningful_improvement_pts": 5.0,
+        "tie_band_pts": 2.0,
+        "retention_margin_pts": 2.0
+      },
+      "pointer": "margins, decision_rules_frozen_before_confirmation_outcomes"
+    },
+    "D1_push_practice_is_productive_at_its_own_cell": {
+      "estimand": "100 * [success(prac_push, ch_push_300) - success(prac_null, ch_push_300)]",
+      "per_seed_pts": {
+        "8600": 9.1796875,
+        "8601": 3.90625,
+        "8602": 6.640625
+      },
+      "recomputed_from_cells": [
+        9.1797,
+        3.9062,
+        6.6406
+      ],
+      "confirmation_mean_8601_8602_pts": 5.2734375,
+      "three_seed_mean_pts": 6.575520833333333,
+      "three_seed_sample_sd_pts": 2.637321497464726,
+      "verdict": "CONFIRMED (rule: both new-seed deltas > 0 and their mean >= 5 points)",
+      "receipt_path": "/home/linjiw/lucid/receipts/analysis/lucid_practice_allocation_confirmation_20260905.json",
+      "pointer": "decisions.D1_push_practice_is_productive"
+    },
+    "D2_targeting_does_NOT_clear_its_margin_on_the_broad_suite": {
+      "estimand": "broad_macro(prac_push) - broad_macro(prac_easy), 13-cell macro, percentage points",
+      "per_seed_pts": {
+        "8600": -0.07512019230770761,
+        "8601": 1.6977163461538538,
+        "8602": 4.462139423076934
+      },
+      "recomputed_from_macro_success_pts": [
+        -0.0751,
+        1.6977,
+        4.4621
+      ],
+      "confirmation_mean_8601_8602_pts": 3.079927884615394,
+      "three_seed_mean_pts": 2.0282451923076934,
+      "three_seed_sample_sd_pts": 2.2866171942314564,
+      "verdict": "INCONCLUSIVE_OR_ADVERSE",
+      "rule": "both new-seed deltas > 0 and mean >= 5 points; |mean| < 2 is only the frozen screen band",
+      "receipt_path": "/home/linjiw/lucid/receipts/analysis/lucid_practice_allocation_confirmation_20260905.json",
+      "pointer": "decisions.D2_selecting_push_beats_manageable_placebo",
+      "HYGIENE": "The single-seed readout's -0.07 'TIE inside the 2.0-pt band' is SUPERSEDED. At three seeds the mean is +2.03 with sample SD 2.29 and the preregistered verdict is INCONCLUSIVE_OR_ADVERSE, not a tie. Write: 'targeting did not clear its preregistered +5.0-point margin'. Do not write 'targeting buys nothing' or 'targeting ties'."
+    },
+    "D3_no_retention_tradeoff": {
+      "estimand": "100 * [success(treatment, phys_100) - success(prac_null, phys_100)]",
+      "per_seed_pts": {
+        "prac_push": {
+          "8600": 0.0,
+          "8601": -0.390625,
+          "8602": 0.0
+        },
+        "prac_easy": {
+          "8600": -0.1953125,
+          "8601": 0.1953125,
+          "8602": 0.1953125
+        }
+      },
+      "verdict": "NO_NEW_SEED_TRADEOFF (nothing beyond the 2.0-pt retention margin)",
+      "receipt_path": "/home/linjiw/lucid/receipts/analysis/lucid_practice_allocation_confirmation_20260905.json",
+      "pointer": "decisions.D3_retention_tradeoff"
+    },
+    "supportive_transfer_not_a_gate": {
+      "ch_push_350_push_minus_null_pts": {
+        "per_seed": {
+          "8600": 8.203125,
+          "8601": 12.3046875,
+          "8602": 15.8203125
+        },
+        "mean": 12.109375,
+        "sample_sd": 3.8123479093638935
+      },
+      "ch_push_fric_350_150_push_minus_null_pts": {
+        "per_seed": {
+          "8600": 10.546875,
+          "8601": 6.4453125,
+          "8602": 13.4765625
+        },
+        "mean": 10.15625,
+        "sample_sd": 3.531863539067407
+      },
+      "receipt_path": "/home/linjiw/lucid/receipts/analysis/lucid_practice_allocation_confirmation_20260905.json",
+      "pointer": "supportive_transfer"
+    },
+    "single_seed_8600_only_six_arm_readout": {
+      "broad_macro_success_pts": {
+        "fixed": 86.15,
+        "prac_easy": 87.95,
+        "prac_fric": 88.15,
+        "prac_null": 85.2,
+        "prac_push": 87.88,
+        "prac_pushfric": 89.03
+      },
+      "R3a_adding_friction_to_push_practice_pts": -0.59,
+      "R3b_interaction_term_pts": -8.4,
+      "R3b_definition": "(both - null) - [(push - null) + (fric - null)], all at cell ch_push_fric_350_150",
+      "R3b_reading": "sub-additive, not super-additive; a component that exists to protect combinations has nothing to add",
+      "structural_control": "the plain continuation arm scores 80.9 at phys_200 against the matched control's 81.4, so the two-cohort dispatcher itself costs nothing",
+      "receipt_path": "/home/linjiw/lucid/receipts/analysis/lucid_practice_allocation_readout.json",
+      "pointer": "macro_success_pts, decisions.R3a_adding_friction_to_push_practice, decisions.R3b_interaction_term, finding.structural_control",
+      "CAVEAT": "one seed; prac_fric and prac_pushfric were never carried into the 3-seed confirmation, so R3a and R3b are single-seed screening only, against a 7.8-point between-seed effect"
+    },
+    "how_this_sits_with_nesting": {
+      "text": "Reallocating environments changes the DENSITY of a distribution the policy already samples; it does not introduce a condition the policy never saw. Density helps, which is why every treated arm improves. Which region gets the density does not clear its margin on a held-out suite. Neither is evidence a curriculum is needed: none of these arms is a curriculum, they are fixed reallocations, and the improvement is available with no scheduler at all.",
+      "receipt_path": "/home/linjiw/lucid/receipts/analysis/lucid_practice_allocation_readout.json",
+      "pointer": "finding.how_this_sits_with_the_nesting_result"
+    },
+    "scope_limits_from_the_receipt": [
+      "unseen-motion generalization",
+      "hardware transfer or real-world safety",
+      "statistical significance or population-level equivalence from three seeds",
+      "a universal property of push disturbances outside the named simulator, policy, clip, dose, and budget",
+      "practice utility from a capability probe"
+    ]
+  },
+  "E_null_channel_and_interaction_sweep": {
+    "source_sweep": "/home/linjiw/lucid-sonic/manifests/channel_sweep_20260902_001226",
+    "cells_found": 55,
+    "seed": 8600,
+    "baseline_cell": "phys_100 (the lambda=1 envelope), fixed@s8600 success 99.4141%",
+    "single_channel_drops_from_phys_100_pts_recomputed": {
+      "ch_push_300": 24.8047,
+      "ch_push_200": 8.2031,
+      "ch_mass_300": 4.4922,
+      "ch_fric_150": 2.1484,
+      "ch_fric_200": 1.9531,
+      "ch_com_200": 0.5859,
+      "ch_com_300": 0.5859,
+      "ch_joint_300": 0.3906,
+      "ch_mass_200": 0.1953,
+      "ch_joint_200": 0.1953,
+      "ch_fric_125": -0.1953
+    },
+    "push_is_the_binding_channel": {
+      "at_2x": {
+        "push": 8.2031,
+        "friction": 1.9531,
+        "CoM": 0.5859,
+        "mass": 0.1953,
+        "joint_offset": 0.1953
+      },
+      "push_share_of_total_single_channel_loss_at_2x": 0.7361,
+      "at_3x": {
+        "push": 24.8047,
+        "mass": 4.4922,
+        "CoM": 0.5859,
+        "joint_offset": 0.3906
+      },
+      "worst_channel_in_4_of_5_arms": "push (the exception is the no-randomization arm 'off', where CoM is worst)",
+      "receipt_path": "/home/linjiw/lucid/receipts/analysis/lucid_channel_attribution_20260902.json",
+      "pointer": "arms[*].cells[*].drop_vs_phys_100, arms[*].anisotropy_at_2x"
+    },
+    "HYGIENE_on_free_channels": "At 3x, CoM (-0.59) and joint offset (-0.39) are inside the receipt's own 2-3 point single-cell noise. Mass at 3x costs 4.49 points and is NOT free. Do not write 'mass/CoM/joint free to 3x'; write 'CoM and joint offset are inside single-cell noise at 3x; mass costs 4.5 points; push costs 24.8'.",
+    "interaction_term_recomputed": {
+      "definition": "loss at phys_200 (all channels at 2x simultaneously) minus the sum of the five single-channel 2x losses, all against phys_100 within the same arm",
+      "fixed@s8600": {
+        "joint_loss_pts": 17.383,
+        "sum_of_marginals_pts": 11.14,
+        "interaction_pts": 6.243
+      },
+      "all_arms_interaction_pts": {
+        "fixed@s8600": 6.243,
+        "lucid_ratchet_rg@s8600": 7.234,
+        "lucid_rg@s8600": 5.462,
+        "lucid_s4_rg@s8600": 4.687,
+        "off@s8600": -9.963
+      },
+      "reading": "super-additive by about 6 points for the four randomized arms (+4.7 to +7.2); sub-additive (-10.0) for the no-randomization arm",
+      "receipt_path": "/home/linjiw/lucid/receipts/analysis/lucid_channel_attribution_20260902.json",
+      "pointer": "arms[*].scalar.phys_100, arms[*].scalar.phys_200, arms[*].anisotropy_at_2x.drops",
+      "recomputed": true
+    },
+    "receipt_stated_caveats": [
+      "single seed (8600); paired within-seed noise on a single 512-episode cell is ~2-3 points",
+      "channel cells widen one term from the lambda=1 envelope with the others at lambda=1; the friction floor clamps at 0.05 so ch_fric_150 and ch_fric_200 differ only in the high bound",
+      "the scalar phys_* references come from earlier receipts scored with the pinned evaluator; the channel cells use the current evaluator, whose scalar path is unchanged"
+    ]
+  },
+  "F_null_frozen_policy_actuator_screen": {
+    "protocol": "five frozen policies x thirteen cells, no training; live / survivable / separating, in that order",
+    "channels": {
+      "effort_limit (range x[0.25,1.0] at act_effort_150)": {
+        "reference_arm_delta_at_top_rung_pts": -18.95,
+        "rank_correlation_with_existing_ladder": 0.5,
+        "verdict": "CANDIDATE: live, survivable, separates policies, ranks them differently from the existing ladder"
+      },
+      "joint_friction (act_friction_300)": {
+        "reference_arm_delta_at_top_rung_pts": -12.3,
+        "rank_correlation_with_existing_ladder": 0.9,
+        "verdict": "CANDIDATE but restates general robustness rather than measuring a new axis"
+      },
+      "armature (act_armature_200)": {
+        "reference_arm_delta_at_top_rung_pts": -0.2,
+        "verdict": "NOT LIVE"
+      },
+      "velocity_limit (act_velocity_200)": {
+        "reference_arm_delta_at_top_rung_pts": 0.2,
+        "verdict": "NOT LIVE"
+      }
+    },
+    "aa_null_control": {
+      "cells": [
+        "phys_100",
+        "act_off"
+      ],
+      "max_abs_gap_pts": 1.56,
+      "verdict": "PASS: adding four inert terms changed nothing beyond single-cell noise"
+    },
+    "receipt_path": "/home/linjiw/lucid/receipts/analysis/lucid_actuator_screen_readout.json",
+    "pointer": "channels.effort, channels.friction, channels.armature, channels.velocity, aa_null",
+    "receipt_stated_caveats": [
+      "frozen policies only: this locates where a channel matters, it does not show that training at that severity fails or that staging helps",
+      "one evaluation seed per cell; single-cell noise here is 2-3 points",
+      "a channel that reads NOT LIVE may be unapplied rather than harmless; these receipts contain no PhysX read-back field"
+    ]
+  },
+  "G_null_progress_signal_audit": {
+    "question": "How much evidence does an estimate of learning progress at a FIXED condition need before its sign can be trusted, and do conditions plateau at different times?",
+    "run": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260901_232720/seed_8600/gate_150, iterations 1-3362, frontier held at lambda 1.0",
+    "strata": 8,
+    "strata_still_improving_by_5pts_or_more": 8,
+    "strata_plateaued": 0,
+    "smallest_window_with_a_trustworthy_sign": {
+      "stratum_7": 400,
+      "all_other_strata": "no window in {25,50,100,200,400} qualified"
+    },
+    "reading": "every condition in the window moves the same way, so progress cannot separate them here",
+    "receipt_path": "/home/linjiw/lucid/receipts/analysis/lucid_progress_signal_audit_20260902.json",
+    "pointer": "discrimination, smallest_window_with_trustworthy_sign_per_stratum, runs[*].strata[*].by_window"
+  },
+  "H_the_thermal_barrier_work_WAS_NEVER_RUN": {
+    "status_field_verbatim": "FROZEN BEFORE P0 RUNS. No policy has been evaluated under the thermal channel.",
+    "receipt_path": "/home/linjiw/lucid/receipts/analysis/lucid_thermal_p0_frozen_prediction_20260903.json",
+    "pointer": "status",
+    "what_exists": [
+      "/home/linjiw/lucid/receipts/manifests/lucid_thermal_barrier_preregistration_20260903.json (preregistration)",
+      "/home/linjiw/lucid/receipts/analysis/lucid_thermal_p0_frozen_prediction_20260903.json (four falsifiable predictions, frozen before any run)",
+      "/home/linjiw/lucid/GR00T-WholeBodyControl/tests/practice_utility/test_thermal.py and test_thermal_actuator.py (CPU tests only)"
+    ],
+    "what_does_not_exist": "no thermal manifest, artifact, output directory or analysis anywhere under /home/linjiw/lucid-sonic (searched 2026-09-07)",
+    "the_registered_basis_measured_at_phys_100": {
+      "torque_saturation_by_arm": {
+        "lucid_s4_rg@s8600": 0.0579,
+        "fixed@s8600": 0.0317,
+        "lucid_ratchet_rg@s8600": 0.0125,
+        "lucid_rg@s8600": 0.005,
+        "off@s8600": 0.0046
+      },
+      "receipt_path": "/home/linjiw/lucid/receipts/analysis/lucid_thermal_p0_frozen_prediction_20260903.json",
+      "pointer": "the_measured_basis.per_arm"
+    },
+    "HYGIENE": "The thermal channel is a preregistered, unrun experiment. It cannot be cited as a measured null, and it is not evidence that 'no channel has a barrier'. Paper Section 10 currently groups it with the practice-allocation and effort screens as one of the 'screens [that] did not establish an adaptive advantage'. That grouping must be corrected: two were run, one was not.",
+    "superseded_by": {
+      "text": "The actuator preregistration explicitly supersedes the thermal one as the FIRST thing to try, because the deployment motivation (a motor delivering less than its rating) is obtainable directly from the effort limit the simulator already has.",
+      "receipt_path": "/home/linjiw/lucid/receipts/manifests/lucid_actuator_barrier_preregistration_20260903.json",
+      "pointer": "supersedes"
+    }
+  },
+  "I_the_four_verified_DR_measurement_defects": {
+    "lead_note_not_a_receipt": "/home/linjiw/lucid/lucid-hard-dr-survey-2026-09-03.md (45-agent survey, header states 'Not yet reviewed by a human')",
+    "all_four_reverified_in_source_2026_09_07": true,
+    "D1_per_shape_friction_buckets": {
+      "defect": "randomize_rigid_body_material draws one material bucket per COLLISION SHAPE, not per body.",
+      "source_path": "/home/linjiw/IsaacLab/source/isaaclab/isaaclab/envs/mdp/events.py",
+      "pointer": "line 262: bucket_ids = torch.randint(0, num_buckets, (len(env_ids), total_num_shapes), device='cpu')",
+      "geometry_verified": {
+        "path": "/home/linjiw/lucid/GR00T-WholeBodyControl/gear_sonic/data/assets/robot_description/urdf/g1/main.urdf",
+        "pointer": "left_ankle_roll_link and right_ankle_roll_link each carry 7 <collision> cylinders (radii 0.008-0.010, lengths 0.05/0.167/0.182/0.186/0.182/0.167/0.05)",
+        "verified_in_session": true
+      },
+      "term_config": {
+        "path": "/home/linjiw/lucid/GR00T-WholeBodyControl/gear_sonic/config/manager_env/events/terms/physics_material.yaml",
+        "pointer": "static_friction_range [0.3,1.6], dynamic [0.3,1.2], restitution [0.0,0.5], num_buckets 64, body_names '.*'"
+      },
+      "arithmetic_recomputed": {
+        "marginal_sd_of_static_friction": 0.375278,
+        "sd_of_the_mean_of_7_iid_draws": 0.141842,
+        "sigma_distance_of_mu_0.30_from_the_0.95_mean": 4.5826
+      },
+      "invalidates": "any claim that a friction result describes a coherent low-friction FOOT. The channel-sweep ch_fric_* cells and the friction component of the physics ladder measure a marginal the robot never experienced as a coherent plant. No run in this project has delivered a low-mu foot.",
+      "caveat": "'foot-effective mu = arithmetic mean of the 7 shape draws' is a model (tangential capacity ~ N*mean(mu_i)), not a measurement; the normal-force distribution across the 7 shapes was not measured. The settling experiment (num_buckets:1, feet-only frozen screen, ~12 min GPU) was recommended and, as far as this audit can find, never run."
+    },
+    "D2_interval_mode_delay_buffer_reset": {
+      "defect": "randomize_action_delay calls buffer.reset(env_ids) immediately after set_time_lag, justified in-code by an EPISODE-reset argument. In interval mode this zeroes _num_pushes; CircularBuffer.__getitem__ clamps to _num_pushes-1, so every mid-episode resample collapses realized lag to zero and ramps back.",
+      "source_path": "/home/linjiw/lucid/GR00T-WholeBodyControl/gear_sonic/research/practice_utility/events_reset_safe.py",
+      "pointer": "line 415 buffer.set_time_lag(lags, env_ids); line 419 buffer.reset(env_ids); in-code justification at lines 416-418",
+      "verified_in_session": true,
+      "magnitude_from_the_survey": "12-30% of episode wall-time runs below the commanded lag at interval_range_s [0.20,0.50] with lags <= 12",
+      "invalidates": "every jitter/burst latency cell, confounded in the EASY direction; it is a prerequisite for ANY within-episode latency claim.",
+      "scope_note": "interval-mode latency exists only as an EVALUATION preset (tracking/lucid_eval_latency_jitter.yaml) and was never trained on, so no contribution in this paper rests on it."
+    },
+    "D3_per_joint_actuator_draws": {
+      "defect": "actuator draws are per JOINT, not per environment: step = torch.rand(base.shape) with base.shape = (n_env_ids, n_joints).",
+      "source_path": "/home/linjiw/lucid/GR00T-WholeBodyControl/gear_sonic/research/practice_utility/actuator_dr.py",
+      "pointer": "lines 248 (base = nominal[env_ids][:, columns]) and 255-259 (step = torch.rand(base.shape, ...))",
+      "verified_in_session": true,
+      "arithmetic_recomputed": {
+        "act_effort_150 per-joint draw": "U[0.25, 1.0]",
+        "E[min over 10 leg joints]": 0.3182,
+        "P(no leg joint below 0.40)": 0.1074,
+        "fraction of episodes already containing a leg joint below 0.40": 0.8926
+      },
+      "invalidates": "the planned effort-point target AS SPECIFIED: 'run_actuator_barrier.sh --channel effort_limit --target 0.40'. 89.3% of the episodes behind the -18.95 pt act_effort_150 drop already contained a leg joint below 0.40, so a point target at 0.40 is MILDER than most of the rung motivating it. Separately, run_curriculum_comparison.py builds act_range as [0.40, 1.0] (mean 0.70) against the point's 0.40, confounding shape with mean.",
+      "does_NOT_invalidate": {
+        "text": "the effort-POINT runs that were actually executed. At low == high the code takes a torch.full branch, writing one shared value to every joint of every environment, which is exactly the shared draw the shape test requires.",
+        "source_pointer": "/home/linjiw/lucid/GR00T-WholeBodyControl/gear_sonic/research/practice_utility/actuator_dr.py lines 253-254: if low == high: step = torch.full(base.shape, float(low), ...)",
+        "corroborating_receipt": "/home/linjiw/lucid/receipts/manifests/effort_point030_h6000_endpoint_20260904.json :: arms.act_point_s8600_h6000.draw_shape == 'common_point_all_envs_all_joints'",
+        "verified_in_session": true
+      },
+      "unrun_remedy": "a third act_range_matched arm at [0.25, 0.55] (or U[0.25,0.35] against point 0.30) was specified and never run"
+    },
+    "D4_inert_restitution": {
+      "defect": "the restitution third of the ground material channel has never affected the simulation.",
+      "source_path": "/home/linjiw/lucid/GR00T-WholeBodyControl/gear_sonic/envs/manager_env/modular_tracking_env_cfg.py",
+      "pointer": "line 326 restitution_combine_mode='multiply' inside a RigidBodyMaterialCfg that never sets restitution (also line 344 for the trimesh branch)",
+      "default_verified": {
+        "path": "/home/linjiw/IsaacLab/source/isaaclab/isaaclab/sim/spawners/materials/physics_materials_cfg.py",
+        "pointer": "line 44: restitution: float = 0.0"
+      },
+      "consequence": "e_eff = 0 * e_robot = 0 regardless of the [0.0, 0.5] restitution_range draw declared in terms/physics_material.yaml",
+      "verified_in_session": true,
+      "invalidates": "any reading of the physics_material channel as a three-parameter channel; one of its three parameters is inert."
+    },
+    "the_common_cause": "All four are cases where a receipt records the value REQUESTED, not the value the simulator APPLIED, so a null reads as 'harmless' when it may be 'never delivered'. Rule adopted: never report a channel inert until a read-back confirms the simulator received it."
+  },
+  "J_what_the_section_may_and_may_not_claim": {
+    "MAY_claim": [
+      "Per parameter, the supports are exactly nested and a full-intensity draw lands in the stage-s range with probability exactly s. This is a property of the sampling code, verifiable from any implementation's own source.",
+      "Therefore fixed randomization withholds no parameter VALUE that a curriculum would introduce, so one candidate explanation for a curriculum advantage is ruled out here.",
+      "Whether whole EPISODES as easy as an earlier stage appear is a different, unmeasured joint event whose frequency spans about 11.7 orders of magnitude over the plausible effective-dimension range at stage 0.5.",
+      "Reallocating a quarter of the environments to a harder condition improves the practised cell (+6.58 pts mean over 3 seeds, sample SD 2.64, preregistered CONFIRMED) but choosing WHICH condition did not clear its preregistered +5.0-point margin on the broad suite (+2.03 pts mean, sample SD 2.29, INCONCLUSIVE_OR_ADVERSE).",
+      "Push is the binding channel: 8.2 of the 11.1 points of single-channel loss at 2x, and 24.8 points at 3x.",
+      "Simultaneous 2x randomization costs about 6 points more than the sum of the single-channel costs (fixed arm, one seed).",
+      "The concentrated-target prediction was tested on the joint-effort-limit channel and failed there: direct point training took off, the preregistered barrier condition was false, and the point-trained policy solves its own plant and every easier one."
+    ],
+    "MUST_NOT_claim": [
+      "'Nesting explains why no curriculum wins.' It rules out one explanation; it does not establish one. (Receipt reading[2].)",
+      "'182 of 1024 environments per iteration are as easy as stage 0.75.' Retracted by schema 2 of the nesting receipt; it is 182 only if exactly 6 dimensions drive difficulty, and 0.0024 at the 45 the configs actually draw.",
+      "'Targeting buys nothing / targeting ties.' The three-seed preregistered verdict is INCONCLUSIVE_OR_ADVERSE at +2.03 pts, not a tie.",
+      "'The thermal-barrier screen found no barrier.' It was never run.",
+      "'No channel has a barrier.' Four channels were screened FROZEN (effort, friction, armature, velocity) and one was trained at a concentrated target (effort). That is a map with holes, not a universal statement. The survey's 'none passed the barrier lens' is argument, not measurement.",
+      "'The concentrated-target comparison has not been run.' It was run on one channel; what was not run is the mean-matched-range arm and any staged arm.",
+      "'mass/CoM/joint are free to 3x.' Mass at 3x costs 4.5 points."
+    ]
+  }
+}

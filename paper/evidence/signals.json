@@ -1,0 +1,683 @@
+{
+ "kind": "lucid_paper_evidence",
+ "topic": "signal_audit",
+ "generated": "2026-09-07",
+ "generated_by": "evidence sweep; every value below either read from a named receipt key or recomputed from the named raw telemetry",
+ "paper_section": "paper/when-training-gets-easier.md section 6, 'Which Signals Can Guide Expansion', Table 3",
+ "what_the_audit_is": {
+  "question": "A signal that drives an expanding curriculum must (a) move with competence while applied difficulty is held fixed (ANCHORING), (b) respond to difficulty in the right direction at fixed competence (DIFFICULTY RESPONSE), and (c) respond to its own actuator with the right sign (AUTHORITY). The audit tests candidate readiness signals on all three.",
+  "receipts": [
+   "/home/linjiw/lucid/receipts/analysis/lucid_signal_audit_20260901.json",
+   "/home/linjiw/lucid/receipts/analysis/lucid_physical_signal_audit_20260902.json"
+  ],
+  "tools": [
+   "/home/linjiw/lucid/tools/signal_audit.py",
+   "/home/linjiw/lucid/tools/physical_signal_audit.py"
+  ],
+  "anchoring_evidence_base": {
+   "arms": 5,
+   "identity": [
+    "fixed@s8600",
+    "fixed@s8601",
+    "fixed@s8602",
+    "ratchet@s8600",
+    "ratchet@s8601"
+   ],
+   "why_these": "applied lambda is pinned at 1.0 for all but a brief warm-up, so difficulty is constant by construction and any systematic movement in a signal is movement in the instrument",
+   "iterations_matched_per_arm": 8000,
+   "pointer": "lucid_signal_audit_20260901.json /fixed_difficulty_arms[*] (lambda_min == lambda_max == 1.0)"
+  },
+  "authority_evidence_base": {
+   "arms": 2,
+   "identity": [
+    "lucid_rg@s8601 (collapsed, lambda 0.9421 -> 0.0624, descent window 2141 iterations from iter 5860)",
+    "lucid_s4_rg@s8600 (collapsed, lambda 0.9446 -> 0.0121, descent window 729 iterations from iter 7272)"
+   ],
+   "pointer": "lucid_physical_signal_audit_20260902.json /authority_under_evacuation[*]"
+  },
+  "difficulty_response_evidence_base": {
+   "cells": 126,
+   "arms": 14,
+   "presets_per_arm": 9,
+   "episodes_per_cell": 512,
+   "lambda_grid": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1.0,
+    1.25,
+    1.5,
+    1.75,
+    2.0
+   ],
+   "pointer": "lucid_physical_signal_audit_20260902.json /difficulty_response_frozen_policies/cells_used = 126",
+   "caveat": "evaluator batch diagnostics include auto-reset environments after the scored episode terminates (receipt: not_yet_verified), so per-cell physical means are contaminated; correlations are reported with that contamination, not corrected for it (pointer: /caveats[1])"
+  }
+ },
+ "how_many_signals": {
+  "in_the_paper_table": 5,
+  "paper_table_signals": [
+   "time_out_rate (time-out survival)",
+   "mean_return",
+   "latent_p90 (learned mismatch)",
+   "foot_slip_per_step_m",
+   "torque_saturation"
+  ],
+  "actually_audited_in_the_receipt": 12,
+  "all_twelve": [
+   "latent_p90",
+   "time_out_rate",
+   "mean_return",
+   "foot_slip_per_step_m",
+   "torque_saturation",
+   "joint_limit_proximity",
+   "energy_proxy",
+   "undesired_contact_rate",
+   "contact_force_peak",
+   "contact_impulse_total",
+   "action_rate",
+   "action_acceleration"
+  ],
+  "pointer": "lucid_physical_signal_audit_20260902.json /verdict_anchoring (12 keys)",
+  "a_sixth_candidate_audited_separately": "local learning progress (per-condition survival slope), receipts lucid_progress_signal_audit_20260902.json and lucid_progress_signal_audit_warmstart_20260902.json",
+  "a_seventh_candidate_audited_separately": "per-step foot slip as a resolution signal, receipt lucid_slip_resolution_audit_20260902.json"
+ },
+ "signals": [
+  {
+   "name": "time_out_rate",
+   "paper_name": "Time-out survival",
+   "what_it_measures": "fraction of episodes in the iteration that ended by reaching the end of the 4 s clip rather than by a termination condition, over the whole 1,024-environment population; one bit per episode",
+   "source": "training log line 'Episode_Termination/time_out', /home/linjiw/lucid-sonic/outputs/<branch>.log",
+   "verdict": "TRACKS competence. The headline positive.",
+   "anchoring": {
+    "spearman_vs_iteration_mean": 0.9867,
+    "min": 0.9846,
+    "max": 0.9924,
+    "arms": 5,
+    "monotone_frac_mean": 0.9231,
+    "reversals_mean": 4.6,
+    "late_quarter_range_frac_mean": 0.0182,
+    "sign_consistent_across_arms": true,
+    "sign_matches_improvement_all_arms": true,
+    "receipt": "/home/linjiw/lucid/receipts/analysis/lucid_signal_audit_20260901.json",
+    "pointer": "/verdict_at_fixed_difficulty/time_out_rate"
+   },
+   "saturation_recomputed": {
+    "method": "per-iteration time_out parsed from the five lambda=1 training logs; block means over iterations 1-1000 (start), 4501-5000, 5501-6000, 7501-8000 (end); fraction of total rise = (block - start)/(end - start)",
+    "per_arm": {
+     "fixed@s8600": {
+      "mean_iter_1_1000": 0.0136,
+      "mean_iter_4501_5000": 0.9282,
+      "mean_iter_5501_6000": 0.9489,
+      "mean_iter_7501_8000": 0.9646,
+      "frac_of_total_rise_by_iter_5000": 0.9616,
+      "frac_of_total_rise_by_iter_6000": 0.9835,
+      "mean_last_300": 0.9655
+     },
+     "fixed@s8601": {
+      "mean_iter_1_1000": 0.0132,
+      "mean_iter_4501_5000": 0.9011,
+      "mean_iter_5501_6000": 0.9315,
+      "mean_iter_7501_8000": 0.9495,
+      "frac_of_total_rise_by_iter_5000": 0.9482,
+      "frac_of_total_rise_by_iter_6000": 0.9808,
+      "mean_last_300": 0.9502
+     },
+     "fixed@s8602": {
+      "mean_iter_1_1000": 0.0142,
+      "mean_iter_4501_5000": 0.9281,
+      "mean_iter_5501_6000": 0.9452,
+      "mean_iter_7501_8000": 0.9617,
+      "frac_of_total_rise_by_iter_5000": 0.9645,
+      "frac_of_total_rise_by_iter_6000": 0.9825,
+      "mean_last_300": 0.962
+     },
+     "ratchet@s8600": {
+      "mean_iter_1_1000": 0.0124,
+      "mean_iter_4501_5000": 0.8962,
+      "mean_iter_5501_6000": 0.9301,
+      "mean_iter_7501_8000": 0.9596,
+      "frac_of_total_rise_by_iter_5000": 0.9331,
+      "frac_of_total_rise_by_iter_6000": 0.9689,
+      "mean_last_300": 0.9607
+     },
+     "ratchet@s8601": {
+      "mean_iter_1_1000": 0.0119,
+      "mean_iter_4501_5000": 0.9114,
+      "mean_iter_5501_6000": 0.9315,
+      "mean_iter_7501_8000": 0.9517,
+      "frac_of_total_rise_by_iter_5000": 0.9571,
+      "frac_of_total_rise_by_iter_6000": 0.9785,
+      "mean_last_300": 0.9528
+     },
+     "lucid_rg@s8601": {
+      "mean_last_300": 0.9854,
+      "mean_last_500": 0.9846,
+      "max": 0.9949
+     },
+     "lucid_s4_rg@s8600": {
+      "mean_last_300": 0.9854,
+      "mean_last_500": 0.9845,
+      "max": 0.9937
+     }
+    },
+    "mean_fraction_of_total_rise_by_iteration_5000": 0.9529,
+    "mean_fraction_of_total_rise_by_iteration_6000": 0.9788,
+    "endpoint_means_iter_7501_8000": "0.9495 to 0.9646 across the five arms",
+    "reading": "survival completes 95.3% of its whole-run rise by iteration 5,000 and 97.9% by 6,000, then flatlines near 0.95-0.96; the receipted late-quarter range fraction of 0.0182 says the final quarter of training moves the signal over 1.8% of its own range",
+    "recomputed": true
+   },
+   "authority": {
+    "pearson_lambda_vs_signal": {
+     "lucid_rg@s8601": -0.623,
+     "lucid_s4_rg@s8600": -0.8017
+    },
+    "relief_last300_vs_pre_descent": {
+     "lucid_rg@s8601": 0.0587,
+     "lucid_s4_rg@s8600": 0.0179
+    },
+    "mean_pre_descent": {
+     "lucid_rg@s8601": 0.93078,
+     "lucid_s4_rg@s8600": 0.96806
+    },
+    "mean_last": {
+     "lucid_rg@s8601": 0.98539,
+     "lucid_s4_rg@s8600": 0.98535
+    },
+    "reading": "INVERTED: survival rises as lambda is cut. Measured on the training distribution it rewards evacuation, so it is admissible only if measured at a PROBE difficulty above the current frontier and driven by a monotone actuator.",
+    "receipt": "/home/linjiw/lucid/receipts/analysis/lucid_physical_signal_audit_20260902.json",
+    "pointer": "/verdict_authority/time_out_rate"
+   },
+   "collapsed_vs_fixed_endpoint_recomputed": {
+    "lucid_rg@s8601_collapsed_mean_last_300": 0.9854,
+    "lucid_s4_rg@s8600_collapsed_mean_last_300": 0.9854,
+    "fixed@s8600_mean_last_300": 0.9655,
+    "fixed@s8601_mean_last_300": 0.9502,
+    "fixed@s8602_mean_last_300": 0.962,
+    "reading": "the collapsed arms end with HIGHER training survival than any fixed arm because they eased their own exam",
+    "recomputed": true
+   }
+  },
+  {
+   "name": "mean_return",
+   "paper_name": "Mean return",
+   "what_it_measures": "per-iteration mean PPO episode return ('Mean rewards' in the training log); the guard signal and the monitor anyone would reach for",
+   "source": "training log line 'Mean rewards'",
+   "verdict": "Anchored but INVERTED against the endpoint. Diagnostic only, never a gate.",
+   "anchoring": {
+    "spearman_vs_iteration_mean": 0.9733,
+    "min": 0.9667,
+    "max": 0.9798,
+    "arms": 5,
+    "monotone_frac_mean": 0.9539,
+    "reversals_mean": 3.2,
+    "late_quarter_range_frac_mean": 0.0763,
+    "receipt": "/home/linjiw/lucid/receipts/analysis/lucid_signal_audit_20260901.json",
+    "pointer": "/verdict_at_fixed_difficulty/mean_return"
+   },
+   "authority": {
+    "pearson_lambda_vs_signal": {
+     "lucid_rg@s8601": -0.7303,
+     "lucid_s4_rg@s8600": -0.9411
+    },
+    "relief_last300_vs_pre_descent": {
+     "lucid_rg@s8601": 0.5324,
+     "lucid_s4_rg@s8600": 0.2167
+    },
+    "reading": "return rises 53% / 22% when the controller cuts difficulty; it rewards shrinking strongly",
+    "receipt": "/home/linjiw/lucid/receipts/analysis/lucid_physical_signal_audit_20260902.json",
+    "pointer": "/verdict_authority/mean_return"
+   },
+   "endpoint_inversion": {
+    "spearman_return_vs_frontier_auc": -0.7343,
+    "pearson_overall": -0.6095,
+    "pearson_controllers_only": -0.5977,
+    "n_scored_arms": 12,
+    "highest_return_arms": [
+     "lucid_rg@s8601",
+     "lucid_s4_rg@s8600"
+    ],
+    "highest_return_arms_all_evacuated": true,
+    "evacuated_mean_return": 14.8435,
+    "held_mean_return": 11.6017,
+    "evacuated_mean_frontier_auc": 0.718588,
+    "held_mean_frontier_auc": 0.83304,
+    "receipt": "/home/linjiw/lucid/receipts/analysis/lucid_return_inversion_20260901.json",
+    "pointer": "/spearman_return_vs_frontier, /pearson_return_vs_frontier, /pearson_controllers_only, /evacuated_vs_held",
+    "recomputed": true,
+    "hygiene": "-0.7343 is a SPEARMAN rank correlation over 12 arms. Pearson is -0.6095 overall and -0.5977 among the nine controller arms. Never label -0.73 as Pearson r."
+   }
+  },
+  {
+   "name": "latent_p90",
+   "paper_name": "Learned mismatch (the signal the collapsing curriculum used)",
+   "what_it_measures": "p90 over the iteration's samples of the gap between a frozen temporal autoencoder's prediction and the realised latent, measured on ONE tracked environment (9-24 gap samples per iteration, median 24)",
+   "source": "observer_<branch>.jsonl field latent_p90; identical series to the curriculum controller's gap_quantile (verified equal at every matched iteration for lucid_s4_rg@s8600)",
+   "verdict": "DOES NOT TRACK competence. Rejected. This is the headline negative.",
+   "anchoring": {
+    "spearman_vs_iteration_mean": -0.0365,
+    "min": -0.2996,
+    "max": 0.11,
+    "arms": 5,
+    "monotone_frac_mean": 0.5384,
+    "reversals_mean": 19.2,
+    "late_quarter_range_frac_mean": 0.3231,
+    "sign_consistent_across_arms": false,
+    "sign_matches_improvement_all_arms": false,
+    "per_arm_spearman": {
+     "fixed@s8600": 0.11,
+     "fixed@s8601": 0.0708,
+     "fixed@s8602": 0.0537,
+     "ratchet@s8600": -0.2996,
+     "ratchet@s8601": -0.1175
+    },
+    "receipt": "/home/linjiw/lucid/receipts/analysis/lucid_signal_audit_20260901.json",
+    "pointer": "/verdict_at_fixed_difficulty/latent_gap_p90 and /fixed_difficulty_arms[*]/signals[0]",
+    "note": "the physical audit reports monotone_frac_mean 0.5692 for the same arms because it uses a direction-aware definition (/verdict_anchoring/latent_p90); 0.5384 in the first audit is the direction-agnostic 'non-decreasing block pairs' fraction. Quote one definition, not both."
+   },
+   "wandering": {
+    "latent_p90_whole_run_range_fixed@s8600": [
+     0.1471,
+     1.3324
+    ],
+    "p10": 0.317,
+    "p90": 0.7342,
+    "reading": "at pinned lambda = 1.0 the signal traverses 0.15-1.33 over the run while difficulty never moves; the p10-p90 band alone is 0.317-0.734",
+    "source": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260829_000249/seed_8600/fixed/observer_...jsonl field latent_p90, 8,000 rows",
+    "recomputed": true
+   },
+   "authority": {
+    "receipt_window": {
+     "pearson_lambda_vs_signal": {
+      "lucid_rg@s8601": -0.0302,
+      "lucid_s4_rg@s8600": 0.0349
+     },
+     "spearman": {
+      "lucid_rg@s8601": -0.0467,
+      "lucid_s4_rg@s8600": -0.0371
+     },
+     "relief_last300_vs_pre_descent": {
+      "lucid_rg@s8601": -0.0802,
+      "lucid_s4_rg@s8600": -0.0249
+     },
+     "window": "from the detected descent start (iter 5860 / 7272) to the end of training",
+     "receipt": "/home/linjiw/lucid/receipts/analysis/lucid_physical_signal_audit_20260902.json",
+     "pointer": "/verdict_authority/latent_p90 and /authority_under_evacuation[*]/signals[0]",
+     "reading": "the controller's own actuator moves its own signal by essentially nothing (|r| <= 0.035), and cutting difficulty made the gap WORSE, not better (relief -8.0% and -2.5%)"
+    },
+    "wider_window_recomputed": {
+     "claim": "r(lambda, gap) over iterations 5,000-8,000 of lucid_s4_rg@s8600",
+     "pearson": -0.2011,
+     "spearman": -0.5036,
+     "n": 3001,
+     "lucid_rg@s8601_same_window_pearson": -0.1582,
+     "source": "curriculum_<branch>.jsonl fields lambda and gap_quantile under /home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260829_000249/seed_{8600,8601}/",
+     "recomputed": true,
+     "reading": "the frequently quoted r = -0.201 is this wider window, not the receipt's descent window. Both say the same thing with different magnitudes: the sign is wrong (a working controller needs r > 0, lowering difficulty must lower the error) and the magnitude is small. State the window whenever the number is used."
+    },
+    "binned_means_recomputed": [
+     {
+      "arm": "lucid_rg@s8601",
+      "iterations": "5000-5500",
+      "mean_lambda": 0.9911,
+      "mean_gap_q90": 0.6804
+     },
+     {
+      "arm": "lucid_rg@s8601",
+      "iterations": "6500-7000",
+      "mean_lambda": 0.1777,
+      "mean_gap_q90": 0.7895
+     },
+     {
+      "arm": "lucid_rg@s8601",
+      "iterations": "7500-8000",
+      "mean_lambda": 0.2347,
+      "mean_gap_q90": 0.8137
+     },
+     {
+      "arm": "lucid_s4_rg@s8600",
+      "iterations": "5000-5500",
+      "mean_lambda": 0.9966,
+      "mean_gap_q90": 0.6871
+     },
+     {
+      "arm": "lucid_s4_rg@s8600",
+      "iterations": "7500-8000",
+      "mean_lambda": 0.1606,
+      "mean_gap_q90": 0.7954
+     }
+    ],
+    "target_violation_recomputed": {
+     "arm": "lucid_rg@s8601",
+     "window": "final 1,000 iterations (7001-8000)",
+     "iterations_with_gap_above_0.778_target": 474,
+     "of": 1000,
+     "mean_lambda_in_window": 0.3528,
+     "lambda_at_iter_8000": 0.0624,
+     "recomputed": true
+    }
+   },
+   "mechanism": "no authority plus wrong sign means the integrator gets no restoring force, so lambda winds to the rail. This is why both collapses end near lambda = 0.01 instead of at a partial retreat."
+  },
+  {
+   "name": "foot_slip_per_step_m",
+   "paper_name": "Foot slip per step",
+   "what_it_measures": "mean tangential foot displacement while in contact, per control step, over the whole population (hundreds of samples per episode rather than one bit)",
+   "source": "observer_<branch>.jsonl field foot_slip_per_step_m; evaluator batch diagnostics per ladder cell",
+   "verdict": "CORROBORATING MEASUREMENT only. Best difficulty response of any body signal, but it does not rank competence and it rewards evacuation.",
+   "anchoring": {
+    "spearman_vs_iteration_mean": -0.5305,
+    "min": -0.6914,
+    "max": -0.3582,
+    "arms": 5,
+    "improves": "down",
+    "sign_consistent_across_arms": true,
+    "sign_matches_improvement_all_arms": true,
+    "monotone_frac_mean": 0.6103,
+    "reversals_mean": 17.0,
+    "late_quarter_range_frac_mean": 0.0628,
+    "receipt": "/home/linjiw/lucid/receipts/analysis/lucid_physical_signal_audit_20260902.json",
+    "pointer": "/verdict_anchoring/foot_slip_per_step_m"
+   },
+   "difficulty_response": {
+    "spearman_vs_success_all_126_cells": -0.9182,
+    "spearman_vs_success_frontier_56_cells": -0.8128,
+    "per_arm_spearman_vs_success_min": -0.9958,
+    "per_arm_spearman_vs_success_max": -0.9574,
+    "receipt": "/home/linjiw/lucid/receipts/analysis/lucid_physical_signal_audit_20260902.json",
+    "pointer": "/difficulty_response_frozen_policies/pooled/foot_slip_per_step_m",
+    "recomputed": true,
+    "reading": "the only body-grounded signal whose per-arm sign never flips across the ladder"
+   },
+   "authority": {
+    "pearson_lambda_vs_signal": {
+     "lucid_rg@s8601": 0.7493,
+     "lucid_s4_rg@s8600": 0.7074
+    },
+    "relief": {
+     "lucid_rg@s8601": 0.3439,
+     "lucid_s4_rg@s8600": 0.1101
+    },
+    "pointer": "/verdict_authority/foot_slip_per_step_m",
+    "reading": "slip falls 34% / 11% when the controller cuts difficulty, so like return it rewards evacuation"
+   },
+   "resolution_follow_up": {
+    "receipt": "/home/linjiw/lucid/receipts/analysis/lucid_slip_resolution_audit_20260902.json",
+    "verdict": "NOT SUPPORTED; the slip-augmented probe was demoted, not promoted",
+    "resolution": "in the eight cells where success separates the three healthy policies by 0.2-2.1x its own noise, slip separates them by 2.2-3.1x its own (pointer /resolution/finding)",
+    "validity": "across all five policies slip_spearman 0.70 vs success_spearman 0.60; among the three HEALTHY policies the slip ordering is INVERTED in all four easy-cell-to-hard-cell tests (pointer /validity)",
+    "not_verified": "three healthy policies, one seed, slip is a per-cell mean with no within-cell variance (pointer /not_verified)"
+   }
+  },
+  {
+   "name": "torque_saturation",
+   "paper_name": "Torque saturation",
+   "what_it_measures": "population mean fraction of actuator commands at or near the torque limit",
+   "source": "observer_<branch>.jsonl field torque_saturation; evaluator batch diagnostics per ladder cell",
+   "verdict": "A COST, not a gate. Sign flips across arms under the actuator and it does not track success across the ladder.",
+   "anchoring": {
+    "spearman_vs_iteration_mean": -0.312,
+    "min": -0.5583,
+    "max": -0.1509,
+    "arms": 5,
+    "monotone_frac_mean": 0.6,
+    "reversals_mean": 7.2,
+    "late_quarter_range_frac_mean": 0.2739,
+    "receipt": "/home/linjiw/lucid/receipts/analysis/lucid_physical_signal_audit_20260902.json",
+    "pointer": "/verdict_anchoring/torque_saturation"
+   },
+   "difficulty_response": {
+    "spearman_vs_success_all_126_cells": -0.0281,
+    "spearman_vs_success_frontier_56_cells": -0.0607,
+    "per_arm_spearman_vs_success_min": -0.9958,
+    "per_arm_spearman_vs_success_max": 0.9493,
+    "pointer": "/difficulty_response_frozen_policies/pooled/torque_saturation",
+    "recomputed": true,
+    "reading": "pooled correlation is essentially zero while per-arm correlations span -1.00 to +0.95; the sign is a property of the policy, not of the difficulty"
+   },
+   "authority": {
+    "pearson_lambda_vs_signal": {
+     "lucid_rg@s8601": -0.4165,
+     "lucid_s4_rg@s8600": 0.6611
+    },
+    "relief": {
+     "lucid_rg@s8601": -0.5134,
+     "lucid_s4_rg@s8600": -0.0469
+    },
+    "pointer": "/verdict_authority/torque_saturation",
+    "reading": "opposite signs on the two collapses"
+   }
+  }
+ ],
+ "other_signals_audited_but_not_in_the_paper_table": {
+  "receipt": "/home/linjiw/lucid/receipts/analysis/lucid_physical_signal_audit_20260902.json",
+  "pointer": "/verdict_anchoring, /difficulty_response_frozen_policies/pooled",
+  "energy_proxy": {
+   "anchoring_spearman_mean": 0.6496,
+   "improves": "down",
+   "sign_matches_improvement_all_arms": false,
+   "difficulty_rho_vs_success_all": -0.8141,
+   "frontier": -0.7111,
+   "verdict": "rises with competence at fixed difficulty although lower is nominally better, so it fails the anchoring sign test; good difficulty response"
+  },
+  "undesired_contact_rate": {
+   "anchoring_spearman_mean": -0.2185,
+   "sign_consistent_across_arms": false,
+   "difficulty_rho_vs_success_all": 0.1856,
+   "frontier": 0.2037,
+   "verdict": "fails anchoring and difficulty response"
+  },
+  "joint_limit_proximity": {
+   "anchoring_spearman_mean": 0.0649,
+   "sign_consistent_across_arms": false,
+   "verdict": "unanchored, like the learned gap"
+  },
+  "contact_force_peak": {
+   "anchoring_spearman_mean": -0.3013,
+   "reversals_mean": 22.4,
+   "verdict": "correct sign, noisiest series in the audit"
+  },
+  "contact_impulse_total": {
+   "anchoring_spearman_mean": -0.7365,
+   "reversals_mean": 16.0,
+   "verdict": "strongest correctly-signed body anchoring; no ladder response measured (not in EVAL_SIGNALS)"
+  },
+  "action_rate": {
+   "anchoring_spearman_mean": 0.7112,
+   "sign_matches_improvement_all_arms": false,
+   "verdict": "rises with competence though lower is nominally better; smoothness is not competence"
+  },
+  "action_acceleration": {
+   "anchoring_spearman_mean": 0.6641,
+   "sign_matches_improvement_all_arms": false,
+   "verdict": "same as action_rate"
+  }
+ },
+ "sixth_candidate_local_learning_progress": {
+  "what_it_measures": "the slope of per-condition episode-end survival over a training window, i.e. 'is this condition still improving' - the quantity a practice-allocating or progress-driven curriculum needs online",
+  "receipts": {
+   "from_scratch": "/home/linjiw/lucid/receipts/analysis/lucid_progress_signal_audit_20260902.json",
+   "warm_start": "/home/linjiw/lucid/receipts/analysis/lucid_progress_signal_audit_warmstart_20260902.json"
+  },
+  "method": "per-iteration per-stratum survival taken from the longest window in which the curriculum frontier never moved, so every stratum is a fixed condition; the null is the same series with its time order destroyed",
+  "verdict": "UNAVAILABLE once the policy is competent. The signal exists while the policy is learning the task and disappears once it has.",
+  "from_scratch_regime": {
+   "run": "curriculum_comparison_ne1024_20260901_232720/seed_8600/gate_150",
+   "frontier_held_at": 1.0,
+   "iterations": [
+    1,
+    3362
+   ],
+   "iterations_used": 3361,
+   "survival_change_pts_across_8_strata": [
+    101.16,
+    123.28
+   ],
+   "sign_agreement_at_window_200": [
+    0.778,
+    1.0
+   ],
+   "sign_agreement_at_window_400": [
+    0.967,
+    1.0
+   ],
+   "strata_still_improving_by_5pts_or_more": 8,
+   "strata_plateaued": 0,
+   "smallest_window_with_trustworthy_sign_per_stratum": {
+    "7": 400
+   },
+   "pointer": "/runs/<path>/strata/*/by_window/*, /discrimination, /smallest_window_with_trustworthy_sign_per_stratum",
+   "note": "sign agreement is high at windows 200-400 for all eight strata, but only stratum 7 clears the receipt's stricter trustworthy-sign criterion (fraction_above_noise_floor 0.533 at window 400)"
+  },
+  "warm_start_regime": {
+   "run": "curriculum_comparison_ne1024_20260902_072800/seed_8600/gate_150",
+   "frontier_held_at": 1.5,
+   "iterations": [
+    410,
+    2000
+   ],
+   "iterations_used": 1590,
+   "total_change_over_whole_stable_window_pts": {
+    "thin_strata_5_eps_per_iter": [
+     -1.16,
+     0.94
+    ],
+    "frontier_stratum_85_eps_per_iter": 3.58,
+    "probe_stratum_17_eps_per_iter": 2.55
+   },
+   "trend_to_noise_ratio_at_window_100": {
+    "thin_strata": [
+     0.008,
+     0.059
+    ],
+    "frontier_stratum": 0.077,
+    "probe_stratum": 0.067
+   },
+   "sign_agreement_windows_25_to_200": [
+    0.431,
+    0.679
+   ],
+   "sign_agreement_window_400": [
+    0.417,
+    0.833
+   ],
+   "strata_still_improving_by_5pts_or_more": 0,
+   "strata_plateaued": 16,
+   "what_it_would_take": "about 170x the episodes per window on the frontier stratum: ~14,000 episodes per iteration, or a window of ~17,000 iterations at the present cohort size",
+   "pointer": "/finding/numbers, /discrimination",
+   "recomputed": true
+  },
+  "caveats": [
+   "one run per regime, seed 8600",
+   "measured on episode-end survival only; a continuous signal has a different noise floor and is not covered",
+   "thin strata carry 5 episodes per iteration by design (37 environments); the frontier stratum carries 85. Both fail, so the result is not only about thin cohorts.",
+   "pointer /caveats"
+  ]
+ },
+ "figure_data": {
+  "what_makes_this_a_figure": "per-signal value against measured competence across the frozen physics ladder: nine cells from lambda 0 to 2.0, 14 frozen-policy arms, 512 episodes per cell. Success falls monotonically; foot slip and energy track it; torque saturation and undesired contact do not move.",
+  "per_cell_file": "/home/linjiw/lucid/paper/evidence/signal_audit_ladder_cells.json",
+  "per_cell_file_note": "126 rows regenerated 2026-09-07 with tools/physical_signal_audit.ladder_cells(); the pooled Spearman values recomputed from these rows reproduce the 2026-09-02 receipt exactly (foot slip -0.9182 / -0.8128, torque -0.0281 / -0.0607, energy -0.8141 / -0.7111, contact +0.1856 / +0.2037)",
+  "ladder_means_over_14_arms": [
+   {
+    "lambda_eval": 0.0,
+    "n_arms": 14,
+    "success_rate_mean": 1.0,
+    "foot_slip_per_step_m_mean": 0.001508,
+    "torque_saturation_mean": 0.02412,
+    "energy_proxy_mean": 127.3,
+    "undesired_contact_rate_mean": 0.88229
+   },
+   {
+    "lambda_eval": 0.25,
+    "n_arms": 14,
+    "success_rate_mean": 1.0,
+    "foot_slip_per_step_m_mean": 0.001527,
+    "torque_saturation_mean": 0.02425,
+    "energy_proxy_mean": 129.06,
+    "undesired_contact_rate_mean": 0.88236
+   },
+   {
+    "lambda_eval": 0.5,
+    "n_arms": 14,
+    "success_rate_mean": 0.9994,
+    "foot_slip_per_step_m_mean": 0.001587,
+    "torque_saturation_mean": 0.02435,
+    "energy_proxy_mean": 132.26,
+    "undesired_contact_rate_mean": 0.88263
+   },
+   {
+    "lambda_eval": 0.75,
+    "n_arms": 14,
+    "success_rate_mean": 0.9941,
+    "foot_slip_per_step_m_mean": 0.001701,
+    "torque_saturation_mean": 0.02446,
+    "energy_proxy_mean": 137.24,
+    "undesired_contact_rate_mean": 0.88362
+   },
+   {
+    "lambda_eval": 1.0,
+    "n_arms": 14,
+    "success_rate_mean": 0.9799,
+    "foot_slip_per_step_m_mean": 0.001865,
+    "torque_saturation_mean": 0.02467,
+    "energy_proxy_mean": 144.14,
+    "undesired_contact_rate_mean": 0.88539
+   },
+   {
+    "lambda_eval": 1.25,
+    "n_arms": 14,
+    "success_rate_mean": 0.947,
+    "foot_slip_per_step_m_mean": 0.002107,
+    "torque_saturation_mean": 0.02501,
+    "energy_proxy_mean": 153.42,
+    "undesired_contact_rate_mean": 0.88688
+   },
+   {
+    "lambda_eval": 1.5,
+    "n_arms": 14,
+    "success_rate_mean": 0.8103,
+    "foot_slip_per_step_m_mean": 0.003184,
+    "torque_saturation_mean": 0.02408,
+    "energy_proxy_mean": 167.17,
+    "undesired_contact_rate_mean": 0.88822
+   },
+   {
+    "lambda_eval": 1.75,
+    "n_arms": 14,
+    "success_rate_mean": 0.7453,
+    "foot_slip_per_step_m_mean": 0.003515,
+    "torque_saturation_mean": 0.02451,
+    "energy_proxy_mean": 176.29,
+    "undesired_contact_rate_mean": 0.88859
+   },
+   {
+    "lambda_eval": 2.0,
+    "n_arms": 14,
+    "success_rate_mean": 0.6815,
+    "foot_slip_per_step_m_mean": 0.003651,
+    "torque_saturation_mean": 0.02552,
+    "energy_proxy_mean": 187.05,
+    "undesired_contact_rate_mean": 0.88967
+   }
+  ],
+  "friction_clamp": "the largest single-cell drop in mean success is lambda 1.25 -> 1.50 (0.9470 -> 0.8103, -13.67 points), the phys_150 friction clamp; mean foot slip jumps 0.002107 -> 0.003184 m/step at the same step",
+  "second_panel": "time-out survival vs training iteration for the five lambda=1 arms plus the two collapses, showing (a) the near-perfect anchoring rank correlation, (b) saturation at ~0.95 after 95% of its rise is complete by iteration 5,000, and (c) the two collapsed arms ending ABOVE every fixed arm",
+  "third_panel": "latent_p90 vs training iteration on the same axes at pinned lambda = 1.0, wandering 0.15-1.33 with 19.2 direction reversals"
+ },
+ "headline_sentences_the_section_can_carry": [
+  "Time-out survival is the only candidate that is anchored: rank correlation with training iteration +0.987 (min +0.985, max +0.992) across five arms at pinned lambda = 1.0, with 4.6 direction reversals.",
+  "The learned mismatch signal that drove the collapsing curriculum is not anchored: mean rank correlation -0.037, spanning -0.300 to +0.110 across the same five arms, with 19.2 direction reversals and 32.3% of its whole-run range still in motion during the last quarter of training.",
+  "The same signal has no authority over its own actuator: |r(lambda, gap)| <= 0.035 in the receipt's descent windows, -0.201 over iterations 5,000-8,000 of lucid_s4_rg@s8600, and in both collapses cutting difficulty made the gap worse (-8.0% and -2.5%).",
+  "Survival's own defect is that it is inverted and saturating: it completes 95.3% of its whole-run rise by iteration 5,000, and the two collapsed arms end at 0.985 training survival against 0.950-0.966 for the three fixed arms. It is admissible only measured at a probe difficulty above the current frontier and driven by a monotone actuator.",
+  "The three candidates fail differently and must not be summarised as one failure: the learned gap has no authority and the wrong sign, return is inverted, and survival is inverted and saturating."
+ ],
+ "hygiene_notes": [
+  "Spearman -0.7343 (return vs frontier AUC, 12 arms) is a rank correlation. Pearson is -0.6095 overall, -0.5977 among the nine controller arms.",
+  "Seeds 8600-8602 influenced development. The five anchoring arms are all drawn from them, so the audit is replication, never untouched confirmation.",
+  "Iteration counts here are PPO/environment iterations at 1,024 parallel environments, not episodes.",
+  "The audit's anchoring test assumes competence rises monotonically over a run at fixed difficulty. That assumption is what makes 'rank correlation with iteration' a competence test; it is an assumption, not a measurement, and should be stated in the paper.",
+  "The two collapses are the only authority evidence. n = 2."
+ ]
+}

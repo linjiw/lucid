@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fable's Guidance — LUCID → ICRA 2027</title>
+<style>
+  :root {
+    --bg: #fbfaf7; --fg: #1d1d1b; --muted: #5d5b55; --line: #e2dfd7;
+    --accent: #8a3b12; --accent-bg: #f7ece4; --ok: #2f6b3a; --ok-bg: #e8f2ea;
+    --warn: #8c6a00; --warn-bg: #fbf3d9; --stop: #9b2226; --stop-bg: #f9e6e6;
+    --code-bg: #f1efe9;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #17171a; --fg: #e8e6e0; --muted: #a29f97; --line: #33333a;
+      --accent: #e8a27a; --accent-bg: #2b1f18; --ok: #8fd19c; --ok-bg: #1b2a1e;
+      --warn: #e6c65c; --warn-bg: #2b2611; --stop: #f08b8f; --stop-bg: #2e1a1b;
+      --code-bg: #232327;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #17171a; --fg: #e8e6e0; --muted: #a29f97; --line: #33333a;
+    --accent: #e8a27a; --accent-bg: #2b1f18; --ok: #8fd19c; --ok-bg: #1b2a1e;
+    --warn: #e6c65c; --warn-bg: #2b2611; --stop: #f08b8f; --stop-bg: #2e1a1b;
+    --code-bg: #232327;
+  }
+  html { color-scheme: light dark; }
+  body { margin: 0; background: var(--bg); color: var(--fg);
+         font: 16px/1.55 Georgia, "Iowan Old Style", "Times New Roman", serif; }
+  main { max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; }
+  h1 { font-size: 2rem; line-height: 1.15; margin: 0 0 8px; }
+  h2 { font-size: 1.35rem; margin: 44px 0 12px; padding-top: 14px; border-top: 1px solid var(--line); }
+  h3 { font-size: 1.05rem; margin: 26px 0 8px; }
+  p, li { max-width: 72ch; }
+  .meta { color: var(--muted); font-size: 0.95rem; }
+  .status { background: var(--ok-bg); color: var(--ok); border-left: 4px solid var(--ok);
+            padding: 12px 16px; margin: 18px 0; font-weight: bold; }
+  .callout { border-left: 4px solid var(--accent); background: var(--accent-bg); padding: 12px 16px; margin: 16px 0; }
+  .callout.warn { border-color: var(--warn); background: var(--warn-bg); }
+  .callout.stop { border-color: var(--stop); background: var(--stop-bg); }
+  table { border-collapse: collapse; width: 100%; font-size: 0.92rem; margin: 12px 0; }
+  .tablewrap { overflow-x: auto; }
+  th, td { text-align: left; vertical-align: top; padding: 7px 9px; border-bottom: 1px solid var(--line); }
+  th { color: var(--muted); font-weight: normal; font-size: 0.85rem; letter-spacing: 0.02em; text-transform: uppercase; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  code { font: 0.88em/1.4 ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+         background: var(--code-bg); padding: 1px 5px; border-radius: 3px; }
+  ol.tiers { list-style: none; padding: 0; counter-reset: tier; }
+  ol.tiers > li { counter-increment: tier; display: grid; grid-template-columns: 44px 1fr;
+                  gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  ol.tiers > li:before { content: counter(tier, decimal-leading-zero);
+                         font: 1rem ui-monospace, monospace; color: var(--accent); padding-top: 3px; }
+  ol.tiers h3 { margin: 0 0 6px; }
+  ol.tiers p { margin: 0; }
+  .one { font-size: 1.05rem; border-top: 2px solid var(--accent); padding-top: 16px; }
+  .tag { display: inline-block; font: 0.72rem/1 ui-monospace, monospace; padding: 3px 6px;
+         border-radius: 3px; background: var(--ok-bg); color: var(--ok); margin-left: 6px; vertical-align: middle; }
+</style>
+</head>
+<body>
+<main>
+
+<h1>Fable's Guidance — LUCID → ICRA 2027</h1>
+<p class="meta">Originally written 2026-09-07 as a plan. Now the record of what was done, what I got wrong,
+what remains, and where the work goes next. The August 26 to September 2 log is preserved as
+<code>fable-archive-2026-09-02.md</code>. A Markdown copy of this page is <code>fable.md</code>.</p>
+
+<div class="status">Status: the September 7 plan is executed. The paper is assembled, audited, replicated
+and complete as a simulation-only diagnostic contribution.</div>
+
+<h2 id="state">0. Where the work stands</h2>
+<div class="tablewrap"><table>
+<thead><tr><th>Item</th><th>State</th></tr></thead>
+<tbody>
+<tr><td>Manuscript</td><td>8 pages in the official <code>ieeeconf</code> class, at the limit, no overfull boxes</td></tr>
+<tr><td>Anonymity</td><td>No author, affiliation, repository, W&amp;B or filesystem string in source, text or metadata</td></tr>
+<tr><td>Figures</td><td>5, generated from receipts with input-hash assertions, grayscale-safe, all cross-referenced</td></tr>
+<tr><td>Tables</td><td>7, numbered in reading order, each with denominators in its caption</td></tr>
+<tr><td>References</td><td>20, every identity and every citing claim verified against a primary source</td></tr>
+<tr><td>Video</td><td>6.84 MB, 75.7 s, 1080p, 25 fps, progressive H.264. Passes all six conference limits</td></tr>
+<tr><td>Second-seed replication</td><td><strong>Complete.</strong> All 57 cells. R1 passes, R0 fails, on both seeds</td></tr>
+<tr><td>Independent verification</td><td>37 claims recomputed from raw data, not from summaries</td></tr>
+</tbody></table></div>
+
+<p>The four contributions, all measured, all receipted:</p>
+<ol>
+  <li><strong>Range collapse.</strong> An adaptive curriculum allowed to narrow its own ranges does so in all six runs and nearly collapses in two. Terminal return and independently measured robustness are inversely ranked, Spearman −0.73 over twelve runs. A collapse costs 14.19 success-AUC points against fixed randomization on the same seed.</li>
+  <li><strong>Never-shrink.</strong> The projection blocks all 2,033 requested reductions across three seeds and passes a preregistered tolerance rule. Not equivalence: the one-sided 95% lower bound is −3.19 points.</li>
+  <li><strong>Survival and fidelity decouple.</strong> Continuation holds 100% nominal completion while global error rises 127.93 to 225.87 mm. A fixed practice mixture does not prevent it (+28.20%), nor does restoring optimizer state (+27.75%).</li>
+  <li><strong>Reference anchoring, replicated.</strong> R1 holds the endpoint increase to +4.33% and passes retention at all five checkpoints, gaining +5.18 points of hard-condition qualification. A preregistered second continuation seed reproduces it at +6.46% and +7.72 points, passing all five again, while the unanchored control fails at every checkpoint on both seeds.</li>
+</ol>
+
+<p>Plus the explanation that makes the negatives cohere: fixed randomization already nests every curriculum
+stage's marginal parameter values, so a curriculum needs a concentrated target. That is the paper's most
+valuable idea and it is also the bridge to deployment, because a real robot <em>is</em> a concentrated target.</p>
+
+<h2 id="wrong">1. What I got wrong in the original plan</h2>
+<p>Recording these because the corrections matter more than the plan did.</p>
+<ul>
+  <li><strong>I said seven pages with room to spare.</strong> It is eight, the legal limit. The extra page went to verified corrections, not padding.</li>
+  <li><strong>I proposed a supplementary PDF.</strong> The conference does not support one. The evidence ledger lives in the repository instead.</li>
+  <li><strong>I conflated two evaluation panels.</strong> I wrote 128 → 324 mm and 127.93 mm as if they shared a denominator. They do not: 128.57 mm is the legacy quality-frontier panel and 127.93 mm is the masked first-episode retention panel.</li>
+  <li><strong>I assumed the plan was unexecuted.</strong> Most of it had already been carried out by a parallel agent. The useful work turned out to be verification, not authorship.</li>
+  <li><strong>I described never-shrink as close to Automatic Domain Randomization.</strong> ADR's boundary rule is bidirectional: it contracts below a low threshold. Never-shrink is that rule with the contraction branch removed, which is a difference on exactly the axis contribution 2 is about.</li>
+</ul>
+
+<h2 id="audits">2. What the audits found, and what I did about it</h2>
+<p>Three adversarial workflows ran, of 8, 14 and 6 agents. Every finding was checked against a primary
+source before I acted on it.</p>
+<p>The three that changed a claim:</p>
+<ul>
+  <li><strong>Section 9 contradicted its own table.</strong> The text asserted an ordering that holds in one of six cells; at λ = 1 the collapsed policy is the strongest arm in both columns. Rewritten to claim the ordering only beyond the envelope, with the inversion now reported as evidence for the paper's own thesis: a narrowed policy looks best exactly where it is scored.</li>
+  <li><strong>Two "separate" controls were one run.</strong> The no-expansion continuation and the fresh branch of the optimizer comparison share every training setting; their evaluations differ only by a label and an 11th-decimal contact value. Section 8.2 now says so and reports both endpoints, which were missing.</li>
+  <li><strong>Table 2 is near-tautological by construction.</strong> The controller is capped at λ = 1, so the projection reduces to clamping, and 99.2% of never-shrink environment-iterations sit at the envelope against 100% for fixed. The paper now states this before the table.</li>
+</ul>
+<div class="callout warn"><p><strong>Adversarial output is a lead, not a verdict.</strong> Three findings were checked and rejected: a claim that the evaluator was unpinned across campaigns (it is pinned by content hash; the auditor conflated it with the worktree commit), an instruction that would have merged two genuinely distinct runs, and reported journal publications that arXiv does not show. A fourth put the Pronto drift figure backwards, quoting the LIDAR-corrected value as the proprioceptive one. Acting on any of them would have put a false statement in the work.</p></div>
+<p>Full record: <code>paper/review-response-2026-09-07b.md</code>.</p>
+
+<h2 id="remains">3. What remains before submission</h2>
+<p>Small, and none of it is research.</p>
+<ol>
+  <li>Final read of the assembled PDF end to end, for typography and float placement only.</li>
+  <li>Decide the public-repository question. The site is public and names the author while the paper is under double-blind review. This is a judgement call for the author, not a defect: the PDF itself is clean.</li>
+  <li>Submit before September 15, not on it. Video upload windows close September 9 and reopen September 17, so the video must go up before September 9 to accompany the initial submission.</li>
+</ol>
+<p>Do not add experiments. The evidence is closed and the page budget is spent.</p>
+
+<h2 id="deploy">4. Where the work goes next: real-world deployment</h2>
+<p>The full roadmap, with receipts and verified external sources, is
+<code>lucid-deployment-roadmap-2026-09-07.md</code>, published on the project page. Its spine:</p>
+<ol class="tiers">
+  <li><div><h3>Controller prerequisites</h3><p>Explain or bound the unresolved cross-process rollout divergence, adopt a multi-motion origin, and scale past the 128-iteration pilot.</p></div></li>
+  <li><div><h3>Trustworthy disturbance and recovery measurement</h3><p>Repair four verified randomization defects, three still unfixed. Fix the observation window. Freeze a recovery contract, because no band, dwell or horizon has ever been frozen and so no policy has passed or failed a recovery test.</p></div></li>
+  <li><div><h3>Establish whether feedback earns its cost</h3><p>Protected fixed practice against a frozen schedule against feedback, one budget, same origins. A tie is a publishable negative and ends the curriculum line for hardware.</p></div></li>
+  <li><div><h3>Independent origins and a validated export</h3><p>Two continuation seeds from one origin are not two origins. The vendored C++ ONNX runner has no receipt showing it was ever built or run.</p></div></li>
+  <li><div><h3>Hardware</h3><p>Name the real position source and its drift, make the pushes physical, and put safety first. A software stop flag inside the control loop is not an emergency stop.</p></div></li>
+</ol>
+<div class="callout stop"><p><strong>The single hardest obstacle</strong> is that the exact simulator position used to fix the path-error input is privileged information. On a real robot it must come from a state estimator or external tracking, and the error of that source enters the control loop. A published multi-sensor estimator reports proprioceptive-only error of 83 cm over 10 m on ANYmal, about 8.3%, which exteroceptive corrections reduce by roughly 60%. That is a deployment research problem, and it should be named as one rather than deferred.</p></div>
+
+<h2 id="rules">5. Rules that stayed in force, and earned their keep</h2>
+<ul>
+  <li>Every number points to a receipt. This is what caught the duplicated control and the mis-numbered tables.</li>
+  <li>Verify adversarial findings before acting. Three of ten blockers were wrong.</li>
+  <li>A tolerance pass is a decision, not equivalence. Print the bound next to every tie.</li>
+  <li>Never select a checkpoint after seeing its trajectory. R1's best checkpoint is not its endpoint on either seed, and the endpoint is what is reported both times.</li>
+  <li>Completion is reported beside tracking error in every table that has either. That is the paper's point.</li>
+</ul>
+
+<h2 id="one">6. If you only read one paragraph</h2>
+<p class="one">The paper is done and it is honest. Adaptive curricula shrink their own ranges and look better
+while getting worse; continued policies keep standing while they stop tracking; a monotone projection
+blocks the first and a reference anchor blocks the second, now replicated at a second seed. Fixed
+randomization was a stronger baseline than anyone expected, because it already contains every curriculum
+stage. What stands between this and a real robot is not more training. It is that the deployed controller
+cannot measure its own displacement from the path it is asked to follow, and the quantity we used to fix
+that in simulation does not exist on hardware.</p>
+
+</main>
+</body>
+</html>

@@ -1,0 +1,27 @@
+# Response to the September 8 revision brief
+
+This is an executed revision record, not a reviewer rebuttal or acceptance prediction. The paper is an eight-page anonymous review candidate; author scientific approval and eligibility are still required.
+
+| Requested correction or analysis | Executed change | Remaining scientific limit |
+|---|---|---|
+| Reconcile six/three/twelve and both adaptive variants | Complete A/B/N/F census; seeds, iteration and checkpoint hashes exported. Saved states establish one 1,024-environment cohort versus four 256-environment strata. | Historical comparisons involve the specific mismatch-driven controller |
+| One-sided tolerance and uncertainty | Four exact empirical component decisions; categorical paired-difference figure; stored-precision arithmetic reproduces mean +0.5968, SD 2.2469 and lower bound −3.1911 pp. | Empirical pass is not statistical noninferiority or equivalence |
+| Correct contraction explanation and ADR | Positive stable-equilibrium example; explicit persistent-drive/boundary qualification; mismatch distinguished from return; ADR permits expansion and contraction. | No unique dynamical cause identified |
+| Complete metric and physical definitions | Main paper specifies ranges/units, clipping, delays, pushes, initialization, horizon, termination, AUC bounds/weights, alignment and post-termination masking. | Scalar λ is not uniformly smooth physical difficulty |
+| PPO, controller and continuation details | Main paper records reward/PPO settings, instrument/update/guard, origin, scaling/normalization, anchor construction/size/frequency, optimizer/LR state and added cost. | Exact native replay is verified in historical receipt; CPU/direct-256 diagnostics differ |
+| Finish frozen repetition | Both campaigns already complete; 135 metric hashes and 69,120 episode records rechecked. All outcomes retained by continuation seed. | Same trained origin and one motion; R2 has one continuation seed |
+| Full retention rule and constituents | D and L for all sampled checkpoints; both protected conditions and both errors/completion in CSV; complete endpoint table and trajectory figure. | Closest R1 margin is 0.33 percentage points; finite development panels |
+| Early stopping comparator | No evaluated R0 or R2 continuation checkpoint is feasible. R1 retrospective maxima at iterations 500 and 1,500 retained alongside primary endpoints. | No conclusion about untested early/between-sample checkpoints or held-out selection |
+| Qualification sensitivity | September 8 existing-data addendum fixes all 25 threshold pairs before computation; all checkpoints exported. Both R1 endpoints gain throughout; R0 loses in five cells per seed. | Exploratory sensitivity; unchanged primary 600/50 mm |
+| Panel identity and alias wording | Aliases explained as repeated copies of one motion; no paired-rollout inference. Separate 128-alias origin denominator yields 8.79% and is not pooled. | Matching numeric seeds do not establish matched perturbation streams |
+| Physical interpretation of tracking drift | Global/local conventions stated, no subtraction to create root error, missing saved time traces documented. | Root translation, heading and articulation mechanisms remain unresolved |
+| Narrow secondary claims | MuJoCo reversal at no-push λ=1 is explicit; additive-loss residual renamed; low AUC in a full-range run retained; optimizer restoration not necessary for drift. | No universal transfer, pairwise causal attribution or unique PPO mechanism |
+| Portable figures and numbers | Anonymous compact data, data dictionary, hashes, six numerical contract tests, all scalar/episode inputs and scripts; isolated build regenerates five figures and eight-page PDF. | Reproduces displayed analysis, not original GPU training without private assets |
+| Focus writing | Two questions, two measured controls; consolidated closest work, protocol, range result, complete continuation result and limited transfer. Markdown regenerates TeX and HTML, including offline vector math. | Narrow scope is a material scientific limitation, not removed by prose |
+| Video and anonymity | Existing source bound by exact video hash to its manifest; all 64 tiles retained. DR illustration policies use training seed 8601; no-DR uses 8600. | Historical replays cannot substitute for central R0/R1 trajectory evidence |
+
+The source-video identity check corrected an intermediate audit mistake: the builder's default fixed arm was seed 8600, but the exact footage hash resolves to the frontier manifest's fixed seed 8601. The final caption follows the manifest and agrees with the baked source label. No scientific comparison was changed on the basis of the mistaken default.
+
+No new simulation, training, observer, allocator, multi-motion adaptation, hardware study or optional fixed-policy evaluation was launched. The optional return-decomposition evaluation would need its own checkpoint/condition/reward/horizon freeze and explicit resource decision; narrowing the present causal language resolves the unsupported claim without changing the frozen programme.
+
+Independent author review should challenge the measurement contribution beyond familiar reward inflation and forgetting; the adequacy of one-origin evidence; fairness of the extra anchor computation; the limited R2 control; and the interpretation of development thresholds and margins. That review has not been performed by a human collaborator in this revision.

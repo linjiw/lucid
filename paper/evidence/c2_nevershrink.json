@@ -1,0 +1,322 @@
+{
+  "kind": "lucid_paper_evidence",
+  "topic": "C2_never_shrink_monotone_projection",
+  "schema_version": 1,
+  "created_at": "2026-09-07",
+  "created_by": "evidence audit subagent, all numbers traced to a file on disk and recomputed where derivable",
+  "one_line": "A monotone projection on the DR intensity refused 2,033 PI-law shrink requests across three seeds and applied none; against fixed DR it passed its preregistered 2-of-3 tolerance rule at 3/3 on all four AUC components, but the mean paired frontier-success gain is only +0.597 pts with a one-sided 95% lower bound of -3.19 pts, so this is a DECISION, not equivalence, and two of three seeds favour fixed.",
+
+  "primary_receipts": {
+    "h_r2_analysis": {
+      "path": "/home/linjiw/lucid-sonic/manifests/ratchet_confirmation_20260831/lucid_ratchet_confirmation_analysis.json",
+      "sha256": "8656575f94925eb43527bd74be68f613aed41dfba57e4ca759c29e693670cc3c",
+      "sha256_verified_today": true,
+      "mode": "0444 read-only",
+      "created_at": "2026-09-01T16:08:14.384755-04:00",
+      "git_sha": "ca057e658acc59773e798057980b827d65988441",
+      "note": "NOT mirrored into the git repo; only the data root holds it. Repo holds the preregistration, amendment, clarification and screen analysis."
+    },
+    "preregistration": {
+      "path": "/home/linjiw/lucid/receipts/manifests/lucid_monotone_ratchet_preregistration_20260831.json",
+      "sha256": "11c2dca351e38db7b240728e5f57069a731410e5517c9f36b1d96c125962da32",
+      "identical_to_data_root_copy": true,
+      "created_at": "2026-08-31T14:38:00-04:00",
+      "written_before_gpu": true
+    },
+    "confirmation_amendment": {
+      "path": "/home/linjiw/lucid/receipts/manifests/lucid_monotone_ratchet_confirmation_amendment_20260831.json",
+      "sha256": "2064bf7a16ca159092c6ebeabfbf09bc2fe3c1b30ce359a64505503a83786044",
+      "created_at": "2026-08-31T23:20:00-04:00",
+      "prospective_timing.written_before_any_new_confirmation_training_or_evaluation": true
+    },
+    "screen_analysis_s8601": {
+      "path": "/home/linjiw/lucid/receipts/manifests/lucid_ratchet_screen_analysis_s8601_20260831.json",
+      "sha256": "7c41e42ab378aeee1d22d57f113af7e09f2ed7672e124ed2068b2b5fa4e066d4"
+    },
+    "return_inversion_12_arms": {
+      "path": "/home/linjiw/lucid/receipts/analysis/lucid_return_inversion_20260901.json"
+    },
+    "p3_readout_collapsed_arm": {
+      "path": "/home/linjiw/lucid/receipts/analysis/lucid_p3_readout.json"
+    },
+    "phase0_analysis": {
+      "path": "/home/linjiw/lucid/receipts/analysis/lucid_phase0_analysis_20260901.json",
+      "mode": "0444 read-only"
+    },
+    "prior_draft_verification": {
+      "path": "/home/linjiw/lucid/receipts/analysis/lucid_draft_number_verification_20260902.json",
+      "note": "an earlier independent pass that confirms the same C2 numbers; this audit reproduced them from raw traces again"
+    }
+  },
+
+  "the_rule": {
+    "statement_in_words": "The intensity scalar lambda may expand or hold; a PI-law decrease is refused. The relative return guard remains the only path that can lower lambda.",
+    "statement_in_symbols_as_realized": "lambda_{n+1} = max(lambda_n, lambda_tilde_{n+1}) on every non-guard iteration; on a guard trip the update is lambda_{n+1} = max(lambda_min, return_decay * lambda_n) and the max-projection is bypassed.",
+    "implementation": {
+      "file": "/home/linjiw/lucid/GR00T-WholeBodyControl/gear_sonic/research/practice_utility/dr_controller.py",
+      "flag": "PIConfig.monotonic (line 86), documented lines 81-85",
+      "projection": "LucidDRController._apply_floor, lines 210-218",
+      "call_sites": "lines 279 and 319 (the two non-guard update paths)",
+      "guard_bypass": "the guard branch at lines 248-261 returns before _apply_floor is reached",
+      "file_sha256": "c70a7db5c21474a7e2daeaeb6759fa634aff82d0599b2fc26dfbfc9261b14f15",
+      "file_sha256_matches_preregistration_pin": true,
+      "submodule_head": "22475f355485742fa211db1d1b4c8e5640ec3589",
+      "last_commit_touching_file": "3457718f30b74bd6bca9d7dd439be0e53dbbde43 (2026-08-31)"
+    },
+    "arm_wiring": {
+      "file": "/home/linjiw/lucid/GR00T-WholeBodyControl/scripts/practice_utility/run_curriculum_comparison.py",
+      "arm_name": "lucid_ratchet_rg",
+      "constant": "RATCHET_ARMS at line 170",
+      "hydra_override": "++callbacks.lucid_curriculum.monotonic=true, emitted at line 1368"
+    },
+    "scope_of_the_rule": "It is a projection on ONE scalar intensity in [0.0, 1.0] that scales the physical DR ranges; it is not a per-parameter support projection.",
+    "expansion_half_never_exercised": "lambda_max = 1.0, so once lambda reaches the envelope the rule can only hold, never climb further. The 'may expand' half of the rule was never tested above the ceiling."
+  },
+
+  "mechanism_blocked_requests": {
+    "seeds": [8600, 8601, 8602],
+    "num_seeds": 3,
+    "iterations_per_seed": 8000,
+    "post_warmup_logged_rows_per_seed": 7990,
+    "blocked_pi_decrease_requests": {"8600": 453, "8601": 951, "8602": 629, "total": 2033},
+    "applied_decreases": {"8600": 0, "8601": 0, "8602": 0, "total": 0},
+    "unguarded_decreases": {"8600": 0, "8601": 0, "8602": 0, "total": 0},
+    "guard_trips": {"8600": 0, "8601": 0, "8602": 0, "total": 0},
+    "first_iteration_lambda_ge_0.95": {"8600": 64, "8601": 70, "8602": 65},
+    "preregistered_deadline_for_that": 500,
+    "terminal_1000_iteration_high_lambda_fraction": {"8600": 1.0, "8601": 1.0, "8602": 1.0},
+    "final_lambda": {"8600": 1.0, "8601": 1.0, "8602": 1.0},
+    "all_six_H_R0_gates_pass_all_three_seeds": true,
+    "receipt_pointer": "lucid_ratchet_confirmation_analysis.json -> mechanism.per_seed.<seed>.pi_decrease_control and .reach_lambda_095_by_step_500 and .terminal_1000_high_lambda_exposure",
+    "recomputed_from_raw_traces": true,
+    "raw_traces": {
+      "8600": {"path": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260831_231901/seed_8600/lucid_ratchet_rg/curriculum_curriculum_comparison_ne1024_20260831_231901_s8600_lucid_ratchet_rg.jsonl", "sha256": "a5390052bedce534ecc7b9ae7eb5d1a47e9fdd96ac2757c3753a0309d99ba1ce", "sha256_verified_today": true},
+      "8601": {"path": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260831_144022/seed_8601/lucid_ratchet_rg/curriculum_curriculum_comparison_ne1024_20260831_144022_s8601_lucid_ratchet_rg.jsonl", "sha256": "f1c334b00c0de4b8e70d57ae7817bbfe7d33eee9471fd376988d5a2e7d69d1e0", "sha256_verified_today": true},
+      "8602": {"path": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260901_100208/seed_8602/lucid_ratchet_rg/curriculum_curriculum_comparison_ne1024_20260901_100208_s8602_lucid_ratchet_rg.jsonl", "sha256": "e7d619064587c6fc6b99448d23de0f202c5148121214c1f6f0917787ed77b68d", "sha256_verified_today": true}
+    },
+    "caveat_requests_are_not_independent": "The 2,033 refusals are correlated per-iteration controller events inside three runs, not 2,033 independent samples. The statistical n for any policy comparison is 3.",
+    "caveat_guard_is_still_a_downward_path": "The rule blocks only PI-law decreases. A return-guard trip may still lower lambda. In these three runs the guard never tripped (0/3 seeds, 0 rows), so no decrease was ever applied; the claim 'blocks every shrink request' is exact for what happened but is not an absolute floor by construction."
+  },
+
+  "the_contrast_that_is_the_contribution": {
+    "unconstrained_controller_cells": {
+      "n_cells": 6,
+      "campaign": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260829_000249",
+      "recomputed_today_from_jsonl": true,
+      "per_cell": [
+        {"seed": 8600, "mode": "lucid_rg",    "applied_decreases": 610,  "guard_trips": 0, "unguarded_decreases": 610,  "peak_lambda": 1.0, "final_lambda": 1.0000, "mean_lambda_last_1000": 1.0000},
+        {"seed": 8600, "mode": "lucid_s4_rg", "applied_decreases": 1950, "guard_trips": 0, "unguarded_decreases": 1950, "peak_lambda": 1.0, "final_lambda": 0.0121, "mean_lambda_last_1000": 0.4785},
+        {"seed": 8601, "mode": "lucid_rg",    "applied_decreases": 2450, "guard_trips": 0, "unguarded_decreases": 2450, "peak_lambda": 1.0, "final_lambda": 0.0624, "mean_lambda_last_1000": 0.3528},
+        {"seed": 8601, "mode": "lucid_s4_rg", "applied_decreases": 1273, "guard_trips": 0, "unguarded_decreases": 1273, "peak_lambda": 1.0, "final_lambda": 1.0000, "mean_lambda_last_1000": 1.0000},
+        {"seed": 8602, "mode": "lucid_rg",    "applied_decreases": 242,  "guard_trips": 0, "unguarded_decreases": 242,  "peak_lambda": 1.0, "final_lambda": 1.0000, "mean_lambda_last_1000": 1.0000},
+        {"seed": 8602, "mode": "lucid_s4_rg", "applied_decreases": 432,  "guard_trips": 0, "unguarded_decreases": 432,  "peak_lambda": 1.0, "final_lambda": 1.0000, "mean_lambda_last_1000": 1.0000}
+      ],
+      "cells_with_at_least_one_applied_shrink": "6 of 6",
+      "cells_that_terminally_evacuated_final_lambda_below_0.10": "2 of 6",
+      "ratchet_cells_with_any_applied_shrink": "0 of 3, by construction"
+    },
+    "same_seed_same_controller_contrast": {
+      "seed": 8601,
+      "collapsed_lucid_rg_frontier_success_auc": 0.739909,
+      "never_shrink_lucid_ratchet_rg_frontier_success_auc": 0.9130859375,
+      "fixed_frontier_success_auc": 0.8818359375,
+      "collapsed_vs_never_shrink_pts": -17.3177,
+      "collapsed_vs_fixed_pts": -14.1927,
+      "recomputed": true,
+      "statement": "Same controller, same seed, same everything, differing only by the monotone projection: 17.32 frontier success-AUC points. This is the cleanest statement of C2 available.",
+      "receipts": [
+        "/home/linjiw/lucid/receipts/analysis/lucid_p3_readout.json -> frontier_success_auc (collapsed arm)",
+        "/home/linjiw/lucid-sonic/manifests/ratchet_confirmation_20260831/lucid_ratchet_confirmation_analysis.json -> arms.lucid_ratchet_rg.success_rate.frontier_auc.per_seed.8601.auc",
+        "/home/linjiw/lucid/receipts/analysis/lucid_return_inversion_20260901.json -> pairs[]"
+      ],
+      "caveat": "Seed 8601 is the seed selected for the ratchet screen AFTER its collapse was observed (preregistration selection_disclosure). It is a targeted mechanistic regression test, not a blinded efficacy seed. It is also the single seed of three on which the ratchet beat fixed."
+    },
+    "dashboard_inversion_for_the_never_shrink_arm": {
+      "never_shrink_at_s8601_terminal_return": 10.9807,
+      "rank_of_that_return_among_12_scored_arm_seeds": "lowest (12 of 12)",
+      "never_shrink_at_s8601_frontier_success_auc": 0.913086,
+      "rank_of_that_auc_among_12_scored_arm_seeds": "highest (1 of 12)",
+      "receipt": "/home/linjiw/lucid/receipts/analysis/lucid_return_inversion_20260901.json -> pairs[], n_scored_pairs=12",
+      "context_correlations": {"spearman_return_vs_frontier": -0.7343, "pearson_return_vs_frontier": -0.6095, "pearson_controllers_only": -0.5977},
+      "hygiene": "-0.73 is a SPEARMAN rank correlation. Pearson is -0.61 overall and -0.60 among controllers."
+    }
+  },
+
+  "tolerance_test_vs_fixed_dr": {
+    "preregistered_rule": {
+      "source": "/home/linjiw/lucid/receipts/manifests/lucid_monotone_ratchet_preregistration_20260831.json -> hypotheses.H_R2_three_seed_noninferiority",
+      "text": "After confirmatory cells, each frontier co-primary is within 0.02 of fixed in >=2/3 paired training seeds, and each in-envelope co-primary is within 0.01 in >=2/3 paired seeds. Exact seed counts and deltas are reported; no p-value is claimed at n=3.",
+      "frontier_margin_pts": 2.0,
+      "in_envelope_margin_pts": 1.0,
+      "required_within_margin_seeds": 2,
+      "num_seeds": 3,
+      "written_before_gpu": true,
+      "superiority_preregistered": false
+    },
+    "verdict": {
+      "status": "pass",
+      "noninferiority_claim_authorized": true,
+      "superiority_claim_authorized": false,
+      "directional_claim_authorized": false,
+      "pointer": "lucid_ratchet_confirmation_analysis.json -> preregistered_decision and claim_scope"
+    },
+    "four_components": [
+      {"component": "success_rate:frontier_auc",    "margin_pts": 2.0, "mean_delta_pts": 0.5967882, "within_margin_seeds": 3, "verdict": "pass", "strictly_favorable_seeds_descriptive": 1},
+      {"component": "success_rate:in_envelope_auc", "margin_pts": 1.0, "mean_delta_pts": 0.0651042, "within_margin_seeds": 3, "verdict": "pass", "strictly_favorable_seeds_descriptive": 2},
+      {"component": "progress_rate:frontier_auc",   "margin_pts": 2.0, "mean_delta_pts": 0.4947374, "within_margin_seeds": 3, "verdict": "pass", "strictly_favorable_seeds_descriptive": 1},
+      {"component": "progress_rate:in_envelope_auc","margin_pts": 1.0, "mean_delta_pts": 0.0100911, "within_margin_seeds": 3, "verdict": "pass", "strictly_favorable_seeds_descriptive": 2}
+    ],
+    "secondary_lat_50ms": {"success_mean_delta_pts": -0.0651042, "progress_mean_delta_pts": -0.0426432, "verdict": "pass", "preregistered_as_secondary": true},
+
+    "headline_frontier_success": {
+      "per_seed_pts": {"8600": -0.1627604, "8601": 3.1250000, "8602": -1.1718750},
+      "per_seed_auc": {
+        "8600": {"never_shrink": 0.9029947916666666, "fixed": 0.9046223958333333},
+        "8601": {"never_shrink": 0.9130859375,       "fixed": 0.8818359375},
+        "8602": {"never_shrink": 0.8203124999999999, "fixed": 0.8320312500}
+      },
+      "mean_paired_difference_pts": 0.596788194444442,
+      "sample_sd_pts": 2.246880,
+      "standard_error_pts": 1.297237,
+      "n_seeds": 3,
+      "t_0.95_df2": 2.919986,
+      "one_sided_95_lower_bound_pts": -3.191124,
+      "two_sided_95_ci_pts": [-4.9848, 6.1783],
+      "margin_pts": 2.0,
+      "lower_bound_outside_margin": true,
+      "seeds_favouring_fixed": [8600, 8602],
+      "seeds_favouring_never_shrink": [8601],
+      "count_favouring_fixed": 2,
+      "count_favouring_never_shrink": 1,
+      "recomputed": true,
+      "recompute_method": "statistics.mean / statistics.stdev(ddof=1) on the three paired delta_pts; LB = mean - t(0.95, df=2) * sd / sqrt(3)",
+      "pointer": "lucid_ratchet_confirmation_analysis.json -> ratchet_vs_fixed.success_rate.frontier_auc.per_seed.<seed>.delta_pts"
+    },
+
+    "the_plus_3.125_is_seed_noise": {
+      "value_pts": 3.125,
+      "seed": 8601,
+      "verdict": "confirmed seed noise",
+      "why": "It is the single positive draw of three and the sign flips across seeds. The preregistered informative sub-test -- ratchet minus fixed positive on BOTH 8600 and 8602 with each gap above +3.0 pts, prior probability about 0.4% under pure seed noise -- did NOT trigger; both new seeds are negative.",
+      "receipt": "/home/linjiw/lucid-sonic/manifests/ratchet_confirmation_20260831/lucid_ratchet_confirmation_analysis.json -> ratchet_vs_fixed.success_rate.frontier_auc.per_seed"
+    },
+
+    "decision_not_equivalence": {
+      "required_sentence": "The rule was fixed before the data and it passed; that is the decision it was written to make. It is not a demonstration of equivalence. With three seeds and a paired standard deviation of 2.25 points, the one-sided 95% lower bound on the frontier-success difference is -3.19 points, which lies outside the 2-point margin.",
+      "forbidden_words": ["equivalent", "equivalence", "statistically noninferior", "as good as", "better than fixed"],
+      "receipt_says_so_itself": "claim_scope.superiority_claim_authorized = false; claim_scope.directional_claim_authorized = false",
+      "prereg_says_so_itself": "hypotheses.superiority = 'Not preregistered. A positive point estimate over fixed is descriptive and cannot turn the Tier-1 signal constraint into a superiority claim.'"
+    }
+  },
+
+  "why_the_tie_is_close_to_structural": {
+    "finding": "Over the post-warmup run the never-shrink arm and fixed DR are distributionally identical.",
+    "recomputed_today": true,
+    "per_seed": {
+      "8600": {"post_warmup_rows": 7990, "rows_after_global_step_100": 7900, "distinct_applied_lambda_after_step_100": 1, "that_value": 1.0},
+      "8601": {"post_warmup_rows": 7990, "rows_after_global_step_100": 7900, "distinct_applied_lambda_after_step_100": 1, "that_value": 1.0},
+      "8602": {"post_warmup_rows": 7990, "rows_after_global_step_100": 7900, "distinct_applied_lambda_after_step_100": 1, "that_value": 1.0}
+    },
+    "fraction_of_logged_iterations_after_step_100": 0.988736,
+    "consequence": "The two arms share an identical training distribution over 98.87% of post-warmup training, differing only by a ~70-iteration warm-up ramp and RNG stream divergence. The H_R2 tolerance test is therefore close to structurally guaranteed and carries little information about capability. Say this in the paper; it is why the ratchet's informative comparator is the UNCONSTRAINED controller, not fixed DR.",
+    "realized_exposure_at_the_envelope": {
+      "receipt": "/home/linjiw/lucid/receipts/analysis/lucid_realized_exposure_20260903.json -> runs['lucid_ratchet_rg@seed_8600'].share_by_difficulty['at the envelope']",
+      "receipt_value_seed_8600": 0.9925,
+      "receipt_covers_only_seed_8600": true,
+      "recomputed_all_three_seeds_share_of_8000_nominal_iterations": {"8600": 0.99250, "8601": 0.99163, "8602": 0.99238},
+      "fixed_dr_share": 1.0,
+      "unit": "iterations at the pinned intensity (single cohort); for these single-cohort arms episodes and environment-iterations give the same 0.9925",
+      "bin_definition": "'at the envelope' = lambda in [0.9, 1.1)"
+    }
+  },
+
+  "seed_effect_that_bounds_every_claim": {
+    "pooled_seed_means_frontier_success_auc": {"8600": 0.903809, "8601": 0.897461, "8602": 0.826172},
+    "seed_8602_is_below_the_other_two_by_pts": 7.8,
+    "applies_to_both_arms": true,
+    "pooled_six_arm_seed_sd_pts": 3.9979,
+    "pooled_six_arm_seed_range_pts": 9.2773,
+    "paired_delta_sd_frontier_auc_pts": 2.2469,
+    "paired_delta_sd_on_phys_175_200_band_pts": 2.7367,
+    "recomputed": true,
+    "consequence": "Any one-seed screen must be read against a paired noise floor of 2.25 pts on the four-cell frontier AUC and 2.74 pts on the {phys_175, phys_200} band.",
+    "pointer": "recomputed from lucid_ratchet_confirmation_analysis.json -> arms.*.success_rate.frontier_auc.per_seed.*.cells"
+  },
+
+  "instrument_and_provenance": {
+    "instrument_audit_passed": true,
+    "cell_count": 84,
+    "evaluator_sha256": "308e24150e4d4f03d0abf0dc6a427063ac662904bb3a7765488a9bff63cd94ca",
+    "panel_receipt": "/home/linjiw/lucid-sonic/manifests/replicate_panel_panel_hob002_k512.json",
+    "panel_sha256": "e2e61933405e6701b0563eb4df793b6faf5c90d8ae5b7d8fc1e11f47142aefd7",
+    "evaluation_seed_by_training_seed": {"8600": 8700, "8601": 8701, "8602": 8702},
+    "episodes_per_cell": 512,
+    "presets": 14,
+    "frontier_grid": ["phys_125", "phys_150", "phys_175", "phys_200"],
+    "frontier_trapezoid_weights": {"phys_125": 0.1666667, "phys_150": 0.3333333, "phys_175": 0.3333333, "phys_200": 0.1666667},
+    "in_envelope_grid": ["phys_000", "phys_025", "phys_050", "phys_075", "phys_100"],
+    "all_six_input_evaluation_and_three_training_receipt_sha256_verified_today": true,
+    "all_six_stored_frontier_aucs_recomputed_from_cells_and_matched_to_1e-12": true,
+    "determinism_control_P2": {"claim": "fixed@s8600 rescored bit-identically to the prior value, 2779/3072 successes", "source": "lucid-latest-report.md P2 paragraph", "receipt_status": "NOT independently re-derived in this audit"}
+  },
+
+  "scope_and_caveats_that_must_travel_with_c2": [
+    "Three paired training seeds (8600, 8601, 8602). All three influenced development; they are REPLICATION, never untouched confirmation.",
+    "Seed 8601 was selected for the ratchet screen AFTER its unconstrained collapse was observed. The preregistration discloses this: 'a targeted mechanistic regression test, not a blinded efficacy seed'. It is also the one seed of three that favours the ratchet.",
+    "Fixed seeds 8600 and 8601 come from the earlier campaign generation via a reconstructed historical bridge; only fixed 8602 was newly trained for the confirmation. Disclosed in the amendment's claim_scope.comparator_disclosure.",
+    "One motion: walk_hands_on_back_loop_002__A066_M, a 4.03 s single walk clip, evaluated with 512 episode aliases per cell. Many aliases improve within-policy precision; they do NOT create independent trained policies and give no motion-generalization evidence.",
+    "1,024 environments, 8,000 PPO iterations from scratch per training cell. Environment-iterations, not episodes.",
+    "The rule acts on ONE scalar intensity in [0, 1] scaling the physical DR ranges; it is not a per-parameter support projection, and its 'may expand' half was never exercised because lambda_max = 1.0.",
+    "The return guard remains a legal downward path. It never tripped in these three runs, so the observed trajectories are strictly monotone, but the rule is not an absolute floor by construction.",
+    "No p-value is claimed at n = 3 (preregistration). The one-sided 95% lower bound reported here assumes a t(2) reference distribution on three paired differences and is itself a very weak instrument.",
+    "The never-shrink arm and fixed DR are the same training distribution over 98.87% of post-warmup training, so the tolerance pass is near-tautological and must not be described as a hard-won result.",
+    "The ratchet does not rehabilitate the latent mismatch signal; the same-day signal audit disqualified it on five runs."
+  ],
+
+  "discrepancies_found": [
+    {
+      "item": "lucid_p3_readout.json free-text field frozen_bands.floor_effect_addressed",
+      "says": "lucid_s4_rg@s8600 has 206 contiguous iterations at dose < 0.05 and a final dose of 0.0075",
+      "recomputed_from_the_raw_trace": "194 trailing contiguous iterations with lambda < 0.05, and final lambda_after = 0.012064 (the 0.00794 value is the second-to-last row)",
+      "severity": "low; the argument the sentence makes is unaffected, but the two numbers are not reproducible as written",
+      "trace": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260829_000249/seed_8600/lucid_s4_rg/curriculum_curriculum_comparison_ne1024_20260829_000249_s8600_lucid_s4_rg.jsonl"
+    },
+    {
+      "item": "preregistration offline_replay.cells counterfactual ratchet_bind_rows vs the applied-decrease counts in the unconstrained runs",
+      "prereg": "8600/lucid_s4_rg 1978 and 8601/lucid_rg 2490",
+      "recomputed_applied_decreases_in_those_same_runs": "1950 and 2450",
+      "explanation": "These are two different quantities. The replay holds lambda at the ratcheted value, so the PI law is evaluated at a different operating point and requests decreases on a different set of rows. The other four cells (610, 1273, 242, 432) coincide.",
+      "severity": "low; do not present the replay counts as observed shrink counts"
+    },
+    {
+      "item": "paper/when-training-gets-easier.md section 5, realized-exposure sentence",
+      "says": "Training telemetry records how many episodes each training cohort ran ... The never-shrink arm spent 99.2 percent of its training exposure at the envelope",
+      "issue": "the underlying receipt covers seed 8600 only, and its exposure_source is 'iterations at the pinned intensity (single cohort)', not episodes. The claim-hygiene rule forbids interchanging episodes and environment-iterations.",
+      "fix": "say 'iterations' and either name seed 8600 or use the recomputed all-three-seed figures 99.25 / 99.16 / 99.24 percent",
+      "severity": "medium for hygiene, low for substance"
+    },
+    {
+      "item": "paper/when-training-gets-easier.md section 5, the rule in symbols",
+      "says": "lambda_{n+1} = max(lambda_n, lambda_tilde_{n+1})",
+      "issue": "true on every non-guard iteration only; the implementation's guard branch bypasses the projection and can lower lambda. In these three runs the guard never tripped, so the realized trajectories do satisfy the formula exactly.",
+      "fix": "add a half-sentence: 'the return guard remains the only path that can lower it, and it never tripped in these runs'",
+      "severity": "medium; a reviewer reading the code would catch it"
+    },
+    {
+      "item": "portability of the master receipt",
+      "issue": "lucid_ratchet_confirmation_analysis.json, the receipt behind every C2 number, exists only under /home/linjiw/lucid-sonic/manifests/ and is not in the git repo. The repo has the preregistration, the amendment, the clarification and the screen analysis, but not the three-seed analysis.",
+      "fix": "copy it to /home/linjiw/lucid/receipts/manifests/ratchet_confirmation_20260831/ before the supplement is built",
+      "severity": "medium for reproducibility"
+    }
+  ],
+
+  "what_c2_does_not_establish": [
+    "Not equivalence with fixed DR. The one-sided 95% lower bound is -3.19 pts, outside the 2-point margin.",
+    "Not superiority over fixed DR. Explicitly not preregistered and explicitly not authorized by the receipt.",
+    "Not a directional claim: claim_scope.directional_claim_authorized = false.",
+    "Not generalization beyond the single training motion and its 512 aliases.",
+    "Not hardware or real-world transfer.",
+    "Not a claim that the latent mismatch gap became a calibrated difficulty signal.",
+    "Not evidence that the 'may expand' half of the rule does anything: lambda_max = 1.0 was the ceiling."
+  ]
+}

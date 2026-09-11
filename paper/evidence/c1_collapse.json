@@ -1,0 +1,236 @@
+{
+  "topic": "C1 - training-range collapse in adaptive domain randomization",
+  "summary": "Six adaptive DR runs (two controller variants x three seeds, 8,000 iterations each) all applied reductions to their own difficulty scale, and two ended near zero (final lambda 0.062416 and 0.012064) after having reached the full envelope within the first 70 iterations; a matched never-shrink control applied zero reductions across three runs while refusing 2,033 requests. The collapse is invisible from inside training and inverted on the ladder: the two collapsed runs hold the two highest terminal returns of the twelve scored arm-seed pairs (15.29 and 14.40 against 10.98-12.28 for every run that held), and terminal return versus frontier success AUC has Spearman -0.7343 over n=12 (Pearson -0.6095 overall, -0.5977 over the nine controller arms). The preregistered collapse scores 0.739909 frontier success AUC against 0.881836 for fixed DR and 0.913086 for never-shrink on the same seed, i.e. -14.19 and -17.32 points, while its in-envelope AUC is still 0.998047. That readout was frozen before it existed (git c9ccedb at 14:10 EDT; measurement manifest at 16:17 EDT) and landed inside the recency prediction interval, below the uniform interval, and 14.19 points below the 'evacuation is free' comparator, so 'the collapse is cosmetic' is rejected while 'recency-weighted exposure' remains unearned. Two scope limits travel with all of this: a 7.8-point between-seed effect measured on the two lambda-pinned arms, about 4x the exposure law's own 1.83-point residual SD, so the law must not be quoted without a seed term; and the friction clamp at phys_150 (static-friction floor 0.1375 -> 0.05, 2.75x, carrying a third of the endpoint weight) is where all four Phase-0 adaptive arms take their largest drop, with foot-slip growth ordering the drops on n=4, correlational evidence only.",
+  "facts": [
+    {
+      "claim": "The adaptive-DR denominator is six runs: two adaptive controller variants (lucid_rg, lucid_s4_rg) x three seeds (8600, 8601, 8602), each trained 8,000 iterations.",
+      "value": "6 runs; 8,000 logged iterations each (7,990 rows carry controller telemetry)",
+      "receipt_path": "/home/linjiw/lucid/receipts/manifests/lucid_frontier_exposure_law_preregistration_20260901.json",
+      "pointer": "established_facts_not_predictions.anti_gating_frequency.unconstrained_controller_cells_8000it = 6",
+      "recomputed": true,
+      "caveat": "Six runs are two DIFFERENT adaptive variants x three seeds, not six replicates of one curriculum. Row counts recomputed from the six per-run curriculum JSONL traces under /home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260829_000249/seed_*/{lucid_rg,lucid_s4_rg}/curriculum_*.jsonl (8,000 rows each)."
+    },
+    {
+      "claim": "Every adaptive run applied at least one reduction of its own difficulty scale lambda: 6 of 6.",
+      "value": "6/6. Applied downward lambda moves per run: lucid_rg 610 (s8600), 2,450 (s8601), 242 (s8602); lucid_s4_rg 1,950 (s8600), 1,273 (s8601), 432 (s8602). Total 6,957.",
+      "receipt_path": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260829_000249",
+      "pointer": "seed_{8600,8601,8602}/{lucid_rg,lucid_s4_rg}/curriculum_curriculum_comparison_ne1024_20260829_000249_s<seed>_<mode>.jsonl; count of rows with lambda_after < lambda_before. Summary-level corroboration: /home/linjiw/lucid/receipts/manifests/lucid_frontier_exposure_law_preregistration_20260901.json -> established_facts_not_predictions.anti_gating_frequency.any_downward_movement = 6",
+      "recomputed": true,
+      "caveat": "A 'shrink' here is an APPLIED per-iteration decrease of the scalar lambda, not an independent experimental event; rows within a run are strongly autocorrelated. Controller REQUESTS (rows with control<0) are 610/1,978/2,490/1,273/242/432 and differ from applied moves only for lucid_s4_rg@s8600 (1,978 requested, 1,950 applied). The matched fixed and no-DR arms show 0 decreases, confirming the counter is not an artifact of the logger."
+    },
+    {
+      "claim": "Two of the six adaptive runs collapsed: they reached the full envelope early and ended near lambda = 0.",
+      "value": "2/6. Terminal lambda 0.062416 (lucid_rg@s8601) and 0.012064 (lucid_s4_rg@s8600). The other four end at lambda = 1.000000.",
+      "receipt_path": "/home/linjiw/lucid/receipts/analysis/lucid_return_inversion_20260901.json",
+      "pointer": "pairs[0].final_lambda = 0.062 (lucid_rg@s8601, evacuated true); pairs[1].final_lambda = 0.012 (lucid_s4_rg@s8600, evacuated true); also /home/linjiw/lucid/receipts/manifests/lucid_frontier_exposure_law_preregistration_20260901.json -> established_facts_not_predictions.anti_gating_frequency.terminal_evacuation = 2",
+      "recomputed": true,
+      "caveat": "Full-precision terminal lambdas recomputed from the raw traces. 'Collapse' has no preregistered numeric threshold; the operational definition is 'ends near lambda=0 after having reached lambda=1.0 earlier'. Both collapsed runs first reached lambda 1.0 at iteration 67 (s8601) and 62 (s8600). The two collapses fall on DIFFERENT variants and DIFFERENT seeds, so 2/6 is not two replicates of one failure."
+    },
+    {
+      "claim": "The collapses are deep and sustained, not a terminal blip.",
+      "value": "lucid_rg@s8601: 5,666 of 7,990 telemetry iterations at lambda >= 0.95, last such at iteration 5,859; mean lambda over the final 1,000 iterations 0.3528; 276 iterations at lambda < 0.05, longest contiguous stretch 92. lucid_s4_rg@s8600: 6,822 at lambda >= 0.95, last at iteration 7,271; mean lambda over the final 1,000 iterations 0.4785; terminal contiguous stretch of 206 iterations at exposure dose < 0.05, final dose 0.00754.",
+      "receipt_path": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260829_000249",
+      "pointer": "seed_8601/lucid_rg/curriculum_*.jsonl and seed_8600/lucid_s4_rg/curriculum_*.jsonl, field 'lambda' per row; dose = 1.0*lambda for lucid_rg and 0.625*lambda for lucid_s4_rg per /home/linjiw/lucid/receipts/manifests/lucid_frontier_exposure_law_preregistration_20260901.json -> exposure_definition.per_iteration_dose. Corroborated at /home/linjiw/lucid/receipts/analysis/lucid_p3_readout.json -> frozen_bands.floor_effect_addressed ('206 contiguous iterations at dose < 0.05, final dose 0.0075'; 'mean lambda over its last 1000 iterations is 0.3528').",
+      "recomputed": true,
+      "caveat": ""
+    },
+    {
+      "claim": "The never-shrink (monotone) control shows the shrink count is a property of the unconstrained controller, not of the logger or the seeds.",
+      "value": "0 applied decreases across all three never-shrink runs; 453 / 951 / 629 = 2,033 requested decreases refused; 0 guard trips; all three end at lambda 1.0; first lambda >= 0.95 at iteration 64 / 70 / 65.",
+      "receipt_path": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison",
+      "pointer": "curriculum_comparison_ne1024_20260831_231901/seed_8600/lucid_ratchet_rg/, _20260831_144022/seed_8601/lucid_ratchet_rg/, _20260901_100208/seed_8602/lucid_ratchet_rg/ curriculum_*.jsonl; rows with control<0 (requested) vs rows with lambda_after<lambda_before (applied). Cross-check: /home/linjiw/lucid/receipts/analysis/lucid_draft_number_verification_20260902.json -> confirmed[11]",
+      "recomputed": true,
+      "caveat": "This number's primary home is contribution C2. The 2,033 are correlated controller events inside three runs, not 2,033 independent replicates; N = 3."
+    },
+    {
+      "claim": "Terminal training return and independently measured robustness are inversely RANKED across the scored arms (Spearman rank correlation).",
+      "value": "Spearman rho = -0.7343, n = 12 arm-seed pairs",
+      "receipt_path": "/home/linjiw/lucid/receipts/analysis/lucid_return_inversion_20260901.json",
+      "pointer": "spearman_return_vs_frontier = -0.7343; n_scored_pairs = 12",
+      "recomputed": true,
+      "caveat": "SPEARMAN, never Pearson. The denominator is 12 arm-seed pairs = 4 arm types (fixed, never-shrink, lucid_rg, lucid_s4_rg) x 3 seeds (8600/8601/8602), no duplicate arm-seed pair; it is not 12 independent curricula. Return is the mean of the last 500 iterations of 'Mean rewards'; the endpoint is frontier success AUC on the frozen phys_125..200 trapezoid."
+    },
+    {
+      "claim": "The linear (Pearson) correlation is weaker than the rank correlation and must be reported as the weaker figure.",
+      "value": "Pearson r = -0.6095 over all 12 pairs; r = -0.5977 over the 9 controller arms (fixed excluded). Recomputed Spearman over the same 9 controllers is -0.8333.",
+      "receipt_path": "/home/linjiw/lucid/receipts/analysis/lucid_return_inversion_20260901.json",
+      "pointer": "pearson_return_vs_frontier = -0.6095; pearson_controllers_only = -0.5977",
+      "recomputed": true,
+      "caveat": "An interim ten-pair analysis gave -0.84 / -0.87; the weakening is one arm, lucid_s4_rg@s8602, which never evacuated but is brittle at the friction clamp (its own audit). Report -0.61 / -0.60, not the interim figures. The controllers-only Spearman -0.8333 is my recomputation and is not stored in any receipt."
+    },
+    {
+      "claim": "The arms with the highest terminal training return are exactly the two collapsed arms.",
+      "value": "Highest terminal returns of the 12: lucid_rg@s8601 15.2859 (final lambda 0.062, frontier AUC 0.739909) and lucid_s4_rg@s8600 14.4010 (final lambda 0.012, frontier AUC 0.697266). Every run that held its ranges falls in 10.9807-12.2843. Lowest return of all twelve, 10.9807 (never-shrink@s8601), carries the highest frontier AUC, 0.913086.",
+      "receipt_path": "/home/linjiw/lucid/receipts/analysis/lucid_return_inversion_20260901.json",
+      "pointer": "highest_return_arms = [lucid_rg@s8601, lucid_s4_rg@s8600]; highest_return_arms_all_evacuated = true; pairs[*].terminal_return",
+      "recomputed": true,
+      "caveat": "All twelve terminal returns reproduce exactly. For the six adaptive and three never-shrink arms the value is the mean of the last 500 'mean_return' rows in the curriculum JSONL; for the three fixed arms it exists only in the training stdout logs /home/linjiw/lucid-sonic/outputs/curriculum_comparison_ne1024_20260829_000249_s8600_fixed.log, _s8601_fixed.log and _20260901_044118_s8602_fixed.log (regex 'Mean rewards:', last 500 of 8,000)."
+    },
+    {
+      "claim": "Grouped, the collapsed runs look better on the training dashboard and worse on the ladder.",
+      "value": "Collapsed (n=2): mean terminal return 14.8435, mean frontier success AUC 0.718588. Range-holding (n=10): mean terminal return 11.6017, mean frontier success AUC 0.833040.",
+      "receipt_path": "/home/linjiw/lucid/receipts/analysis/lucid_return_inversion_20260901.json",
+      "pointer": "evacuated_vs_held.{evacuated_mean_return, held_mean_return, evacuated_mean_frontier, held_mean_frontier}",
+      "recomputed": true,
+      "caveat": "n = 2 versus n = 10; the 'held' group pools three arm types."
+    },
+    {
+      "claim": "The preregistered collapse costs 14.19 frontier success-AUC points against fixed DR on the SAME training seed.",
+      "value": "14.19 points (0.881836 - 0.739909 = 0.141927)",
+      "receipt_path": "/home/linjiw/lucid/receipts/analysis/lucid_return_inversion_20260901.json",
+      "pointer": "frontier_success_auc for arm 'fixed@s8601' (0.881836) minus arm 'lucid_rg@s8601' (0.739909). Primary cells: /home/linjiw/lucid-sonic/manifests/curriculum_robustness_ne512_20260901_161202.json (collapse, 9/9 cells, eval seed 8701, evaluator build ca057e65) and /home/linjiw/lucid-sonic/manifests/ratchet_screen_20260831/fixed/curriculum_robustness_ne512_20260831_202312.json (fixed@s8601, eval seed 8701, build 3457718f). Recomputation of the arithmetic is also stored at /home/linjiw/lucid/receipts/analysis/lucid_draft_number_verification_20260902.json -> confirmed[7].",
+      "recomputed": true,
+      "caveat": "Same training seed (8601) and same evaluation seed (8701) on the same 512-alias panel, but the two ladders were scored on two evaluator git trees (ca057e65 vs 3457718f); the preregistration records that the evaluator is bit-deterministic across builds and that per-cell dr_ranges hash identically. One seed, one pair."
+    },
+    {
+      "claim": "The same collapse costs 17.32 frontier success-AUC points against the never-shrink arm on the SAME training seed.",
+      "value": "17.32 points (0.913086 - 0.739909 = 0.173177)",
+      "receipt_path": "/home/linjiw/lucid/receipts/analysis/lucid_return_inversion_20260901.json",
+      "pointer": "frontier_success_auc for arm 'lucid_ratchet_rg@s8601' (0.913086) minus arm 'lucid_rg@s8601' (0.739909). Primary cells: /home/linjiw/lucid-sonic/manifests/ratchet_screen_20260831/treatment/curriculum_robustness_ne512_20260831_201524.json. Arithmetic recomputed at /home/linjiw/lucid/receipts/analysis/lucid_draft_number_verification_20260902.json -> confirmed[8].",
+      "recomputed": true,
+      "caveat": "One seed. The never-shrink arm at seed 8601 is also the single positive draw of the three-seed never-shrink-vs-fixed comparison (+3.125 pts; the other two seeds favour fixed), so 17.32 is the largest of the three same-seed never-shrink comparators available."
+    },
+    {
+      "claim": "The second collapse, on its own seed, costs more than the preregistered one.",
+      "value": "lucid_s4_rg@s8600 (final lambda 0.012) scores 0.697266 against fixed@s8600 0.904622 (-20.74 pts) and never-shrink@s8600 0.902995 (-20.57 pts).",
+      "receipt_path": "/home/linjiw/lucid/receipts/analysis/lucid_return_inversion_20260901.json",
+      "pointer": "frontier_success_auc for arms lucid_s4_rg@s8600 / fixed@s8600 / lucid_ratchet_rg@s8600. Primary cells: /home/linjiw/lucid-sonic/manifests/curriculum_robustness_ne512_20260830_013413.json and /home/linjiw/lucid-sonic/manifests/ratchet_confirmation_20260831/evaluation/{fixed_s8600,ratchet_s8600}/*.json",
+      "recomputed": true,
+      "caveat": "NOT the preregistered arm and NOT a clean second measurement of the cost of collapse: lucid_s4_rg is the stratified variant, whose per-iteration difficulty dose is 0.625x fixed by construction, so its gap confounds evacuation with a lower stated dose. Its ladder score also predates the exposure-law preregistration (it is one of the seven fit points). The headline 14-17 point figure is the seed-8601 un-stratified arm."
+    },
+    {
+      "claim": "Within the second collapsed run, the same policy lost frontier AUC between its intact mid-training capsule and its collapsed endpoint.",
+      "value": "7.98 points (0.777018 at the 6,000-iteration capsule vs 0.697266 at the collapsed 8,000-iteration endpoint of the same run; 0.079752)",
+      "receipt_path": "/home/linjiw/lucid-sonic/manifests/curriculum_robustness_ne512_20260830_020139.json",
+      "pointer": "runs.*_lucid_s4_rg_h6000_phys_{125,150,175,200}.summary.success_rate, trapezoid weights [1/6,1/3,1/3,1/6]; endpoint from /home/linjiw/lucid-sonic/manifests/curriculum_robustness_ne512_20260830_013413.json. Prose lead: lucid-latest-report.md line ~493 states -7.97 pts.",
+      "recomputed": true,
+      "caveat": "Same run at two checkpoints, so it confounds terminal evacuation with 2,000 extra gradient steps. The two capsules were scored under two evaluator builds (106eeff0 for h6000, 52d9b526 for the endpoint) at the same evaluation seed 8700. Ledger prints -7.97; the exact value is 7.975 points."
+    },
+    {
+      "claim": "The collapse looks like success on the training dashboard: the run's return RISES as its difficulty falls, by more than a matched control gains over the same iterations.",
+      "value": "lucid_rg@s8601: mean return 10.188 over the 500 iterations ending at its last lambda >= 0.95 iteration (5,859), rising to 15.286 over its final 500 iterations at lambda 0.062 = +5.10 return points. Over the identical iteration span, fixed@s8601 gained +1.03 (10.287 -> 11.313) and never-shrink@s8601 +0.76 (10.217 -> 10.981). lucid_s4_rg@s8600 gained +2.30 (12.100 -> 14.401).",
+      "receipt_path": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260829_000249/seed_8601/lucid_rg/curriculum_curriculum_comparison_ne1024_20260829_000249_s8601_lucid_rg.jsonl",
+      "pointer": "field 'mean_return' per row, windows [5360..5859] and [7491..7990]; controls from /home/linjiw/lucid-sonic/outputs/curriculum_comparison_ne1024_20260829_000249_s8601_fixed.log and _20260831_144022_s8601_lucid_ratchet_rg.log (regex 'Mean rewards:', same iteration windows)",
+      "recomputed": true,
+      "caveat": "Recomputed by me; no stored receipt carries this comparison. Descriptive: two collapsed runs against two matched same-seed controls, no causal test. It bounds the 'it is just more training' explanation but does not eliminate it."
+    },
+    {
+      "claim": "Within-run, difficulty and return move in opposite directions in the collapsed runs and the same direction in the runs that held.",
+      "value": "Pearson r(lambda, mean return) over all 7,990 telemetry iterations: -0.740 (lucid_rg@s8601) and -0.384 (lucid_s4_rg@s8600); +0.196, +0.199, +0.190, +0.196 in the four range-holding adaptive runs.",
+      "receipt_path": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260829_000249",
+      "pointer": "seed_*/{lucid_rg,lucid_s4_rg}/curriculum_*.jsonl, fields 'lambda' and 'mean_return'",
+      "recomputed": true,
+      "caveat": "Recomputed by me; not in any stored receipt. Time-confounded (both series trend with training iteration) and per-iteration rows are strongly autocorrelated, so this is descriptive support for the mechanism, not an estimate of an effect."
+    },
+    {
+      "claim": "An evaluator that stopped at the nominal training envelope would grade the collapsed policy as essentially perfect.",
+      "value": "lucid_rg@s8601 in-envelope success AUC (phys_000..100, weights [1/8,1/4,1/4,1/4,1/8]) = 0.998047, against frontier success AUC (phys_125..200) 0.739909. Per-cell in-envelope success 1.000 / 1.000 / 1.000 / 0.998047 / 0.988281.",
+      "receipt_path": "/home/linjiw/lucid/receipts/analysis/lucid_phase0_analysis_20260901.json",
+      "pointer": "arms['lucid_rg@s8601'].success_rate.phys_000..phys_100 and .frontier_success_auc",
+      "recomputed": true,
+      "caveat": "In-envelope AUC recomputed from the per-cell success rates; the phase-0 receipt stores per-cell success but not the in-envelope AUC for this arm. All nine cells are fresh physics draws of the SINGLE training clip."
+    },
+    {
+      "claim": "The P3 out-of-sample test was frozen before the measurement existed, with two competing predicted intervals.",
+      "value": "recency-weighted law (H=2000, exposure E=0.556184): point 0.72473, t(5) prediction interval [0.67376, 0.77569]. Uniform law (E=0.822335): point 0.82567, interval [0.76087, 0.89047]. The intervals overlap on [0.76086, 0.77571]; an outcome there discriminates nothing. Comparator 'evacuation is free' = fixed@s8601 = 0.881836.",
+      "receipt_path": "/home/linjiw/lucid/receipts/manifests/lucid_frontier_exposure_law_preregistration_20260901.json",
+      "pointer": "frozen_predictions.P3_collapse_arm_PRIMARY.{recency_H2000, uniform, comparator, discrimination_honest}; created_at = 2026-09-01T13:20:00-04:00; written_before_data = true",
+      "recomputed": false,
+      "caveat": "Provenance verified independently: the preregistration was committed to git as c9ccedb ('research: preregister frontier exposure law and grid v2') at 2026-09-01 14:10:22 -0400, and the P3 measurement manifest curriculum_robustness_ne512_20260901_161202.json has created_at 2026-09-01T16:17:19-04:00. The readout's own preregistration_sha256 field is null, so the git timestamp is the pin."
+    },
+    {
+      "claim": "P3 realised 0.7399 frontier success AUC.",
+      "value": "0.739909; per-cell success 0.945312 / 0.792969 / 0.662109 / 0.583984 at phys_125 / 150 / 175 / 200; held-out band success 0.623047",
+      "receipt_path": "/home/linjiw/lucid/receipts/analysis/lucid_p3_readout.json",
+      "pointer": "frontier_success_auc = 0.739909; per_cell_success; status = 'SCORED'; cell_provenance (all nine cells from curriculum_robustness_ne512_20260901_161202.json)",
+      "recomputed": true,
+      "caveat": "Recomputed from the raw per-cell success rates with the frozen trapezoid weights [1/6,1/3,1/3,1/6]; the scored checkpoint is final_checkpoint.pt of the 8,000-iteration collapsed run, sha256 e8ece9de91b5d73ea7ef920cc27047068ee1a25ea804d8c7001cf603fb31d70e, unmutated across the ladder."
+    },
+    {
+      "claim": "P3 rejected the 'evacuation is free' hypothesis and landed below the uniform-exposure interval; the recency term was not rejected but is not established.",
+      "value": "0.739909 falls in the preregistered 'recency_favored' bucket [0.67366, 0.76086): inside the recency prediction interval and BELOW the uniform interval's lower bound (0.76087). 'Collapse is cosmetic / evacuation is free' (>= 0.881836) is rejected by 14.19 points; the law is not rejected downward either (the floor was 0.67366). The exposure hypothesis SURVIVES.",
+      "receipt_path": "/home/linjiw/lucid/receipts/analysis/lucid_p3_readout.json",
+      "pointer": "frozen_bands.outcomes_exhaustive; global_falsification_rule; verdict[0..1]",
+      "recomputed": true,
+      "caveat": "Recency is NOT established by this. The same receipt records that a boxcar trailing mean of the same dose beats the exponential kernel out of sample (LOO Q^2 0.9771 vs 0.9693) and that across single-variable models with in-sample R^2 > 0.97 the P3 point prediction spans 0.6438-0.8940 (25 points). P3 selects a member of an equivalence class as much as it confirms a law. Never write 'the recency-weighted exposure law' as established."
+    },
+    {
+      "claim": "The exposure-law fit's high R^2 is not evidence for the model.",
+      "value": "R^2 = 0.988258 on 7 points from 6 distinct runs and 2 training seeds; residual SD 0.018284 (1.83 pts); pure-error SD 0.015707 (1.57 pts) on 3 dof; lack-of-fit F(2,3) = 1.896 against F_crit 9.55; only 3 of 7 points carry exposure leverage; exactly 1 of 7 runs is stratified.",
+      "receipt_path": "/home/linjiw/lucid/receipts/manifests/lucid_frontier_exposure_law_preregistration_20260901.json",
+      "pointer": "fitted_laws.recency_H2000.{r_squared, residual_sd, n_points, n_distinct_training_runs, n_stratified_runs}; fit_quality_honest_assessment.{pure_error_sd, lack_of_fit_F_2_3, F_crit_0.05, verdict}; identifiability_disclosure.leverage",
+      "recomputed": false,
+      "caveat": "The receipt's own verdict: '1.8-pt residuals are the instrument's resolution, not the law's accuracy.' Two of the seven points are the SAME run at 6,000 and 8,000 iterations (nested), so training length is uncontrolled anywhere in the fit."
+    },
+    {
+      "claim": "The between-seed effect on frontier success AUC is large and is not an arm effect.",
+      "value": "On the two arms whose lambda is pinned by construction, frontier success AUC falls from seed 8600 to seed 8602 by 7.26 pts (fixed 0.904622 -> 0.832031) and 8.27 pts (never-shrink 0.902995 -> 0.820312); mean 7.76 pts (the audit reports 'mean offset -7.8 points'). Pooled over the six lambda-pinned arm-seeds, SD = 4.00 pts and range = 9.28 pts. Seed means pooling both pinned arms: 8600 = 0.9038, 8601 = 0.8975, 8602 = 0.8262.",
+      "receipt_path": "/home/linjiw/lucid/receipts/analysis/lucid_s4rg_s8602_audit_20260901.json",
+      "pointer": "candidate_contributors[0] (id C1): 'frontier success AUC falls from 0.904622 to 0.832031 (fixed) and 0.902995 to 0.820312 (ratchet). Mean offset -7.8 points.' Values cross-checked against /home/linjiw/lucid/receipts/analysis/lucid_return_inversion_20260901.json pairs[*].frontier_success_auc.",
+      "recomputed": true,
+      "caveat": "n = 2 arms. Applying the offset to the adaptive arms assumes the seed effect is additive and arm-independent, which the audit lists as not verified. Seeds 8600-8602 influenced development: they are replication, never untouched confirmation."
+    },
+    {
+      "claim": "The exposure law must not be quoted without a seed term.",
+      "value": "Raw out-of-sample residuals against the frozen law: +1.5 / +2.7 / -9.8 / -14.0 pts (lucid_rg@s8601, lucid_s4_rg@s8601, lucid_rg@s8602, lucid_s4_rg@s8602). After removing a post-hoc seed offset: +1.5 / +2.7 / -2.1 / -6.2 pts. The 7.8-pt seed effect is about 4x the law's own 1.83-pt residual SD.",
+      "receipt_path": "/home/linjiw/lucid/receipts/analysis/lucid_s4rg_s8602_audit_20260901.json",
+      "pointer": "what_this_changes_for_the_exposure_law.{finding, raw_out_of_sample_residuals_pts, after_post_hoc_seed_offset_pts, honest_reading}; identical values at /home/linjiw/lucid/receipts/analysis/lucid_phase0_analysis_20260901.json arms[*].{residual_raw_pts, residual_after_seed_offset_pts}",
+      "recomputed": true,
+      "caveat": "The seed offset is post hoc; removing it is a diagnostic, not a corrected model. It does not affect P3, which is a seed-8601 arm needing no offset and landing +1.5 pts raw, inside the recency band and outside the two-law overlap."
+    },
+    {
+      "claim": "phys_150 is where the static-friction floor reaches its physical clamp, and it carries a third of the frontier endpoint's weight.",
+      "value": "Static-friction lower bound 0.1375 at phys_125 -> 0.05 at phys_150 (a 2.75x fall) and pinned at 0.05 for phys_150/175/200. Dynamic-friction lower bound 0.1875 -> 0.075 (2.5x), pinned at 0.05 from phys_175. Frontier trapezoid weights are [1/6, 1/3, 1/3, 1/6], so phys_150 carries 1/3 of the endpoint.",
+      "receipt_path": "/home/linjiw/lucid-sonic/manifests/curriculum_robustness_ne512_20260901_161202.json",
+      "pointer": "runs.*_phys_{100,125,150,175,200}.summary.dr_ranges.physics_material.{static_friction_range, dynamic_friction_range}; weights at /home/linjiw/lucid/receipts/manifests/lucid_ratchet_screen_analysis_s8601_20260831.json arms.fixed.success_rate.frontier_auc.weights; audit narrative at /home/linjiw/lucid/receipts/analysis/lucid_s4rg_s8602_audit_20260901.json the_clamp",
+      "recomputed": true,
+      "caveat": ""
+    },
+    {
+      "claim": "Every one of the four Phase-0 adaptive arms takes its largest single-cell success drop exactly at phys_150.",
+      "value": "12.11 pts (lucid_s4_rg@s8601), 15.23 (lucid_rg@s8601), 19.53 (lucid_rg@s8602), 38.67 (lucid_s4_rg@s8602)",
+      "receipt_path": "/home/linjiw/lucid/receipts/analysis/lucid_phase0_analysis_20260901.json",
+      "pointer": "arms[*].largest_single_cell_drop and arms[*].consecutive_cell_drops_pts.phys_150; same figures at /home/linjiw/lucid/receipts/analysis/lucid_s4rg_s8602_audit_20260901.json the_clamp.supporting_morphology.success_drop_pts",
+      "recomputed": true,
+      "caveat": "SCOPE: four Phase-0 adaptive arms only. Over the six lambda-pinned arms (fixed and never-shrink x 3 seeds) with complete post-clamp ladders, only four of six take their largest drop at phys_150; fixed@s8600 (7.03 pts) and never-shrink@s8601 (6.45 pts) drop most at phys_200. Do not write 'every arm'."
+    },
+    {
+      "claim": "Foot-slip growth across the clamp orders the success drop across the four arms.",
+      "value": "foot slip per step, phys_150 / phys_125 ratio: 1.328 (lucid_s4_rg@s8601), 1.444 (lucid_rg@s8601), 2.091 (lucid_rg@s8602), 2.329 (lucid_s4_rg@s8602). That ordering is identical to the ordering of the success drops (12.11 < 15.23 < 19.53 < 38.67), i.e. rank correlation 1.0 on n = 4.",
+      "receipt_path": "/home/linjiw/lucid/receipts/analysis/lucid_s4rg_s8602_audit_20260901.json",
+      "pointer": "the_clamp.supporting_morphology.foot_slip_ratio_phys150_over_phys125 (stored as 1.33 / 1.44 / 2.09 / 2.33); full precision recomputed from /home/linjiw/lucid/receipts/analysis/lucid_phase0_analysis_20260901.json arms[*].quality_at_frontier.phys_{125,150}.foot_slip_per_step_m",
+      "recomputed": true,
+      "caveat": "n = 4, correlational. No arm was run with friction held fixed while the other channels scaled, so this is a consistent mechanism, not a demonstrated cause; the audit says so in its own 'caveat' and 'not_yet_verified' fields. The recommended separating experiment (a friction-only cell, ~33 s per arm) was never run."
+    },
+    {
+      "claim": "The loss at the clamp dominates each adaptive arm's frontier score.",
+      "value": "success at phys_125 minus mean success over phys_150/175/200: 17.9 pts (lucid_s4_rg@s8601), 22.2 (lucid_rg@s8602), 26.6 (lucid_rg@s8601), 42.0 (lucid_s4_rg@s8602). In-envelope AUC (phys_000..100) for the worst of them is still 0.996826, third of four and 0.24 pts behind the best.",
+      "receipt_path": "/home/linjiw/lucid/receipts/analysis/lucid_s4rg_s8602_audit_20260901.json",
+      "pointer": "where_the_loss_is.{in_envelope_auc_phys_000_100, pre_clamp_phys_125, post_clamp_mean_phys_150_175_200, drop_across_the_clamp_pts, sibling_drops_pts}",
+      "recomputed": true,
+      "caveat": "The audit's own field where_the_loss_is.in_envelope_rank says 'second of four, within 0.9 points of the best'; recomputation from the four arms' per-cell success gives THIRD of four and 0.24 points behind the best (0.999268 > 0.998047 > 0.996826 > 0.989990). The AUC value 0.996826 itself is correct; the rank prose is not. Use the value, not the rank sentence."
+    },
+    {
+      "claim": "The instrument behind every C1 ladder number is pinned and audited.",
+      "value": "512 motion aliases per cell (motion_keys_sha256 4b0fae02...), evaluator pinned at 308e2415..., worktree commit ca057e65, per-cell DR ranges hash identical across arms at all nine cells, checkpoints unmutated across the ladder, 9 of 9 cells at exit code 0 per arm, evaluation seeds 8701 (seed-8601 arms) and 8702 (seed-8602 arms).",
+      "receipt_path": "/home/linjiw/lucid/receipts/analysis/lucid_phase0_analysis_20260901.json",
+      "pointer": "instrument.{evaluator_pin, worktree_commit, episodes_per_cell}; instrument_audit.{per_cell_dr_ranges_identical_across_arms, mismatched_cells, cells_audited, panel_identity, single_panel, checkpoints_unmutated}; scope",
+      "recomputed": false,
+      "caveat": "The receipt's own scope line: 'Authorizes NO superiority claim for any training procedure and provides NO motion-generalization evidence: every cell is a fresh physics draw of the single clip every arm trained on.'"
+    }
+  ],
+  "problems": [
+    "SCOPE ERROR to fix in the paper and in the standing note lucid-ladder-friction-clamp: 'every arm's largest drop lands at phys_150' is true only for the four Phase-0 adaptive arms. Recomputed over the six lambda-pinned arms with complete post-clamp ladders, fixed@s8600 drops most at phys_200 (7.03 pts vs 5.47 at phys_150) and never-shrink@s8601 drops most at phys_200 (6.45 vs 2.93). The defensible statement is 8 of the 10 complete post-clamp ladders, and 4 of 4 adaptive arms.",
+    "RECEIPT-INTERNAL ERROR: lucid_s4rg_s8602_audit_20260901.json -> where_the_loss_is.in_envelope_rank claims lucid_s4_rg@s8602 is 'second of four, within 0.9 points of the best' on in-envelope AUC. Recomputed from the four arms' per-cell success it is THIRD of four and 0.24 points behind the best. The stored AUC (0.996826) is correct; only the rank sentence is wrong. Do not quote the rank sentence.",
+    "INTERNAL INCONSISTENCY (harmless, but disclose if the interval is printed): the P3 recency interval appears as [0.67376, 0.77569] in frozen_predictions.P3_collapse_arm_PRIMARY.recency_H2000 and as [0.67366, 0.77571] in global_falsification / outcomes_exhaustive of the SAME file (and identically in lucid_p3_readout.json). The uniform interval likewise appears as [0.76087, 0.89047] and [0.76086, 0.89046]. Differences are ~1e-5 and change no verdict; pick one set and say which field it came from.",
+    "PROVENANCE GAP (now closed by hand): lucid_p3_readout.json.preregistration_sha256 is null, so the readout does not hash-pin its preregistration. I verified the ordering independently: the preregistration was committed as git c9ccedb at 2026-09-01 14:10:22 -0400 and the P3 evaluation manifest has created_at 2026-09-01T16:17:19-04:00. Cite the commit, not the file's self-declaration, in the reproducibility statement.",
+    "NO PREREGISTERED DEFINITION OF 'COLLAPSE'. No receipt states a numeric threshold separating 'shrank' from 'collapsed'. The operational definition in use is 'terminal lambda near 0 after having reached lambda = 1.0'. Both collapsed runs also spend hundreds of iterations below lambda 0.05 mid-run, and one range-holding run (lucid_s4_rg@s8601) applied 1,273 decreases and still ended at lambda 1.0. The paper must state the definition it uses in one sentence.",
+    "DENOMINATOR HYGIENE: '2 of 6' pools two DIFFERENT adaptive variants (lucid_rg, lucid_s4_rg) across three seeds, and the two collapses fall on different variants and different seeds (lucid_rg@s8601, lucid_s4_rg@s8600). It is not two replicates of one curriculum failing, and it is not a 1/3 rate estimated from six exchangeable runs.",
+    "CONFOUND on the second collapse: lucid_s4_rg@s8600's 20.74 / 20.57-point gaps against fixed and never-shrink on seed 8600 are real but confounded, because lucid_s4_rg is the stratified variant with a 0.625x per-iteration difficulty dose by construction. Quote it only with that caveat; the clean same-seed figure is the un-stratified seed-8601 arm (14.19 / 17.32).",
+    "MISSING RECEIPT PATH: the terminal returns of the three `fixed` arms (11.9370 / 11.3125 / 11.6159) are not in any JSON receipt and are absent from the curriculum JSONL traces (no mean_return field on fixed arms). lucid_return_inversion_20260901.json lists only the EVALUATION manifests in pairs[*].sources. I recomputed them from the training stdout logs /home/linjiw/lucid-sonic/outputs/curriculum_comparison_ne1024_20260829_000249_s8600_fixed.log, _s8601_fixed.log and curriculum_comparison_ne1024_20260901_044118_s8602_fixed.log. Those paths should be added to the receipt before the paper cites the number.",
+    "INSTRUMENT HETEROGENEITY across the 12 pairs: evaluation seeds differ by training seed (8700 / 8701 / 8702) and the ladders span at least three evaluator git trees (52d9b526, 106eeff0, 3457718f, ca057e65). The headline 14.19-point comparison pairs a ca057e65 score against a 3457718f score. The preregistration discloses this and argues bit-determinism across builds; the paper should carry one sentence saying so rather than implying a single scoring run.",
+    "INCOMPLETE FLOOR ARM: the seed-8602 no-DR (`off`) run has only 1,675 of 8,000 rows in its curriculum trace, so the 0.492839 no-DR floor is a seed-8600 measurement only. Any statement of the form 'the collapse still beats no-DR by 20+ points' is single-seed.",
+    "EXCLUDED ATTEMPT retained for honesty: curriculum_robustness_ne512_20260901_161052.json (9 rows, 0 usable cells, exit code 1, arm lucid_rg@s8601) is excluded from the phase-0 analysis as an interrupted attempt. If the paper's supplement lists receipts it should list this exclusion.",
+    "TWO C1 NUMBERS I RECOMPUTED HAVE NO STORED RECEIPT AT ALL: (a) the within-run return rise of the collapsed arm against matched same-seed controls (+5.10 vs +1.03 and +0.76 over the same iteration window), and (b) the within-run Pearson r(lambda, return) per arm. Both are reproducible from the raw JSONL and stdout logs named above, but if the paper uses either, a small analysis receipt should be written first."
+  ]
+}

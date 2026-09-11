@@ -1,0 +1,13 @@
+{
+  "data_manifest_sha256": "df98f601e801b31b69b765272799f18034a79c9b67aeb7dee048b8da8460250e",
+  "builder_sha256": "dd6c384ebe5a03be6c694f700f359df09b248aec1b2bf4328a8cb17ccdcd33f5",
+  "outputs": {
+    "mujoco_ladder.pdf": "5f350855b33df399c1f2a02ae4898a6cebe26d634d3ab8eb8f64511027e9eff6",
+    "paired_seeds.pdf": "524a356237c30550814361e997d4a83e4d253be08274398b0fa60fcd0a36e006",
+    "retention_trajectory.pdf": "b475f6e5995e7106f8e65de77fe720bfeff1e1211113d2f9c51443f808a10650",
+    "return_inversion.pdf": "a5f0878e35fd942fc1549dc2e52a5f2fd104a59c97489e59d51a28f4714d3992",
+    "signal_audit.pdf": "1e89f5632d14e1c87898f817df5d2003013a93602c43df1d722177b2357382a5",
+    "threshold_sensitivity.pdf": "913de165e4229bc10953f01062ed8afff66a11d0326825f0b776685378d397d7"
+  },
+  "scope": "Existing simulation records; seeds 8600 and 8601 share one continuation origin."
+}

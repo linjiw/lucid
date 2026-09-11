@@ -1,0 +1,651 @@
+{
+  "kind": "historical_video_source_binding",
+  "source_video_sha256": "b34dc36ebe8b25024dfe688f667137aeb2c421e7bdff4353904f3a57442a8b69",
+  "source_manifest_sha256": "6f5b3989532cb7e9142c56c395e359bc0b236c33cf934e30f8c0d9a3927b68d1",
+  "manifest": {
+    "1.5": {
+      "off_s8600": {
+        "pass": 0,
+        "n": 8,
+        "fall_times": [
+          1.44,
+          1.66,
+          1.32,
+          0.54,
+          3.76,
+          3.4,
+          1.5,
+          1.54
+        ],
+        "isaac": 0.511719
+      },
+      "lucid_collapsed_s8601": {
+        "pass": 3,
+        "n": 8,
+        "fall_times": [
+          2.52,
+          1.1,
+          1.94,
+          1.14,
+          3.42
+        ],
+        "isaac": 0.792969
+      },
+      "fixed_s8601": {
+        "pass": 2,
+        "n": 8,
+        "fall_times": [
+          1.28,
+          3.66,
+          0.9,
+          3.7,
+          3.62,
+          3.94
+        ],
+        "isaac": 0.904297
+      },
+      "ratchet_s8601": {
+        "pass": 4,
+        "n": 8,
+        "fall_times": [
+          2.0,
+          0.98,
+          3.76,
+          3.84
+        ],
+        "isaac": 0.941406
+      }
+    },
+    "2": {
+      "off_s8600": {
+        "pass": 0,
+        "n": 8,
+        "fall_times": [
+          0.8,
+          1.7,
+          1.26,
+          0.56,
+          1.84,
+          2.18,
+          1.1,
+          1.22
+        ],
+        "isaac": 0.333984
+      },
+      "lucid_collapsed_s8601": {
+        "pass": 1,
+        "n": 8,
+        "fall_times": [
+          2.74,
+          1.3,
+          1.36,
+          1.0,
+          2.22,
+          1.86,
+          2.46
+        ],
+        "isaac": 0.583984
+      },
+      "fixed_s8601": {
+        "pass": 2,
+        "n": 8,
+        "fall_times": [
+          2.4,
+          1.32,
+          2.38,
+          1.06,
+          3.76,
+          2.64
+        ],
+        "isaac": 0.796875
+      },
+      "ratchet_s8601": {
+        "pass": 4,
+        "n": 8,
+        "fall_times": [
+          3.54,
+          1.74,
+          2.8,
+          1.42
+        ],
+        "isaac": 0.832031
+      }
+    }
+  },
+  "panel_order": [
+    "off_s8600",
+    "lucid_collapsed_s8601",
+    "fixed_s8601",
+    "ratchet_s8601"
+  ],
+  "draw_indices": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "scale_order": [
+    1.5,
+    2.0
+  ],
+  "new_simulation": false,
+  "selection": "All recorded tiles in the existing frontier video; no outcome-based subsampling.",
+  "tile_outcomes": [
+    {
+      "arm": "fixed_s8601",
+      "scale": 1.5,
+      "draw": 1,
+      "fell": false,
+      "t_end": 4.02,
+      "source_json_sha256": "8da398425820ff8feb8a195c193048d502afd2ded9c3bab174d5ac0f7469eb7b"
+    },
+    {
+      "arm": "fixed_s8601",
+      "scale": 1.5,
+      "draw": 2,
+      "fell": true,
+      "t_end": 1.28,
+      "source_json_sha256": "2761ce4e073d28c2d59722dc0dcd7d74454be339d506809595f215e3c5134d2f"
+    },
+    {
+      "arm": "fixed_s8601",
+      "scale": 1.5,
+      "draw": 3,
+      "fell": true,
+      "t_end": 3.66,
+      "source_json_sha256": "f8dc5b67546e0aa1e460d22e419163440a3c2b6bd51e53331ac9a537583991a3"
+    },
+    {
+      "arm": "fixed_s8601",
+      "scale": 1.5,
+      "draw": 4,
+      "fell": true,
+      "t_end": 0.9,
+      "source_json_sha256": "f8fafde3f3d79d44782a5e477e2bd4a6344c890900bef30e330075b4cd49fe0f"
+    },
+    {
+      "arm": "fixed_s8601",
+      "scale": 1.5,
+      "draw": 5,
+      "fell": true,
+      "t_end": 3.7,
+      "source_json_sha256": "cbb0577fd84d967f5d54d409b392bd70f70781755406d751b502d079121bb5b7"
+    },
+    {
+      "arm": "fixed_s8601",
+      "scale": 1.5,
+      "draw": 6,
+      "fell": false,
+      "t_end": 4.02,
+      "source_json_sha256": "195f1b7a2971dad204164db0e54525d39f12bf2fd3700ab413bfbb2cd249f172"
+    },
+    {
+      "arm": "fixed_s8601",
+      "scale": 1.5,
+      "draw": 7,
+      "fell": true,
+      "t_end": 3.62,
+      "source_json_sha256": "d388994cda72d6f727ed8200647988a9c212bd95b82a20f4f04212c17ef7e0cc"
+    },
+    {
+      "arm": "fixed_s8601",
+      "scale": 1.5,
+      "draw": 8,
+      "fell": true,
+      "t_end": 3.94,
+      "source_json_sha256": "6f792b72ca8319e9423132924fec872b2e15d554e81e9f6892024966ed34bd52"
+    },
+    {
+      "arm": "fixed_s8601",
+      "scale": 2.0,
+      "draw": 1,
+      "fell": true,
+      "t_end": 2.4,
+      "source_json_sha256": "5406179bb373cc2c637905749b0fea47c41175347bae5ed819ef8187f31086d1"
+    },
+    {
+      "arm": "fixed_s8601",
+      "scale": 2.0,
+      "draw": 2,
+      "fell": true,
+      "t_end": 1.32,
+      "source_json_sha256": "befe938970274485182746daeadbefab7f24e36ca9be59015c2c91333a78e538"
+    },
+    {
+      "arm": "fixed_s8601",
+      "scale": 2.0,
+      "draw": 3,
+      "fell": true,
+      "t_end": 2.38,
+      "source_json_sha256": "0209fd7230208a61798eec7101de6079cb558838ab14695fba6d0a4d6626d407"
+    },
+    {
+      "arm": "fixed_s8601",
+      "scale": 2.0,
+      "draw": 4,
+      "fell": true,
+      "t_end": 1.06,
+      "source_json_sha256": "bde1b4715fa88ea1d0e12e5534e4abc9f220279ea5d4ce2b05a5df528c67d6bc"
+    },
+    {
+      "arm": "fixed_s8601",
+      "scale": 2.0,
+      "draw": 5,
+      "fell": false,
+      "t_end": 4.02,
+      "source_json_sha256": "562a25811f89f4363963759d8b73a87aba241c888ae69f61c0acdb026a38b066"
+    },
+    {
+      "arm": "fixed_s8601",
+      "scale": 2.0,
+      "draw": 6,
+      "fell": false,
+      "t_end": 4.02,
+      "source_json_sha256": "a570e1fe5ff77f65b8155bd8115ded68fa6951cd8eec1b5e2d3b4307baef1333"
+    },
+    {
+      "arm": "fixed_s8601",
+      "scale": 2.0,
+      "draw": 7,
+      "fell": true,
+      "t_end": 3.76,
+      "source_json_sha256": "ba40b040245bf28a547e47ba6648e3218d990ea667c485fdc6bf93b1f3ed2c9e"
+    },
+    {
+      "arm": "fixed_s8601",
+      "scale": 2.0,
+      "draw": 8,
+      "fell": true,
+      "t_end": 2.64,
+      "source_json_sha256": "a12f657af7bf5d48f74b8b75b3f5c25622f3b9d0e02d99b891ac3a8b14b2c3fd"
+    },
+    {
+      "arm": "lucid_collapsed_s8601",
+      "scale": 1.5,
+      "draw": 1,
+      "fell": true,
+      "t_end": 2.52,
+      "source_json_sha256": "fe4c277c0b4478d387f9f8690ea17b2f9576ef83ccc3df8a77d71b546fc83ac3"
+    },
+    {
+      "arm": "lucid_collapsed_s8601",
+      "scale": 1.5,
+      "draw": 2,
+      "fell": true,
+      "t_end": 1.1,
+      "source_json_sha256": "f47c1596d5596dd320c0af8b56ddf3605f93f57ef7dbaf85a0cd977e8140144d"
+    },
+    {
+      "arm": "lucid_collapsed_s8601",
+      "scale": 1.5,
+      "draw": 3,
+      "fell": true,
+      "t_end": 1.94,
+      "source_json_sha256": "19dc3f7e9b7b73dcaea09168936f9de9205e0a8dc1fd155629febcd79bb8ecdf"
+    },
+    {
+      "arm": "lucid_collapsed_s8601",
+      "scale": 1.5,
+      "draw": 4,
+      "fell": true,
+      "t_end": 1.14,
+      "source_json_sha256": "a107563e6b013ee32a4bb17eac94adfb582288a232a32bd72192d2c37dd9840c"
+    },
+    {
+      "arm": "lucid_collapsed_s8601",
+      "scale": 1.5,
+      "draw": 5,
+      "fell": false,
+      "t_end": 4.02,
+      "source_json_sha256": "9327b94d5be4b657c5cae490b6ba01c34401b1b26bd0dcf1975ad6a826fe32df"
+    },
+    {
+      "arm": "lucid_collapsed_s8601",
+      "scale": 1.5,
+      "draw": 6,
+      "fell": false,
+      "t_end": 4.02,
+      "source_json_sha256": "079fe00ca4155710efd3566351746e5cf6782248f25e292a5f8244dbce61cfb5"
+    },
+    {
+      "arm": "lucid_collapsed_s8601",
+      "scale": 1.5,
+      "draw": 7,
+      "fell": false,
+      "t_end": 4.02,
+      "source_json_sha256": "b3324895aac129742fb5a4ec3cc8ec8577899dd3a6a721af30006683cad0e972"
+    },
+    {
+      "arm": "lucid_collapsed_s8601",
+      "scale": 1.5,
+      "draw": 8,
+      "fell": true,
+      "t_end": 3.42,
+      "source_json_sha256": "1ccb2fea560e5c91fdc5c6c8af6411d2bb23c2e0d0d9c04d8d6b5f36a2844ade"
+    },
+    {
+      "arm": "lucid_collapsed_s8601",
+      "scale": 2.0,
+      "draw": 1,
+      "fell": true,
+      "t_end": 2.74,
+      "source_json_sha256": "83d965d120290fbfe267553f0fa5079b8683fe229eea7f2111e432687336e572"
+    },
+    {
+      "arm": "lucid_collapsed_s8601",
+      "scale": 2.0,
+      "draw": 2,
+      "fell": true,
+      "t_end": 1.3,
+      "source_json_sha256": "007055159e8d8956727a35803192436c8693a3d8e1f13d4f6edaa85c4756b541"
+    },
+    {
+      "arm": "lucid_collapsed_s8601",
+      "scale": 2.0,
+      "draw": 3,
+      "fell": true,
+      "t_end": 1.36,
+      "source_json_sha256": "4952d1b8a24ecec0571ee7ff3cff769c3f12620add6a50e819d8f56acf449b09"
+    },
+    {
+      "arm": "lucid_collapsed_s8601",
+      "scale": 2.0,
+      "draw": 4,
+      "fell": true,
+      "t_end": 1.0,
+      "source_json_sha256": "4095c28c4a72c392015b1c475a53919569e082411257ad8523e2d3abf41f9f7a"
+    },
+    {
+      "arm": "lucid_collapsed_s8601",
+      "scale": 2.0,
+      "draw": 5,
+      "fell": false,
+      "t_end": 4.02,
+      "source_json_sha256": "91ef5bec526c064b7942c1ee5297c0261bbe373325e0713800d445072cdd5432"
+    },
+    {
+      "arm": "lucid_collapsed_s8601",
+      "scale": 2.0,
+      "draw": 6,
+      "fell": true,
+      "t_end": 2.22,
+      "source_json_sha256": "7a55d1006d3d90cbf33173f1242a6f7988a5d1b3f98960604fc63698383981a8"
+    },
+    {
+      "arm": "lucid_collapsed_s8601",
+      "scale": 2.0,
+      "draw": 7,
+      "fell": true,
+      "t_end": 1.86,
+      "source_json_sha256": "359151a8f81f9705ac4ae9081d83ff12b9ec3dda13c16e8469a9bcaa732ce91f"
+    },
+    {
+      "arm": "lucid_collapsed_s8601",
+      "scale": 2.0,
+      "draw": 8,
+      "fell": true,
+      "t_end": 2.46,
+      "source_json_sha256": "1094125ba365b7aebd1acd301fed81fe87b6ce581146e99bb4da50bd5fdef317"
+    },
+    {
+      "arm": "off_s8600",
+      "scale": 1.5,
+      "draw": 1,
+      "fell": true,
+      "t_end": 1.44,
+      "source_json_sha256": "035354961a0818fc05f3a368cef57b21787a21e32111769a85b977e490e0cc9e"
+    },
+    {
+      "arm": "off_s8600",
+      "scale": 1.5,
+      "draw": 2,
+      "fell": true,
+      "t_end": 1.66,
+      "source_json_sha256": "dfe41782000148ce7bf8afa67b12c8b8a26a2ab9f6e48938eee7f3e06f733694"
+    },
+    {
+      "arm": "off_s8600",
+      "scale": 1.5,
+      "draw": 3,
+      "fell": true,
+      "t_end": 1.32,
+      "source_json_sha256": "486e373d243a998102f808066caf87434575ebcb35f24899af7724bb590091ce"
+    },
+    {
+      "arm": "off_s8600",
+      "scale": 1.5,
+      "draw": 4,
+      "fell": true,
+      "t_end": 0.54,
+      "source_json_sha256": "4e450006944a33b0324958b5b8cd516bddc2d2c1116b1b9c2ed146390dd62504"
+    },
+    {
+      "arm": "off_s8600",
+      "scale": 1.5,
+      "draw": 5,
+      "fell": true,
+      "t_end": 3.76,
+      "source_json_sha256": "0768eec3b5c9153fa8e109a0bf5aa46637c7885ba4853cd2e6ec5deab282df6a"
+    },
+    {
+      "arm": "off_s8600",
+      "scale": 1.5,
+      "draw": 6,
+      "fell": true,
+      "t_end": 3.4,
+      "source_json_sha256": "54a6ef36ec5348c2156570fc6fc358f87056c5f11f419ac92cd53d7e3aa2a94b"
+    },
+    {
+      "arm": "off_s8600",
+      "scale": 1.5,
+      "draw": 7,
+      "fell": true,
+      "t_end": 1.5,
+      "source_json_sha256": "85cd82c8cf8a75f14efaca05a11f7e73c882cddc5e70408a05031cfc978c4873"
+    },
+    {
+      "arm": "off_s8600",
+      "scale": 1.5,
+      "draw": 8,
+      "fell": true,
+      "t_end": 1.54,
+      "source_json_sha256": "0ab40343cf3c10c400b91a1300ae391b66ae8ee37948e0bf231e44bb4f62e037"
+    },
+    {
+      "arm": "off_s8600",
+      "scale": 2.0,
+      "draw": 1,
+      "fell": true,
+      "t_end": 0.8,
+      "source_json_sha256": "71dc57c9108e286ecb55408dcb5cd15f2b7a8cc080824cdaaaa2384c9874aebe"
+    },
+    {
+      "arm": "off_s8600",
+      "scale": 2.0,
+      "draw": 2,
+      "fell": true,
+      "t_end": 1.7,
+      "source_json_sha256": "7174e3992f01c858959a1ea24204bfc274f5ac338f65668323717a518577d298"
+    },
+    {
+      "arm": "off_s8600",
+      "scale": 2.0,
+      "draw": 3,
+      "fell": true,
+      "t_end": 1.26,
+      "source_json_sha256": "21d298d31b1a97a2f2bf13194871aef383baa408ad7996cc6148982ac389fb18"
+    },
+    {
+      "arm": "off_s8600",
+      "scale": 2.0,
+      "draw": 4,
+      "fell": true,
+      "t_end": 0.56,
+      "source_json_sha256": "336e6da2d21073241c46ba4b3fc478495732cedaf45e8671004cee1d256b50f2"
+    },
+    {
+      "arm": "off_s8600",
+      "scale": 2.0,
+      "draw": 5,
+      "fell": true,
+      "t_end": 1.84,
+      "source_json_sha256": "024acc1c1c6f2b6d2d7587ff0a3dad478a721579f0c6ce4266716ae58fe0ed0e"
+    },
+    {
+      "arm": "off_s8600",
+      "scale": 2.0,
+      "draw": 6,
+      "fell": true,
+      "t_end": 2.18,
+      "source_json_sha256": "0e038c7e36177f7e849b1889504e7e9b2d25d556c41b55e8a0773e7bbadc5053"
+    },
+    {
+      "arm": "off_s8600",
+      "scale": 2.0,
+      "draw": 7,
+      "fell": true,
+      "t_end": 1.1,
+      "source_json_sha256": "f52c9dadc2b58248378d9c7c7d81727f54be0a03b56d523607bf6eaf1c0ea104"
+    },
+    {
+      "arm": "off_s8600",
+      "scale": 2.0,
+      "draw": 8,
+      "fell": true,
+      "t_end": 1.22,
+      "source_json_sha256": "f1541867930fac01c8be21643f79f5a6dabf307bc3872093527aaee57c880f00"
+    },
+    {
+      "arm": "ratchet_s8601",
+      "scale": 1.5,
+      "draw": 1,
+      "fell": false,
+      "t_end": 4.02,
+      "source_json_sha256": "69858fb30d5e05af848cf411a28580c8b1c41e2a5ad75a2acfdb8e93a5580b94"
+    },
+    {
+      "arm": "ratchet_s8601",
+      "scale": 1.5,
+      "draw": 2,
+      "fell": true,
+      "t_end": 2.0,
+      "source_json_sha256": "df01653acfe6b766a2eeba7ed82689488dd94e2a0da45761c59bb838394c4748"
+    },
+    {
+      "arm": "ratchet_s8601",
+      "scale": 1.5,
+      "draw": 3,
+      "fell": false,
+      "t_end": 4.02,
+      "source_json_sha256": "cdbaad11c6842609c7d74d160e7afedc8182e70fd213fe9ddeefc78fcaf87fad"
+    },
+    {
+      "arm": "ratchet_s8601",
+      "scale": 1.5,
+      "draw": 4,
+      "fell": true,
+      "t_end": 0.98,
+      "source_json_sha256": "8263ee75ed417d2fbdad620c995dddfde23ec8dfb56287ad0019e3cf8ea2c718"
+    },
+    {
+      "arm": "ratchet_s8601",
+      "scale": 1.5,
+      "draw": 5,
+      "fell": true,
+      "t_end": 3.76,
+      "source_json_sha256": "a7c61cf41d55d15dada7a9bbfe22ab18089ac6a160c4fa269297c3d924da0112"
+    },
+    {
+      "arm": "ratchet_s8601",
+      "scale": 1.5,
+      "draw": 6,
+      "fell": false,
+      "t_end": 4.02,
+      "source_json_sha256": "32bb8d5e3ff4e2e6f0d1aed1f8edaf5bc0d4784309abdf465ea192f44ffa1ca2"
+    },
+    {
+      "arm": "ratchet_s8601",
+      "scale": 1.5,
+      "draw": 7,
+      "fell": true,
+      "t_end": 3.84,
+      "source_json_sha256": "d480380d96eff090bb20b5b09622b94738c45e5b12e40ab58517b536a5598f61"
+    },
+    {
+      "arm": "ratchet_s8601",
+      "scale": 1.5,
+      "draw": 8,
+      "fell": false,
+      "t_end": 4.02,
+      "source_json_sha256": "01c8707cf8514c14934f1ba7601665ef4b40605d9d98445ebf2cc3113b1a0efe"
+    },
+    {
+      "arm": "ratchet_s8601",
+      "scale": 2.0,
+      "draw": 1,
+      "fell": true,
+      "t_end": 3.54,
+      "source_json_sha256": "b111f38a3f91bdeb8e260c91156e96837c20056da6922653fee2d03b4ece61ab"
+    },
+    {
+      "arm": "ratchet_s8601",
+      "scale": 2.0,
+      "draw": 2,
+      "fell": true,
+      "t_end": 1.74,
+      "source_json_sha256": "5df3469b55b192f707253f3e472a8f185e6f57d1e61be1f01033ef094ff74200"
+    },
+    {
+      "arm": "ratchet_s8601",
+      "scale": 2.0,
+      "draw": 3,
+      "fell": true,
+      "t_end": 2.8,
+      "source_json_sha256": "bef260c56bd64112b36f338e68478475efb8076d1a73db0a39a8143d28133525"
+    },
+    {
+      "arm": "ratchet_s8601",
+      "scale": 2.0,
+      "draw": 4,
+      "fell": true,
+      "t_end": 1.42,
+      "source_json_sha256": "fd69e2100dec5e7cde531193343a17090f0b27f5ab3374971b3b55e393d2ef67"
+    },
+    {
+      "arm": "ratchet_s8601",
+      "scale": 2.0,
+      "draw": 5,
+      "fell": false,
+      "t_end": 4.02,
+      "source_json_sha256": "bd8395b8aa5df191a44a43511d646ee49faabbc45fd841eae4aac773e15eac58"
+    },
+    {
+      "arm": "ratchet_s8601",
+      "scale": 2.0,
+      "draw": 6,
+      "fell": false,
+      "t_end": 4.02,
+      "source_json_sha256": "d7ddd8ed35fc3390fe0ce5d514d79199792a3c8f862efd100340ac8b87e17ab1"
+    },
+    {
+      "arm": "ratchet_s8601",
+      "scale": 2.0,
+      "draw": 7,
+      "fell": false,
+      "t_end": 4.02,
+      "source_json_sha256": "cba8baba9c3ea1abb2db2cd65c98289fb9a013b3a432d75e6def4ac4af2c86ba"
+    },
+    {
+      "arm": "ratchet_s8601",
+      "scale": 2.0,
+      "draw": 8,
+      "fell": false,
+      "t_end": 4.02,
+      "source_json_sha256": "fcbe50c995e27f7ce5415f57850b078ace26ef2466b69f6690636a1fc6303a4d"
+    }
+  ]
+}

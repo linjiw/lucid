@@ -1,0 +1,30 @@
+{
+  "status": "author-review draft; no submission created",
+  "title": "When Training Gets Easier: Range Collapse and Tracking Drift in Humanoid Robustness Training",
+  "abstract": "Favorable training scores need not indicate improved robot performance. We present a diagnostic study of two score\u2013behavior discrepancies in simulated humanoid motion tracking. First, all six runs of two shrink-permitted randomization controllers contract their ranges, and two nearly collapse. Across twelve scored policies, terminal return is negatively associated with independently evaluated robustness (Spearman \u22120.73). A never-shrink projection prevents contraction, but its three-seed comparison with fixed randomization does not establish statistical noninferiority. Second, fixed-mixture hard-condition continuation preserves 100% nominal completion while increasing global tracking error from 127.93 to 225.87 mm. Cached reference-action anchoring limits the endpoint increase to 4.33%, satisfies the complete origin-relative retention rule at all five sampled checkpoints, and improves hard-condition tracking qualification by 5.18 percentage points. A frozen repetition changes only the continuation seed: anchored drift is 6.46% and the qualification gain is 7.72 points; every sampled retention check again passes. Neither unanchored repetition nor a reduced-learning-rate control has a feasible sampled earlier checkpoint. These continuation results concern one trained origin and one motion. The measured failures support evaluating policy improvement on fixed external conditions and robustness gains jointly with origin-relative task retention.",
+  "abstract_word_count": 185,
+  "authors": null,
+  "corresponding_author": null,
+  "paperplaza_pins": null,
+  "route": null,
+  "iros_1615_disposition": null,
+  "keyword_topics_for_author_selection": [
+    "Humanoid and Bipedal Locomotion",
+    "Reinforcement Learning",
+    "Performance Evaluation and Benchmarking"
+  ],
+  "keywords_confirmed_in_portal": true,
+  "internal_submission_target": "2026-09-14",
+  "paper_sha256": "62bba60887efb22c02ab8179701c33956ba041f36761159505dc44d15c9758fd",
+  "video_sha256": "3201e7015221eaae08786762fde41b930ad5dd2b697ca550df361d16ee172555",
+  "ordered_keywords": [
+    "Humanoid and Bipedal Locomotion",
+    "Reinforcement Learning",
+    "Performance Evaluation and Benchmarking"
+  ],
+  "keyword_choice_submitted": false,
+  "abstract_character_count": 1462,
+  "abstract_portal_limit": 2000,
+  "abstract_fits_portal": true,
+  "metadata_preflight_receipt": "icra-metadata-preflight-2026-09-08.json"
+}

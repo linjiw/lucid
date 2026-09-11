@@ -1,282 +1,334 @@
 {
-  "kind": "lucid_public_recovery_progress_v1",
-  "snapshot_utc": "2026-09-07T02:21:30.260800+00:00",
-  "live_feed": false,
-  "scope": "SONIC development evidence; one trained origin; evaluation aliases are not independent trained policies.",
-  "retention": {
-    "rows": [
-      {
-        "arm": "origin",
-        "global_mpjpe_mm": 127.92777118159745,
-        "local_mpjpe_mm": 28.191841102969782,
-        "global_change_pct": 0.0,
-        "hard_qualified_pct": 42.7734375,
-        "retained_all_sampled": true
-      },
-      {
-        "arm": "R0",
-        "global_mpjpe_mm": 225.869156925374,
-        "local_mpjpe_mm": 30.21218552012194,
-        "global_change_pct": 76.5599094232211,
-        "hard_qualified_pct": 49.0234375,
-        "retained_all_sampled": false
-      },
-      {
-        "arm": "R1",
-        "global_mpjpe_mm": 133.4718139637347,
-        "local_mpjpe_mm": 27.957790567748578,
-        "global_change_pct": 4.333728893210598,
-        "hard_qualified_pct": 47.94921875,
-        "retained_all_sampled": true
-      },
-      {
-        "arm": "R2",
-        "global_mpjpe_mm": 163.53395492429658,
-        "local_mpjpe_mm": 28.312064088429484,
-        "global_change_pct": 27.833036887788065,
-        "hard_qualified_pct": 53.41796875,
-        "retained_all_sampled": false
-      }
-    ],
-    "completed_at": "2026-09-06T22:52:46.608525+00:00",
-    "training_transitions_per_arm": 49152000,
-    "analysis_sha256": "2f488eb04c23aba14ac3d6e1a8e075e1c87f5e42708a21d82caa0ce7a7767271",
-    "receipt_sha256": "37ec30639cd486b08e203b64104ccb06fa2b8917b509406cbf7d3a47cfd19b15"
-  },
-  "motion_screen": {
-    "state": "complete",
-    "completed_at": "2026-09-07T01:57:20.017592+00:00",
-    "plan_sha256": "cb05d12074a0278415c156bfc04bcec435ce938791939cf922c1599e04847368",
-    "status_sha256": "c99d5eaf978815da6447e417f6290bf23429b8d1e699e918bb6e8edb4bf6fa66",
-    "source_commit": "a1b88167850a6aa1548a4cce45d9c1430e7d701f",
-    "aliases_per_cell": 128,
-    "cells": [
-      {
-        "motion": "control",
-        "motion_key": "walk_hands_on_back_loop_002__A066_M",
-        "arm": "origin",
-        "seed": 8730,
-        "preset": "phys_000",
-        "checkpoint_iteration": 0,
-        "checkpoint_sha256": "e7fe72a0a48d6d4d534368ee9870b7a5e382bf2c51bb025d35eadee0818aaa8d",
-        "summary": {
-          "completion_rate": 1.0,
-          "tracking_success_rate": 1.0,
-          "global_mpjpe_mm": 117.63909979028763,
-          "local_mpjpe_mm": 28.060489518803777,
-          "legacy_global_mpjpe_mm": 118.23023718445742,
-          "legacy_local_mpjpe_mm": 28.201482418194487
-        },
-        "metrics_sha256": "f18dae56dbdc6859df7177ce2a84d057068645da750f0105023ebbd6e79d789c",
-        "wandb_url": "https://wandb.ai/16726/lucid-sonic/runs/motion-cb05d12074a0-control_origin_s8730_phys_000"
-      },
-      {
-        "motion": "control",
-        "motion_key": "walk_hands_on_back_loop_002__A066_M",
-        "arm": "R1",
-        "seed": 8730,
-        "preset": "phys_000",
-        "checkpoint_iteration": 2000,
-        "checkpoint_sha256": "a593dd5f87620e7c60f79a64a4d15761a9726ae77c0679bd51908d74ee9f28bb",
-        "summary": {
-          "completion_rate": 1.0,
-          "tracking_success_rate": 1.0,
-          "global_mpjpe_mm": 127.97766886305793,
-          "local_mpjpe_mm": 27.788457300926467,
-          "legacy_global_mpjpe_mm": 128.6207568078955,
-          "legacy_local_mpjpe_mm": 27.92808327876828
-        },
-        "metrics_sha256": "2a26fa5b8b3acf08cfcfae43781b20e84cb99a86c3fed623ea4858f82e443936",
-        "wandb_url": "https://wandb.ai/16726/lucid-sonic/runs/motion-cb05d12074a0-control_R1_s8730_phys_000"
-      },
-      {
-        "motion": "arc",
-        "motion_key": "walk_arc_cw_loop_R_002__A229",
-        "arm": "origin",
-        "seed": 8730,
-        "preset": "phys_000",
-        "checkpoint_iteration": 0,
-        "checkpoint_sha256": "e7fe72a0a48d6d4d534368ee9870b7a5e382bf2c51bb025d35eadee0818aaa8d",
-        "summary": {
-          "completion_rate": 0.9921875,
-          "tracking_success_rate": 0.0,
-          "global_mpjpe_mm": 793.0214047481647,
-          "local_mpjpe_mm": 115.47039818772612,
-          "legacy_global_mpjpe_mm": 793.7210878953721,
-          "legacy_local_mpjpe_mm": 115.62879067384131
-        },
-        "metrics_sha256": "a6ac80095f7bba1ec5f4378b04b32e9d98b5fea6d598f9f14292c438f9ce1495",
-        "wandb_url": "https://wandb.ai/16726/lucid-sonic/runs/motion-cb05d12074a0-arc_origin_s8730_phys_000"
-      },
-      {
-        "motion": "arc",
-        "motion_key": "walk_arc_cw_loop_R_002__A229",
-        "arm": "R1",
-        "seed": 8730,
-        "preset": "phys_000",
-        "checkpoint_iteration": 2000,
-        "checkpoint_sha256": "a593dd5f87620e7c60f79a64a4d15761a9726ae77c0679bd51908d74ee9f28bb",
-        "summary": {
-          "completion_rate": 0.984375,
-          "tracking_success_rate": 0.0,
-          "global_mpjpe_mm": 1185.1512764970166,
-          "local_mpjpe_mm": 118.4450554272148,
-          "legacy_global_mpjpe_mm": 1185.9412316660478,
-          "legacy_local_mpjpe_mm": 118.6052793316863
-        },
-        "metrics_sha256": "69450e744f013c099950b3b4a742b75b20fa17352f2eb9d82ee3de601b55ffe9",
-        "wandb_url": "https://wandb.ai/16726/lucid-sonic/runs/motion-cb05d12074a0-arc_R1_s8730_phys_000"
-      },
-      {
-        "motion": "sideways",
-        "motion_key": "walk_sideway_135_loop_003__A037",
-        "arm": "origin",
-        "seed": 8730,
-        "preset": "phys_000",
-        "checkpoint_iteration": 0,
-        "checkpoint_sha256": "e7fe72a0a48d6d4d534368ee9870b7a5e382bf2c51bb025d35eadee0818aaa8d",
-        "summary": {
-          "completion_rate": 0.9765625,
-          "tracking_success_rate": 0.0,
-          "global_mpjpe_mm": 1673.0165180520698,
-          "local_mpjpe_mm": 95.49251007805636,
-          "legacy_global_mpjpe_mm": 1693.751908701763,
-          "legacy_local_mpjpe_mm": 95.50057737729203
-        },
-        "metrics_sha256": "2c0c39e86182f3d6a5e11c997e245db5ffc2faa8776cf2bdbacdc76aeb10be92",
-        "wandb_url": "https://wandb.ai/16726/lucid-sonic/runs/motion-cb05d12074a0-sideways_origin_s8730_phys_000"
-      },
-      {
-        "motion": "sideways",
-        "motion_key": "walk_sideway_135_loop_003__A037",
-        "arm": "R1",
-        "seed": 8730,
-        "preset": "phys_000",
-        "checkpoint_iteration": 2000,
-        "checkpoint_sha256": "a593dd5f87620e7c60f79a64a4d15761a9726ae77c0679bd51908d74ee9f28bb",
-        "summary": {
-          "completion_rate": 0.96875,
-          "tracking_success_rate": 0.0,
-          "global_mpjpe_mm": 1233.5918648831378,
-          "local_mpjpe_mm": 97.94875906584637,
-          "legacy_global_mpjpe_mm": 1271.2569944136535,
-          "legacy_local_mpjpe_mm": 98.56327341354138
-        },
-        "metrics_sha256": "a4e66f734df497b70a969d5e5c08299c591512fd55edf8e79cfa693010b1402e",
-        "wandb_url": "https://wandb.ai/16726/lucid-sonic/runs/motion-cb05d12074a0-sideways_R1_s8730_phys_000"
-      },
-      {
-        "motion": "stoop",
-        "motion_key": "neutral_stoop_down_R_001__A104",
-        "arm": "origin",
-        "seed": 8730,
-        "preset": "phys_000",
-        "checkpoint_iteration": 0,
-        "checkpoint_sha256": "e7fe72a0a48d6d4d534368ee9870b7a5e382bf2c51bb025d35eadee0818aaa8d",
-        "summary": {
-          "completion_rate": 0.0,
-          "tracking_success_rate": 0.0,
-          "global_mpjpe_mm": 478.88875666010966,
-          "local_mpjpe_mm": 97.06004126949668,
-          "legacy_global_mpjpe_mm": 460.61017654220774,
-          "legacy_local_mpjpe_mm": 94.38199008429721
-        },
-        "metrics_sha256": "95ff4aa32bb5b61edda73c2492992042727595bed639fc2d94a65603e0406a94",
-        "wandb_url": "https://wandb.ai/16726/lucid-sonic/runs/motion-cb05d12074a0-stoop_origin_s8730_phys_000"
-      },
-      {
-        "motion": "stoop",
-        "motion_key": "neutral_stoop_down_R_001__A104",
-        "arm": "R1",
-        "seed": 8730,
-        "preset": "phys_000",
-        "checkpoint_iteration": 2000,
-        "checkpoint_sha256": "a593dd5f87620e7c60f79a64a4d15761a9726ae77c0679bd51908d74ee9f28bb",
-        "summary": {
-          "completion_rate": 0.0,
-          "tracking_success_rate": 0.0,
-          "global_mpjpe_mm": 459.65662262617985,
-          "local_mpjpe_mm": 101.06065776830383,
-          "legacy_global_mpjpe_mm": 438.50419090020523,
-          "legacy_local_mpjpe_mm": 98.03693980882944
-        },
-        "metrics_sha256": "089336c3794fd09f2501e49df53b94102fbef43578fa8841975af54930e2d58c",
-        "wandb_url": "https://wandb.ai/16726/lucid-sonic/runs/motion-cb05d12074a0-stoop_R1_s8730_phys_000"
-      }
-    ],
-    "comparisons": {
-      "control": {
-        "global_mpjpe_mm": {
-          "mean_difference_mm": -1.4253409062584632,
-          "standard_error_mm": 3.3092409884723044,
-          "relative_change": 0.08788378261309893,
-          "empirical_retained": true
-        },
-        "local_mpjpe_mm": {
-          "mean_difference_mm": -3.0780811697576933,
-          "standard_error_mm": 0.11426932437186983,
-          "relative_change": -0.009694492952270761,
-          "empirical_retained": true
-        },
-        "completion_delta_pp": 0.0,
-        "all_retained": true
-      },
-      "arc": {
-        "global_mpjpe_mm": {
-          "mean_difference_mm": 312.8277312740352,
-          "standard_error_mm": 27.835850604710014,
-          "relative_change": 0.49447577253400654,
-          "empirical_retained": false
-        },
-        "local_mpjpe_mm": {
-          "mean_difference_mm": -8.57238257928395,
-          "standard_error_mm": 0.4975736801837682,
-          "relative_change": 0.025761210545516944,
-          "empirical_retained": true
-        },
-        "completion_delta_pp": -0.78125,
-        "all_retained": false
-      },
-      "sideways": {
-        "global_mpjpe_mm": {
-          "mean_difference_mm": -606.7263049741392,
-          "standard_error_mm": 47.449048714535756,
-          "relative_change": -0.26265410318875027,
-          "empirical_retained": true
-        },
-        "local_mpjpe_mm": {
-          "mean_difference_mm": -7.093002020015623,
-          "standard_error_mm": 0.5446687781462948,
-          "relative_change": 0.02572190201914548,
-          "empirical_retained": true
-        },
-        "completion_delta_pp": -0.78125,
-        "all_retained": true
-      },
-      "stoop": {
-        "global_mpjpe_mm": {
-          "mean_difference_mm": -67.12100969994083,
-          "standard_error_mm": 7.456876656755994,
-          "relative_change": -0.04015991974432542,
-          "empirical_retained": true
-        },
-        "local_mpjpe_mm": {
-          "mean_difference_mm": -5.705387628142531,
-          "standard_error_mm": 0.49991485345064424,
-          "relative_change": 0.04121795588051569,
-          "empirical_retained": true
-        },
-        "completion_delta_pp": 0.0,
-        "all_retained": true
-      }
+ "kind": "lucid_public_recovery_progress_v1",
+ "snapshot_utc": "2026-09-08T00:00:00+00:00",
+ "live_feed": false,
+ "scope": "SONIC development evidence; one trained origin; evaluation aliases are not independent trained policies.",
+ "retention": {
+  "rows": [
+   {
+    "arm": "origin",
+    "global_mpjpe_mm": 127.92777118159745,
+    "local_mpjpe_mm": 28.191841102969782,
+    "global_change_pct": 0.0,
+    "hard_qualified_pct": 42.7734375,
+    "retained_all_sampled": true
+   },
+   {
+    "arm": "R0",
+    "global_mpjpe_mm": 225.869156925374,
+    "local_mpjpe_mm": 30.21218552012194,
+    "global_change_pct": 76.5599094232211,
+    "hard_qualified_pct": 49.0234375,
+    "retained_all_sampled": false
+   },
+   {
+    "arm": "R1",
+    "global_mpjpe_mm": 133.4718139637347,
+    "local_mpjpe_mm": 27.957790567748578,
+    "global_change_pct": 4.333728893210598,
+    "hard_qualified_pct": 47.94921875,
+    "retained_all_sampled": true
+   },
+   {
+    "arm": "R2",
+    "global_mpjpe_mm": 163.53395492429658,
+    "local_mpjpe_mm": 28.312064088429484,
+    "global_change_pct": 27.833036887788065,
+    "hard_qualified_pct": 53.41796875,
+    "retained_all_sampled": false
+   }
+  ],
+  "completed_at": "2026-09-06T22:52:46.608525+00:00",
+  "training_transitions_per_arm": 49152000,
+  "analysis_sha256": "2f488eb04c23aba14ac3d6e1a8e075e1c87f5e42708a21d82caa0ce7a7767271",
+  "receipt_sha256": "37ec30639cd486b08e203b64104ccb06fa2b8917b509406cbf7d3a47cfd19b15"
+ },
+ "motion_screen": {
+  "state": "complete",
+  "completed_at": "2026-09-07T01:57:20.017592+00:00",
+  "plan_sha256": "cb05d12074a0278415c156bfc04bcec435ce938791939cf922c1599e04847368",
+  "status_sha256": "c99d5eaf978815da6447e417f6290bf23429b8d1e699e918bb6e8edb4bf6fa66",
+  "source_commit": "a1b88167850a6aa1548a4cce45d9c1430e7d701f",
+  "aliases_per_cell": 128,
+  "cells": [
+   {
+    "motion": "control",
+    "motion_key": "walk_hands_on_back_loop_002__A066_M",
+    "arm": "origin",
+    "seed": 8730,
+    "preset": "phys_000",
+    "checkpoint_iteration": 0,
+    "checkpoint_sha256": "e7fe72a0a48d6d4d534368ee9870b7a5e382bf2c51bb025d35eadee0818aaa8d",
+    "summary": {
+     "completion_rate": 1.0,
+     "tracking_success_rate": 1.0,
+     "global_mpjpe_mm": 117.63909979028763,
+     "local_mpjpe_mm": 28.060489518803777,
+     "legacy_global_mpjpe_mm": 118.23023718445742,
+     "legacy_local_mpjpe_mm": 28.201482418194487
     },
-    "wandb_url": "https://wandb.ai/16726/lucid-sonic/runs/motion-cb05d12074a0278415"
+    "metrics_sha256": "f18dae56dbdc6859df7177ce2a84d057068645da750f0105023ebbd6e79d789c",
+    "wandb_url": "https://wandb.ai/16726/lucid-sonic/runs/motion-cb05d12074a0-control_origin_s8730_phys_000"
+   },
+   {
+    "motion": "control",
+    "motion_key": "walk_hands_on_back_loop_002__A066_M",
+    "arm": "R1",
+    "seed": 8730,
+    "preset": "phys_000",
+    "checkpoint_iteration": 2000,
+    "checkpoint_sha256": "a593dd5f87620e7c60f79a64a4d15761a9726ae77c0679bd51908d74ee9f28bb",
+    "summary": {
+     "completion_rate": 1.0,
+     "tracking_success_rate": 1.0,
+     "global_mpjpe_mm": 127.97766886305793,
+     "local_mpjpe_mm": 27.788457300926467,
+     "legacy_global_mpjpe_mm": 128.6207568078955,
+     "legacy_local_mpjpe_mm": 27.92808327876828
+    },
+    "metrics_sha256": "2a26fa5b8b3acf08cfcfae43781b20e84cb99a86c3fed623ea4858f82e443936",
+    "wandb_url": "https://wandb.ai/16726/lucid-sonic/runs/motion-cb05d12074a0-control_R1_s8730_phys_000"
+   },
+   {
+    "motion": "arc",
+    "motion_key": "walk_arc_cw_loop_R_002__A229",
+    "arm": "origin",
+    "seed": 8730,
+    "preset": "phys_000",
+    "checkpoint_iteration": 0,
+    "checkpoint_sha256": "e7fe72a0a48d6d4d534368ee9870b7a5e382bf2c51bb025d35eadee0818aaa8d",
+    "summary": {
+     "completion_rate": 0.9921875,
+     "tracking_success_rate": 0.0,
+     "global_mpjpe_mm": 793.0214047481647,
+     "local_mpjpe_mm": 115.47039818772612,
+     "legacy_global_mpjpe_mm": 793.7210878953721,
+     "legacy_local_mpjpe_mm": 115.62879067384131
+    },
+    "metrics_sha256": "a6ac80095f7bba1ec5f4378b04b32e9d98b5fea6d598f9f14292c438f9ce1495",
+    "wandb_url": "https://wandb.ai/16726/lucid-sonic/runs/motion-cb05d12074a0-arc_origin_s8730_phys_000"
+   },
+   {
+    "motion": "arc",
+    "motion_key": "walk_arc_cw_loop_R_002__A229",
+    "arm": "R1",
+    "seed": 8730,
+    "preset": "phys_000",
+    "checkpoint_iteration": 2000,
+    "checkpoint_sha256": "a593dd5f87620e7c60f79a64a4d15761a9726ae77c0679bd51908d74ee9f28bb",
+    "summary": {
+     "completion_rate": 0.984375,
+     "tracking_success_rate": 0.0,
+     "global_mpjpe_mm": 1185.1512764970166,
+     "local_mpjpe_mm": 118.4450554272148,
+     "legacy_global_mpjpe_mm": 1185.9412316660478,
+     "legacy_local_mpjpe_mm": 118.6052793316863
+    },
+    "metrics_sha256": "69450e744f013c099950b3b4a742b75b20fa17352f2eb9d82ee3de601b55ffe9",
+    "wandb_url": "https://wandb.ai/16726/lucid-sonic/runs/motion-cb05d12074a0-arc_R1_s8730_phys_000"
+   },
+   {
+    "motion": "sideways",
+    "motion_key": "walk_sideway_135_loop_003__A037",
+    "arm": "origin",
+    "seed": 8730,
+    "preset": "phys_000",
+    "checkpoint_iteration": 0,
+    "checkpoint_sha256": "e7fe72a0a48d6d4d534368ee9870b7a5e382bf2c51bb025d35eadee0818aaa8d",
+    "summary": {
+     "completion_rate": 0.9765625,
+     "tracking_success_rate": 0.0,
+     "global_mpjpe_mm": 1673.0165180520698,
+     "local_mpjpe_mm": 95.49251007805636,
+     "legacy_global_mpjpe_mm": 1693.751908701763,
+     "legacy_local_mpjpe_mm": 95.50057737729203
+    },
+    "metrics_sha256": "2c0c39e86182f3d6a5e11c997e245db5ffc2faa8776cf2bdbacdc76aeb10be92",
+    "wandb_url": "https://wandb.ai/16726/lucid-sonic/runs/motion-cb05d12074a0-sideways_origin_s8730_phys_000"
+   },
+   {
+    "motion": "sideways",
+    "motion_key": "walk_sideway_135_loop_003__A037",
+    "arm": "R1",
+    "seed": 8730,
+    "preset": "phys_000",
+    "checkpoint_iteration": 2000,
+    "checkpoint_sha256": "a593dd5f87620e7c60f79a64a4d15761a9726ae77c0679bd51908d74ee9f28bb",
+    "summary": {
+     "completion_rate": 0.96875,
+     "tracking_success_rate": 0.0,
+     "global_mpjpe_mm": 1233.5918648831378,
+     "local_mpjpe_mm": 97.94875906584637,
+     "legacy_global_mpjpe_mm": 1271.2569944136535,
+     "legacy_local_mpjpe_mm": 98.56327341354138
+    },
+    "metrics_sha256": "a4e66f734df497b70a969d5e5c08299c591512fd55edf8e79cfa693010b1402e",
+    "wandb_url": "https://wandb.ai/16726/lucid-sonic/runs/motion-cb05d12074a0-sideways_R1_s8730_phys_000"
+   },
+   {
+    "motion": "stoop",
+    "motion_key": "neutral_stoop_down_R_001__A104",
+    "arm": "origin",
+    "seed": 8730,
+    "preset": "phys_000",
+    "checkpoint_iteration": 0,
+    "checkpoint_sha256": "e7fe72a0a48d6d4d534368ee9870b7a5e382bf2c51bb025d35eadee0818aaa8d",
+    "summary": {
+     "completion_rate": 0.0,
+     "tracking_success_rate": 0.0,
+     "global_mpjpe_mm": 478.88875666010966,
+     "local_mpjpe_mm": 97.06004126949668,
+     "legacy_global_mpjpe_mm": 460.61017654220774,
+     "legacy_local_mpjpe_mm": 94.38199008429721
+    },
+    "metrics_sha256": "95ff4aa32bb5b61edda73c2492992042727595bed639fc2d94a65603e0406a94",
+    "wandb_url": "https://wandb.ai/16726/lucid-sonic/runs/motion-cb05d12074a0-stoop_origin_s8730_phys_000"
+   },
+   {
+    "motion": "stoop",
+    "motion_key": "neutral_stoop_down_R_001__A104",
+    "arm": "R1",
+    "seed": 8730,
+    "preset": "phys_000",
+    "checkpoint_iteration": 2000,
+    "checkpoint_sha256": "a593dd5f87620e7c60f79a64a4d15761a9726ae77c0679bd51908d74ee9f28bb",
+    "summary": {
+     "completion_rate": 0.0,
+     "tracking_success_rate": 0.0,
+     "global_mpjpe_mm": 459.65662262617985,
+     "local_mpjpe_mm": 101.06065776830383,
+     "legacy_global_mpjpe_mm": 438.50419090020523,
+     "legacy_local_mpjpe_mm": 98.03693980882944
+    },
+    "metrics_sha256": "089336c3794fd09f2501e49df53b94102fbef43578fa8841975af54930e2d58c",
+    "wandb_url": "https://wandb.ai/16726/lucid-sonic/runs/motion-cb05d12074a0-stoop_R1_s8730_phys_000"
+   }
+  ],
+  "comparisons": {
+   "control": {
+    "global_mpjpe_mm": {
+     "mean_difference_mm": -1.4253409062584632,
+     "standard_error_mm": 3.3092409884723044,
+     "relative_change": 0.08788378261309893,
+     "empirical_retained": true
+    },
+    "local_mpjpe_mm": {
+     "mean_difference_mm": -3.0780811697576933,
+     "standard_error_mm": 0.11426932437186983,
+     "relative_change": -0.009694492952270761,
+     "empirical_retained": true
+    },
+    "completion_delta_pp": 0.0,
+    "all_retained": true
+   },
+   "arc": {
+    "global_mpjpe_mm": {
+     "mean_difference_mm": 312.8277312740352,
+     "standard_error_mm": 27.835850604710014,
+     "relative_change": 0.49447577253400654,
+     "empirical_retained": false
+    },
+    "local_mpjpe_mm": {
+     "mean_difference_mm": -8.57238257928395,
+     "standard_error_mm": 0.4975736801837682,
+     "relative_change": 0.025761210545516944,
+     "empirical_retained": true
+    },
+    "completion_delta_pp": -0.78125,
+    "all_retained": false
+   },
+   "sideways": {
+    "global_mpjpe_mm": {
+     "mean_difference_mm": -606.7263049741392,
+     "standard_error_mm": 47.449048714535756,
+     "relative_change": -0.26265410318875027,
+     "empirical_retained": true
+    },
+    "local_mpjpe_mm": {
+     "mean_difference_mm": -7.093002020015623,
+     "standard_error_mm": 0.5446687781462948,
+     "relative_change": 0.02572190201914548,
+     "empirical_retained": true
+    },
+    "completion_delta_pp": -0.78125,
+    "all_retained": true
+   },
+   "stoop": {
+    "global_mpjpe_mm": {
+     "mean_difference_mm": -67.12100969994083,
+     "standard_error_mm": 7.456876656755994,
+     "relative_change": -0.04015991974432542,
+     "empirical_retained": true
+    },
+    "local_mpjpe_mm": {
+     "mean_difference_mm": -5.705387628142531,
+     "standard_error_mm": 0.49991485345064424,
+     "relative_change": 0.04121795588051569,
+     "empirical_retained": true
+    },
+    "completion_delta_pp": 0.0,
+    "all_retained": true
+   }
   },
-  "recorder": {
-    "cells_completed": 8,
-    "nonzero_push_events": 380,
-    "analysis_sha256": "574add6f6d9705137aebae87f419246090e34d0b890703337447e0aa0ffc2ed4",
-    "scope": "all four preregistered v2 execution/retention pairs pass; contact-derived diagnostics not validated; original all-metric gate remains failed; this is not recovered-task efficacy"
+  "wandb_url": "https://wandb.ai/16726/lucid-sonic/runs/motion-cb05d12074a0278415"
+ },
+ "recorder": {
+  "cells_completed": 8,
+  "nonzero_push_events": 380,
+  "analysis_sha256": "574add6f6d9705137aebae87f419246090e34d0b890703337447e0aa0ffc2ed4",
+  "scope": "all four preregistered v2 execution/retention pairs pass; contact-derived diagnostics not validated; original all-metric gate remains failed; this is not recovered-task efficacy"
+ },
+ "next_step": "Establish a high-quality shared multi-motion origin, then retention coverage, recovery calibration and matched feedback comparisons.",
+ "seed_8601": {
+  "campaign": "retention_second_seed_20260907_c",
+  "plan_sha256": "57fbff80fbcd47f740f0e7bff9f7f84e7bef7892a92b50fd61396cb4ce7827cd",
+  "scope": "same-origin continuation seed 8601; empirical gates, not simultaneous inference",
+  "cells_complete": 57,
+  "scientific_change": "PPO and environment seed 8600 -> 8601 only; R2 not repeated",
+  "origin_reproduces_first_campaign_exactly": true,
+  "endpoints": [
+   {
+    "arm": "origin",
+    "global_mpjpe_mm": 127.92777118159745,
+    "local_mpjpe_mm": 28.191841102969782,
+    "global_change_pct": 0.0,
+    "hard_qualified_pct": 42.7734375,
+    "retained_all_sampled": true
+   },
+   {
+    "arm": "R0",
+    "global_mpjpe_mm": 205.42855444562542,
+    "local_mpjpe_mm": 32.49744655847343,
+    "global_change_pct": 60.581672414204114,
+    "hard_qualified_pct": 48.6328125,
+    "retained_all_sampled": false
+   },
+   {
+    "arm": "R1",
+    "global_mpjpe_mm": 136.19551048164587,
+    "local_mpjpe_mm": 27.382097932534396,
+    "global_change_pct": 6.462818216626398,
+    "hard_qualified_pct": 50.48828125,
+    "retained_all_sampled": true
+   }
+  ],
+  "r1_per_checkpoint_global_increase_pct": {
+   "250": 8.690816185631633,
+   "500": 2.9226639018644196,
+   "1000": 9.66823996154822,
+   "1500": 6.147863456035929,
+   "2000": 6.462818216626398
   },
-  "next_step": "Establish a high-quality shared multi-motion origin, then retention coverage, recovery calibration and matched feedback comparisons."
+  "r1_binding_checkpoint": {
+   "iteration": 1000,
+   "increase_pct": 9.66823996154822,
+   "budget_pct": 10.0
+  },
+  "limits": [
+   "two continuation seeds from one origin are not two independent origins",
+   "one origin and one 4.00 s motion",
+   "512 aliases per condition are not independent trained policies",
+   "the retention gate is an empirical development decision, not a simultaneous confidence guarantee"
+  ]
+ }
 }

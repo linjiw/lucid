@@ -1,0 +1,426 @@
+{
+  "topic": "Adversarial audit of the running second-seed replication (retention_second_seed_20260907_c)",
+  "audited_at_utc": "2026-09-07T11:36:16Z",
+  "auditor_note": "READ-ONLY. No process was killed, modified or launched. No GPU work started.",
+  "verdict": "NOT DISQUALIFIED as a matched replication of the training/evaluation recipe. Every hyperparameter, seed-frozen sampler, input artefact and evaluation command is byte-identical to the original except the PPO/environment seed. Three defects remain that are about SCOPE and BOOKKEEPING, not about matching: the preregistered PRIMARY ENDPOINT was restated, R2 is absent, and R0 was reused from a predecessor directory whose own receipt is marked 'failed'.",
+  "1_command_diff": {
+    "method": "Token-level diff of plan.json cells[].command between the two campaigns, then re-diff after canonicalising the repo prefix and the campaign directory name.",
+    "train_R0": {
+      "token_count": "76 -> 76",
+      "differences": [
+        {
+          "arg": "positional argv[1] (train script path)",
+          "orig": "/home/linjiw/lucid-anchor-start-repair/scripts/practice_utility/train_with_delay.py",
+          "new": "/home/linjiw/lucid-retention-second-seed/scripts/practice_utility/train_with_delay.py",
+          "class": "benign",
+          "why": "different git worktree; the 1039 shared py/yaml/toml files hash identically (see 3_code_identity)"
+        },
+        {
+          "arg": "seed",
+          "orig": "8600",
+          "new": "8601",
+          "class": "intended"
+        },
+        {
+          "arg": "++callbacks.practice_capsule.pair_id",
+          "orig": "curriculum_seed_8600",
+          "new": "retention_continuation_seed_8601",
+          "class": "benign",
+          "why": "capsule metadata label only; note capsules from the two campaigns can no longer be joined on pair_id"
+        },
+        {
+          "arg": "++callbacks.practice_observer.output_dir",
+          "orig": "/home/linjiw/lucid-sonic/experiments/retention_screen_campaign_20260906_c/pilot/train_R0",
+          "new": "/home/linjiw/lucid-sonic/experiments/retention_second_seed_20260907_b/pilot/train_R0",
+          "class": "benign"
+        },
+        {
+          "arg": "++callbacks.lucid_curriculum.output_dir",
+          "orig": "/home/linjiw/lucid-sonic/experiments/retention_screen_campaign_20260906_c/pilot/train_R0",
+          "new": "/home/linjiw/lucid-sonic/experiments/retention_second_seed_20260907_b/pilot/train_R0",
+          "class": "benign"
+        },
+        {
+          "arg": "++callbacks.practice_capsule.capsule_dir",
+          "orig": "/home/linjiw/lucid-sonic/experiments/retention_screen_campaign_20260906_c/pilot/train_R0/capsules",
+          "new": "/home/linjiw/lucid-sonic/experiments/retention_second_seed_20260907_b/pilot/train_R0/capsules",
+          "class": "benign"
+        },
+        {
+          "arg": "++algo.config.reference_anchor_cost_path",
+          "orig": "/home/linjiw/lucid-sonic/experiments/retention_screen_campaign_20260906_c/pilot/train_R0/anchor_cost.jsonl",
+          "new": "/home/linjiw/lucid-sonic/experiments/retention_second_seed_20260907_b/pilot/train_R0/anchor_cost.jsonl",
+          "class": "benign"
+        },
+        {
+          "arg": "++callbacks.optimizer_history.output_path",
+          "orig": "/home/linjiw/lucid-sonic/experiments/retention_screen_campaign_20260906_c/pilot/train_R0/optimizer_history.json",
+          "new": "/home/linjiw/lucid-sonic/experiments/retention_second_seed_20260907_b/pilot/train_R0/optimizer_history.json",
+          "class": "benign"
+        }
+      ],
+      "residual_after_canonicalising_paths": [
+        "seed=8600 -> seed=8601",
+        "pair_id=curriculum_seed_8600 -> pair_id=retention_continuation_seed_8601"
+      ]
+    },
+    "train_R1": {
+      "token_count": "76 -> 76",
+      "differences": "identical structure to train_R0: script repo prefix (lucid-anchor-start-repair -> lucid-retention-logging-repair), seed 8600->8601, pair_id label, and five output-path rewrites to the _c campaign directory.",
+      "residual_after_canonicalising_paths": [
+        "seed=8600 -> seed=8601",
+        "pair_id=curriculum_seed_8600 -> pair_id=retention_continuation_seed_8601"
+      ]
+    },
+    "unchanged_scientific_arguments_verified_identical": {
+      "++algo.config.actor_learning_rate": "2e-05 (both arms, both campaigns)",
+      "++algo.trl.learning_rate": "2e-05",
+      "++algo.trl.lr_scheduler_type": "constant",
+      "++algo.config.reference_anchor_beta": "R0 0.0, R1 1.0 (both campaigns)",
+      "++algo.config.reference_anchor_batch_size": "256",
+      "++algo.config.reference_anchor_seed": "8610",
+      "++algo.config.reference_anchor_path": "/home/linjiw/lucid-sonic/experiments/retention_repair_campaign_20260906_a/collection/anchor_buffer.pt",
+      "++algo.config.reference_anchor_sha256": "3517adde328c64d14304f9fab2dfd96f4a4c744ebe2213b2cc6971ee295a4b85",
+      "++algo.config.num_learning_iterations": "2000",
+      "++algo.config.save_interval": "100000",
+      "num_envs": "1024 (training) / 512 (evaluation)",
+      "checkpoint": ".../curriculum_comparison_ne1024_20260829_000249/seed_8600/fixed/final_checkpoint.pt",
+      "++callbacks.lucid_curriculum.mode": "fixed",
+      "++callbacks.lucid_curriculum.spread_strata": "2",
+      "++callbacks.lucid_curriculum.stratum_sizes": "[768,256]",
+      "++callbacks.lucid_curriculum.practice_vectors_json": "[{},{\"push_robot\":3.0}]",
+      "++callbacks.lucid_curriculum.anchor_seed": "8600",
+      "++callbacks.lucid_curriculum.fixed_lambda": "1.0",
+      "++callbacks.lucid_curriculum.delta_target": "0.778",
+      "++callbacks.lucid_curriculum.kp/ki/alpha/integral_max/return_floor/warmup_iterations": "1.0 / 0.02 / 0.05 / 1.0 / 8.0 / 10",
+      "++manager_env.terminations.*.threshold": "anchor_pos 0.5, ee_body_pos 0.5, foot_pos_xyz 0.5, anchor_ori_full 1.0",
+      "++manager_env.commands.motion.motion_lib_cfg.motion_file": "/home/linjiw/lucid-sonic/pools/subsets/m1_hob002/robot_filtered",
+      "++callbacks.optimizer_history.mode": "fresh",
+      "++callbacks.optimizer_history.learning_rate_scale": "1.0",
+      "++callbacks.optimizer_history.learning_rate_policy": "adaptive",
+      "--max-delay": "12",
+      "++resume": "false",
+      "++trainer._target_": "gear_sonic.research.practice_utility.reference_anchor_trainer.ReferenceAnchoredPPOTrainer"
+    },
+    "evaluation_cells": {
+      "shared_ids": 55,
+      "residual_diff_after_canonicalising_repo_and_campaign_paths": "NONE (zero tokens differ across all 55 shared evaluation cells)",
+      "verified_identical": "seed=8700, num_envs=512, preset ids (phys_000, phys_100, ch_push_300, ch_push_350, ch_push_fric_350_150), non_latency_dr_scale, fixed_latency_steps, motion_file panel_hob002_k512/robot_filtered, tracking_thresholds_sha256=a0bd939d2e3c16a97ae75195e239ea8c4d38e220e75444c767103684c1a67a5b, QualifiedTrackingEvalCallback target"
+    }
+  },
+  "2_seed_freeze": {
+    "training_seed": {
+      "orig": 8600,
+      "new": 8601,
+      "receipt": "/home/linjiw/lucid-sonic/experiments/retention_second_seed_20260907_c/pilot/plan.json",
+      "pointer": "$.training_seed"
+    },
+    "anchor_seed_cohort_sampling": {
+      "orig": 8600,
+      "new": 8600,
+      "status": "FROZEN",
+      "pointer": "cells[train_R*].command ++callbacks.lucid_curriculum.anchor_seed"
+    },
+    "reference_anchor_seed": {
+      "orig": 8610,
+      "new": 8610,
+      "status": "FROZEN",
+      "pointer": "cells[train_R*].command ++algo.config.reference_anchor_seed"
+    },
+    "evaluation_seed": {
+      "orig": 8700,
+      "new": 8700,
+      "status": "FROZEN",
+      "pointer": "$.evaluation_seed"
+    },
+    "empirical_proof_of_cohort_freeze": {
+      "artefact": "practice_start.json (realised stratum/cohort assignment written at global_step 0)",
+      "sha256": "3ae4b9b60b7350199c1a1e48b8bdfb5a3edb68c9c6bc69fd801fa0ff1d44f898",
+      "byte_identical_across": [
+        "/home/linjiw/lucid-sonic/experiments/retention_screen_campaign_20260906_c/pilot/train_R0/practice_start.json",
+        "/home/linjiw/lucid-sonic/experiments/retention_screen_campaign_20260906_c/pilot/train_R1/practice_start.json",
+        "/home/linjiw/lucid-sonic/experiments/retention_screen_campaign_20260906_c/pilot/train_R2/practice_start.json",
+        "/home/linjiw/lucid-sonic/experiments/retention_second_seed_20260907_b/pilot/train_R0/practice_start.json",
+        "/home/linjiw/lucid-sonic/experiments/retention_second_seed_20260907_c/pilot/train_R1/practice_start.json"
+      ],
+      "recorded_seed_field": 8600,
+      "interpretation": "The cohort/stratum assignment realised at seed 8601 is byte-identical to the one realised at seed 8600. The seed change touches PPO/environment sampling only, exactly as claimed."
+    },
+    "resolved_hydra_config_diff": {
+      "files": [
+        "/home/linjiw/lucid-anchor-start-repair/logs_rl/TRL_G1_Track/manager/universal_token/all_modes/sonic_release_test-20260906_120613/config.yaml (orig R0)",
+        "/home/linjiw/lucid-retention-second-seed/logs_rl/TRL_G1_Track/manager/universal_token/all_modes/sonic_release_test-20260907_005507/config.yaml (new R0)"
+      ],
+      "diff_lines": 8,
+      "diff_content": [
+        "seed: 8600 -> 8601",
+        "hydra output_dir timestamp",
+        "reference_anchor_cost_path",
+        "practice_observer.output_dir",
+        "lucid_curriculum.output_dir",
+        "practice_capsule.capsule_dir",
+        "practice_capsule.pair_id",
+        "optimizer_history.output_path"
+      ],
+      "identical_in_both": {
+        "desired_kl": 0.01,
+        "schedule": "adaptive",
+        "actor_learning_rate": 2e-05,
+        "critic_learning_rate": 0.001,
+        "num_learning_iterations": 2000,
+        "reference_anchor_beta": 0.0,
+        "reference_anchor_batch_size": 256,
+        "reference_anchor_seed": 8610,
+        "algo.trl.learning_rate": 2e-05
+      }
+    }
+  },
+  "3_code_identity": {
+    "git_shas": {
+      "orig_screen": "2d4aa0aef89a078b00cc397b8b13f4809227a5c7 (/home/linjiw/lucid-anchor-start-repair)",
+      "new_R0": "886c347a88c7a037517c2eec15a8fe7d243c143a (/home/linjiw/lucid-retention-second-seed)",
+      "new_R1_and_evals": "a42dd61975222ac74eeb17cf3253aeaf8210b2a3 (/home/linjiw/lucid-retention-logging-repair)"
+    },
+    "git_diff_2d4aa0a_to_a42dd61": "2 files, +288 lines: scripts/practice_utility/run_retention_second_seed.py and its test. Nothing else.",
+    "git_diff_a42dd61_to_886c347": "same 2 files only (the W&B summary serialization fix).",
+    "plan_code_hashes_normalised_diff": {
+      "orig_vs_new": "1039 shared py/yaml/toml files, ZERO differing content hashes; the only extra file in the new manifest is scripts/practice_utility/run_retention_second_seed.py (the campaign driver, not on the training or evaluation code path).",
+      "predecessor_b_vs_c": "only run_retention_second_seed.py differs (the wandb fix)."
+    },
+    "conclusion": "No training-path or evaluation-path code changed between the original screen and the replication."
+  },
+  "4_input_artefact_sha256": {
+    "origin_checkpoint": {
+      "path": "/home/linjiw/lucid-sonic/artifacts/curriculum_comparison/curriculum_comparison_ne1024_20260829_000249/seed_8600/fixed/final_checkpoint.pt",
+      "orig_plan": "e7fe72a0a48d6d4d534368ee9870b7a5e382bf2c51bb025d35eadee0818aaa8d",
+      "new_plan": "e7fe72a0a48d6d4d534368ee9870b7a5e382bf2c51bb025d35eadee0818aaa8d",
+      "recomputed_on_disk": "e7fe72a0a48d6d4d534368ee9870b7a5e382bf2c51bb025d35eadee0818aaa8d",
+      "match": true
+    },
+    "anchor_buffer": {
+      "path": "/home/linjiw/lucid-sonic/experiments/retention_repair_campaign_20260906_a/collection/anchor_buffer.pt",
+      "orig_plan": "3517adde328c64d14304f9fab2dfd96f4a4c744ebe2213b2cc6971ee295a4b85",
+      "new_plan": "3517adde328c64d14304f9fab2dfd96f4a4c744ebe2213b2cc6971ee295a4b85",
+      "recomputed_on_disk": "3517adde328c64d14304f9fab2dfd96f4a4c744ebe2213b2cc6971ee295a4b85",
+      "match": true
+    },
+    "replicate_panel_receipt": {
+      "path": "/home/linjiw/lucid-sonic/manifests/replicate_panel_panel_hob002_k512.json",
+      "sha_both_plans": "e2e61933405e6701b0563eb4df793b6faf5c90d8ae5b7d8fc1e11f47142aefd7",
+      "recomputed_on_disk": "e2e61933405e6701b0563eb4df793b6faf5c90d8ae5b7d8fc1e11f47142aefd7",
+      "match": true
+    },
+    "panel_block": "plan['panel'] dicts compare EQUAL (motion_count 512, motion_keys_sha256 4b0fae02..., pool_sha256 b065a498..., split_sha256 33784622..., source_clip_sha256 a7f10e7a...)",
+    "tracking_thresholds": {
+      "sha_both": "a0bd939d2e3c16a97ae75195e239ea8c4d38e220e75444c767103684c1a67a5b",
+      "content_identical": true
+    },
+    "continuation_decision": {
+      "sha_both": "fa131a0b943b2397138af2675e8795677d16d2cc71ea8f4dc95e79fe0befe8bf",
+      "continuation_mode": "fresh (both)"
+    },
+    "encoder": "a4195a6e49e4ec7098f58be4b04f464bbb14a9ce6c20ff508678faf4428a879d (both)",
+    "optimizer_binding": "6d0d2c11588ed54da71d975228423d02fd93c86ef802c92e38b2652c23798c09 (both)",
+    "training_subset_manifest": "c7f7ea3259d9ed26d3dd503801f9aae016676fce8aea11015b360e96de61d848 (both)",
+    "inputs_dict": "59 entries -> 64 entries; the 5 additions are pure provenance (the original plan.json, the _b plan/receipt/thresholds, the _c thresholds). No input was removed or changed."
+  },
+  "5_R0_reuse": {
+    "retrained_or_reused": "REUSED. R0 was NOT retrained for _c.",
+    "predecessor": "/home/linjiw/lucid-sonic/experiments/retention_second_seed_20260907_b/pilot/train_R0",
+    "reuse_receipt": "/home/linjiw/lucid-sonic/experiments/retention_second_seed_20260907_b/pilot/receipt.json",
+    "reuse_receipt_sha256_in_plan": "78282671ebac67e0ff5528f54c0d7fa5551112277e0014fbad1ff2f38d0b4afe",
+    "reuse_receipt_sha256_recomputed": "78282671ebac67e0ff5528f54c0d7fa5551112277e0014fbad1ff2f38d0b4afe",
+    "why_b_failed": "TypeError: can only concatenate str (not \"int\") to str, raised inside wandb Run.summary.update() AFTER train_R0 exited 0 and after validate_training() had produced a complete validation block. Purely a logging serialization fault; the _b watcher.log records 'Replication failed; preserve receipt, no automatic retry.'",
+    "gate_implemented_by_driver": {
+      "file": "/home/linjiw/lucid-retention-logging-repair/scripts/practice_utility/run_retention_second_seed.py",
+      "function": "reuse_training (lines ~59-84)",
+      "checks": [
+        "source receipt sha256 matches the frozen plan",
+        "cell id must be exactly 'train_R0'",
+        "old runtime exit_code == 0",
+        "source receipt['error'] string-equals the specific wandb TypeError",
+        "validation.training.complete is true",
+        "re-hashes final checkpoint, resolved config, all artifact_hashes, and every snapshot checkpoint AND capsule"
+      ]
+    },
+    "checkpoint_sha_recomputed_on_disk": {
+      "/home/linjiw/lucid-sonic/experiments/retention_second_seed_20260907_b/pilot/train_R0/final_checkpoint.pt": "852c704d5c4ad189f3326fb53003e60caec2e50b43b569480782e6c8b2a849fb (matches receipt)",
+      "snapshots/probe_250/final_checkpoint.pt": "0a39ed9ab8a521b2b296dbe3cd2e739debb77648af90c50491da4536a975facb (matches)",
+      "snapshots/probe_500/final_checkpoint.pt": "303f330e55d44c667f9cd2d768831ff3cddf82f2449b3d2745df7aaa2dbd4345 (matches)",
+      "snapshots/probe_1000/final_checkpoint.pt": "32dccb1a89f4df743dbe426d23a1cabaf7f68e45f0d3be2d2bc3fdf466945dba (matches)",
+      "snapshots/probe_1500/final_checkpoint.pt": "85fa8c66cb0d25d23d26d0a4a83bfdf6c23c7134d6b56625c0e2b0c8c2466cfd (matches)"
+    },
+    "matched_pairing_evidence": {
+      "training_transitions": "orig R0 49,152,000 == new R0 49,152,000 == orig R1 49,152,000",
+      "optimizer_rate_min/max_R0": "orig 1e-05 / 3.375000000000001e-05 == new 1e-05 / 3.375000000000001e-05",
+      "iterations_parsed": "2000 both, complete true both",
+      "actuator_groups_swapped": "5 both",
+      "observer_rows": "2000 both",
+      "cohort_assignment": "practice_start.json byte-identical (see 2_seed_freeze)"
+    },
+    "legitimacy": "LEGITIMATE as a matched arm. The reused R0 ran the identical recipe at seed 8601 from the identical origin with the identical frozen cohort; only the campaign output directory differs. The pairing R0-vs-R1 at seed 8601 is intact.",
+    "bookkeeping_defect": "The _b receipt records train_R0 status 'failed' AND campaign status 'failed'. The _c receipt re-labels the same cell 'complete'. A reader of _b alone would conclude seed 8601 R0 failed. The paper's supplement must state that seed-8601 R0 lives in the _b directory and was promoted by _c's verified-reuse path.",
+    "cross_repo_note": "R0's binary came from /home/linjiw/lucid-retention-second-seed (886c347) while R1's comes from /home/linjiw/lucid-retention-logging-repair (a42dd61). The _c plan's code_hashes manifest covers ONLY the a42dd61 checkout; the 886c347 checkout is hashed in the _b plan. The two commits differ only in the driver script, so this is documentation-only, but the _c plan is not a self-contained code record for both arms."
+  },
+  "6_R2_absence": {
+    "present": false,
+    "cell_count": "83 (original) -> 57 (replication)",
+    "dropped": "train_R2 plus its 25 evaluation cells (5 checkpoints x 5 presets) = 26 cells",
+    "enforced_where": "run_retention_second_seed.py validate_plan_grid(): raises ValueError('replicate R0/R1 only') unless [c['arm'] for c in training] == ['R0','R1']",
+    "sanctioned_by": "/home/linjiw/lucid/fable.md section 3.2: 'A second seed of R0 and R1 only (drop R2)'",
+    "consequence_for_the_paper": "Contribution 4's R2 leg ('a lower learning rate also fails retention') stays at ONE continuation seed even if the replication completes. Only the R0-fails / R1-holds contrast becomes two-of-two. The paper must not write 'both R0 and R2 fail retention at two seeds'.",
+    "original_R2_arguments_that_have_no_second_seed": [
+      "++algo.config.actor_learning_rate=1e-05",
+      "++algo.trl.learning_rate=1e-05",
+      "++algo.config.desired_kl=null",
+      "++algo.config.schedule=fixed",
+      "++callbacks.optimizer_history.learning_rate_scale=0.5",
+      "++callbacks.optimizer_history.learning_rate_policy=fixed"
+    ]
+  },
+  "7_evaluation_panel": {
+    "evaluation_seed": {
+      "orig": 8700,
+      "new": 8700,
+      "differs": false
+    },
+    "eval_replicates": {
+      "orig": 512,
+      "new": 512,
+      "differs": false
+    },
+    "eval_num_envs": {
+      "orig": 512,
+      "new": 512,
+      "differs": false
+    },
+    "panel": "identical replicate-alias panel panel_hob002_k512 (512 aliases of the single clip walk_hands_on_back_loop_002__A066_M)",
+    "hygiene_reminder": "The 512 aliases are replicates of ONE motion. They tighten within-policy precision; they are not 512 independent motions and not independent trained policies.",
+    "free_determinism_check_available": "The replication re-runs the 5 eval_origin_0_* cells at the identical origin checkpoint and identical eval seed 8700. If the resulting metrics differ from the original campaign's eval_origin_0_* cells, that quantifies evaluator nondeterminism at no extra cost; if identical, the two campaigns' evaluation legs are provably comparable. This comparison should be made when the campaign finishes."
+  },
+  "8_preregistration_changes": {
+    "kind": {
+      "orig": "retention_repair_screen_v1",
+      "new": "retention_second_seed_v1"
+    },
+    "PRIMARY_ENDPOINT": {
+      "orig": "held-out tracking qualification versus origin across checkpoints subject to empirical clean/original-envelope retention",
+      "new": "per-checkpoint empirical retention; hard-condition tracking qualification secondary",
+      "class": "SCIENTIFICALLY MEANINGFUL",
+      "first_appeared": "already present in the _b plan frozen 2026-09-07T00:54:11Z, so it is not new to _c",
+      "why_it_matters": "The original screen's headline result was R1's +5.18 pp held-out qualified-execution gain over origin, GATED on retention. The replication demotes that gain to a secondary endpoint and promotes retention to primary. A replication whose primary endpoint is not the original's primary endpoint cannot, as preregistered, confirm or refute the +5.2 pp claim as a primary result. If R1 retains but the held-out gain does not reproduce, the plan as written does not call that a primary failure."
+    },
+    "scientific_change_declared": "PPO/environment seed 8600 to 8601 only; cohort and anchor sampling seeds frozen -- VERIFIED TRUE by command diff, resolved-config diff and byte-identical practice_start.json",
+    "claim_scope_declared": "same local origin and motion; two continuation seeds, not independent origins -- accurate",
+    "unimplemented": "identical list on both sides: ['recovery-qualified endpoint','adaptive schedule','multi-origin confirmation']",
+    "missing_smoke_gate": "The original campaign ran a 16-iteration smoke stage with a frozen smoke_gate.json (retention_screen_campaign_20260906_c/smoke/). The replication has NO smoke directory and no smoke stage; it inherits the original's smoke hashes by reference in plan['inputs'] only. No fresh smoke gate was run at seed 8601.",
+    "missing_campaign_json": "The original has campaign.json carrying training_protocol {seed, smoke_iterations 16, pilot_iterations 2000, num_envs 1024, stratum_sizes, practice, R1_beta 1.0, R1_batch 256, R1_forward_batch_limit 128, R2_rate 1e-05, R2_desired_kl null, R0_R1_desired_kl 0.01}. The replication has no campaign.json and no status.json; the protocol is implicit in the cell commands. desired_kl=0.01 was confirmed instead from the resolved Hydra config.",
+    "abandoned_preregistration": "/home/linjiw/lucid-sonic/experiments/retention_second_seed_20260907_a/pilot/plan.json was frozen at 04:53:18Z at git_sha 2d4aa0a, then superseded 53 seconds later by the _b plan at git_sha 886c347. _a was never executed (no receipt.json). Benign, but the plan was re-cut after being written read-only."
+  },
+  "9_live_progress": {
+    "sampled_at_utc": "2026-09-07T11:36:16Z",
+    "campaign_status": "running",
+    "receipt": "/home/linjiw/lucid-sonic/experiments/retention_second_seed_20260907_c/pilot/receipt.json",
+    "cells_total": 57,
+    "cells_complete": 1,
+    "cells_running": 1,
+    "cells_not_started": 55,
+    "train_R0": {
+      "status": "complete (by verified reuse)",
+      "wall_seconds": 7835.723822074011,
+      "ran_in": "/home/linjiw/lucid-sonic/experiments/retention_second_seed_20260907_b",
+      "gpu_max_used_mib": 14207.0,
+      "gpu_min_free_mib": 1602.0
+    },
+    "train_R1": {
+      "status": "running",
+      "started_at": "2026-09-07T11:08:42.521661+00:00",
+      "wandb": "https://wandb.ai/16726/lucid-sonic/runs/p4rvttfe",
+      "iteration": "211 / 2000",
+      "total_time_s": 1618.68,
+      "mean_s_per_iteration": 7.671,
+      "trainer_reported_ETA_s": 13724.3,
+      "beta_confirmed_live": 1.0,
+      "anchor_updates_per_iteration": 20
+    },
+    "throughput_comparison": {
+      "original_R1_wall_s": 6237.980127745977,
+      "original_s_per_iteration": 3.119,
+      "current_s_per_iteration": 7.671,
+      "contention_factor": "2.46x slower"
+    },
+    "gpu": {
+      "device": "NVIDIA GeForce RTX 5080, 16303 MiB",
+      "used_mib": 13381,
+      "free_mib": 2428,
+      "utilization_pct": 99,
+      "tenants": [
+        {
+          "pid": 3354732,
+          "mib": 6911,
+          "owner": "LUCID train_R1 (train_with_delay.py, lucid-retention-logging-repair)"
+        },
+        {
+          "pid": 3350363,
+          "mib": 2406,
+          "owner": "NON-LUCID: climb-feasibility-first/mjlab-1.6.0 running climb-gate-ablation-2026-09-06/paper/h1/job.py"
+        },
+        {
+          "pid": 3379926,
+          "mib": 3323,
+          "owner": "NON-LUCID: gear_sonic/eval_agent_trl.py on /home/linjiw/kimodo/.codex/sonic-m3j checkpoint"
+        }
+      ]
+    },
+    "projections": {
+      "R1_finish_at_current_rate_utc": "2026-09-07T15:24 (+/- contention)",
+      "R1_finish_if_GPU_clears_now_utc": "2026-09-07T13:09",
+      "eval_leg_55_cells_uncontended_s": 2815.2,
+      "eval_leg_55_cells_at_2.46x_s": 6924,
+      "campaign_finish_at_current_contention_utc": "2026-09-07T17:20",
+      "campaign_finish_if_GPU_clears_now_utc": "2026-09-07T13:56",
+      "basis": "original per-cell evaluation wall times from retention_screen_campaign_20260906_c/pilot/receipt.json: 80 cells, mean 51.4 s, median 53.0 s, total 4115.3 s; the 55 cells the replication keeps totalled 2815.2 s"
+    },
+    "budget_vs_fable": "fable.md section 3.2 estimated ~3.5 GPU-hours training + ~1.5 h scoring. Actual: R0 alone consumed 2.18 h and R1 is projected at 3.8-4.3 h under contention, i.e. roughly 2x the planned budget. fable.md's own rule is 'if the GPU is contended past Sep 9, drop the replication'."
+  },
+  "10_live_risks": {
+    "gpu_gate_may_kill_the_campaign": {
+      "mechanism": "run_retention_second_seed.py line ~162 calls LA.run_arm(cmd, log, plan['min_free_mib']) -> wait_for_gpu(11000, LUCID_GPU_WAIT_SECONDS). The launching shell sets LUCID_GPU_WAIT_SECONDS=1800. After 1800 s below 11000 MiB free, wait_for_gpu raises RuntimeError.",
+      "arithmetic": "Total 16303 MiB. When R1 exits it releases 6911 MiB. If both non-LUCID tenants stay resident (2406 + 3323 = 5729 MiB) plus desktop (~559 MiB), free would be approximately 9833 MiB -- BELOW the 11000 MiB gate.",
+      "consequence": "The first of the 55 evaluation cells could wait 30 minutes and then fail the whole campaign.",
+      "no_resume": "The driver opens with `if destination.exists(): raise FileExistsError('used repair attempt; no automatic resume/retry')`. A failure at any of the 55 evaluation cells requires a new _d directory and a new reuse chain; it cannot be resumed in place.",
+      "gate_source": "/home/linjiw/lucid-retention-logging-repair/scripts/practice_utility/run_latency_ab.py lines 212-242"
+    },
+    "wall_clock_not_comparable": "plan['resource_scope'] already says 'matched transitions, not equal wall time'. Transitions ARE matched (49,152,000). Do not compare seed-8600 and seed-8601 wall times in the paper.",
+    "reuse_gate_matches_on_an_error_string": "reuse_training() authorises reuse by string-equality on receipt['error'] == 'TypeError: can only concatenate str (not \"int\") to str'. Narrow and deliberate, but it is a string match, not a structural proof that the failure was post-training."
+  },
+  "11_what_the_original_claims_and_which_survive": {
+    "original_endpoints": {
+      "receipt": "/home/linjiw/lucid-sonic/experiments/retention_screen_campaign_20260906_c/status.json",
+      "R0": {
+        "retained_at_endpoint": false,
+        "held_out_delta_origin_pp": 6.25
+      },
+      "R1": {
+        "retained_at_endpoint": true,
+        "retained_at_all_sampled_checkpoints": true,
+        "held_out_delta_origin_pp": 5.17578125,
+        "joint_endpoint_improvement": true
+      },
+      "R2": {
+        "retained_at_endpoint": false,
+        "held_out_delta_origin_pp": 10.64453125
+      }
+    },
+    "recomputed_clean_error_ratios": {
+      "source": "/home/linjiw/lucid-sonic/experiments/retention_screen_campaign_20260906_c/analysis/report.md",
+      "origin_phys_000_global_mm": 127.93,
+      "R1_2000_phys_000_global_mm": 133.47,
+      "R1_relative_increase_pct": 4.33,
+      "R0_2000_phys_000_global_mm": 225.87,
+      "R0_relative_increase_pct": 76.56,
+      "note": "confirms the paper's +4.3% and +76.6%"
+    },
+    "note_on_R0": "R0's held-out gain over origin (+6.25 pp) is LARGER than R1's (+5.18 pp). R1's advantage is that it gains held-out points WITHOUT losing clean quality; it is not the larger raw gain. The paper must not imply R1 beat R0 on held-out score."
+  }
+}

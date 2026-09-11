@@ -1,0 +1,50 @@
+{
+  "kind": "read_only_live_submission_metadata_inspection",
+  "checked_at_utc": "2026-09-08 06:01:34 UTC",
+  "conference": "ICRA 2027",
+  "inspected_form_category": "Contributed paper",
+  "final_submission_route": null,
+  "submitted_paper": false,
+  "authors_entered": false,
+  "commitment_accepted": false,
+  "metadata_submitted": false,
+  "source_url": "https://ras.papercept.net/conferences/scripts/start.pl",
+  "source_form_sha256": "953d644aed2da2a8a11fda06ca282f34122cafae3a34edb8925de0fa85898ee9",
+  "source_keywords_sha256": "7d270069ebfa29ed7f7f3626b1712c45b854f57281c32372aa8a586dcccf2803",
+  "abstract_max_characters": 2000,
+  "candidate_abstract_characters": 1462,
+  "candidate_abstract_fits": true,
+  "portal_keyword_count_range": [
+    1,
+    3
+  ],
+  "official_call_minimum_keywords": 3,
+  "required_keyword_count": 3,
+  "combined_keyword_character_limit": 250,
+  "candidate_keyword_characters_including_separators": 96,
+  "ordered_draft_keywords": [
+    {
+      "priority": 1,
+      "label": "Humanoid and Bipedal Locomotion",
+      "current_selector_index": 80
+    },
+    {
+      "priority": 2,
+      "label": "Reinforcement Learning",
+      "current_selector_index": 178
+    },
+    {
+      "priority": 3,
+      "label": "Performance Evaluation and Benchmarking",
+      "current_selector_index": 211
+    }
+  ],
+  "keyword_labels_verified": true,
+  "keyword_choice_submitted": false,
+  "notes": [
+    "The selector says keyword order affects reviewer/session assignment and keywords cannot be changed after submission.",
+    "Opening a blank form and its keyword list is inspection, not a submitted contribution.",
+    "All-author consent, originality/concurrent-submission and disclosure attestations were not accepted on behalf of the authors.",
+    "Anonymous evidence omits session tokens and raw form fields."
+  ]
+}

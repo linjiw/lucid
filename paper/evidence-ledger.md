@@ -1,27 +1,39 @@
-# Internal evidence ledger — not submission material
+# Evidence ledger — September 8 diagnostic revision
 
-## Appendix B. Evidence ledger (remove before submission)
+Internal navigation, excluded from the anonymous manuscript. The current scientific source is `when-training-gets-easier.md`; the September 7 manuscript and earlier IROS programme are historical sources, not interchangeable evidence. The portable package's `data/manifest.json` binds compact files to source hashes. Its identifying source map remains private, outside the archive.
 
-| Section | Receipt |
-|---|---|
-| 4 | `receipts/analysis/lucid_return_inversion_20260901.json`, `lucid_p3_readout_20260901.json` |
-| 5 | `receipts/analysis/lucid_phase0_analysis_20260901.json` (H_R2 decision), ratchet guard logs |
-| 6 | `receipts/analysis/lucid_signal_audit_20260901.json`, `lucid_physical_signal_audit_20260902.json` |
-| 7 | `receipts/analysis/lucid_channel_attribution_20260902.json` |
-| 8 | `receipts/analysis/mujoco_sim2sim_20260902/`, `lucid_heldout_motion_20260901.json` |
-| all | `receipts/analysis/lucid_draft_number_verification_20260902.json` — every number above re-checked against its receipt or the raw training trace |
-| 9 | `receipts/analysis/lucid_why_no_curriculum_wins_20260903.json`, `lucid_nesting_calculus_20260903.json`, `lucid_actuator_screen_readout.json` |
-| 10 | `receipts/analysis/lucid_progress_signal_audit_20260902.json` and `..._warmstart_20260902.json`; preregistration `lucid_practice_allocation_screen_preregistration_20260902.json`; training trace `artifacts/.../curriculum_comparison_ne1024_20260901_232720/seed_8600/gate_150/curriculum_*.jsonl` (the gate run itself; `lucid_gate_feasibility_20260901.json` is a replay proxy, not this run), preregistration `lucid_support_expansion_screen_preregistration_20260901.json` |
+## Current claim map
 
+| Claim / location | Experimental unit and denominator | Portable evidence and computation | Limit |
+|---|---|---|---|
+| Six A/B runs contract; two collapse (III-A, Fig. 1) | Two recorded shrink-permitted modes × seeds 8600–8602; 8,000-iteration endpoints | `data/historical.json`, `data/range_traces.json.gz`, `analysis/historical_census.csv` | Other full-range endpoints can also have poor AUC |
+| Twelve-policy return–AUC correlation (abstract, III-A) | A/B/N/F × three training seeds; no no-DR point | `analysis/diagnostic.json:return_auc_spearman`; `auc` integrates `phys_125..200` | Association across studied controllers, not a fixed-policy causal decomposition |
+| Never-shrink empirical decision and uncertainty (III-B, Fig. 2) | Three N-minus-F training-seed contrasts, separately four metric/band components | `data/tolerance.json`; `analysis/diagnostic.json:contrasts` | One-sided empirical degradation tolerance passes; statistical noninferiority/equivalence unsupported |
+| Complete retention at all sampled checkpoints (IV-B, Fig. 3, Table 3) | One origin, one motion; seed 8600 R0/R1/R2 and seed 8601 R0/R1; five checkpoints and campaign-specific origin | `data/retention_episodes.json.gz` (135 panels × 512 trials), `analysis/retention_summary.csv`, `analysis/retention_constituents.csv` | R1 passes 10/10 sampled checks; R0 fails 10/10, R2 fails 5/5. No guarantee between samples or across origins |
+| Sampled early-stopping alternative (IV-C) | The complete frozen checkpoint schedule; both protected conditions | `analysis/diagnostic.json:early_stopping` | No feasible sampled R0/R2 continuation; retrospective R1 maxima are not held-out performance |
+| Threshold sensitivity (IV-C, Fig. 4) | Every checkpoint × all 25 threshold pairs; hard conditions equally weighted | `analysis/threshold_sensitivity.csv` (675 rows) | Exploratory reporting grid fixed before this computation; 600/50 mm remains primary; R0's negative cells retained |
+| Physical/controller/optimizer/anchor definitions (II, IV-A) | Recorded common config, arm-specific saved state, and native validation receipts | `data/method.json`, `data/historical.json:controller_state`, `data/anchor_validation.json` | Stale adjacent config labels do not define arms; actual optimizer starts take precedence over unused config fields |
+| Legacy drift and optimizer-history control (IV-A) | Separate legacy accumulation protocol and pilot checkpoint | `data/secondary_controls.json:legacy_controls` | Restoration is not necessary for drift; reconstructed parameter binding limits attribution; duplicate fresh/hold condition counted once |
+| Secondary nominal 8.79% margin (IV-B) | Separate seed-8730, 128-alias panel | `data/secondary_controls.json:secondary_nominal_128` | Different origin-panel denominator; never pool with primary 512-alias result |
+| Limited MuJoCo check (V, Fig. 5) | Historical ONNX policies, 32 draws/cell, independently implemented physics | `data/mujoco.json` (960 draw outcomes across five policies, three scales, two push settings) | Ordering reverses at no-push scale 1; not continuation R1 or hardware |
+| Additive-loss residual and signal audit (III-A, V) | Historical saved audit panels | `data/channel_sweep.json`, `data/signal_audit.json` | Descriptive residual, not an identified pairwise interaction or unique collapse cause |
+| Video illustrations | Four historical policies × two scales × eight recorded draws | `evidence/historical-video-source.json`, video receipt and hashed source footage | All 64 existing tiles; no matched R0/R1 trajectories or world-path error evidence |
 
-## September 7 additions and claim boundaries
+## Frozen replication and provenance
 
-- Continuation drift: `lucid-quality-frontier-pilot-results-2026-09-05.md`. Its legacy panel reports 128.57 → 324.50 mm, not the later retention panel's 127.93 mm origin. Do not combine denominators across protocols.
-- R0/R1/R2: `/home/linjiw/lucid-sonic/experiments/retention_screen_campaign_20260906_c/analysis/analysis.json` and `receipt.json`; first-episode metrics, 83 completed cells. Endpoint R1 +4.33%; all five checkpoint gates pass, not +4.33% at every checkpoint.
-- Optimizer control: `lucid-optimizer-history-results-2026-09-06.md`. Drift in both branches rejects optimizer restoration as a sufficient explanation; it does not prove a PPO-gradient mechanism.
-- Second continuation seed: `/home/linjiw/lucid-sonic/experiments/retention_second_seed_20260907_b/pilot/plan.json`, SHA256 `f2ca969140d232579c70c8127df2c6ee775cf00917f3667ce976d9a17afd3f86`. Pending. Same origin, fixed evaluation seed, 57 cells; never label independent origins.
-- Path-input pilot: complete training and 16 evaluations, archived future work; sideways push endpoint fails 2/128. No calibrated recovery endpoint, no main-paper claim.
+Private root: `/home/linjiw/lucid-sonic`.
 
-## Prohibited in the submission
+- First campaign: `experiments/retention_screen_campaign_20260906_c/pilot`; 83 completed cells, 80 evaluation panels. Frozen plan SHA256 `9ddfe9549ea094caebd41e545be88f0d243bd11c87b6e4c44b0914754687c01a`.
+- Repetition: `experiments/retention_second_seed_20260907_c/pilot`; 57 completed cells, 55 evaluation panels. Frozen plan SHA256 `57fbff80fbcd47f740f0e7bff9f7f84e7bef7892a92b50fd61396cb4ce7827cd`.
+- The September 7 `_b` plan is superseded by the documented orchestration repair. Its failed logging receipt is preserved. Completed R0 training was reused with final checkpoint SHA256 `852c704d5c4ad189f3326fb53003e60caec2e50b43b569480782e6c8b2a849fb`; it was not rerun to choose a favorable result.
+- Common origin SHA256 `e7fe72a0a48d6d4d534368ee9870b7a5e382bf2c51bb025d35eadee0818aaa8d`; collected anchor buffer SHA256 `3517adde328c64d14304f9fab2dfd96f4a4c744ebe2213b2cc6971ee295a4b85`.
+- Export rechecked every one of the 135 raw metric hashes against the frozen receipts and recomputed 69,120 episode records. Native cached-action equality is taken from the completed CUDA/TF32 validation, not a new GPU replay in this revision.
+- W&B online status was checked read-only in entity `16726`, project `lucid-sonic`. The repaired repetition's 57 runs are finished; the historical `_b` logging failure remains visible. Example verified repetition run: https://wandb.ai/16726/lucid-sonic/runs/p4rvttfe . Complete URL/status inventory: `outputs/icra_revision_20260908/wandb_online_check.json` in the private root. W&B groups may include monitor/smoke runs; their run count is not the experimental-cell denominator.
 
-No equivalence/noninferiority inference from a passed empirical tolerance rule. No unconditional curriculum superiority. No claim that nesting explains all null results, or that an instantaneous survival signal certifies fidelity. No multi-motion, recovery-observer, hardware, or new-R1 MuJoCo result. No separate supplementary PDF or identifying artifact paths in the anonymous manuscript.
+The original historical receipts remain `receipts/analysis/lucid_return_inversion_20260901.json`, `lucid_phase0_analysis_20260901.json`, `lucid_signal_audit_20260901.json`, `lucid_channel_attribution_20260902.json` and `mujoco_sim2sim_20260902/`. The export preserves their hashes; it does not rewrite source evidence.
+
+## Unavailable evidence and release conditions
+
+Central continuation records do not contain saved time-resolved body/reference/heading trajectories. No root-error subtraction or substitute historical video is used. Existing historical robustness cells do not provide the complete early/late × narrow/wide return matrix with the required common scoring contract. The optional new evaluation is not launched; the central interpretation stays observational.
+
+The completed arithmetic, data build and artifact checks do not provide independent human scientific review, establish IROS 1615 eligibility, or constitute author approval. See `submission-review-2026-09-08.md` for the remaining release decisions. BeyondMimic, released-controller/path-input studies, calibrated recovery claims and old hardware/superiority claims remain outside this diagnostic evidence set.
