@@ -58,9 +58,9 @@ export OMNI_KIT_ACCEPT_EULA=YES
 export OMP_NUM_THREADS=${OMP_NUM_THREADS:-8}
 export MKL_NUM_THREADS=${MKL_NUM_THREADS:-8}
 export TRL_EXPERIMENTAL_SILENCE=1
-# Runs default to offline so a machine without credentials never blocks on a
-# network call; a run that wants live monitoring sets WANDB_MODE=online itself.
-export WANDB_MODE=${WANDB_MODE:-offline}
+# User preference (2026-09-06): log every experiment online to W&B.
+# Launchers must also enable use_wandb or attach the receipt monitor for frozen runs.
+export WANDB_MODE=${WANDB_MODE:-online}
 export WANDB_PROJECT=${WANDB_PROJECT:-lucid-sonic}
 # The API key lives in ~/.netrc (chmod 600), written by `wandb login`. It is
 # deliberately not in this file, not in the repo, and not in any receipt.

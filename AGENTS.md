@@ -33,3 +33,7 @@ Commit within the affected nested repository. Follow recent scoped subjects: `fi
 ## Research-Specific Instructions
 
 Read `lucid-handoff-2026-08-20.md` and the relevant design section before changing experiments. Do not build the utility estimator or residual allocator until their documented gates pass, and keep BeyondMimic sandbox results out of claim-bearing SONIC tables.
+
+## Experiment Logging (User Preference, 2026-09-06)
+
+Log every research training and evaluation experiment to W&B online in `lucid-sonic` (entity `16726`). Use one group per dated campaign and explicit stage, arm, seed, checkpoint iteration, and evaluation condition in run names/configuration. Record source commit, frozen plan SHA, checkpoint/metric hashes, runtime, and available quality/robustness metrics. Keep SONIC and BeyondMimic visibly separate. Verify the online run and record its URL in the experiment note. Setting `WANDB_MODE` alone does not enable logging: enable the native W&B callback for new plans, or attach the read-only receipt monitor for already frozen/running campaigns. Label backfilled results honestly, preserve stable IDs on resume, and never silently treat offline logs as online. Keep credentials, datasets, and large checkpoints out of uploaded configuration and Git. See `lucid-wandb-experiment-logging-2026-09-06.md` for the active monitor and naming scheme.

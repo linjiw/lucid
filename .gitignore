@@ -5,3 +5,14 @@
 __pycache__/
 *.log
 tmp/
+
+# Local worktrees, agent settings, and generated experiment artifacts
+/GR00T-WBC-exp029/
+/GR00T-WholeBodyControl-plr/
+/.agents/
+/.codex/
+/skills/
+/wandb/
+/MUJOCO_LOG.TXT
+/receipts/manifests/
+/receipts/analysis/fable_independent_verification_20260907.json
