@@ -1,5 +1,7 @@
 # LUCID quality-frontier research and execution plan
 
+**September 6 priority amendment:** the prospective ordering below is superseded by [quality-preserving robustness expansion and the retention-repair plan](lucid-retention-repair-plan-2026-09-06.md). Finish the frozen history control, establish quality-preserving fixed Push practice against ordinary and lower-rate continuation, then test feedback with the same repair in every baseline. Historical plans and failed gates below remain unchanged.
+
 Version 1, 2026-09-05. Companion [method design](lucid-quality-frontier-design-2026-09-05.md). The user authorized planning, implementation, and starting experiments. Work proceeds serially on the shared RTX 5080, without disturbing other jobs. This plan begins an investigation; it does not assert the proposed outcomes.
 
 ## Questions and evidence ladder

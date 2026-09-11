@@ -1,5 +1,7 @@
 # LUCID quality-frontier execution status
 
+**September 6 continuation:** see [retention-repair implementation and queued collection](lucid-retention-repair-status-2026-09-06.md) and the [revised research plan](lucid-retention-repair-plan-2026-09-06.md). Historical results below remain unchanged.
+
 Date: 2026-09-05. Companion [design](lucid-quality-frontier-design-2026-09-05.md) and [research plan](lucid-quality-frontier-research-plan-2026-09-05.md).
 
 **Completed pilot:** all 20 cells and automatic analysis finished on September 5. [Results and research decision](lucid-quality-frontier-pilot-results-2026-09-05.md). Gate gains are +1.17 points over static and +3.32 over replay, but all arms substantially degrade clean tracking relative to the starting policy. Original inter-arm retention passes must not be read as preservation of that starting policy.

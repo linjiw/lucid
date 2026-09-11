@@ -1,3 +1,9 @@
+> Active experiment: [2,000-update matched timed curriculum campaign](lucid-timed-2000-campaign-2026-09-11.md). Training/evaluation status is provisional; no endpoint result is claimed.
+
+> Research continuation, 2026-09-11: this historical manuscript is preserved as source material. Its reported results are not verified SONIC results. The current single-motion latent-feedback hypothesis, revised opening, signal design, and push/latency validation plan are in [the research restart](lucid-latent-feedback-single-motion-2026-09-11.md). The [method development and revised abstract](lucid-feedback-method-development-2026-09-11.md) specify structured teacher feedback, separate push/delay scheduling, and the current measurement audit. The [post-baseline research note](lucid-ued-post-baseline-2026-09-11.md) tracks the completed 2,000-iteration training, fixed-panel evaluations, and PLR/GACL/PAIRED implementation work. The [explainable timed-curriculum design](lucid-explainable-timed-curriculum-2026-09-11.md) defines teacher information, the matched native uniform/PLR integration, and the limits of current evidence. Consult the later SONIC handoffs for negative as well as positive evidence before reusing claims below.
+
+> Latest 64-update investigation: [pilot and corrected signal findings](lucid-timed-pilot-and-signal-findings-2026-09-11.md) records matched uniform/PLR training, nine fixed evaluations, a verified encoder joint-order mismatch, and the corrected latent comparison. The preliminary unmapped latent analysis is superseded; uniform/PLR outcomes are unaffected.
+
 CONFIDENTIAL. Limited circulation. For review only.
 LUCID: Latent-Understanding Curriculum for Informed Domain
 Randomization in Humanoid Control

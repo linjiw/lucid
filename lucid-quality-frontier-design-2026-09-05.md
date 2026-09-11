@@ -1,5 +1,7 @@
 # LUCID: quality-preserving expansion under uncertain dynamics
 
+**September 6 amendment:** [the retention-repair design](lucid-retention-repair-plan-2026-09-06.md) supersedes prospective stages and baseline priorities below. The next controlled variable is a frozen-origin behavioral anchor under the productive fixed Push mixture. Existing pilot evidence and its immutable runtime are preserved; feedback and learned information branches follow a viable retention repair.
+
 Version 1, 2026-09-05. Design accepted for staged implementation by the user on this date. Experimental launches remain conditional on the measurement and CPU gates below. Source analysis: [September 5 research memo](lucid-feedback-frontier-research-2026-09-05.md). Implementation checkout: `/home/linjiw/lucid-quality-frontier`, branch `research/quality-frontier`, starting at SONIC `22475f3`. The original checkout's uncommitted effort experiments are excluded.
 
 ## Research objective and scope

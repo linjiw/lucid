@@ -1,5 +1,9 @@
 # LUCID optimizer-history control: preparation and numerical validation
 
+**Completed September 6:** the [verified 22-cell results](lucid-optimizer-history-results-2026-09-06.md) select fresh history for the next screen. Both histories end with roughly +28% clean global drift; restored history breaches every sampled clean global margin and finishes 0.78 points lower on held-out qualification. The preparation and interim observations below are preserved as history.
+
+**September 6 priority update:** finish the frozen full-horizon pair, then select a common continuation recipe for the [matched retention-repair experiment](lucid-retention-repair-plan-2026-09-06.md). A separately tested anchor implementation and serial collection queue are recorded in the [current status](lucid-retention-repair-status-2026-09-06.md). Neither changes this diagnostic or establishes a behavioral repair result.
+
 Date: September 5 EDT / September 6 UTC. Companion [continuation audit](lucid-continuation-contract-audit-2026-09-05.md) and [research plan](lucid-quality-frontier-research-plan-2026-09-05.md).
 
 **Execution update:** the fixed-initial diagnostic has finished with a tracking-retention breach. The [completed-results and launch memo](lucid-initial-hold-results-2026-09-05.md) records the implemented runtime/binding work, 1,940 passing CPU tests, and the newly started smoke-gated paired campaign. The preparation sections below preserve their earlier state; the simulator gate is pending, and source parameter names are reconstructed with an explicit provenance limitation.

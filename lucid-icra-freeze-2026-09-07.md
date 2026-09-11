@@ -1,6 +1,6 @@
 # ICRA diagnostic-paper science freeze — September 7, 2026
 
-**Execution update:** the original R0 training completed; a W&B serialization error stopped orchestration afterward. The [logging repair and R1 continuation](lucid-retention-replication-repair-2026-09-07.md) preserve the science contract and original failed receipt. A seven-page PDF, five figures, reference identity audit and simulation-video draft are now prepared.
+**Execution update:** the original R0 training completed; a W&B serialization error stopped orchestration afterward. The [logging repair and R1 continuation](lucid-retention-replication-repair-2026-09-07.md) preserve the science contract and original failed receipt. An eight-page PDF, five figures, reference identity audit and simulation-video draft are prepared. The replication relaunched as campaign `_c` with plan SHA256 `57fbff80fbcd47f740f0e7bff9f7f84e7bef7892a92b50fd61396cb4ce7827cd`; the earlier `_b` plan produced no results. The campaign completed on 2026-09-07 and is reported in the manuscript.
 
 This execution contract applies the current `fable.md` and `fable.html`. The submission is **When Training Gets Easier: Range Collapse and Tracking Drift in Humanoid Robustness Training**. Recovery-aware curriculum development remains a separate future programme.
 

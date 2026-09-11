@@ -1,4 +1,14 @@
+> Active experiment: [2,000-update matched timed curriculum campaign](lucid-timed-2000-campaign-2026-09-11.md). Training/evaluation status is provisional; no endpoint result is claimed.
+
 # LUCID Research Program — Design & Implementation Plan
+
+> Latest 64-update investigation: [pilot and corrected signal findings](lucid-timed-pilot-and-signal-findings-2026-09-11.md) records matched uniform/PLR training, nine fixed evaluations, a verified encoder joint-order mismatch, and the corrected latent comparison. The preliminary unmapped latent analysis is superseded; uniform/PLR outcomes are unaffected.
+
+> September 11 timed-teacher continuation: the 2,000-iteration baseline and 47 evaluations are complete; fresh evaluation seeds confirm nominal global-tracking drift. The matched uniform/PLR implementation therefore retains the original checkpoint and anchor buffer. See [explainable timed curriculum](lucid-explainable-timed-curriculum-2026-09-11.md) for native integration, smoke receipts, structured feedback, and validation requirements. Earlier running-status notes below are historical.
+
+> September 11 follow-up: the user requests a 2,000-iteration baseline and GACL/PAIRED/PLR comparisons. The protected R1 seed-8612 baseline is running online with 30 queued frozen-policy evaluations. Tested finite replay/teacher components and a conditional timed-disturbance gate are documented in [the UED execution note](lucid-ued-methods-and-baseline-2026-09-11.md). These components are not yet comparative training results. Utility-estimator/residual-allocator gates remain unchanged.
+
+> September 11, 2026 continuation: the user returns the active question to one-motion latent-feedback DR. See [method development and execution results](lucid-feedback-method-development-2026-09-11.md). The utility estimator/residual allocator gates remain closed. Observer reset contamination is repaired and 1,924 CPU tests pass. A 32-iteration nominal pipeline run completed online, but paired evaluation fell from 128/128 to 90/128 completion; retain the common origin and repair nominal continuation before harder curriculum training. This result is not a latent-method comparison.
 
 > **2026-09-05 continuation:** The completed practice-allocation confirmation and its failed selector gate motivate a staged quality-preserving curriculum investigation. Current method details are in [quality-frontier design](lucid-quality-frontier-design-2026-09-05.md), prospective comparisons in [research plan](lucid-quality-frontier-research-plan-2026-09-05.md), and implementation/run receipts in [execution status](lucid-quality-frontier-status-2026-09-05.md). This continuation does not reopen the utility-estimator or residual-allocator gates, and the historical sections below are retained as their original record.
 
